@@ -4,6 +4,14 @@
 
 Windows Perf GUI is a Visual Studio extension that aims to provide a GUI for [Windows Perf](https://gitlab.com/Linaro/WindowsPerf/windowsperf)
 
+## How to use Windows Perf
+
+### Setting up the wperf path
+
+In order to set the path to the wperf executable, go to `Tools -> Options -> Windows Perf -> Wperf Path` and set the **absolute** path to the `wperf.exe` executable and then click save.
+
+![Update settings tutorial](doc/resources/update-settings.gif)
+
 ## What can you do with Visual Studio extension for Windows Perf GUI
 
 Under construction...
