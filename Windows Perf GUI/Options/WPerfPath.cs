@@ -1,10 +1,4 @@
-﻿// BSD 3-Clause License
-//
-// Copyright (c) 2022, Arm Limited
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are met:
+﻿// modification, are permitted provided that the following conditions are met:
 //
 // 1. Redistributions of source code must retain the above copyright notice, this
 //    list of conditions and the following disclaimer.
@@ -28,30 +22,23 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
-global using Community.VisualStudio.Toolkit;
-global using Microsoft.VisualStudio.Shell;
-global using System;
-global using Task = System.Threading.Tasks.Task;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
-using System.Threading;
 
 namespace Windows_Perf_GUI
 {
-    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [InstalledProductRegistration(Vsix.Name, Vsix.Description, Vsix.Version)]
-    [ProvideToolWindow(typeof(MyToolWindow.Pane), Style = VsDockStyle.Tabbed, Window = WindowGuids.SolutionExplorer)]
-    [ProvideMenuResource("Menus.ctmenu", 1)]
-    [Guid(PackageGuids.Windows_Perf_GUIString)]
-    [ProvideOptionPage(typeof(OptionsProvider.WPerfPathOptions), "Windows Perf", "Wperf Path", 0, 0, true, SupportsProfiles = true)]
-
-    public sealed class Windows_Perf_GUIPackage : ToolkitPackage
+    internal partial class OptionsProvider
     {
-        protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
-        {
-            await this.RegisterCommandsAsync();
+        [ComVisible(true)]
+        public class WPerfPathOptions : BaseOptionPage<WPerfPath> { }
+    }
 
-            this.RegisterToolWindows();
-        }
+    public class WPerfPath : BaseOptionModel<WPerfPath>
+    {
+        [Category("Windows Perf")]
+        [DisplayName("Wperf path")]
+        [Description("The path for the wperf.exe file")]
+        [DefaultValue(true)]
+        public string WperfPath { get; set; } = "wperf.exe";
     }
 }
