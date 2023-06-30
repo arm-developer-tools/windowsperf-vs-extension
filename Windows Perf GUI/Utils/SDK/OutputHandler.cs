@@ -10,14 +10,14 @@ namespace Windows_Perf_GUI.Utils.SDK
     {
         public OutputHandler() { }
 
-        public List<string> Outputh = new List<string>();
-        public Action<string> OutputhCb { get; set; }
+        public List<string> Output = new List<string>();
+        public Action<string> OutputCb { get; set; }
         public void OutputhHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
             // Collect the Std output of the process and store it in a list
-            this.Outputh.Add(outLine.Data);
+            this.Output.Add(outLine.Data);
             // Execute the callback function if it is set
-            OutputhCb?.Invoke(outLine.Data);
+            OutputCb?.Invoke(outLine.Data);
         }
     }
 }
