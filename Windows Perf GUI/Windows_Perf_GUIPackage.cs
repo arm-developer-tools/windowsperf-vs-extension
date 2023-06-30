@@ -33,6 +33,8 @@ global using Community.VisualStudio.Toolkit;
 global using Microsoft.VisualStudio.Shell;
 global using System;
 global using Task = System.Threading.Tasks.Task;
+global using System.Diagnostics;
+
 using System.Runtime.InteropServices;
 using System.Threading;
 

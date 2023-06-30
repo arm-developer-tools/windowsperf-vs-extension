@@ -48,6 +48,8 @@
     <Compile Include="Options\WPerfPath.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Commands\MyToolWindowCommand.cs" />
+    <Compile Include="Utils\SDK\OutputHandler.cs" />
+    <Compile Include="Utils\SDK\ProcessRunner.cs" />
     <Compile Include="Windows_Perf_GUIPackage.cs" />
     <Compile Include="source.extension.cs">
       <AutoGen>True</AutoGen>
