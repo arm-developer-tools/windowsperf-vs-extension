@@ -30,6 +30,14 @@ Under construction...
 
 Show your appreciation to those who have contributed to the project.
 
+## Code Documentation
+
+To get started with the project, see our [Code Docs](doc/dev.md) page.
+
+## Contributing
+
+To contribute to the project follow our [Contributing Guidelines](CONTRIBUTING.md).
+
 ## License
 
 All code in this repository is licensed under the [BSD 3-Clause License](LICENSE)
