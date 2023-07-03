@@ -1,5 +1,7 @@
 # ProcessRunner
 
+[[_TOC_]]
+
 ## Summary
 
 A utility class for running processes, gracefully shutting them down and capturing their output.

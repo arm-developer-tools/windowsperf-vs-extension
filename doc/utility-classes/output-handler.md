@@ -1,6 +1,8 @@
 # OutputHandler
 
-## Description
+[[_TOC_]]
+
+## Summary
 
 OutputHandler is a class that provides a simple way handle `DataReceivedEventHandler` and plug to the `StdOutput` / `StdError` of process.
 
