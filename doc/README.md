@@ -1,6 +1,6 @@
 # WindowsPerfGUI Documentation
 
-[[_TOC_]
+[[_TOC_]]
 
 # Utility Classes
 
