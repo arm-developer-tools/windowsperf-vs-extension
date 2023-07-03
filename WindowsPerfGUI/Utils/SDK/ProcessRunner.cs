@@ -32,7 +32,7 @@
 using System.Threading;
 using System.Runtime.InteropServices;
 
-namespace Windows_Perf_GUI.Utils.SDK
+namespace WindowsPerfGUI.Utils.SDK
 {
     class ProcessRunner
     {

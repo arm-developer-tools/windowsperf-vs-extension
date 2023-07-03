@@ -28,22 +28,15 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using System.Collections.Generic;
 
-namespace Windows_Perf_GUI.Utils.SDK
+namespace WindowsPerfGUI
 {
-    public class OutputHandler
+    [Command(PackageIds.MyCommand)]
+    internal sealed class MyToolWindowCommand : BaseCommand<MyToolWindowCommand>
     {
-        public OutputHandler() { }
-
-        public List<string> Output = new List<string>();
-        public Action<string> OutputCb { get; set; }
-        public void OutputhHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        protected override Task ExecuteAsync(OleMenuCmdEventArgs e)
         {
-            // Collect the Std output of the process and store it in a list
-            this.Output.Add(outLine.Data);
-            // Execute the callback function if it is set
-            OutputCb?.Invoke(outLine.Data);
+            return MyToolWindow.ShowAsync();
         }
     }
 }

@@ -28,27 +28,32 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows_Perf_GUI.Utils.SDK;
 
-namespace Windows_Perf_GUI.SDK
+global using Community.VisualStudio.Toolkit;
+global using Microsoft.VisualStudio.Shell;
+global using System;
+global using Task = System.Threading.Tasks.Task;
+global using System.Diagnostics;
+
+using System.Runtime.InteropServices;
+using System.Threading;
+
+namespace WindowsPerfGUI
 {
-    internal class WperfClient
-    {
-        private string Path;
-        public WperfClient()
-        {
-            AssignPathAsync().RunSynchronously();
-        }
+    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
+    [InstalledProductRegistration(Vsix.Name, Vsix.Description, Vsix.Version)]
+    [ProvideToolWindow(typeof(MyToolWindow.Pane), Style = VsDockStyle.Tabbed, Window = WindowGuids.SolutionExplorer)]
+    [ProvideMenuResource("Menus.ctmenu", 1)]
+    [Guid(PackageGuids.WindowsPerfGUIString)]
+    [ProvideOptionPage(typeof(OptionsProvider.WPerfPathOptions), "Windows Perf", "Wperf Path", 0, 0, true, SupportsProfiles = true)]
 
-        private async Task AssignPathAsync()
+    public sealed class WindowsPerfGUIPackage : ToolkitPackage
+    {
+        protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            var options = await WPerfPath.GetLiveInstanceAsync();
-            Path = options.WperfPath;
+            await this.RegisterCommandsAsync();
+
+            this.RegisterToolWindows();
         }
     }
 }

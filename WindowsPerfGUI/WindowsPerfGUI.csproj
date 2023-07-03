@@ -13,8 +13,8 @@
     <ProjectGuid>{AD9B63F7-54F0-4F74-8202-75CF2398BED6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Windows_Perf_GUI</RootNamespace>
-    <AssemblyName>Windows Perf GUI</AssemblyName>
+    <RootNamespace>WindowsPerfGUI</RootNamespace>
+    <AssemblyName>WindowsPerfGUI</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <UseCodebase>true</UseCodebase>
@@ -51,7 +51,7 @@
     <Compile Include="Utils\SDK\OutputHandler.cs" />
     <Compile Include="Utils\SDK\ProcessRunner.cs" />
     <Compile Include="SDK\WperfClient.cs" />
-    <Compile Include="Windows_Perf_GUIPackage.cs" />
+    <Compile Include="WindowsPerfGUIPackage.cs" />
     <Compile Include="source.extension.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

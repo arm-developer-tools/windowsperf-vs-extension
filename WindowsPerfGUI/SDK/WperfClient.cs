@@ -28,26 +28,27 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using WindowsPerfGUI.Utils.SDK;
 
-using System.Reflection;
-using System.Runtime.InteropServices;
-using Windows_Perf_GUI;
-
-[assembly: AssemblyTitle(Vsix.Name)]
-[assembly: AssemblyDescription(Vsix.Description)]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany(Vsix.Author)]
-[assembly: AssemblyProduct(Vsix.Name)]
-[assembly: AssemblyCopyright(Vsix.Author)]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-
-[assembly: ComVisible(false)]
-
-[assembly: AssemblyVersion(Vsix.Version)]
-[assembly: AssemblyFileVersion(Vsix.Version)]
-
-namespace System.Runtime.CompilerServices
+namespace WindowsPerfGUI.SDK
 {
-    public class IsExternalInit { }
+    internal class WperfClient
+    {
+        private string Path;
+        public WperfClient()
+        {
+            AssignPathAsync().RunSynchronously();
+        }
+
+        private async Task AssignPathAsync()
+        {
+            var options = await WPerfPath.GetLiveInstanceAsync();
+            Path = options.WperfPath;
+        }
+    }
 }

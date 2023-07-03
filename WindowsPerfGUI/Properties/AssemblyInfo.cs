@@ -29,23 +29,25 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-using System.ComponentModel;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using WindowsPerfGUI;
 
-namespace Windows_Perf_GUI
+[assembly: AssemblyTitle(Vsix.Name)]
+[assembly: AssemblyDescription(Vsix.Description)]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany(Vsix.Author)]
+[assembly: AssemblyProduct(Vsix.Name)]
+[assembly: AssemblyCopyright(Vsix.Author)]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+
+[assembly: ComVisible(false)]
+
+[assembly: AssemblyVersion(Vsix.Version)]
+[assembly: AssemblyFileVersion(Vsix.Version)]
+
+namespace System.Runtime.CompilerServices
 {
-    internal partial class OptionsProvider
-    {
-        [ComVisible(true)]
-        public class WPerfPathOptions : BaseOptionPage<WPerfPath> { }
-    }
-
-    public class WPerfPath : BaseOptionModel<WPerfPath>
-    {
-        [Category("Windows Perf")]
-        [DisplayName("Wperf path")]
-        [Description("The path for the wperf.exe file")]
-        [DefaultValue(true)]
-        public string WperfPath { get; set; } = "wperf.exe";
-    }
+    public class IsExternalInit { }
 }

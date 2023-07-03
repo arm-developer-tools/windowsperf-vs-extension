@@ -29,32 +29,23 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-using Microsoft.VisualStudio.Imaging;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 
-namespace Windows_Perf_GUI
+namespace WindowsPerfGUI
 {
-    public class MyToolWindow : BaseToolWindow<MyToolWindow>
+    internal partial class OptionsProvider
     {
-        public override string GetTitle(int toolWindowId) => "My Tool Window";
+        [ComVisible(true)]
+        public class WPerfPathOptions : BaseOptionPage<WPerfPath> { }
+    }
 
-        public override Type PaneType => typeof(Pane);
-
-        public override Task<FrameworkElement> CreateAsync(int toolWindowId, CancellationToken cancellationToken)
-        {
-            return Task.FromResult<FrameworkElement>(new MyToolWindowControl());
-        }
-
-        [Guid("e92265f4-3d92-4a09-a90b-75fe312ffed2")]
-        internal class Pane : ToolWindowPane
-        {
-            public Pane()
-            {
-                BitmapImageMoniker = KnownMonikers.ToolWindow;
-            }
-        }
+    public class WPerfPath : BaseOptionModel<WPerfPath>
+    {
+        [Category("Windows Perf")]
+        [DisplayName("Wperf path")]
+        [Description("The path for the wperf.exe file")]
+        [DefaultValue(true)]
+        public string WperfPath { get; set; } = "wperf.exe";
     }
 }

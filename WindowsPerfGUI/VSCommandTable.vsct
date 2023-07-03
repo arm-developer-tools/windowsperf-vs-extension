@@ -6,10 +6,10 @@
   <Include href="KnownImageIds.vsct"/>
   <Include href="VSGlobals.vsct"/>
 
-  <Commands package="Windows_Perf_GUI">
+  <Commands package="WindowsPerfGUI">
     <!--This section defines the elements the user can interact with, like a menu command or a button or combo box in a toolbar. -->
     <Buttons>
-      <Button guid="Windows_Perf_GUI" id="MyCommand" priority="0x0100" type="Button">
+      <Button guid="WindowsPerfGUI" id="MyCommand" priority="0x0100" type="Button">
         <Parent guid="VSMainMenu" id="View.DevWindowsGroup.OtherWindows.Group1"/>
         <Icon guid="ImageCatalogGuid" id="ToolWindow" />
         <CommandFlag>IconIsMoniker</CommandFlag>
@@ -22,7 +22,7 @@
   </Commands>
 
   <Symbols>
-    <GuidSymbol name="Windows_Perf_GUI" value="{496c2178-b18c-47e3-b4b3-586827fe382b}">
+    <GuidSymbol name="WindowsPerfGUI" value="{496c2178-b18c-47e3-b4b3-586827fe382b}">
       <IDSymbol name="MyCommand" value="0x0100" />
     </GuidSymbol>
   </Symbols>

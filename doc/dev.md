@@ -1,8 +1,8 @@
-# Windows Perf GUI Code Docs
+# WindowsPerfGUI Code Docs
 
 ## Table of Contents
 
-- [Windows Perf GUI Code Docs](#windows-perf-gui-code-docs)
+- [WindowsPerfGUI Code Docs](#windowsperfgui-code-docs)
   - [Table of Contents](#table-of-contents)
   - [WperfClient](#wperfclient)
   - [Utility Classes](#utility-classes)

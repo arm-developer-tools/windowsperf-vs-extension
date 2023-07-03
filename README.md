@@ -1,8 +1,8 @@
 # vs-extension
 
-## What is Windows Perf GUI
+## What is WindowsPerfGUI
 
-Windows Perf GUI is a Visual Studio extension that aims to provide a GUI for [Windows Perf](https://gitlab.com/Linaro/WindowsPerf/windowsperf)
+WindowsPerfGUI is a Visual Studio extension that aims to provide a GUI for [Windows Perf](https://gitlab.com/Linaro/WindowsPerf/windowsperf)
 
 ## How to use Windows Perf
 
@@ -12,14 +12,14 @@ In order to set the path to the wperf executable, go to `Tools -> Options -> Win
 
 ![Update settings tutorial](doc/resources/update-settings.gif)
 
-## What can you do with Visual Studio extension for Windows Perf GUI
+## What can you do with Visual Studio extension for WindowsPerfGUI
 
 Under construction...
 
 ## Project Structure
 
 ```bash
-└───Windows Perf GUI
+└───WindowsPerfGUI
     ├───Commands    (Commands for the extension)
     ├───Properties  (Contains the AssemblyInfo.cs file that describes the application metadata)
     ├───Resources   (Contains the icons for the extension)

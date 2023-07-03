@@ -32,7 +32,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Windows_Perf_GUI
+namespace WindowsPerfGUI
 {
     public partial class MyToolWindowControl : UserControl
     {
@@ -43,7 +43,7 @@ namespace Windows_Perf_GUI
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            VS.MessageBox.Show("Windows_Perf_GUI", "Button clicked");
+            VS.MessageBox.Show("WindowsPerfGUI", "Button clicked");
         }
     }
 }

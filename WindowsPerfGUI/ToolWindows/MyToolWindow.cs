@@ -29,14 +29,32 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-namespace Windows_Perf_GUI
+using Microsoft.VisualStudio.Imaging;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+
+namespace WindowsPerfGUI
 {
-    [Command(PackageIds.MyCommand)]
-    internal sealed class MyToolWindowCommand : BaseCommand<MyToolWindowCommand>
+    public class MyToolWindow : BaseToolWindow<MyToolWindow>
     {
-        protected override Task ExecuteAsync(OleMenuCmdEventArgs e)
+        public override string GetTitle(int toolWindowId) => "My Tool Window";
+
+        public override Type PaneType => typeof(Pane);
+
+        public override Task<FrameworkElement> CreateAsync(int toolWindowId, CancellationToken cancellationToken)
         {
-            return MyToolWindow.ShowAsync();
+            return Task.FromResult<FrameworkElement>(new MyToolWindowControl());
+        }
+
+        [Guid("e92265f4-3d92-4a09-a90b-75fe312ffed2")]
+        internal class Pane : ToolWindowPane
+        {
+            public Pane()
+            {
+                BitmapImageMoniker = KnownMonikers.ToolWindow;
+            }
         }
     }
 }

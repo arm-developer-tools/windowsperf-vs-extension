@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="Windows_Perf_GUI.73de2c45-cf60-4edb-a092-b09b43acf2ae" Version="0.0.1" Language="en-US" Publisher="Nader Zouaoui" />
-        <DisplayName>Windows_Perf_GUI</DisplayName>
+        <Identity Id="WindowsPerfGUI.73de2c45-cf60-4edb-a092-b09b43acf2ae" Version="0.0.1" Language="en-US" Publisher="Nader Zouaoui" />
+        <DisplayName>WindowsPerfGUI</DisplayName>
         <Description xml:space="preserve">Empty VSIX Project.</Description>
         <License>LICENSE.txt</License>
         <Icon>Resources\Icon.png</Icon>
