@@ -1,4 +1,4 @@
-// BSD 3-Clause License
+﻿// BSD 3-Clause License
 //
 // Copyright (c) 2022, Arm Limited
 // All rights reserved.
@@ -23,16 +23,12 @@
 // DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
 // FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 // CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WindowsPerfGUI.SDK.WperfOutputs;
 using WindowsPerfGUI.Utils.SDK;
 
 namespace WindowsPerfGUI.SDK
@@ -55,6 +51,29 @@ namespace WindowsPerfGUI.SDK
             WperfPorcess = new ProcessRunner(Path);
             IsInitilized = true;
         }
+
+        private (string stdOutput, string stdError) ExecuteAwaitedCommand(params string[] args)
+        {
+            if (!IsInitilized)
+            {
+                InitProcess();
+            }
+
+            (string stdOutput, string stdError) = WperfPorcess.StartAwaitedProcess(args);
+            return (stdOutput, stdError);
+        }
+        /// <summary>
+        /// This returns the WPerf and Wperf driver installed version
+        /// it runs the command wperf -version -json
+        /// </summary>
+        /// <returns>
+        ///     Tuple<![CDATA[<WperfVersion serializedOutput, string stdError>]]>
+        /// </returns>
+        public (WperfVersion output, string stdError) GetVersion()
+        {
+            (string stdOutput, string stdError) = ExecuteAwaitedCommand("-version", "-json");
+            WperfVersion serializedOutput = WperfVersion.FromJson(stdOutput);
+            return (serializedOutput, stdError);
         }
     }
 }
