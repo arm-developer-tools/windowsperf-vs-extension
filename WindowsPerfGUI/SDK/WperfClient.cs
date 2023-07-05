@@ -1,4 +1,4 @@
-﻿// BSD 3-Clause License
+// BSD 3-Clause License
 //
 // Copyright (c) 2022, Arm Limited
 // All rights reserved.
@@ -40,7 +40,21 @@ namespace WindowsPerfGUI.SDK
     internal class WperfClient
     {
         public string Path { get; set; }
+        private bool IsInitilized { get; set; }
+
+        private ProcessRunner WperfPorcess;
         public WperfClient() { }
 
+        protected void InitProcess()
+        {
+            if (IsInitilized)
+            {
+                return;
+            }
+
+            WperfPorcess = new ProcessRunner(Path);
+            IsInitilized = true;
+        }
+        }
     }
 }
