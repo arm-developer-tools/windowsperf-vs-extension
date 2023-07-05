@@ -36,12 +36,12 @@ namespace WindowsPerfGUI.Utils.SDK
     {
         public OutputHandler() { }
 
-        public List<string> Output = new List<string>();
+        public List<string> Output = new();
         public Action<string> OutputCb { get; set; }
         public void OutputhHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
             // Collect the Std output of the process and store it in a list
-            this.Output.Add(outLine.Data);
+            Output.Add(outLine.Data);
             // Execute the callback function if it is set
             OutputCb?.Invoke(outLine.Data);
         }
