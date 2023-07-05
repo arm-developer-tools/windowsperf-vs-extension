@@ -39,16 +39,12 @@ namespace WindowsPerfGUI.SDK
 {
     internal class WperfClient
     {
-        private string Path;
-        public WperfClient()
-        {
-            AssignPathAsync().RunSynchronously();
-        }
+        public string Path { get; set; }
+        public WperfClient() { }
 
-        private async Task AssignPathAsync()
+        public void PrintPath()
         {
-            var options = await WPerfPath.GetLiveInstanceAsync();
-            Path = options.WperfPath;
+            Debug.WriteLine("WperfClient.Path: " + Path);
         }
     }
 }
