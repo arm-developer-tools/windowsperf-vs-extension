@@ -23,17 +23,18 @@
 // DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
 // FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 // CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-using System.Threading;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace WindowsPerfGUI.Utils.SDK
 {
+
     class ProcessRunner
     {
         #region Process Control
@@ -54,7 +55,7 @@ namespace WindowsPerfGUI.Utils.SDK
 
         [DllImport("kernel32.dll")]
         static extern bool SetConsoleCtrlHandler(ConsoleCtrlDelegate HandlerRoutine, bool Add);
-        delegate Boolean ConsoleCtrlDelegate(CtrlTypes CtrlType);
+        delegate bool ConsoleCtrlDelegate(CtrlTypes CtrlType);
 
         [DllImport("kernel32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -72,12 +73,20 @@ namespace WindowsPerfGUI.Utils.SDK
 
         private readonly string _Path;
 
-        private readonly IntPtr _ProcessorAffinity;
+        private readonly IntPtr? _ProcessorAffinity;
 
         private CancellationTokenSource _BackgroundProcessCancelationToken;
+
         #endregion Properties
 
-        public ProcessRunner(string path, IntPtr processorAffinity)
+        public ProcessRunner(string path)
+        {
+            _Path = path;
+            StdOutput = new OutputHandler();
+            StdError = new OutputHandler();
+        }
+
+        public ProcessRunner(string path, IntPtr? processorAffinity)
         {
             _Path = path;
             StdOutput = new OutputHandler();
@@ -85,10 +94,10 @@ namespace WindowsPerfGUI.Utils.SDK
             _ProcessorAffinity = processorAffinity;
         }
 
-        public Task StartProcessAsync(params string[] args)
+        public Task StartBackgroundProcessAsync(params string[] args)
         {
             _BackgroundProcessCancelationToken = new CancellationTokenSource();
-            _BackgroundProcessTask = Task.Run(() => StartProcess(args), _BackgroundProcessCancelationToken.Token);
+            _BackgroundProcessTask = Task.Run(() => StartBackgroundProcess(args), _BackgroundProcessCancelationToken.Token);
             return _BackgroundProcessTask;
         }
 
@@ -120,9 +129,46 @@ namespace WindowsPerfGUI.Utils.SDK
             SetConsoleCtrlHandler(null, false);
 
         }
-
-        private void StartProcess(string[] args)
+        public (string stdError, string stdOutput) StartAwaitedProcess(string[] args)
         {
+            InitProcess(args);
+            _BackgroundProcess.Start();
+            if (_ProcessorAffinity != null)
+            {
+                _BackgroundProcess.ProcessorAffinity = (IntPtr)_ProcessorAffinity;
+            }
+            string stdOutput = "";
+            string stdError = "";
+
+            while (!_BackgroundProcess.HasExited)
+            {
+                stdOutput += _BackgroundProcess.StandardOutput.ReadToEnd();
+                stdError += _BackgroundProcess.StandardError.ReadToEnd();
+            }
+            _BackgroundProcess.WaitForExit();
+            return (stdOutput, stdError);
+        }
+
+
+
+        private void StartBackgroundProcess(string[] args)
+        {
+            InitProcess(args);
+            _BackgroundProcess.OutputDataReceived += new DataReceivedEventHandler(StdOutput.OutputhHandler);
+            _BackgroundProcess.ErrorDataReceived += new DataReceivedEventHandler(StdError.OutputhHandler);
+            _BackgroundProcess.Start();
+            if (_ProcessorAffinity != null)
+            {
+                _BackgroundProcess.ProcessorAffinity = (IntPtr)_ProcessorAffinity;
+            }
+            _BackgroundProcess.BeginOutputReadLine();
+            _BackgroundProcess.BeginErrorReadLine();
+            _BackgroundProcess.WaitForExit();
+        }
+
+        private void InitProcess(string[] args)
+        {
+            if (_BackgroundProcess != null && !_BackgroundProcess.HasExited) throw new Exception("Process already running");
             _BackgroundProcess = new Process()
             {
                 StartInfo = {
@@ -137,22 +183,10 @@ namespace WindowsPerfGUI.Utils.SDK
                 },
                 EnableRaisingEvents = true,
             };
-            _BackgroundProcess.OutputDataReceived += new DataReceivedEventHandler(StdOutput.OutputhHandler);
-            _BackgroundProcess.ErrorDataReceived += new DataReceivedEventHandler(StdError.OutputhHandler);
-            _BackgroundProcess.Start();
-            if (_ProcessorAffinity != null)
-            {
-                _BackgroundProcess.ProcessorAffinity = _ProcessorAffinity;
-            }
-            _BackgroundProcess.BeginOutputReadLine();
-            _BackgroundProcess.BeginErrorReadLine();
-            _BackgroundProcess.WaitForExit();
         }
-
-
         private void ForceKillProcess()
         {
-            _BackgroundProcessCancelationToken.Cancel(true);
+            _BackgroundProcessCancelationToken?.Cancel(true);
             if (_BackgroundProcess != null && !_BackgroundProcess.HasExited)
             {
                 _BackgroundProcess.CancelOutputRead();
