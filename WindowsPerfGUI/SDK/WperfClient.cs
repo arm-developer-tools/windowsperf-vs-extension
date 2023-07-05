@@ -42,9 +42,5 @@ namespace WindowsPerfGUI.SDK
         public string Path { get; set; }
         public WperfClient() { }
 
-        public void PrintPath()
-        {
-            Debug.WriteLine("WperfClient.Path: " + Path);
-        }
     }
 }
