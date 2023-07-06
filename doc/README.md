@@ -6,7 +6,7 @@
 
 `WperfClient` is the SDK that is used to communicate with the `wperf.exe` process. It is used to send commands to the `wperf.exe` process and to receive its output.
 
-- [WperfClient class](wperf-client.md).
+- [WperfClient class](sdk/wperf-client.md).
 
 ## Utility Classes
 

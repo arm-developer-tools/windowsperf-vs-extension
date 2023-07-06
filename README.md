@@ -32,7 +32,7 @@ Show your appreciation to those who have contributed to the project.
 
 ## Code Documentation
 
-To get started with the project, see our [Code Docs](doc/dev.md) page.
+To get started with the project, see our [Code Docs](doc/README.md) page.
 
 ## Contributing
 
