@@ -76,7 +76,7 @@ namespace WindowsPerfGUI.SDK
             return (serializedOutput, stdError);
         }
         /// <summary>
-        /// This returns the list of Wperf's predifined events and metrics
+        /// This returns the list of Wperf's predefined events and metrics
         /// it runs the command wperf list -json
         /// </summary> 
         /// <returns></returns>
