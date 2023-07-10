@@ -28,45 +28,28 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
-using System.Windows;
-using System.Windows.Controls;
-using WindowsPerfGUI.SDK;
-using WindowsPerfGUI.SDK.WperfOutputs;
-
-namespace WindowsPerfGUI
+namespace WindowsPerfGUI.SDK.WperfOutputs
 {
-    public partial class MyToolWindowControl : UserControl
+    public partial class WperfTest
     {
-        public MyToolWindowControl()
-        {
-            InitializeComponent();
-        }
+        [JsonProperty("Test_Results")]
+        public List<TestResult> TestResults { get; set; }
+    }
 
-        private void button1_Click(object sender, RoutedEventArgs e)
-        {
-            WperfClientFactory wperfClient = new();
-            (WperfVersion output, _) = wperfClient.GetVersion();
-            foreach (SDK.WperfOutputs.Version version in output.Version)
-            {
-                Debug.WriteLine(version.Component + " : " + version.ComponentVersion);
-            }
-            (WperfList eventList, _) = wperfClient.GetEventList();
-            foreach (PredefinedEvent wperfEvent in eventList.PredefinedEvents)
-            {
-                Debug.WriteLine("Event Name : " + wperfEvent.AliasName + " - Raw Index : " + wperfEvent.RawIndex + " - Event Type : " + wperfEvent.EventType);
-            }
-            foreach (PredefinedMetric wperfMetric in eventList.PredefinedMetrics)
-            {
-                Debug.WriteLine("Metric Name : " + wperfMetric.Metric + " - Events : " + wperfMetric.Events);
-            }
+    public partial class TestResult
+    {
+        [JsonProperty("Result")]
+        public string Result { get; set; }
 
-            (WperfTest wperfTestResults, _) = wperfClient.GetTest();
-            foreach (TestResult testResult in wperfTestResults.TestResults)
-            {
-                Debug.WriteLine("Test Name : " + testResult.TestName + " - Test Result : " + testResult.Result);
-            }
-            VS.MessageBox.Show("WindowsPerfGUI", "Button clicked");
-        }
+        [JsonProperty("Test_Name")]
+        public string TestName { get; set; }
+    }
+
+    public partial class WperfTest
+    {
+        public static WperfTest FromJson(string json) => JsonConvert.DeserializeObject<WperfTest>(json, WindowsPerfGUI.SDK.WperfOutputs.JsonSettings.Settings);
     }
 }
