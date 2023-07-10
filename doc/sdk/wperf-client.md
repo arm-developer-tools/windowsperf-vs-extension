@@ -21,6 +21,8 @@ The `WperfClient` class is part of the `WindowsPerfGUI.SDK` namespace and provid
 
 - `(WperfList output, string stdError) GetEventList()`: This public method executes the `wperf list -json` command and returns the output. The standard output is deserialized into a `WperfList` object and returned, along with the standard error. [Read more...](../wperf-outputs/wperf-list.md)
 
+- `(WperfTest output, string stdError) GetTest()`: This public method executes the `wperf test -json` command and returns the output. The standard output is deserialized into a `WperfTest` object and returned, along with the standard error. [Read more...](../wperf-outputs/wperf-test.md)
+
 ## Usage Example
 
 ```csharp
