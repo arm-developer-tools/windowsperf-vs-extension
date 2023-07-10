@@ -87,5 +87,17 @@ namespace WindowsPerfGUI.SDK
             return (serializedOutput, stdError);
         }
 
+        /// <summary>
+        /// This returns the additional data about the host
+        /// it runs the command wperf test -json
+        /// </summary>
+        /// <returns></returns>
+        public (WperfTest output, string stdError) GetTest()
+        {
+            (string stdOutput, string stdError) = ExecuteAwaitedCommand("test", "-json");
+
+            WperfTest serializedOutput = WperfTest.FromJson(stdOutput);
+            return (serializedOutput, stdError);
+        }
     }
 }
