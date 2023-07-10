@@ -7,3 +7,5 @@ WperfOutputs is a collection of classes that contains the types of the `JSON` ou
 ## WperfOutputs Namespace
 
 - [WperfVersion](wperf-version.md)
+- [WperfTest](wperf-test.md)
+- [WperfList](wperf-list.md)
