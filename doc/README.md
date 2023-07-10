@@ -19,5 +19,9 @@
 
 `WperfOutputs` is a collection of classes that contains the types of the `JSON` output from the `wperf.exe` process. It is used to deserialize the `JSON` output from the `wperf.exe` process.
 
-- [WperfVersion](wperf-outputs\wperf-version.md)
-  - This class is used to represent the version information for components in the Windows Performance (Wperf) system. It is capable of parsing this information from a JSON string.
+- [WperfVersion](wperf-outputs/wperf-version.md)
+  - This class is used to represent the version information for components in the WindowsPerf (`wperf`) system using `wperf -version`.
+- [WperfList](wperf-outputs/wperf-list.md)
+  - The `WperfList` class is a part of the `WindowsPerfGUI.SDK.WperfOutputs` namespace. It represents a collection of predefined events and metrics using `wperf list`.
+- [WperfTest](wperf-outputs/wperf-test.md)
+  - This class is a part of the `WindowsPerfGUI.SDK.WperfOutputs` namespace. It represents a collection of test results that represents additional data about the host using `wperf test`.

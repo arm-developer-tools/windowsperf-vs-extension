@@ -2,7 +2,7 @@
 
 [[_TOC_]]
 
-The `WperfList` class is a part of the `WindowsPerfGUI.SDK.WperfOutputs` namespace. It represents a collection of predefined events and metrics for Windows Performance Monitor.
+The `WperfList` class is a part of the `WindowsPerfGUI.SDK.WperfOutputs` namespace. It represents a collection of predefined events and metrics for `wperf`.
 
 ## Summary
 
