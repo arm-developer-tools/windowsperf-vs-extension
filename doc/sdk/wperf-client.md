@@ -17,7 +17,9 @@ The `WperfClient` class is part of the `WindowsPerfGUI.SDK` namespace and provid
 
 - `(string stdOutput, string stdError) ExecuteAwaitedCommand(params string[] args)`: This private method runs a Wperf command, specified by the `args` parameter, and waits for the command to complete. It returns the standard output and standard error from the command.
 
-- `(WperfVersion output, string stdError) GetVersion()`: This public method executes the `wperf -version -json` command and returns the output. The standard output is deserialized into a `WperfVersion` object and returned, along with the standard error.
+- `(WperfVersion output, string stdError) GetVersion()`: This public method executes the `wperf -version -json` command and returns the output. The standard output is deserialized into a `WperfVersion` object and returned, along with the standard error. [Read more...](../wperf-outputs/wperf-versiom.md)
+
+- `(WperfList output, string stdError) GetEventList()`: This public method executes the `wperf list -json` command and returns the output. The standard output is deserialized into a `WperfList` object and returned, along with the standard error. [Read more...](../wperf-outputs/wperf-list.md)
 
 ## Usage Example
 
