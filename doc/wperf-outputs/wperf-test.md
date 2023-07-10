@@ -2,7 +2,7 @@
 
 [[_TOC_]]
 
-The `WperfTest` class is a part of the `WindowsPerfGUI.SDK.WperfOutputs` namespace. It represents a collection of test results for Windows Performance Monitor.
+The `WperfTest` class is a part of the `WindowsPerfGUI.SDK.WperfOutputs` namespace. It represents a collection of test results that represents additional data about the host for `wperf`.
 
 ## Summary
 
