@@ -1,4 +1,4 @@
-﻿// BSD 3-Clause License
+// BSD 3-Clause License
 //
 // Copyright (c) 2022, Arm Limited
 // All rights reserved.
@@ -75,5 +75,17 @@ namespace WindowsPerfGUI.SDK
             WperfVersion serializedOutput = WperfVersion.FromJson(stdOutput);
             return (serializedOutput, stdError);
         }
+        /// <summary>
+        /// This returns the list of Wperf's predifined events and metrics
+        /// it runs the command wperf list -json
+        /// </summary> 
+        /// <returns></returns>
+        public (WperfList output, string stdError) GetEventList()
+        {
+            (string stdOutput, string stdError) = ExecuteAwaitedCommand("list", "-json");
+            WperfList serializedOutput = WperfList.FromJson(stdOutput);
+            return (serializedOutput, stdError);
+        }
+
     }
 }

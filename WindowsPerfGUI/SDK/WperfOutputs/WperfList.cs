@@ -1,4 +1,4 @@
-// BSD 3-Clause License
+﻿// BSD 3-Clause License
 //
 // Copyright (c) 2022, Arm Limited
 // All rights reserved.
@@ -28,41 +28,47 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
-using System.Windows;
-using System.Windows.Controls;
-using WindowsPerfGUI.SDK;
-using WindowsPerfGUI.SDK.WperfOutputs;
-
-namespace WindowsPerfGUI
+namespace WindowsPerfGUI.SDK.WperfOutputs
 {
-    public partial class MyToolWindowControl : UserControl
+
+    public partial class WperfList
     {
-        public MyToolWindowControl()
-        {
-            InitializeComponent();
-        }
+        [JsonProperty("Predefined_Events")]
+        public List<PredefinedEvent> PredefinedEvents { get; set; }
 
-        private void button1_Click(object sender, RoutedEventArgs e)
-        {
-            WperfClientFactory wperfClient = new();
-            (WperfVersion output, _) = wperfClient.GetVersion();
-            foreach (SDK.WperfOutputs.Version version in output.Version)
-            {
-                Debug.WriteLine(version.Component + " : " + version.ComponentVersion);
-            }
-            (WperfList eventList, _) = wperfClient.GetEventList();
-            foreach (PredefinedEvent wperfEvent in eventList.PredefinedEvents)
-            {
-                Debug.WriteLine("Event Name : " + wperfEvent.AliasName + " - Raw Index : " + wperfEvent.RawIndex + " - Event Type : " + wperfEvent.EventType);
-            }
-            foreach (PredefinedMetric wperfMetric in eventList.PredefinedMetrics)
-            {
-                Debug.WriteLine("Metric Name : " + wperfMetric.Metric + " - Events : " + wperfMetric.Events);
-            }
-
-            Debug.WriteLine(wperfClient.GetVersion());
-            VS.MessageBox.Show("WindowsPerfGUI", "Button clicked");
-        }
+        [JsonProperty("Predefined_Metrics")]
+        public List<PredefinedMetric> PredefinedMetrics { get; set; }
     }
+
+    public partial class PredefinedEvent
+    {
+        [JsonProperty("Alias_Name")]
+        public string AliasName { get; set; }
+
+        [JsonProperty("Event_Type")]
+        public string EventType { get; set; }
+
+        [JsonProperty("Raw_Index")]
+        public string RawIndex { get; set; }
+    }
+
+    public partial class PredefinedMetric
+    {
+        [JsonProperty("Events")]
+        public string Events { get; set; }
+
+        [JsonProperty("Metric")]
+        public string Metric { get; set; }
+    }
+
+
+    public partial class WperfList
+    {
+        public static WperfList FromJson(string json) => JsonConvert.DeserializeObject<WperfList>(json, WindowsPerfGUI.SDK.WperfOutputs.JsonSettings.Settings);
+    }
+
 }
+
