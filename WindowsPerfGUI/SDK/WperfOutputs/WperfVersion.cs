@@ -36,7 +36,7 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
     public partial class WperfVersion
     {
         [JsonProperty("Version")]
-        public List<Version> Version { get; set; }
+        public List<Version> Components { get; set; }
     }
 
     public partial class Version

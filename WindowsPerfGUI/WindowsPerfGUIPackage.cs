@@ -37,6 +37,7 @@ global using System.Diagnostics;
 
 using System.Runtime.InteropServices;
 using System.Threading;
+using WindowsPerfGUI.Options;
 
 namespace WindowsPerfGUI
 {
@@ -45,7 +46,7 @@ namespace WindowsPerfGUI
     [ProvideToolWindow(typeof(MyToolWindow.Pane), Style = VsDockStyle.Tabbed, Window = WindowGuids.SolutionExplorer)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(PackageGuids.WindowsPerfGUIString)]
-    [ProvideOptionPage(typeof(OptionsProvider.WPerfPathOptions), "Windows Perf", "Wperf Path", 0, 0, true, SupportsProfiles = true)]
+    [ProvideOptionPage(typeof(WPerfPathPage), "Windows Perf", "Wperf Path", 0, 0, true, SupportsProfiles = true)]
 
     public sealed class WindowsPerfGUIPackage : ToolkitPackage
     {

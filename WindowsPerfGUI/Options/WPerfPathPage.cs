@@ -28,19 +28,28 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-namespace WindowsPerfGUI.SDK
+using System.Runtime.InteropServices;
+using System.Windows;
+
+namespace WindowsPerfGUI.Options
 {
-    internal class WperfClientFactory : WperfClient
+    [ComVisible(true)]
+    [Guid("DB55C26B-3270-417D-B496-88EC3CAC6ECC")]
+
+    public class WPerfPathPage : UIElementDialogPage
     {
-        public WperfClientFactory()
+        protected override UIElement Child
         {
-            AssignPathAsync().FireAndForget();
-        }
-        private async Task AssignPathAsync()
-        {
-            WPerfOptions options = await WPerfOptions.GetLiveInstanceAsync();
-            Path = options.WperfPath;
-            InitProcess();
+            get
+            {
+                WPerfPath page = new WPerfPath
+                {
+                    wPerfPathPage = this
+                };
+                page.Initialize();
+                return page;
+            }
         }
     }
+
 }

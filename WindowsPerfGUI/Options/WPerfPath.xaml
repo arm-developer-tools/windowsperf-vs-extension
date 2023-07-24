@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="WindowsPerfGUI.Options.WPerfPath"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WindowsPerfGUI.Options"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <StackPanel>
+        <Grid x:Name="MainStack">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Content="The path for the wperf.exe file" Grid.Row="0" Grid.Column="0"/>
+            <TextBox x:Name="PathInput" Grid.Row="0" Grid.Column="1" Width="300" Margin="5"/>
+
+            <Button x:Name="ValidateButton" Content="Validate" Grid.Row="1" Grid.Column="0" Margin="5" Click="ValidateButton_Click"/>
+
+            <TextBlock x:Name="PlaceholderLabel" Text="wperf is not available at the indicated path or not initialised" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"  Margin="5"/>
+        </Grid>
+    </StackPanel>
+</UserControl>

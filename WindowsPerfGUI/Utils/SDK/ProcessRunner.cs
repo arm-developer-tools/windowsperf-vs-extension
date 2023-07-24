@@ -77,6 +77,8 @@ namespace WindowsPerfGUI.Utils.SDK
 
         private CancellationTokenSource _BackgroundProcessCancelationToken;
 
+        private bool _HasProcessStarted = false;
+
         #endregion Properties
 
         public ProcessRunner(string path)
@@ -132,7 +134,16 @@ namespace WindowsPerfGUI.Utils.SDK
         public (string stdError, string stdOutput) StartAwaitedProcess(string[] args)
         {
             InitProcess(args);
-            _BackgroundProcess.Start();
+            try
+            {
+                _BackgroundProcess.Start();
+                _HasProcessStarted = true;
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception($"Failed to start process {_Path} with arguments {string.Join(" ", args)}", e);
+            }
             if (_ProcessorAffinity != null)
             {
                 _BackgroundProcess.ProcessorAffinity = (IntPtr)_ProcessorAffinity;
@@ -187,7 +198,7 @@ namespace WindowsPerfGUI.Utils.SDK
         private void ForceKillProcess()
         {
             _BackgroundProcessCancelationToken?.Cancel(true);
-            if (_BackgroundProcess != null && !_BackgroundProcess.HasExited)
+            if (_HasProcessStarted && _BackgroundProcess != null && !_BackgroundProcess.HasExited)
             {
                 _BackgroundProcess.CancelOutputRead();
                 _BackgroundProcess.CancelErrorRead();

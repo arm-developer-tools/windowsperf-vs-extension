@@ -47,7 +47,7 @@ namespace WindowsPerfGUI
         {
             WperfClientFactory wperfClient = new();
             (WperfVersion output, _) = wperfClient.GetVersion();
-            foreach (SDK.WperfOutputs.Version version in output.Version)
+            foreach (SDK.WperfOutputs.Version version in output.Components)
             {
                 Debug.WriteLine(version.Component + " : " + version.ComponentVersion);
             }
