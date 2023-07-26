@@ -1,0 +1,48 @@
+﻿<platform:DialogWindow  x:Class="WindowsPerfGUI.WperfHostDataDialog"
+                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                        xmlns:platform="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
+                        xmlns:toolkit="clr-namespace:Community.VisualStudio.Toolkit;assembly=Community.VisualStudio.Toolkit"
+                        toolkit:Themes.UseVsTheme="True"
+                        mc:Ignorable="d"
+                        Width="800"
+                        Height="400"
+                        d:DesignHeight="600"
+                        d:DesignWidth="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="410"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="Test Name" Margin="5,0,5,0"/>
+            <TextBlock Grid.Column="1" Text="Test Result" Margin="10,0,0,0"/>
+        </Grid>
+        <ListBox Grid.Row="1" x:Name="WperfTestResults">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="400" Width="Auto"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0"  Grid.Column="0" Text="{Binding TestName}" Margin="0,0,5,0"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text=":"/>
+                        <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Result}" Margin="5,0,0,0"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+
+        <Button x:Name="CloseButton" Content="Close" Grid.Row="2" HorizontalAlignment="Right" Margin="10" Width="100" Click="CloseButton_Click" />
+    </Grid>
+</platform:DialogWindow>

@@ -2,6 +2,12 @@
 
 [[_TOC_]]
 
+## How to install WindowsPerfGUI extension for Visual Studio
+
+First, you need to have the binary of the extension. and then you can install it by clicking on `WindowsPerfGUI.vsix` and then click on `Install`.
+
+PS: you need to make sure that any previous version of the extension is uninstalled and that Visual Studio is closed before installing the extension.
+
 ## WperfClient
 
 `WperfClient` is the SDK that is used to communicate with the `wperf.exe` process. It is used to send commands to the `wperf.exe` process and to receive its output.

@@ -53,6 +53,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Commands\WperfHostData.cs" />
     <Compile Include="Options\WPerfPath.xaml.cs">
       <DependentUpon>WPerfPath.xaml</DependentUpon>
     </Compile>
@@ -67,6 +68,9 @@
     <Compile Include="SDK\WperfOutputs\WperfList.cs" />
     <Compile Include="SDK\WperfOutputs\WperfTest.cs" />
     <Compile Include="SDK\WperfOutputs\WperfVersion.cs" />
+    <Compile Include="ToolWindows\WperfHostDataDialog.xaml.cs">
+      <DependentUpon>WperfHostDataDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utils\SDK\OutputHandler.cs" />
     <Compile Include="Utils\SDK\ProcessRunner.cs" />
     <Compile Include="SDK\WperfClient.cs" />
@@ -118,6 +122,10 @@
     <Compile Include="ToolWindows\MyToolWindowControl.xaml.cs">
       <DependentUpon>MyToolWindowControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="ToolWindows\WperfHostDataDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

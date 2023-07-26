@@ -18,12 +18,22 @@
           <LocCanonicalName>.View.MyToolWindow</LocCanonicalName>
         </Strings>
       </Button>
+      <Button guid="WindowsPerfGUI" id="WperfHostData" priority="0x0100" type="Button">
+        <Parent guid="VSMainMenu" id="Tools.OptionsGroup"/>
+        <Icon guid="ImageCatalogGuid" id="ListView"/>
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Wperf Host Data</ButtonText>
+          <LocCanonicalName>.Tools.WperfHostData</LocCanonicalName>
+        </Strings>
+      </Button>
     </Buttons>
   </Commands>
 
   <Symbols>
     <GuidSymbol name="WindowsPerfGUI" value="{496c2178-b18c-47e3-b4b3-586827fe382b}">
       <IDSymbol name="MyCommand" value="0x0100" />
+      <IDSymbol name="WperfHostData" value="0x0101"/>
     </GuidSymbol>
   </Symbols>
 </CommandTable>
