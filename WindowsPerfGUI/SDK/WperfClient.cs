@@ -77,12 +77,12 @@ namespace WindowsPerfGUI.SDK
         }
         /// <summary>
         /// This returns the list of Wperf's predefined events and metrics
-        /// it runs the command wperf list -json
+        /// it runs the command wperf list -v -json
         /// </summary> 
         /// <returns></returns>
         public (WperfList output, string stdError) GetEventList()
         {
-            (string stdOutput, string stdError) = ExecuteAwaitedCommand("list", "-json");
+            (string stdOutput, string stdError) = ExecuteAwaitedCommand("list", "-v", "-json");
             WperfList serializedOutput = WperfList.FromJson(stdOutput);
             return (serializedOutput, stdError);
         }

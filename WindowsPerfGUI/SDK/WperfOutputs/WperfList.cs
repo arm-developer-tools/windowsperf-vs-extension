@@ -34,41 +34,53 @@ using System.Collections.Generic;
 namespace WindowsPerfGUI.SDK.WperfOutputs
 {
 
-    public partial class WperfList
-    {
-        [JsonProperty("Predefined_Events")]
-        public List<PredefinedEvent> PredefinedEvents { get; set; }
+  public partial class WperfList
+  {
+    [JsonProperty("Predefined_Events")]
+    public List<PredefinedEvent> PredefinedEvents { get; set; }
 
-        [JsonProperty("Predefined_Metrics")]
-        public List<PredefinedMetric> PredefinedMetrics { get; set; }
-    }
+    [JsonProperty("Predefined_Metrics")]
+    public List<PredefinedMetric> PredefinedMetrics { get; set; }
+  }
 
-    public partial class PredefinedEvent
-    {
-        [JsonProperty("Alias_Name")]
-        public string AliasName { get; set; }
+  public partial class PredefinedEvent
+  {
+    [JsonProperty("Alias_Name")]
+    public string AliasName { get; set; }
 
-        [JsonProperty("Event_Type")]
-        public string EventType { get; set; }
+    [JsonProperty("Raw_Index")]
+    public string RawIndex { get; set; }
 
-        [JsonProperty("Raw_Index")]
-        public string RawIndex { get; set; }
-    }
+    [JsonProperty("Event_Type")]
+    public string EventType { get; set; }
 
-    public partial class PredefinedMetric
-    {
-        [JsonProperty("Events")]
-        public string Events { get; set; }
+    [JsonProperty("Description")]
+    public string Description { get; set; }
+  }
 
-        [JsonProperty("Metric")]
-        public string Metric { get; set; }
-    }
+  public partial class PredefinedMetric
+  {
+    [JsonProperty("Metric")]
+    public string Metric { get; set; }
+
+    [JsonProperty("Events")]
+    public string Events { get; set; }
+
+    [JsonProperty("Formula")]
+    public string Formula { get; set; }
+
+    [JsonProperty("Unit")]
+    public string Unit { get; set; }
+
+    [JsonProperty("Description")]
+    public string Description { get; set; }
+  }
 
 
-    public partial class WperfList
-    {
-        public static WperfList FromJson(string json) => JsonConvert.DeserializeObject<WperfList>(json, WindowsPerfGUI.SDK.WperfOutputs.JsonSettings.Settings);
-    }
+  public partial class WperfList
+  {
+    public static WperfList FromJson(string json) => JsonConvert.DeserializeObject<WperfList>(json, WindowsPerfGUI.SDK.WperfOutputs.JsonSettings.Settings);
+  }
 
 }
 

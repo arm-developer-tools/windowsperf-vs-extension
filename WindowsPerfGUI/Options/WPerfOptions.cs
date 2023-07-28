@@ -51,5 +51,6 @@ namespace WindowsPerfGUI
         public bool IsWperfInitialized { get; set; } = false;
 
         public WperfVersion WperfCurrentVersion { get; set; }
+        public WperfList WperfList { get; set; }
     }
 }

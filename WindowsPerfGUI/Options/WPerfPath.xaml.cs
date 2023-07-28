@@ -49,9 +49,10 @@ namespace WindowsPerfGUI.Options
         public void Initialize()
         {
             PathInput.Text = WPerfOptions.Instance.WperfPath;
-            if (WPerfOptions.Instance.IsWperfInitialized && WPerfOptions.Instance.WperfCurrentVersion != null)
+            if (WPerfOptions.Instance.IsWperfInitialized && WPerfOptions.Instance.WperfCurrentVersion != null && WPerfOptions.Instance.WperfList != null)
             {
                 SetWperfVersion(WPerfOptions.Instance.WperfCurrentVersion);
+                SetPredefinedEventsAndMetrics(WPerfOptions.Instance.WperfList);
             }
             WPerfOptions.Instance.Save();
         }
@@ -64,7 +65,11 @@ namespace WindowsPerfGUI.Options
             {
                 (WperfVersion versions, string error) = wperf.GetVersion();
                 if (error != "") throw new Exception(error);
-                SetWperfVersion(versions);
+                SetWperfVersion(versions, shouldForce: true);
+
+                (WperfList wperfList, string errorWperfList) = wperf.GetEventList();
+                if (errorWperfList != "") throw new Exception(errorWperfList);
+                SetPredefinedEventsAndMetrics(wperfList, shouldForce: true);
             }
             catch (Exception ex)
             {
@@ -77,7 +82,7 @@ namespace WindowsPerfGUI.Options
         {
             MainStack.Children.RemoveRange(OFFSET_ROW + 1, MainStack.Children.Count - OFFSET_ROW);
         }
-        private void SetWperfVersion(WperfVersion wperfVersion)
+        private void SetWperfVersion(WperfVersion wperfVersion, bool shouldForce = false)
         {
             ClearMainStack();
 
@@ -96,12 +101,23 @@ namespace WindowsPerfGUI.Options
                 MainStack.Children.Add(componentLabel);
                 MainStack.Children.Add(componentVersionLabel);
             }
-
-            WPerfOptions.Instance.IsWperfInitialized = true;
-            WPerfOptions.Instance.WperfCurrentVersion = wperfVersion;
-            WPerfOptions.Instance.Save();
+            if (shouldForce)
+            {
+                WPerfOptions.Instance.IsWperfInitialized = true;
+                WPerfOptions.Instance.WperfCurrentVersion = wperfVersion;
+                WPerfOptions.Instance.Save();
+            }
         }
-
+        private void SetPredefinedEventsAndMetrics(WperfList wperfList, bool shouldForce = false)
+        {
+            PredefinedEventsDataGrid.ItemsSource = wperfList.PredefinedEvents;
+            PredefinedMetricsDataGrid.ItemsSource = wperfList.PredefinedMetrics;
+            if (shouldForce)
+            {
+                WPerfOptions.Instance.WperfList = wperfList;
+                WPerfOptions.Instance.Save();
+            }
+        }
         private TextBlock TextBlockFactory(string text, int offset, bool isRight = false)
         {
             TextBlock textBlock = new TextBlock() { Text = text, Margin = new Thickness(5, 5, 5, 5) };
@@ -113,7 +129,6 @@ namespace WindowsPerfGUI.Options
             else
             {
                 textBlock.SetValue(Grid.ColumnProperty, 0);
-
             }
             return textBlock;
         }

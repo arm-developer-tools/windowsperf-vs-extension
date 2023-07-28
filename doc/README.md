@@ -28,6 +28,6 @@ PS: you need to make sure that any previous version of the extension is uninstal
 - [WperfVersion](wperf-outputs/wperf-version.md)
   - This class is used to represent the version information for components in the WindowsPerf (`wperf`) system using `wperf -version`.
 - [WperfList](wperf-outputs/wperf-list.md)
-  - The `WperfList` class is a part of the `WindowsPerfGUI.SDK.WperfOutputs` namespace. It represents a collection of predefined events and metrics using `wperf list`.
+  - The `WperfList` class is a part of the `WindowsPerfGUI.SDK.WperfOutputs` namespace. It represents a collection of predefined events and metrics using `wperf list -v`.
 - [WperfTest](wperf-outputs/wperf-test.md)
   - This class is a part of the `WindowsPerfGUI.SDK.WperfOutputs` namespace. It represents a collection of test results that represents additional data about the host using `wperf test`.

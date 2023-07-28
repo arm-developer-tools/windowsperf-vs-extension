@@ -8,14 +8,14 @@ WindowsPerfGUI is a Visual Studio extension that aims to provide a GUI for [Wind
 
 ### Setting up the wperf path
 
-In order to set the path to the `wperf` executable, go to `Tools -> Options -> Windows Perf -> Wperf Path` and set the **absolute** path to the `wperf.exe` executable and then on the **Validate** button. If all is well, you should see the version[^1] of `wperf.exe` as well as `wperf-driver`. If not, you will see an error message.
+In order to set the path to the `wperf` executable, go to `Tools -> Options -> Windows Perf -> Wperf Path` and set the **absolute** path to the `wperf.exe` executable and then on the **Validate** button. If all is well, you should see the version[^1] of `wperf.exe` as well as `wperf-driver`, It will also populate the list of available events and metrics[^2] in `wperf. If not, you will see an error message.
 PS: as long as this step has not been fulfilled, the extension will not work.
 
 ![Update settings tutorial](doc/resources/update-settings.gif)
 
 ### Checking additional host data
 
-In order to check data about the host running `wperf`, head to `Tools -> Wperf Host Data` and you will see a new window with a list of test ran by `wperf` and their results[^2].
+In order to check data about the host running `wperf`, head to `Tools -> Wperf Host Data` and you will see a new window with a list of test ran by `wperf` and their results[^3].
 
 ![Additional host data tutorial](doc/resources/wperf-host-data.gif)
 
@@ -52,4 +52,5 @@ All code in this repository is licensed under the [BSD 3-Clause License](LICENSE
 ## References
 
 [^1]: The output shown is the result of executing `wperf -version`.
-[^2]: The output shown is the result of executing `wperf test`.
+[^2]: The output shown is the result of executing `wperf list`.
+[^3]: The output shown is the result of executing `wperf test`.

@@ -6,24 +6,45 @@
              xmlns:local="clr-namespace:WindowsPerfGUI.Options"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel>
-        <Grid x:Name="MainStack">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+    <ScrollViewer>
+        <StackPanel>
+            <Grid x:Name="MainStack">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <Label Content="The path for the wperf.exe file" Grid.Row="0" Grid.Column="0"/>
-            <TextBox x:Name="PathInput" Grid.Row="0" Grid.Column="1" Width="300" Margin="5"/>
+                <Label Content="The path for the wperf.exe file" Grid.Row="0" Grid.Column="0"/>
+                <TextBox x:Name="PathInput" Grid.Row="0" Grid.Column="1" Width="Auto" Margin="5"/>
 
-            <Button x:Name="ValidateButton" Content="Validate" Grid.Row="1" Grid.Column="0" Margin="5" Click="ValidateButton_Click"/>
+                <Button x:Name="ValidateButton" Content="Validate" Grid.Row="1" Grid.Column="0" Margin="5" Click="ValidateButton_Click"/>
 
-            <TextBlock x:Name="PlaceholderLabel" Text="wperf is not available at the indicated path or not initialised" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"  Margin="5"/>
-        </Grid>
-    </StackPanel>
+                <TextBlock x:Name="PlaceholderLabel" Text="wperf is not available at the indicated path or not initialised" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"  Margin="5"/>
+            </Grid>
+            <Label Content="List of available events:"/>
+            <DataGrid Height="200" x:Name="PredefinedEventsDataGrid"  AutoGenerateColumns="False" IsSynchronizedWithCurrentItem="True" AreRowDetailsFrozen="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn IsReadOnly="True" Header="Event Name" Binding="{Binding AliasName}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="Event Raw Index" Binding="{Binding RawIndex}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="Event Description" Binding="{Binding Description}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="Event Type" Binding="{Binding EventType}" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <Label Content="List of available metrics:"/>
+            <DataGrid x:Name="PredefinedMetricsDataGrid" AutoGenerateColumns="False" MinHeight="100" IsSynchronizedWithCurrentItem="True" AreRowDetailsFrozen="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn IsReadOnly="True" Header="Metric" Binding="{Binding Metric}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="Events" Binding="{Binding Events}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="Formula" Binding="{Binding Formula}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="Unit" Binding="{Binding Unit}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="Description" Binding="{Binding Description}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>
