@@ -118,7 +118,7 @@ namespace WindowsPerfGUI.Options
                 WPerfOptions.Instance.Save();
             }
         }
-        private TextBlock TextBlockFactory(string text, int offset, bool isRight = false)
+        public static TextBlock TextBlockFactory(string text, int offset, bool isRight = false)
         {
             TextBlock textBlock = new TextBlock() { Text = text, Margin = new Thickness(5, 5, 5, 5) };
             textBlock.SetValue(Grid.RowProperty, offset);
