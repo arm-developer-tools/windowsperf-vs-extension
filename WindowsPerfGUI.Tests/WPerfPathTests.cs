@@ -27,7 +27,7 @@
 // CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+using NUnitLite;
 using System.Windows.Controls;
 
 namespace WindowsPerfGUI.Options.Tests
@@ -44,5 +44,10 @@ namespace WindowsPerfGUI.Options.Tests
             Assert.That(testTextBlock, Is.InstanceOf(typeof(TextBlock)));
             Assert.That(testTextBlock, Is.Not.Null);
         }
+        public static int Main(string[] args)
+        {
+            return new AutoRun().Execute(args);
+        }
     }
+
 }
