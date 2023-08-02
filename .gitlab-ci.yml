@@ -30,10 +30,11 @@
 
 default:
     tags:
-        - win-arm64
+        - win-arm64-builder
 
 stages:
 - build
+- test
 
 # CI machines are not yet setup to run this
 # sast:
@@ -43,9 +44,25 @@ stages:
 
 build:
   stage: build
+  tags:
+    - win-arm64-builder
   script:
     - C:/wenv/arm64/nuget/nuget.exe restore
     - cmd.exe /c "C:/wenv/arm64/activate.bat" powershell -Command "MSBuild /p:Configuration=Release"
+  artifacts:
+    paths:
+      - WindowsPerfGUI.Tests/bin/Release/*
+    expire_in: 60 min
+  rules:
+      - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+test:
+  stage: test
+  tags:
+    - win-arm64-builder
+  script:
+    - dotnet WindowsPerfGUI.Tests/bin/Release/net6.0-windows/WindowsPerfGUI.Tests.dll
   rules:
       - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
