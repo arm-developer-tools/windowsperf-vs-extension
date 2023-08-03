@@ -19,6 +19,10 @@ In order to check data about the host running `wperf`, head to `Tools -> Wperf H
 
 ![Additional host data tutorial](doc/resources/wperf-host-data.gif)
 
+### Wperf output
+
+All the commands being executed as well as their output can be found at the `Output` window. To open it, go to `View -> Output` and select `WindowsPerf Output` from the dropdown menu.
+
 ## What can you do with Visual Studio extension for WindowsPerfGUI
 
 Under construction...

@@ -41,6 +41,8 @@ namespace WindowsPerfGUI.SDK
         private ProcessRunner WperfPorcess;
         public WperfClient() { }
 
+        public Action<string> OutputWindowTextWriter { get; set; }
+
         protected void InitProcess()
         {
             if (IsInitilized)
@@ -60,6 +62,23 @@ namespace WindowsPerfGUI.SDK
             }
 
             (string stdOutput, string stdError) = WperfPorcess.StartAwaitedProcess(args);
+
+            if (OutputWindowTextWriter == null) return (stdOutput, stdError);
+
+            OutputWindowTextWriter("Executing wperf command:");
+            OutputWindowTextWriter($"{Path} {string.Join(" ", args)}");
+            OutputWindowTextWriter("wperf command output:");
+            OutputWindowTextWriter("=============================================================");
+            OutputWindowTextWriter(stdOutput);
+            OutputWindowTextWriter("=============================================================");
+
+            if (stdError == "") return (stdOutput, stdError);
+
+            OutputWindowTextWriter("wperf command error:");
+            OutputWindowTextWriter("=============================================================");
+            OutputWindowTextWriter(stdError);
+            OutputWindowTextWriter("=============================================================");
+
             return (stdOutput, stdError);
         }
         /// <summary>
