@@ -28,34 +28,54 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using System.Windows;
+using System.Windows.Controls;
 
-global using Community.VisualStudio.Toolkit;
-global using Microsoft.VisualStudio.Shell;
-global using System;
-global using System.Diagnostics;
-global using Task = System.Threading.Tasks.Task;
-using System.Runtime.InteropServices;
-using System.Threading;
-using WindowsPerfGUI.Options;
-
-namespace WindowsPerfGUI
+namespace WindowsPerfGUI.Components
 {
-    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [InstalledProductRegistration(Vsix.Name, Vsix.Description, Vsix.Version)]
-    [ProvideToolWindow(typeof(MyToolWindow.Pane), Style = VsDockStyle.Tabbed, Window = WindowGuids.SolutionExplorer)]
-    [ProvideToolWindow(typeof(SamplingExplorer.Pane), Style = VsDockStyle.Tabbed, Window = WindowGuids.SolutionExplorer)]
-    [ProvideMenuResource("Menus.ctmenu", 1)]
-    [Guid(PackageGuids.WindowsPerfGUIString)]
-    [ProvideOptionPage(typeof(WPerfPathPage), "Windows Perf", "Wperf Path", 0, 0, true, SupportsProfiles = true)]
+    public class CustomTextBoxControl : TextBox
 
-    public sealed class WindowsPerfGUIPackage : ToolkitPackage
     {
-        public static OutputWindowPane WperfOutputWindow { get; set; }
-        protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
+        public static readonly DependencyProperty PlaceholderProperty =
+            DependencyProperty.Register("Placeholder", typeof(string), typeof(CustomTextBoxControl), new PropertyMetadata(string.Empty));
+        public string Placeholder
         {
-            await this.RegisterCommandsAsync();
-            WperfOutputWindow = await OutputWindowPane.CreateAsync("WindowsPerf Output", lazyCreate: true);
-            this.RegisterToolWindows();
+            get { return (string)GetValue(PlaceholderProperty); }
+            set { SetValue(PlaceholderProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsEmptyProperty =
+                    DependencyProperty.Register("IsEmpty", typeof(bool), typeof(CustomTextBoxControl),
+                        new PropertyMetadata(false));
+
+        public bool IsEmpty
+        {
+            get { return (bool)GetValue(IsEmptyProperty); }
+            private set { SetValue(IsEmptyProperty, value); }
+        }
+
+        static CustomTextBoxControl()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomTextBoxControl), new FrameworkPropertyMetadata(typeof(CustomTextBoxControl)));
+        }
+
+
+        protected override void OnInitialized(EventArgs e)
+        {
+            UpdateIsEmpty();
+            this.TextWrapping = TextWrapping.Wrap;
+            base.OnInitialized(e);
+        }
+
+        protected override void OnTextChanged(TextChangedEventArgs e)
+        {
+            UpdateIsEmpty();
+            base.OnTextChanged(e);
+        }
+
+        private void UpdateIsEmpty()
+        {
+            IsEmpty = string.IsNullOrEmpty(Text);
         }
     }
 }

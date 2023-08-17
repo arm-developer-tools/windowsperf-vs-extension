@@ -27,6 +27,15 @@
           <LocCanonicalName>.Tools.WperfHostData</LocCanonicalName>
         </Strings>
       </Button>
+      <Button guid="WindowsPerfGUI" id="SamplingExplorer" priority="0x0100" type="Button">
+        <Parent guid="VSMainMenu" id="View.ExplorerWindowsGroup"/>
+        <Icon guid="ImageCatalogGuid" id="StartTime"/>
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Sampling Explorer</ButtonText>
+          <LocCanonicalName>.View.SamplingExplorer</LocCanonicalName>
+        </Strings>
+      </Button>
     </Buttons>
   </Commands>
 
@@ -34,6 +43,7 @@
     <GuidSymbol name="WindowsPerfGUI" value="{496c2178-b18c-47e3-b4b3-586827fe382b}">
       <IDSymbol name="MyCommand" value="0x0100" />
       <IDSymbol name="WperfHostData" value="0x0101"/>
+      <IDSymbol name="SamplingExplorer" value="0x0102"/>
     </GuidSymbol>
   </Symbols>
 </CommandTable>

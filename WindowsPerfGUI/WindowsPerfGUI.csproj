@@ -53,7 +53,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Commands\SamplingSettings.cs" />
     <Compile Include="Commands\WperfHostData.cs" />
+    <Compile Include="Components\CustomButtonControl.cs" />
+    <Compile Include="Components\CustomComboBoxControl.cs" />
+    <Compile Include="Components\CustomMonikerButtonControl.cs" />
+    <Compile Include="Components\CustomRadioButtonControl.cs" />
+    <Compile Include="Components\CustomTextBoxControl.cs" />
+    <Compile Include="Components\FilePicker.xaml.cs">
+      <DependentUpon>FilePicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Options\WPerfPath.xaml.cs">
       <DependentUpon>WPerfPath.xaml</DependentUpon>
     </Compile>
@@ -68,6 +77,13 @@
     <Compile Include="SDK\WperfOutputs\WperfList.cs" />
     <Compile Include="SDK\WperfOutputs\WperfTest.cs" />
     <Compile Include="SDK\WperfOutputs\WperfVersion.cs" />
+    <Compile Include="ToolWindows\SamplingExplorer.cs" />
+    <Compile Include="ToolWindows\SamplingExplorerControl.xaml.cs">
+      <DependentUpon>SamplingExplorerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ToolWindows\SamplingSettingDialog.xaml.cs">
+      <DependentUpon>SamplingSettingDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ToolWindows\WperfHostDataDialog.xaml.cs">
       <DependentUpon>WperfHostDataDialog.xaml</DependentUpon>
     </Compile>
@@ -111,9 +127,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ToolWindows\MyToolWindow.cs" />
+    <Page Include="Components\FilePicker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Options\WPerfPath.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="ToolWindows\MyToolWindowControl.xaml">
       <SubType>Designer</SubType>
@@ -122,12 +146,21 @@
     <Compile Include="ToolWindows\MyToolWindowControl.xaml.cs">
       <DependentUpon>MyToolWindowControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="ToolWindows\SamplingExplorerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ToolWindows\SamplingSettingDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ToolWindows\WperfHostDataDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="System" />
     <Reference Include="System.Design" />
     <Reference Include="System.Xaml" />

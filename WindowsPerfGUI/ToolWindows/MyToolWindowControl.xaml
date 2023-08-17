@@ -40,6 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
              xmlns:util="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Utilities"
              xmlns:catalog="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.ImageCatalog"
              xmlns:toolkit="clr-namespace:Community.VisualStudio.Toolkit;assembly=Community.VisualStudio.Toolkit"
+             xmlns:Components="clr-namespace:WindowsPerfGUI.Components"
              mc:Ignorable="d"
              d:DesignHeight="300"
              d:DesignWidth="300"
@@ -54,6 +55,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                     Width="120"
                     Height="80"
                     Name="button1" />
+            <Components:FilePicker Label="Insert file" />
+            <Components:CustomComboBoxControl Margin="10,0,10,0"
+                                              x:Name="Combo" />
+            <Components:CustomRadioButtonControl Content="RadioButton"
+                                                 IsChecked="true" />
+
         </StackPanel>
     </Grid>
 </UserControl>

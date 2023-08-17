@@ -23,33 +23,53 @@
 // DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
 // FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 // CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
-using System.Reflection;
-using System.Runtime.InteropServices;
-using WindowsPerfGUI;
+using Microsoft.Win32;
 using System.Windows;
+using System.Windows.Controls;
 
-[assembly: AssemblyTitle(Vsix.Name)]
-[assembly: AssemblyDescription(Vsix.Description)]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany(Vsix.Author)]
-[assembly: AssemblyProduct(Vsix.Name)]
-[assembly: AssemblyCopyright(Vsix.Author)]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-[assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
-
-[assembly: ComVisible(false)]
-
-[assembly: AssemblyVersion(Vsix.Version)]
-[assembly: AssemblyFileVersion(Vsix.Version)]
-
-namespace System.Runtime.CompilerServices
+namespace WindowsPerfGUI.Components
 {
-    public class IsExternalInit { }
+    /// <summary>
+    /// Interaction logic for FilePicker.xaml
+    /// </summary>
+    public partial class FilePicker : UserControl
+    {
+        public FilePicker()
+        {
+            InitializeComponent();
+            FilePathTextBox.TextChanged += (sender, e) => onChange?.Invoke(sender, e);
+        }
+        private RoutedEventHandler onChange;
+        public string Label { get => LabelTextBlock.Content.ToString(); set => LabelTextBlock.Content = value; }
+        public RoutedEventHandler OnChange { get => onChange; set => onChange = value; }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+                FilePathTextBox.Text = openFileDialog.FileName;
+
+        }
+        public void Validate()
+        {
+            if (!IsFileSelected())
+            {
+                throw new Exception("File not selected");
+            }
+        }
+        public string GetFilePath()
+        {
+            return FilePathTextBox.Text;
+        }
+        public bool IsFileSelected()
+        {
+            return FilePathTextBox.Text != "";
+        }
+
+    }
 }

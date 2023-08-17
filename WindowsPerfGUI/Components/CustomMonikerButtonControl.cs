@@ -23,33 +23,46 @@
 // DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
 // FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 // CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
-using System.Reflection;
-using System.Runtime.InteropServices;
-using WindowsPerfGUI;
+using Microsoft.VisualStudio.Imaging;
+using Microsoft.VisualStudio.Imaging.Interop;
 using System.Windows;
-
-[assembly: AssemblyTitle(Vsix.Name)]
-[assembly: AssemblyDescription(Vsix.Description)]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany(Vsix.Author)]
-[assembly: AssemblyProduct(Vsix.Name)]
-[assembly: AssemblyCopyright(Vsix.Author)]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-[assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
-
-[assembly: ComVisible(false)]
-
-[assembly: AssemblyVersion(Vsix.Version)]
-[assembly: AssemblyFileVersion(Vsix.Version)]
-
-namespace System.Runtime.CompilerServices
+using System.Windows.Controls;
+namespace WindowsPerfGUI.Components
 {
-    public class IsExternalInit { }
+    public class CustomMonikerButtonControl : Button
+    {
+
+
+        public ImageMoniker MonikerName
+        {
+            get { return (ImageMoniker)GetValue(MonikerNameProperty); }
+            set { SetValue(MonikerNameProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for MonikerName.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MonikerNameProperty =
+            DependencyProperty.Register("MonikerName", typeof(ImageMoniker), typeof(CustomMonikerButtonControl), new PropertyMetadata(KnownMonikers.Play));
+
+
+        static CustomMonikerButtonControl()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomMonikerButtonControl), new FrameworkPropertyMetadata(typeof(CustomMonikerButtonControl)));
+
+        }
+        protected override void OnInitialized(EventArgs e)
+        {
+
+            CrispImage monikerImage = new CrispImage();
+            monikerImage.Moniker = MonikerName;
+            monikerImage.Width = 16;
+            monikerImage.Height = 16;
+            Content = monikerImage;
+            base.OnInitialized(e);
+        }
+    }
 }

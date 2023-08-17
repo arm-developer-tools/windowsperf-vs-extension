@@ -41,6 +41,9 @@ namespace WindowsPerfGUI
         public MyToolWindowControl()
         {
             InitializeComponent();
+            Combo.Items.Add("One");
+            Combo.Items.Add("two");
+            Combo.Items.Add("Three");
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)

@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsPerfGUI", "WindowsPerfGUI\WindowsPerfGUI.csproj", "{AD9B63F7-54F0-4F74-8202-75CF2398BED6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsPerfGUI.Tests", "WindowsPerfGUI.Tests\WindowsPerfGUI.Tests.csproj", "{0EDD7923-5F82-4B38-A18E-CEFD430B1734}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsPerfGUI.Tests", "WindowsPerfGUI.Tests\WindowsPerfGUI.Tests.csproj", "{0EDD7923-5F82-4B38-A18E-CEFD430B1734}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
