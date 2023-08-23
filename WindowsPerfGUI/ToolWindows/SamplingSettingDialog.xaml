@@ -1,17 +1,17 @@
-﻿<platform:DialogWindow  x:Class="WindowsPerfGUI.SamplingSettingDialog"
-                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                        xmlns:platform="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
-                        xmlns:toolkit="clr-namespace:Community.VisualStudio.Toolkit;assembly=Community.VisualStudio.Toolkit"
-                        xmlns:Components="clr-namespace:WindowsPerfGUI.Components"
-                        toolkit:Themes.UseVsTheme="True"
-                        mc:Ignorable="d"
-                        Width="600"
-                        Height="450"
-                        Background="#535353">
-    <Grid  Margin="10">
+<platform:DialogWindow x:Class="WindowsPerfGUI.SamplingSettingDialog"
+                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:platform="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
+                       xmlns:toolkit="clr-namespace:Community.VisualStudio.Toolkit;assembly=Community.VisualStudio.Toolkit"
+                       xmlns:Components="clr-namespace:WindowsPerfGUI.Components"
+                       toolkit:Themes.UseVsTheme="True"
+                       mc:Ignorable="d"
+                       Width="600"
+                       Height="450"
+                       Background="#535353">
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -47,9 +47,8 @@
             <Components:CustomComboBoxControl Grid.Row="0"
                                               Grid.Column="1"
                                               x:Name="CpuCoreComboBox"
-                                              ItemsSource="{Binding CpuCoreList}"
-                                              SelectedItem="{Binding SelectedCpuCore}"
-                                              SelectedIndex="0" />
+                                              SelectedIndex="0">
+            </Components:CustomComboBoxControl>
             <Separator Grid.Row="2"
                        Grid.ColumnSpan="2"
                        Margin="0,10,0,10" />
@@ -109,6 +108,7 @@
                                         Margin="0,10,0,10"
                                         Padding="20,5,20,5"
                                         Content="Save"
-                                        HorizontalAlignment="Right" />
+                                        HorizontalAlignment="Right"
+                                        Click="CustomButtonControl_Click" />
     </Grid>
 </platform:DialogWindow>

@@ -28,24 +28,43 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.VisualStudio.PlatformUI;
-using WindowsPerfGUI.Utils;
+using System.Collections.Generic;
 
-namespace WindowsPerfGUI
+namespace WindowsPerfGUI.Utils
 {
-  public partial class SamplingSettingDialog : DialogWindow
-  {
-    public SamplingSettingDialog()
+    public class CpuCores
     {
-      InitializeComponent();
-      CpuCores cpuCores = new();
-      CpuCoreComboBox.ItemsSource = cpuCores.CpuCoreList;
-    }
+        static int numberOfAvailableCores;
 
-    private void CustomButtonControl_Click(object sender, System.Windows.RoutedEventArgs e)
-    {
-      Debug.WriteLine("SelectedCpuCore: " + CpuCoreComboBox.SelectedItem);
-    }
+        public class CpuCoreElement
+        {
+            public int coreNumber;
+            public IntPtr coreMask;
+            public override string ToString()
+            {
+                return $"CPU Core {coreNumber} | CPU Mask  {Convert.ToString((int)coreMask, toBase: 2).PadLeft(numberOfAvailableCores, '0'),4}";
+            }
+        }
 
-  }
+        public List<CpuCoreElement> CpuCoreList { get; private set; }
+
+        public CpuCores()
+        {
+            foreach (var item in new
+            System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get())
+            {
+                numberOfAvailableCores += int.Parse(item["NumberOfCores"].ToString());
+            }
+            CreateCpuCoreList();
+        }
+
+        private void CreateCpuCoreList()
+        {
+            CpuCoreList = new List<CpuCoreElement>();
+            for (int i = 0; i < numberOfAvailableCores; i++)
+            {
+                CpuCoreList.Add(new CpuCoreElement { coreNumber = i, coreMask = (IntPtr)(0x1 << i) });
+            }
+        }
+    }
 }
