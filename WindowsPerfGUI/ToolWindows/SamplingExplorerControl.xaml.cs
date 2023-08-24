@@ -42,6 +42,15 @@ namespace WindowsPerfGUI
 
         private void SettingsMonikerButton_Click(object sender, RoutedEventArgs e)
         {
+            if (!WPerfOptions.Instance.IsWperfInitialized)
+            {
+                VS.MessageBox.ShowError(
+                   "Wperf is not initialized please follow the initilization steps",
+                   "To do so go to Tools -> Options -> Windows Perf -> Wperf Path"
+                   );
+                return;
+            }
+
             SamplingSettingDialog samplingSettingsDialog = new();
             samplingSettingsDialog.Title = "Sampling settings";
             samplingSettingsDialog.ShowDialog();

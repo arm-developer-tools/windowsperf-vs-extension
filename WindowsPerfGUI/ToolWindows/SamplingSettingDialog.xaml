@@ -25,7 +25,8 @@
                                                  GroupName="SamplingSourceRadioButtonGroup"
                                                  x:Name="CustomProcessRadioButton"
                                                  IsChecked="True" />
-            <Components:FilePicker x:Name="SamplingSourcePathFilePicker" />
+            <Components:FilePicker x:Name="SamplingSourcePathFilePicker"
+                                   OnChange="FilePickerTextBox_TextChanged" />
             <Components:CustomRadioButtonControl Content="Project Target"
                                                  GroupName="SamplingSourceRadioButtonGroup"
                                                  x:Name="CurrentProjectProcessRadioButton" />
@@ -47,6 +48,7 @@
             <Components:CustomComboBoxControl Grid.Row="0"
                                               Grid.Column="1"
                                               x:Name="CpuCoreComboBox"
+                                              SelectionChanged="CpuCoreComboBox_SelectionChanged"
                                               SelectedIndex="0">
             </Components:CustomComboBoxControl>
             <Separator Grid.Row="2"
@@ -70,6 +72,7 @@
                    Foreground="White" />
             <Components:CustomComboBoxControl Grid.Row="0"
                                               Grid.Column="1"
+                                              SelectionChanged="EventComboBox_SelectionChanged"
                                               Margin="0,0,0,10"
                                               x:Name="EventComboBox"
                                               SelectedIndex="0" />
@@ -80,6 +83,7 @@
             <Components:CustomComboBoxControl Grid.Row="1"
                                               Grid.Column="1"
                                               x:Name="SamplingFrequencyComboBox"
+                                              SelectionChanged="SamplingFrequencyComboBox_SelectionChanged"
                                               Margin="0,0,0,10"
                                               SelectedIndex="0" />
             <Label Grid.Row="2"
@@ -89,6 +93,7 @@
             <Components:CustomTextBoxControl Grid.Row="2"
                                              Grid.Column="1"
                                              x:Name="SamplingTimeoutTextBox"
+                                             TextChanged="SamplingTimeoutTextBox_TextChanged"
                                              Placeholder="2.5"
                                              Padding="2"
                                              Margin="0,0,0,10" />

@@ -88,6 +88,8 @@
       <DependentUpon>WperfHostDataDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\CpuCores.cs" />
+    <Compile Include="Utils\SamplingFrequency.cs" />
+    <Compile Include="Utils\SamplingSettings.cs" />
     <Compile Include="Utils\SDK\OutputHandler.cs" />
     <Compile Include="Utils\SDK\ProcessRunner.cs" />
     <Compile Include="SDK\WperfClient.cs" />

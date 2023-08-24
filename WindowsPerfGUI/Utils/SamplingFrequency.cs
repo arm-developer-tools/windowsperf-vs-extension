@@ -28,48 +28,25 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.Win32;
-using System.Windows;
-using System.Windows.Controls;
+using System.Collections.Generic;
 
-namespace WindowsPerfGUI.Components
+namespace WindowsPerfGUI.Utils
 {
-    /// <summary>
-    /// Interaction logic for FilePicker.xaml
-    /// </summary>
-    public partial class FilePicker : UserControl
+    public static class SamplingFrequency
     {
-        public FilePicker()
+        public static List<string> SamplingFrequencyList = new List<string>()
         {
-            InitializeComponent();
-            FilePathTextBox.TextChanged += (sender, e) => onChange?.Invoke(sender, e);
-        }
-        private TextChangedEventHandler onChange;
-        public string Label { get => LabelTextBlock.Content.ToString(); set => LabelTextBlock.Content = value; }
-        public TextChangedEventHandler OnChange { get => onChange; set => onChange = value; }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() == true)
-                FilePathTextBox.Text = openFileDialog.FileName;
-
-        }
-        public void Validate()
-        {
-            if (!IsFileSelected())
-            {
-                throw new Exception("File not selected");
-            }
-        }
-        public string GetFilePath()
-        {
-            return FilePathTextBox.Text;
-        }
-        public bool IsFileSelected()
-        {
-            return FilePathTextBox.Text != "";
-        }
-
+            "10000",
+            "100000",
+            "200000",
+            "300000",
+            "400000",
+            "500000",
+            "600000",
+            "700000",
+            "800000",
+            "900000",
+            "1000000",
+        };
     }
 }

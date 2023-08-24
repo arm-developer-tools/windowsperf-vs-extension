@@ -33,19 +33,67 @@ using WindowsPerfGUI.Utils;
 
 namespace WindowsPerfGUI
 {
-  public partial class SamplingSettingDialog : DialogWindow
-  {
-    public SamplingSettingDialog()
+    public partial class SamplingSettingDialog : DialogWindow
     {
-      InitializeComponent();
-      CpuCores cpuCores = new();
-      CpuCoreComboBox.ItemsSource = cpuCores.CpuCoreList;
-    }
+        private readonly CpuCores cpuCores = new();
+        public SamplingSettingDialog()
+        {
+            InitializeComponent();
+            CpuCoreComboBox.ItemsSource = cpuCores.CpuCoreList;
+            EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
+            SamplingFrequencyComboBox.ItemsSource = SamplingFrequency.SamplingFrequencyList;
 
-    private void CustomButtonControl_Click(object sender, System.Windows.RoutedEventArgs e)
-    {
-      Debug.WriteLine("SelectedCpuCore: " + CpuCoreComboBox.SelectedItem);
-    }
+        }
 
-  }
+
+        private void CustomButtonControl_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            SyncSamplingSettings();
+            // TODO: verify that all the mandatory fields have been filled before closing
+            this.Close();
+        }
+
+        private void SyncSamplingSettings()
+        {
+            Utils.SamplingSettings.FilePath = SamplingSourcePathFilePicker.FilePathTextBox.Text;
+            Utils.SamplingSettings.CPUCore = cpuCores.CpuCoreList[CpuCoreComboBox.SelectedIndex];
+            Utils.SamplingSettings.SamplingEvent = WPerfOptions.Instance.WperfList.PredefinedEvents[EventComboBox.SelectedIndex];
+            Utils.SamplingSettings.SamplingFrequency = SamplingFrequency.SamplingFrequencyList[SamplingFrequencyComboBox.SelectedIndex];
+            Utils.SamplingSettings.SamplingTimeout = SamplingTimeoutTextBox.Text;
+            UpdateSamplingCommandCallTextBox();
+        }
+        private void UpdateSamplingCommandCallTextBox()
+        {
+            Utils.SamplingSettings.GenerateCommandLineArgsArray();
+            SamplingCommandCallTextBox.Text = Utils.SamplingSettings.GenerateCommandLinePreview();
+        }
+        private void EventComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            Utils.SamplingSettings.SamplingEvent = WPerfOptions.Instance.WperfList.PredefinedEvents[EventComboBox.SelectedIndex];
+            UpdateSamplingCommandCallTextBox();
+        }
+
+        private void SamplingFrequencyComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            Utils.SamplingSettings.SamplingFrequency = SamplingFrequency.SamplingFrequencyList[SamplingFrequencyComboBox.SelectedIndex];
+            UpdateSamplingCommandCallTextBox();
+        }
+
+        private void SamplingTimeoutTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            Utils.SamplingSettings.SamplingTimeout = SamplingTimeoutTextBox.Text;
+            UpdateSamplingCommandCallTextBox();
+        }
+
+        private void CpuCoreComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            Utils.SamplingSettings.CPUCore = cpuCores.CpuCoreList[CpuCoreComboBox.SelectedIndex];
+            UpdateSamplingCommandCallTextBox();
+        }
+        private void FilePickerTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            Utils.SamplingSettings.FilePath = SamplingSourcePathFilePicker.FilePathTextBox.Text;
+            UpdateSamplingCommandCallTextBox();
+        }
+    }
 }
