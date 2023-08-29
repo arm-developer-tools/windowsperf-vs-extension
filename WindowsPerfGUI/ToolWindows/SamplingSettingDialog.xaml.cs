@@ -50,6 +50,13 @@ namespace WindowsPerfGUI
         {
             SyncSamplingSettings();
             // TODO: verify that all the mandatory fields have been filled before closing
+            if (!Utils.SamplingSettings.AreSettingsFilled)
+            {
+                VS.MessageBox.ShowError("To start sampling you need to have at least",
+                    "The executable file path and the event name as well as the core selected!"
+                    );
+                return;
+            }
             this.Close();
         }
 
@@ -61,6 +68,7 @@ namespace WindowsPerfGUI
             Utils.SamplingSettings.SamplingFrequency = SamplingFrequency.SamplingFrequencyList[SamplingFrequencyComboBox.SelectedIndex];
             Utils.SamplingSettings.SamplingTimeout = SamplingTimeoutTextBox.Text;
             UpdateSamplingCommandCallTextBox();
+
         }
         private void UpdateSamplingCommandCallTextBox()
         {

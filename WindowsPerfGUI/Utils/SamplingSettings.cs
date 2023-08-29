@@ -41,15 +41,30 @@ namespace WindowsPerfGUI.Utils
         public static PredefinedEvent SamplingEvent;
         public static string FilePath;
         public static string[] ArgsArray;
+        public static bool IsSampling = false;
+        public static bool AreSettingsFilled = false;
         public static string[] GenerateCommandLineArgsArray()
         {
             List<string> argsList = new List<string>();
+            ValidateSettings();
+            AppendElementsToList(argsList, "record");
             AppendElementsToList(argsList, "-e", string.IsNullOrWhiteSpace(SamplingFrequency) ? SamplingEvent?.AliasName : $"{SamplingEvent?.AliasName}:{SamplingFrequency}");
             AppendElementsToList(argsList, "-pe_file", FilePath);
             AppendElementsToList(argsList, "-c", CPUCore?.coreNumber.ToString());
             AppendElementsToList(argsList, "--timeout", SamplingTimeout);
+            AppendElementsToList(argsList, "-v", "-json");
             ArgsArray = argsList.ToArray();
             return ArgsArray;
+        }
+
+        private static void ValidateSettings()
+        {
+            if (!(string.IsNullOrEmpty(SamplingEvent?.AliasName) || string.IsNullOrEmpty(FilePath) || string.IsNullOrEmpty(CPUCore?.coreNumber.ToString())))
+            {
+                AreSettingsFilled = true;
+                return;
+            }
+            AreSettingsFilled = false;
         }
 
         private static List<string> AppendElementsToList(List<string> source, params string[] args)
@@ -73,7 +88,7 @@ namespace WindowsPerfGUI.Utils
         public static string GenerateCommandLinePreview()
         {
             string[] argsArray = GenerateCommandLineArgsArray();
-            return $"wperf record {string.Join(" ", argsArray)}";
+            return $"wperf {string.Join(" ", argsArray)}";
         }
     }
 }

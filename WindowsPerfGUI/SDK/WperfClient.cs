@@ -56,10 +56,7 @@ namespace WindowsPerfGUI.SDK
 
         private (string stdOutput, string stdError) ExecuteAwaitedCommand(params string[] args)
         {
-            if (!IsInitilized)
-            {
-                InitProcess();
-            }
+            InitProcess();
 
             (string stdOutput, string stdError) = WperfPorcess.StartAwaitedProcess(args);
 
@@ -116,6 +113,28 @@ namespace WindowsPerfGUI.SDK
             (string stdOutput, string stdError) = ExecuteAwaitedCommand("test", "-json");
 
             WperfTest serializedOutput = WperfTest.FromJson(stdOutput);
+            return (serializedOutput, stdError);
+        }
+
+        public async Task StartSamplingAsync()
+        {
+            string[] samplingArgs = Utils.SamplingSettings.GenerateCommandLineArgsArray();
+            Utils.SamplingSettings.IsSampling = true;
+            await WperfPorcess.StartBackgroundProcessAsync(samplingArgs);
+            (WperfSampling serializedOutput, string stdError) = StopSampling();
+            OnSamplingFinished?.Invoke(this, (serializedOutput, stdError));
+            //WperfSampling serializedOutput = WperfSampling.FromJson(stdOutput);
+            //return (serializedOutput, stdError);
+        }
+
+        public EventHandler<(WperfSampling serializedOutput, string stdError)> OnSamplingFinished { get; set; }
+        public (WperfSampling serializedOutput, string stdError) StopSampling()
+        {
+            WperfPorcess.StopProcess();
+            Utils.SamplingSettings.IsSampling = false;
+            string stdOutput = string.Join("", WperfPorcess.StdOutput.Output);
+            string stdError = string.Join("", WperfPorcess.StdError.Output);
+            WperfSampling serializedOutput = WperfSampling.FromJson(stdOutput);
             return (serializedOutput, stdError);
         }
     }

@@ -30,14 +30,29 @@
 
 using System.Windows;
 using System.Windows.Controls;
+using WindowsPerfGUI.SDK;
+using WindowsPerfGUI.SDK.WperfOutputs;
 
 namespace WindowsPerfGUI
 {
     public partial class SamplingExplorerControl : UserControl
     {
+        WperfClientFactory wperfClient = new();
+
+        private void HandleSamplingFinished(object sender, (WperfSampling serializedOutput, string stdError) e)
+        {
+            if (!string.IsNullOrEmpty(e.stdError))
+            {
+                VS.MessageBox.ShowError("Wperf Error", e.stdError);
+                return;
+            }
+            Debug.WriteLine(e.serializedOutput.SamplingSummary.SamplesGenerated);
+        }
+
         public SamplingExplorerControl()
         {
             InitializeComponent();
+            wperfClient.OnSamplingFinished += HandleSamplingFinished;
         }
 
         private void SettingsMonikerButton_Click(object sender, RoutedEventArgs e)
@@ -54,6 +69,33 @@ namespace WindowsPerfGUI
             SamplingSettingDialog samplingSettingsDialog = new();
             samplingSettingsDialog.Title = "Sampling settings";
             samplingSettingsDialog.ShowDialog();
+        }
+
+        private void StartSamplingMonikerButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!WPerfOptions.Instance.IsWperfInitialized) return;
+            // TODO: add verification that settings has been filled
+            if (!Utils.SamplingSettings.AreSettingsFilled)
+            {
+                VS.MessageBox.ShowError("To start sampling you need to have at least",
+                    "The executable file path and the event name as well as the core selected!"
+                    );
+                return;
+            }
+            if (Utils.SamplingSettings.IsSampling)
+            {
+                VS.MessageBox.ShowError(
+                   "WindowsPerf is currently sampling",
+                   "Please wait for the current sampling to finish before restarting an other sampling instance"
+                   );
+                return;
+            }
+            wperfClient.StartSamplingAsync().FireAndForget();
+        }
+
+        private void StopSamplingMonikerButton_Click(object sender, RoutedEventArgs e)
+        {
+            wperfClient.StopSampling();
         }
     }
 }

@@ -24,11 +24,19 @@
                     HorizontalAlignment="Left"
                     Orientation="Horizontal"
                     DockPanel.Dock="Top">
-            <Components:CustomMonikerButtonControl Margin="0,4,1,4"
+            <Components:CustomMonikerButtonControl x:Name="StartSamplingMonikerButton"
+                                                   Margin="0,4,1,4"
+                                                   Click="StartSamplingMonikerButton_Click"
                                                    MonikerName="{x:Static catalog:KnownMonikers.Play}" />
-            <Components:CustomMonikerButtonControl Click="SettingsMonikerButton_Click"
+            <Components:CustomMonikerButtonControl x:Name="StopSamplingMonikerButton"
+                                                   Click="StopSamplingMonikerButton_Click"
+                                                   Margin="0,4,1,4"
+                                                   MonikerName="{x:Static catalog:KnownMonikers.Stop}" />
+            <Components:CustomMonikerButtonControl x:Name="SamplingSettingsMonikerButton"
+                                                   Click="SettingsMonikerButton_Click"
                                                    Margin="0,4,0,4"
                                                    MonikerName="{x:Static catalog:KnownMonikers.Settings}" />
+           
         </StackPanel>
         <Separator Grid.Row="1" />
         <Grid Grid.Row="2">

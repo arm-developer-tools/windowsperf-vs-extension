@@ -75,6 +75,7 @@
     <Compile Include="Commands\MyToolWindowCommand.cs" />
     <Compile Include="SDK\WperfOutputs\JsonSettings.cs" />
     <Compile Include="SDK\WperfOutputs\WperfList.cs" />
+    <Compile Include="SDK\WperfOutputs\WperfSampling.cs" />
     <Compile Include="SDK\WperfOutputs\WperfTest.cs" />
     <Compile Include="SDK\WperfOutputs\WperfVersion.cs" />
     <Compile Include="ToolWindows\SamplingExplorer.cs" />

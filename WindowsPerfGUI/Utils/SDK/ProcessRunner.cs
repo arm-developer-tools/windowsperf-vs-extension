@@ -29,6 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+using Microsoft.VisualStudio.Threading;
 using System.Runtime.InteropServices;
 using System.Threading;
 
@@ -99,7 +100,7 @@ namespace WindowsPerfGUI.Utils.SDK
         public Task StartBackgroundProcessAsync(params string[] args)
         {
             _BackgroundProcessCancelationToken = new CancellationTokenSource();
-            _BackgroundProcessTask = Task.Run(() => StartBackgroundProcess(args), _BackgroundProcessCancelationToken.Token);
+            _BackgroundProcessTask = Task.Run(() => _StartBackgroundProcessAsync(args), _BackgroundProcessCancelationToken.Token);
             return _BackgroundProcessTask;
         }
 
@@ -107,7 +108,7 @@ namespace WindowsPerfGUI.Utils.SDK
         {
             const int waitForExitTimeout = 2000;
             if (force) { ForceKillProcess(); return; }
-
+            if (_BackgroundProcess.HasExited) { return; }
             _BackgroundProcessCancelationToken.Cancel(true);
             if (!AttachConsole((uint)_BackgroundProcess.Id))
             {
@@ -160,11 +161,11 @@ namespace WindowsPerfGUI.Utils.SDK
             return (stdOutput, stdError);
         }
 
-
-
-        private void StartBackgroundProcess(string[] args)
+        private async Task _StartBackgroundProcessAsync(string[] args)
         {
             InitProcess(args);
+            StdOutput.ClearOutput();
+            StdError.ClearOutput();
             _BackgroundProcess.OutputDataReceived += new DataReceivedEventHandler(StdOutput.OutputhHandler);
             _BackgroundProcess.ErrorDataReceived += new DataReceivedEventHandler(StdError.OutputhHandler);
             _BackgroundProcess.Start();
@@ -174,7 +175,8 @@ namespace WindowsPerfGUI.Utils.SDK
             }
             _BackgroundProcess.BeginOutputReadLine();
             _BackgroundProcess.BeginErrorReadLine();
-            _BackgroundProcess.WaitForExit();
+            await _BackgroundProcess.WaitForExitAsync();
+
         }
 
         private void InitProcess(string[] args)
