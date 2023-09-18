@@ -53,6 +53,16 @@ namespace WindowsPerfGUI.Components.TreeListView
 
         public TreeListItem()
         {
+
+        }
+
+        protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
+        {
+            if (Node != null && Node.IsExpandable)
+            {
+                Node.IsExpanded = !Node.IsExpanded;
+            }
+            base.OnMouseDoubleClick(e);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
