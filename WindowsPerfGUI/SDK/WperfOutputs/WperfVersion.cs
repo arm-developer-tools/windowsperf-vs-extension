@@ -46,6 +46,9 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
 
         [JsonProperty("Version")]
         public string ComponentVersion { get; set; }
+
+        [JsonProperty("GitVer")]
+        public string GitVersion { get; set; }
     }
 
     public partial class WperfVersion

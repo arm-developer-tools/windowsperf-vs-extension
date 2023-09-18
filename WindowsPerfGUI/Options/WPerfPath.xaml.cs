@@ -92,11 +92,12 @@ namespace WindowsPerfGUI.Options
 
                 string component = item.component.Component;
                 string componentVersion = item.component.ComponentVersion;
+                string gitVersion = item.component.GitVersion;
 
                 MainStack.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
 
                 TextBlock componentLabel = TextBlockFactory(component, offset);
-                TextBlock componentVersionLabel = TextBlockFactory(componentVersion, offset, true);
+                TextBlock componentVersionLabel = TextBlockFactory($"{componentVersion} ({gitVersion})", offset, true);
 
                 MainStack.Children.Add(componentLabel);
                 MainStack.Children.Add(componentVersionLabel);
