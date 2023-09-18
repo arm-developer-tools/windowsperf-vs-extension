@@ -28,31 +28,50 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using Microsoft.VisualStudio.Text;
+using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using WindowsPerfGUI.Components.TreeListView;
 using WindowsPerfGUI.SDK;
 using WindowsPerfGUI.SDK.WperfOutputs;
+using WindowsPerfGUI.Utils;
 
 namespace WindowsPerfGUI
 {
     public partial class SamplingExplorerControl : UserControl
     {
-        WperfClientFactory wperfClient = new();
-
+        readonly WperfClientFactory wperfClient = new();
+        static FormattedSamplingResults formattedSamplingResults = new FormattedSamplingResults();
         private void HandleSamplingFinished(object sender, (WperfSampling serializedOutput, string stdError) e)
         {
+            SamplingSettingsMonikerButton.IsEnabled = true;
+            StartSamplingMonikerButton.IsEnabled = true;
+            StopSamplingMonikerButton.IsEnabled = false;
             if (!string.IsNullOrEmpty(e.stdError))
             {
                 VS.MessageBox.ShowError("Wperf Error", e.stdError);
                 return;
             }
-            Debug.WriteLine(e.serializedOutput.SamplingSummary.SamplesGenerated);
+            if (e.serializedOutput == null)
+            {
+
+                VS.MessageBox.ShowError("No results were returned from wperf", e.stdError);
+                return;
+            }
+            formattedSamplingResults.FormatSamplingResults(e.serializedOutput, $"Executed at {DateTime.Now.ToShortTimeString()}");
+            if (_tree.Model == null) _tree.Model = formattedSamplingResults;
+            _tree.UpdateTreeList();
         }
 
         public SamplingExplorerControl()
         {
             InitializeComponent();
+            _tree.Model = formattedSamplingResults;
             wperfClient.OnSamplingFinished += HandleSamplingFinished;
+            StopSamplingMonikerButton.IsEnabled = false;
         }
 
         private void SettingsMonikerButton_Click(object sender, RoutedEventArgs e)
@@ -75,14 +94,14 @@ namespace WindowsPerfGUI
         {
             if (!WPerfOptions.Instance.IsWperfInitialized) return;
             // TODO: add verification that settings has been filled
-            if (!Utils.SamplingSettings.AreSettingsFilled)
+            if (!SamplingSettings.AreSettingsFilled)
             {
                 VS.MessageBox.ShowError("To start sampling you need to have at least",
                     "The executable file path and the event name as well as the core selected!"
                     );
                 return;
             }
-            if (Utils.SamplingSettings.IsSampling)
+            if (SamplingSettings.IsSampling)
             {
                 VS.MessageBox.ShowError(
                    "WindowsPerf is currently sampling",
@@ -91,11 +110,162 @@ namespace WindowsPerfGUI
                 return;
             }
             wperfClient.StartSamplingAsync().FireAndForget();
+            SamplingSettingsMonikerButton.IsEnabled = false;
+            StartSamplingMonikerButton.IsEnabled = false;
+            StopSamplingMonikerButton.IsEnabled = true;
         }
 
         private void StopSamplingMonikerButton_Click(object sender, RoutedEventArgs e)
         {
             wperfClient.StopSampling();
+            SamplingSettingsMonikerButton.IsEnabled = true;
+            StartSamplingMonikerButton.IsEnabled = true;
+            StopSamplingMonikerButton.IsEnabled = false;
+        }
+
+        private void _tree_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            TreeList treeList = sender as TreeList;
+            SummaryStack.Children.Clear();
+            if (treeList == null || treeList.SelectedItem == null) return;
+            SamplingSection selecteditem = (treeList.SelectedItem as TreeNode).Tag as SamplingSection;
+            switch (selecteditem.SectionType)
+            {
+                case SamplingSection.SamplingSectionType.ROOT:
+                    CreateRootSummary(SummaryStack.Children, selecteditem);
+                    break;
+                case SamplingSection.SamplingSectionType.SAMPLE_EVENT:
+                    CreateEventSummary(SummaryStack.Children, selecteditem);
+                    break;
+                case SamplingSection.SamplingSectionType.SAMPLE_FUNCTION:
+                    CreateFunctionSummary(SummaryStack.Children, selecteditem);
+                    break;
+
+                case SamplingSection.SamplingSectionType.SAMPLE_SOURCE_CODE:
+                    CreateSourceCodeSummary(SummaryStack.Children, selecteditem);
+                    break;
+                default:
+                    break;
+            }
+        }
+        private void CreateSourceCodeSummary(UIElementCollection children, SamplingSection samplingSection)
+        {
+            if (samplingSection.SectionType != SamplingSection.SamplingSectionType.SAMPLE_SOURCE_CODE)
+            {
+                return;
+            }
+
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("File path: ")), new Run(samplingSection.Name) }, _localFontSizes.lg, _localFontWeights.bold));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Line number: ")), new Run(samplingSection.LineNumber.ToString()) }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Hits: ")), new Run($"{samplingSection.Hits}") }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Overhead: ")), new Run($"{samplingSection.OverheadPercentage}") }, _localFontSizes.md));
+        }
+        private void CreateFunctionSummary(UIElementCollection children, SamplingSection samplingSection)
+        {
+            if (samplingSection.SectionType != SamplingSection.SamplingSectionType.SAMPLE_FUNCTION)
+            {
+                return;
+            }
+
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Function/Symbol Name: ")), new Run(samplingSection.Name) }, _localFontSizes.lg, _localFontWeights.bold));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Interval: ")), new Run(samplingSection.Parent.Frequency) }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Hits: ")), new Run($"{samplingSection.Hits}") }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Overhead: ")), new Run($"{samplingSection.OverheadPercentage}") }, _localFontSizes.md));
+        }
+        private void CreateEventSummary(UIElementCollection children, SamplingSection samplingSection)
+        {
+            if (samplingSection.SectionType != SamplingSection.SamplingSectionType.SAMPLE_EVENT)
+            {
+                return;
+            }
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Event Name: ")), new Run(samplingSection.Name) }, _localFontSizes.lg, _localFontWeights.bold));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Interval: ")), new Run(samplingSection.Frequency) }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Number of Printed Samples: ")), new Run($"{samplingSection.Hits}") }, _localFontSizes.md));
+
+        }
+
+        private void CreateRootSummary(UIElementCollection children, SamplingSection samplingSection)
+        {
+            if (samplingSection.SectionType != SamplingSection.SamplingSectionType.ROOT)
+            {
+                return;
+            }
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Name: ")), new Run(samplingSection.Name) }, _localFontSizes.lg, _localFontWeights.bold));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Pe File: ")), new Run(samplingSection.PeFile) }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Pdb File: ")), new Run(samplingSection.PdbFile) }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Samples Generated: ")), new Run($"{samplingSection.Hits}") }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Samples Dropped: ")), new Run($"{samplingSection.SamplesDropped}") }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Run("Modules: ") }, _localFontSizes.md, _localFontWeights.bold));
+
+            foreach (var module in samplingSection.Modules)
+            {
+                children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Name: ")), new Run(module.Name) }, layer: 1));
+                children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Path: ")), new Run(module.Path) }, layer: 2));
+            }
+
+            children.Add(GenerateTextBlock(new List<Inline>() { new Run("Event List: ") }, _localFontSizes.md, _localFontWeights.bold));
+
+            foreach (var sampledEvent in samplingSection.Children)
+            {
+                children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Name: ")), new Run(sampledEvent.Name) }, layer: 1));
+                children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Frequency: ")), new Run(sampledEvent.Frequency) }, layer: 2));
+            }
+        }
+        private enum _localFontSizes
+        {
+            sm = 12,
+            md = 14,
+            lg = 16,
+        }
+        private enum _localFontWeights
+        {
+            normal,
+            bold,
+        }
+        private TextBlock GenerateTextBlock(List<Inline> InlineText, _localFontSizes fontSize = _localFontSizes.sm, _localFontWeights fontWeight = _localFontWeights.normal, int layer = 0)
+        {
+            FontWeight _fontWeight = fontWeight == _localFontWeights.normal ? FontWeights.Normal : FontWeights.Bold;
+            double marginTop = fontSize == _localFontSizes.sm ? 5 : fontSize == _localFontSizes.md ? 10 : 15;
+            Thickness _margin = new Thickness(layer * 15, marginTop, 0, 0);
+            TextBlock textBlock = new TextBlock() { FontSize = (double)fontSize, FontWeight = _fontWeight, Margin = _margin };
+            textBlock.Inlines.AddRange(InlineText);
+            return textBlock;
+
+        }
+        private void _tree_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var treeList = sender as TreeList;
+
+            SamplingSection selecteditem = (treeList.SelectedItem as TreeNode).Tag as SamplingSection;
+            if (!selecteditem.IsFileExists) return;
+            string filePath = selecteditem.Name;
+            OpenVSDocument(filePath, (int)selecteditem.LineNumber);
+        }
+        private void OpenVSDocument(string filePath, int lineNumber)
+        {
+            _ = Task.Run(async () =>
+            {
+                DocumentView docView;
+                docView = await VS.Documents.OpenAsync(filePath);
+                SnapshotPoint position = docView.TextView.Caret.Position.BufferPosition;
+                docView.TextView.Caret.MoveTo(position.Snapshot.GetLineFromLineNumber(lineNumber - 1).End);
+            });
+        }
+        private void ClearListMonikerButton_Click(object sender, RoutedEventArgs e)
+        {
+            formattedSamplingResults.ClearSampling();
+            _tree.UpdateTreeList();
+        }
+
+        private void TextBlock_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var textBlock = sender as TextBlock;
+            string filePath = textBlock.Text;
+            SamplingSection selecteditem = (_tree?.SelectedItem as TreeNode)?.Tag as SamplingSection;
+            bool isFileExists = File.Exists(filePath);
+            if (!isFileExists) return;
+            int lineNumber = selecteditem?.LineNumber != null ? (int)selecteditem?.LineNumber : 0;
+            OpenVSDocument(filePath, lineNumber);
         }
     }
 }

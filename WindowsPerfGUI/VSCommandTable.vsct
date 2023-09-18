@@ -23,7 +23,7 @@
         <Icon guid="ImageCatalogGuid" id="ListView"/>
         <CommandFlag>IconIsMoniker</CommandFlag>
         <Strings>
-          <ButtonText>Wperf Host Data</ButtonText>
+          <ButtonText>WindowsPerf Host Data</ButtonText>
           <LocCanonicalName>.Tools.WperfHostData</LocCanonicalName>
         </Strings>
       </Button>

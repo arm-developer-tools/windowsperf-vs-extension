@@ -47,6 +47,7 @@ TODO
 
 A good bug report, which is complete and self-contained, enables us to fix the bug. Before  you report a bug, please check the list of [issues](https://gitlab.com/Linaro/WindowsPerf/vs-extension/-/issues) and, if possible, try a bleeding edge code (latest source tree commit).
 
+
 # Common LICENSE tags
 
 (Complete list can be found at: https://spdx.org/licenses)

@@ -35,14 +35,21 @@ namespace WindowsPerfGUI
 {
     public partial class SamplingSettingDialog : DialogWindow
     {
-        private readonly CpuCores cpuCores = new();
         public SamplingSettingDialog()
         {
             InitializeComponent();
-            CpuCoreComboBox.ItemsSource = cpuCores.CpuCoreList;
+
+            // TODO: Investigate CPU Core initial state
+
+            CpuCoreComboBox.ItemsSource = CpuCores.InitCpuCores();
             EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
             SamplingFrequencyComboBox.ItemsSource = SamplingFrequency.SamplingFrequencyList;
 
+            if (SamplingSettings.samplingSettingsFrom.SamplingEvent == null) EventComboBox.SelectedIndex = 0;
+            if (SamplingSettings.samplingSettingsFrom.SamplingFrequency == null) SamplingFrequencyComboBox.SelectedIndex = 0;
+            if (SamplingSettings.samplingSettingsFrom.CPUCore == null) CpuCoreComboBox.SelectedIndex = 0;
+
+            if (SamplingSettings.samplingSettingsFrom.FilePath != null) SamplingSourcePathFilePicker.FilePathTextBox.Text = SamplingSettings.samplingSettingsFrom.FilePath;
         }
 
 
@@ -50,7 +57,7 @@ namespace WindowsPerfGUI
         {
             SyncSamplingSettings();
             // TODO: verify that all the mandatory fields have been filled before closing
-            if (!Utils.SamplingSettings.AreSettingsFilled)
+            if (!SamplingSettings.AreSettingsFilled)
             {
                 VS.MessageBox.ShowError("To start sampling you need to have at least",
                     "The executable file path and the event name as well as the core selected!"
@@ -62,45 +69,18 @@ namespace WindowsPerfGUI
 
         private void SyncSamplingSettings()
         {
-            Utils.SamplingSettings.FilePath = SamplingSourcePathFilePicker.FilePathTextBox.Text;
-            Utils.SamplingSettings.CPUCore = cpuCores.CpuCoreList[CpuCoreComboBox.SelectedIndex];
-            Utils.SamplingSettings.SamplingEvent = WPerfOptions.Instance.WperfList.PredefinedEvents[EventComboBox.SelectedIndex];
-            Utils.SamplingSettings.SamplingFrequency = SamplingFrequency.SamplingFrequencyList[SamplingFrequencyComboBox.SelectedIndex];
-            Utils.SamplingSettings.SamplingTimeout = SamplingTimeoutTextBox.Text;
             UpdateSamplingCommandCallTextBox();
 
         }
         private void UpdateSamplingCommandCallTextBox()
         {
-            Utils.SamplingSettings.GenerateCommandLineArgsArray();
-            SamplingCommandCallTextBox.Text = Utils.SamplingSettings.GenerateCommandLinePreview();
-        }
-        private void EventComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            Utils.SamplingSettings.SamplingEvent = WPerfOptions.Instance.WperfList.PredefinedEvents[EventComboBox.SelectedIndex];
-            UpdateSamplingCommandCallTextBox();
+            SamplingSettings.GenerateCommandLineArgsArray(SamplingSettings.samplingSettingsFrom);
+            SamplingCommandCallTextBox.Text = SamplingSettings.GenerateCommandLinePreview();
         }
 
-        private void SamplingFrequencyComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            Utils.SamplingSettings.SamplingFrequency = SamplingFrequency.SamplingFrequencyList[SamplingFrequencyComboBox.SelectedIndex];
-            UpdateSamplingCommandCallTextBox();
-        }
-
-        private void SamplingTimeoutTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            Utils.SamplingSettings.SamplingTimeout = SamplingTimeoutTextBox.Text;
-            UpdateSamplingCommandCallTextBox();
-        }
-
-        private void CpuCoreComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            Utils.SamplingSettings.CPUCore = cpuCores.CpuCoreList[CpuCoreComboBox.SelectedIndex];
-            UpdateSamplingCommandCallTextBox();
-        }
         private void FilePickerTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            Utils.SamplingSettings.FilePath = SamplingSourcePathFilePicker.FilePathTextBox.Text;
+            SamplingSettings.samplingSettingsFrom.FilePath = SamplingSourcePathFilePicker.FilePathTextBox.Text;
             UpdateSamplingCommandCallTextBox();
         }
     }

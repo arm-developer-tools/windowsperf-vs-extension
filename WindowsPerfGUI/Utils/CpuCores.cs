@@ -32,33 +32,34 @@ using System.Collections.Generic;
 
 namespace WindowsPerfGUI.Utils
 {
-    public class CpuCores
+    public class CpuCoreElement
     {
-        static int numberOfAvailableCores;
-
-        public class CpuCoreElement
+        public int coreNumber;
+        public IntPtr coreMask;
+        public override string ToString()
         {
-            public int coreNumber;
-            public IntPtr coreMask;
-            public override string ToString()
-            {
-                return $"CPU Core {coreNumber} | CPU Mask  {Convert.ToString((int)coreMask, toBase: 2).PadLeft(numberOfAvailableCores, '0'),4}";
-            }
+            return $"CPU Core {coreNumber}";
         }
+    }
+    public static class CpuCores
+    {
+        public static int numberOfAvailableCores = 0;
 
-        public List<CpuCoreElement> CpuCoreList { get; private set; }
+        public static List<CpuCoreElement> CpuCoreList { get; private set; }
 
-        public CpuCores()
+        public static List<CpuCoreElement> InitCpuCores()
         {
+            if (numberOfAvailableCores > 0) return CpuCoreList;
             foreach (var item in new
             System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get())
             {
                 numberOfAvailableCores += int.Parse(item["NumberOfCores"].ToString());
             }
             CreateCpuCoreList();
+            return CpuCoreList;
         }
 
-        private void CreateCpuCoreList()
+        private static void CreateCpuCoreList()
         {
             CpuCoreList = new List<CpuCoreElement>();
             for (int i = 0; i < numberOfAvailableCores; i++)

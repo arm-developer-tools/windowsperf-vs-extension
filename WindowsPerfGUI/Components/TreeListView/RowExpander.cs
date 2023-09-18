@@ -28,32 +28,16 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.VisualStudio.Imaging;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
-namespace WindowsPerfGUI
+namespace WindowsPerfGUI.Components.TreeListView
 {
-    public class SamplingExplorer : BaseToolWindow<SamplingExplorer>
+    public class RowExpander : Control
     {
-        public override string GetTitle(int toolWindowId) => "Sampling Explorer";
-
-        public override Type PaneType => typeof(Pane);
-
-        public override Task<FrameworkElement> CreateAsync(int toolWindowId, CancellationToken cancellationToken)
+        static RowExpander()
         {
-            return Task.FromResult<FrameworkElement>(new SamplingExplorerControl());
-        }
-
-        [Guid("e0b657ee-f2c9-4365-a1db-e0d5a8a59417")]
-        internal class Pane : ToolWindowPane
-        {
-            public Pane()
-            {
-                BitmapImageMoniker = KnownMonikers.ToolWindow;
-            }
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(RowExpander), new FrameworkPropertyMetadata(typeof(RowExpander)));
         }
     }
 }

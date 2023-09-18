@@ -29,10 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-using System.Windows;
 using System.Windows.Controls;
-using WindowsPerfGUI.SDK;
-using WindowsPerfGUI.SDK.WperfOutputs;
 
 namespace WindowsPerfGUI
 {
@@ -41,35 +38,6 @@ namespace WindowsPerfGUI
         public MyToolWindowControl()
         {
             InitializeComponent();
-            Combo.Items.Add("One");
-            Combo.Items.Add("two");
-            Combo.Items.Add("Three");
-        }
-
-        private void button1_Click(object sender, RoutedEventArgs e)
-        {
-            WperfClientFactory wperfClient = new();
-            (WperfVersion output, _) = wperfClient.GetVersion();
-            foreach (SDK.WperfOutputs.Version version in output.Components)
-            {
-                Debug.WriteLine(version.Component + " : " + version.ComponentVersion);
-            }
-            (WperfList eventList, _) = wperfClient.GetEventList();
-            foreach (PredefinedEvent wperfEvent in eventList.PredefinedEvents)
-            {
-                Debug.WriteLine("Event Name : " + wperfEvent.AliasName + " - Raw Index : " + wperfEvent.RawIndex + " - Event Type : " + wperfEvent.EventType);
-            }
-            foreach (PredefinedMetric wperfMetric in eventList.PredefinedMetrics)
-            {
-                Debug.WriteLine("Metric Name : " + wperfMetric.Metric + " - Events : " + wperfMetric.Events);
-            }
-
-            (WperfTest wperfTestResults, _) = wperfClient.GetTest();
-            foreach (TestResult testResult in wperfTestResults.TestResults)
-            {
-                Debug.WriteLine("Test Name : " + testResult.TestName + " - Test Result : " + testResult.Result);
-            }
-            VS.MessageBox.Show("WindowsPerfGUI", "Button clicked");
         }
     }
 }

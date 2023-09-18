@@ -28,32 +28,43 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.VisualStudio.Imaging;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Globalization;
 using System.Windows;
+using System.Windows.Data;
 
-namespace WindowsPerfGUI
+namespace WindowsPerfGUI.Components.TreeListView
 {
-    public class SamplingExplorer : BaseToolWindow<SamplingExplorer>
+    /// <summary>
+    /// Convert Level to left margin
+    /// </summary>
+    internal class LevelToIndentConverter : IValueConverter
     {
-        public override string GetTitle(int toolWindowId) => "Sampling Explorer";
+        private const double IndentSize = 19.0;
 
-        public override Type PaneType => typeof(Pane);
-
-        public override Task<FrameworkElement> CreateAsync(int toolWindowId, CancellationToken cancellationToken)
+        public object Convert(object o, Type type, object parameter, CultureInfo culture)
         {
-            return Task.FromResult<FrameworkElement>(new SamplingExplorerControl());
+            return new Thickness((int)o * IndentSize, 0, 0, 0);
         }
 
-        [Guid("e0b657ee-f2c9-4365-a1db-e0d5a8a59417")]
-        internal class Pane : ToolWindowPane
+        public object ConvertBack(object o, Type type, object parameter, CultureInfo culture)
         {
-            public Pane()
-            {
-                BitmapImageMoniker = KnownMonikers.ToolWindow;
-            }
+            throw new NotSupportedException();
+        }
+    }
+
+    internal class CanExpandConverter : IValueConverter
+    {
+        public object Convert(object o, Type type, object parameter, CultureInfo culture)
+        {
+            if ((bool)o)
+                return Visibility.Visible;
+            else
+                return Visibility.Hidden;
+        }
+
+        public object ConvertBack(object o, Type type, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
         }
     }
 }

@@ -1,16 +1,21 @@
-<platform:DialogWindow x:Class="WindowsPerfGUI.SamplingSettingDialog"
-                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                       xmlns:platform="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
-                       xmlns:toolkit="clr-namespace:Community.VisualStudio.Toolkit;assembly=Community.VisualStudio.Toolkit"
-                       xmlns:Components="clr-namespace:WindowsPerfGUI.Components"
-                       toolkit:Themes.UseVsTheme="True"
-                       mc:Ignorable="d"
-                       Width="600"
-                       Height="450"
-                       Background="#535353">
+<platform:DialogWindow
+    x:Class="WindowsPerfGUI.SamplingSettingDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Components="clr-namespace:WindowsPerfGUI.Components"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:platform="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
+    xmlns:toolkit="clr-namespace:Community.VisualStudio.Toolkit;assembly=Community.VisualStudio.Toolkit"
+    xmlns:utils="clr-namespace:WindowsPerfGUI.Utils"
+    Width="600"
+    Height="500"
+    toolkit:Themes.UseVsTheme="True"
+    Background="#535353"
+    mc:Ignorable="d">
+    <platform:DialogWindow.DataContext>
+        <utils:SamplingSettingsForm />
+    </platform:DialogWindow.DataContext>
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -19,17 +24,17 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0"
-                    Orientation="Vertical">
-            <Components:CustomRadioButtonControl Content="Payload From File"
-                                                 GroupName="SamplingSourceRadioButtonGroup"
-                                                 x:Name="CustomProcessRadioButton"
-                                                 IsChecked="True" />
-            <Components:FilePicker x:Name="SamplingSourcePathFilePicker"
-                                   OnChange="FilePickerTextBox_TextChanged" />
-            <Components:CustomRadioButtonControl Content="Project Target"
-                                                 GroupName="SamplingSourceRadioButtonGroup"
-                                                 x:Name="CurrentProjectProcessRadioButton" />
+        <StackPanel Grid.Row="0" Orientation="Vertical">
+            <Components:CustomRadioButtonControl
+                x:Name="CustomProcessRadioButton"
+                Content="Payload From File"
+                GroupName="SamplingSourceRadioButtonGroup"
+                IsChecked="True" />
+            <Components:FilePicker x:Name="SamplingSourcePathFilePicker" OnChange="FilePickerTextBox_TextChanged" />
+            <Components:CustomRadioButtonControl
+                x:Name="CurrentProjectProcessRadioButton"
+                Content="Project Target"
+                GroupName="SamplingSourceRadioButtonGroup" />
             <Separator Margin="0,10,0,10" />
         </StackPanel>
         <Grid Grid.Row="1">
@@ -41,19 +46,20 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Label Grid.Row="0"
-                   Grid.Column="0"
-                   Content="CPU Core :"
-                   Foreground="White" />
-            <Components:CustomComboBoxControl Grid.Row="0"
-                                              Grid.Column="1"
-                                              x:Name="CpuCoreComboBox"
-                                              SelectionChanged="CpuCoreComboBox_SelectionChanged"
-                                              SelectedIndex="0">
-            </Components:CustomComboBoxControl>
-            <Separator Grid.Row="2"
-                       Grid.ColumnSpan="2"
-                       Margin="0,10,0,10" />
+            <Label
+                Grid.Row="0"
+                Grid.Column="0"
+                Content="CPU Core :"
+                Foreground="White" />
+            <Components:CustomComboBoxControl
+                x:Name="CpuCoreComboBox"
+                Grid.Row="0"
+                Grid.Column="1"
+                SelectedItem="{Binding CPUCore, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            <Separator
+                Grid.Row="2"
+                Grid.ColumnSpan="2"
+                Margin="0,10,0,10" />
         </Grid>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
@@ -66,54 +72,65 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Label Grid.Row="0"
-                   Grid.Column="0"
-                   Content="Event :"
-                   Foreground="White" />
-            <Components:CustomComboBoxControl Grid.Row="0"
-                                              Grid.Column="1"
-                                              SelectionChanged="EventComboBox_SelectionChanged"
-                                              Margin="0,0,0,10"
-                                              x:Name="EventComboBox"
-                                              SelectedIndex="0" />
-            <Label Grid.Row="1"
-                   Grid.Column="0"
-                   Content="Frequency :"
-                   Foreground="White" />
-            <Components:CustomComboBoxControl Grid.Row="1"
-                                              Grid.Column="1"
-                                              x:Name="SamplingFrequencyComboBox"
-                                              SelectionChanged="SamplingFrequencyComboBox_SelectionChanged"
-                                              Margin="0,0,0,10"
-                                              SelectedIndex="0" />
-            <Label Grid.Row="2"
-                   Grid.Column="0"
-                   Content="Timeout (s):"
-                   Foreground="White" />
-            <Components:CustomTextBoxControl Grid.Row="2"
-                                             Grid.Column="1"
-                                             x:Name="SamplingTimeoutTextBox"
-                                             TextChanged="SamplingTimeoutTextBox_TextChanged"
-                                             Placeholder="2.5"
-                                             Padding="2"
-                                             Margin="0,0,0,10" />
+            <Label
+                Grid.Row="0"
+                Grid.Column="0"
+                Content="Event :"
+                Foreground="White" />
+            <Components:CustomComboBoxControl
+                x:Name="EventComboBox"
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="0,0,0,10"
+                SelectedItem="{Binding SamplingEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            <Label
+                Grid.Row="1"
+                Grid.Column="0"
+                Content="Frequency :"
+                Foreground="White" />
+            <Components:CustomComboBoxControl
+                x:Name="SamplingFrequencyComboBox"
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="0,0,0,10"
+                SelectedItem="{Binding SamplingFrequency, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            <Label
+                Grid.Row="2"
+                Grid.Column="0"
+                Content="Timeout (s):"
+                Foreground="White" />
+            <Components:CustomTextBoxControl
+                x:Name="SamplingTimeoutTextBox"
+                Grid.Row="2"
+                Grid.Column="1"
+                Margin="0,0,0,10"
+                Padding="2"
+                Placeholder="2.5"
+                Text="{Binding SamplingTimeout, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
         </Grid>
         <StackPanel Grid.Row="3">
-            <Separator Grid.Row="3"
-                       Padding="0,10,0,10" />
-            <Label Content="WindowsPerf command preview :"
-                   Foreground="White" />
-            <Components:CustomTextBoxControl IsReadOnly="True"
-                                             Padding="2"
-                                             Placeholder="wperf sample"
-                                             x:Name="SamplingCommandCallTextBox" />
+            <Separator Grid.Row="3" Padding="0,10,0,10" />
+            <Label Content="Extra arguments :" Foreground="White" />
+            <Components:CustomTextBoxControl
+                x:Name="ExtraArgs"
+                Padding="2"
+                Placeholder="extra args..."
+                Text="{Binding ExtraArgs, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            <Label Content="WindowsPerf command preview :" Foreground="White" />
+            <Components:CustomTextBoxControl
+                x:Name="SamplingCommandCallTextBox"
+                Padding="2"
+                IsReadOnly="True"
+                Placeholder="wperf sample"
+                Text="{Binding CommandLinePreview, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
         </StackPanel>
-        <Components:CustomButtonControl Grid.Row="4"
-                                        Margin="0,10,0,10"
-                                        Padding="20,5,20,5"
-                                        Content="Save"
-                                        HorizontalAlignment="Right"
-                                        Click="CustomButtonControl_Click" />
+        <Components:CustomButtonControl
+            Grid.Row="4"
+            Margin="0,10,0,10"
+            Padding="20,5,20,5"
+            HorizontalAlignment="Right"
+            Click="CustomButtonControl_Click"
+            Content="Save" />
     </Grid>
 </platform:DialogWindow>

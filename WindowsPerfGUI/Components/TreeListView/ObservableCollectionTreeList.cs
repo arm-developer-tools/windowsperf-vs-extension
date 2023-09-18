@@ -28,32 +28,42 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.VisualStudio.Imaging;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 
-namespace WindowsPerfGUI
+namespace WindowsPerfGUI.Components.TreeListView
 {
-    public class SamplingExplorer : BaseToolWindow<SamplingExplorer>
+    public class ObservableCollectionTreeList<T> : ObservableCollection<T>
     {
-        public override string GetTitle(int toolWindowId) => "Sampling Explorer";
-
-        public override Type PaneType => typeof(Pane);
-
-        public override Task<FrameworkElement> CreateAsync(int toolWindowId, CancellationToken cancellationToken)
+        public void RemoveRange(int index, int count)
         {
-            return Task.FromResult<FrameworkElement>(new SamplingExplorerControl());
+            this.CheckReentrancy();
+            var items = this.Items as List<T>;
+            items.RemoveRange(index, count);
+            OnReset();
         }
 
-        [Guid("e0b657ee-f2c9-4365-a1db-e0d5a8a59417")]
-        internal class Pane : ToolWindowPane
+        public void InsertRange(int index, IEnumerable<T> collection)
         {
-            public Pane()
-            {
-                BitmapImageMoniker = KnownMonikers.ToolWindow;
-            }
+            this.CheckReentrancy();
+            var items = this.Items as List<T>;
+            items.InsertRange(index, collection);
+            OnReset();
+        }
+
+        private void OnReset()
+        {
+            OnPropertyChanged("Count");
+            OnPropertyChanged("Item[]");
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(
+                NotifyCollectionChangedAction.Reset));
+        }
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -31,7 +31,7 @@
 namespace WindowsPerfGUI
 {
     [Command(PackageIds.SamplingExplorer)]
-    internal sealed class SamplingSettings : BaseCommand<SamplingSettings>
+    internal sealed class SamplingSettingsCommand : BaseCommand<SamplingSettingsCommand>
     {
         protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
         {

@@ -53,7 +53,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Commands\SamplingSettings.cs" />
+    <Compile Include="Commands\SamplingSettingsCommand.cs" />
     <Compile Include="Commands\WperfHostData.cs" />
     <Compile Include="Components\CustomButtonControl.cs" />
     <Compile Include="Components\CustomComboBoxControl.cs" />
@@ -63,6 +63,18 @@
     <Compile Include="Components\FilePicker.xaml.cs">
       <DependentUpon>FilePicker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Components\TreeListView\Converters.cs" />
+    <Compile Include="Components\TreeListView\ITreeModel.cs" />
+    <Compile Include="Components\TreeListView\ObservableCollectionTreeList.cs" />
+    <Compile Include="Components\TreeListView\RowExpander.cs" />
+    <Compile Include="Components\TreeListView\TreeList.cs" />
+    <Compile Include="Components\TreeListView\TreeListItem.cs" />
+    <Compile Include="Components\TreeListView\TreeNode.cs" />
+    <Compile Include="Utils\Converters\BooleanToLinkCursor.cs" />
+    <Compile Include="Utils\Converters\BooleanToLinkTextDecoration.cs" />
+    <Compile Include="Utils\FormattedSamplingResults.cs" />
+    <Compile Include="Utils\Converters\BooleanToLinkColor.cs" />
+    <Compile Include="Utils\NotifyPropertyChangedImplementor.cs" />
     <Compile Include="Options\WPerfPath.xaml.cs">
       <DependentUpon>WPerfPath.xaml</DependentUpon>
     </Compile>
@@ -89,8 +101,10 @@
       <DependentUpon>WperfHostDataDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\CpuCores.cs" />
+    <Compile Include="Utils\SamplingSection.cs" />
     <Compile Include="Utils\SamplingFrequency.cs" />
     <Compile Include="Utils\SamplingSettings.cs" />
+    <Compile Include="Utils\SamplingSettingsForm.cs" />
     <Compile Include="Utils\SDK\OutputHandler.cs" />
     <Compile Include="Utils\SDK\ProcessRunner.cs" />
     <Compile Include="SDK\WperfClient.cs" />
