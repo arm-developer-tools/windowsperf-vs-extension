@@ -4,9 +4,17 @@
 
 ## How to install WindowsPerfGUI extension for Visual Studio
 
-First, you need to have the binary of the extension. and then you can install it by clicking on `WindowsPerfGUI.vsix` and then click on `Install`.
+First, you need to have the [binary](https://gitlab.com/Linaro/WindowsPerf/vs-extension/-/releases) of the extension. and then you can install it by clicking on `WindowsPerfGUI.vsix` and then click on `Install`.
 
 PS: you need to make sure that any previous version of the extension is uninstalled and that Visual Studio is closed before installing the extension.
+
+### How to uninstall old WindowsPerfGUI extension
+
+In Visual Studio go to `Extensions` -> `Manage Extensions` -> `Installed` -> `All` -> `WindowsPerfGUI` and select "Uninstall". Please note that this will be scheduled by VS. You may need to close VS instance and follow uninstallation wizard to remove extension.
+
+### Where is WindowsPerfGUI binary?
+
+You can find our binary releases [here](https://gitlab.com/Linaro/WindowsPerf/vs-extension/-/releases). You can also build `VS-extension` solution from sources. Just open `WindowsPerfGUI.sln` from sources and build project for `arm64` configuration.
 
 ## WperfClient
 
