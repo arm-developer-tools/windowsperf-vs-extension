@@ -49,11 +49,11 @@ namespace WindowsPerfGUI.Utils
             ValidateSettings();
             AppendElementsToList(argsList, "record");
             AppendElementsToList(argsList, "-e", string.IsNullOrWhiteSpace(samplingSettingsFrom.SamplingFrequency) ? samplingSettingsFrom.SamplingEvent?.AliasName : $"{samplingSettingsFrom.SamplingEvent?.AliasName}:{samplingSettingsFrom.SamplingFrequency}");
-            AppendElementsToList(argsList, "--pe_file", samplingSettingsFrom.FilePath);
             AppendElementsToList(argsList, "-c", samplingSettingsFrom.CPUCore?.coreNumber.ToString());
             AppendElementsToList(argsList, "--timeout", samplingSettingsFrom.SamplingTimeout);
             AppendElementsToList(argsList, "--annotate");
             AppendElementsToList(argsList, "-v", "--json");
+            AppendElementsToList(argsList, samplingSettingsFrom.FilePath);
             AppendElementsToList(argsList, samplingSettingsFrom.ExtraArgs);
             ArgsArray = argsList.ToArray();
             return ArgsArray;
