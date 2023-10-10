@@ -58,3 +58,7 @@ All code in this repository is licensed under the [BSD 3-Clause License](LICENSE
 [^1]: The output shown is the result of executing `wperf -version`.
 [^2]: The output shown is the result of executing `wperf list`.
 [^3]: The output shown is the result of executing `wperf test`.
+
+# Articles
+
+* [Introducing 1.0.0-beta release of WindowsPerf Visual Studio extension](https://www.linaro.org/blog/introducing-1-0-0-beta-release-of-windowsperf-visual-studio-extension/) blog post.
