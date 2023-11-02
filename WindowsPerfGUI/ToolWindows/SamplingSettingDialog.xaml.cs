@@ -42,7 +42,7 @@ namespace WindowsPerfGUI
             // TODO: Investigate CPU Core initial state
 
             CpuCoreComboBox.ItemsSource = CpuCores.InitCpuCores();
-            EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
+            //EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
             SamplingFrequencyComboBox.ItemsSource = SamplingFrequency.SamplingFrequencyList;
 
             if (SamplingSettings.samplingSettingsFrom.SamplingEvent == null) EventComboBox.SelectedIndex = 0;

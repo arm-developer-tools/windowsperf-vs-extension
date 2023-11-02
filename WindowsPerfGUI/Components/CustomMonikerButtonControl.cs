@@ -54,15 +54,22 @@ namespace WindowsPerfGUI.Components
             DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomMonikerButtonControl), new FrameworkPropertyMetadata(typeof(CustomMonikerButtonControl)));
 
         }
+        readonly CrispImage monikerImage = new CrispImage();
         protected override void OnInitialized(EventArgs e)
         {
 
-            CrispImage monikerImage = new CrispImage();
             monikerImage.Moniker = MonikerName;
             monikerImage.Width = 16;
             monikerImage.Height = 16;
+            monikerImage.Grayscale = false;
             Content = monikerImage;
             base.OnInitialized(e);
+            this.IsEnabledChanged += ToggleGrayScaleMoniker;
+        }
+
+        private void ToggleGrayScaleMoniker(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            monikerImage.Grayscale = !this.IsEnabled;
         }
     }
 }

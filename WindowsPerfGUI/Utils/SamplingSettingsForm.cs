@@ -73,19 +73,6 @@ namespace WindowsPerfGUI.Utils
             }
         }
 
-        private string samplingTimeout;
-
-        public string SamplingTimeout
-        {
-            get { return samplingTimeout; }
-            set
-            {
-                samplingTimeout = value;
-                OnPropertyChanged();
-                CommandLinePreview = SamplingSettings.GenerateCommandLinePreview();
-            }
-        }
-
         private PredefinedEvent samplingEvent;
 
         public PredefinedEvent SamplingEvent
@@ -111,6 +98,19 @@ namespace WindowsPerfGUI.Utils
                 CommandLinePreview = SamplingSettings.GenerateCommandLinePreview();
             }
         }
+        private string samplingTimeout;
+
+        public string SamplingTimeout
+        {
+            get { return samplingTimeout; }
+            set
+            {
+                samplingTimeout = value;
+                OnPropertyChanged();
+                CommandLinePreview = SamplingSettings.GenerateCommandLinePreview();
+            }
+        }
+
         private string extraArgs;
 
         public string ExtraArgs
@@ -134,6 +134,7 @@ namespace WindowsPerfGUI.Utils
                 SamplingEvent = samplingSettingsForm.SamplingEvent;
                 SamplingTimeout = samplingSettingsForm.SamplingTimeout;
                 CPUCore = samplingSettingsForm.CPUCore;
+                ExtraArgs = samplingSettingsForm.ExtraArgs;
             }
             SamplingSettings.samplingSettingsFrom = this;
         }

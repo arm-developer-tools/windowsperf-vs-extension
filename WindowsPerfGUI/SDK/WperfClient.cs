@@ -43,7 +43,24 @@ namespace WindowsPerfGUI.SDK
         public WperfClient() { }
 
         public Action<string> OutputWindowTextWriter { get; set; }
+        private void LogToOutput(string stdOutput, string stdError, params string[] args)
+        {
+            if (OutputWindowTextWriter == null) return;
 
+            OutputWindowTextWriter("Executing wperf command:");
+            OutputWindowTextWriter($"{Path} {string.Join(" ", args)}");
+            OutputWindowTextWriter("wperf command output:");
+            OutputWindowTextWriter("=============================================================");
+            OutputWindowTextWriter(stdOutput);
+            OutputWindowTextWriter("=============================================================");
+
+            if (stdError == "") return;
+
+            OutputWindowTextWriter("wperf command error:");
+            OutputWindowTextWriter("=============================================================");
+            OutputWindowTextWriter(stdError);
+            OutputWindowTextWriter("=============================================================");
+        }
         protected void InitProcess()
         {
             if (IsInitilized)
@@ -55,27 +72,15 @@ namespace WindowsPerfGUI.SDK
             IsInitilized = true;
         }
 
+
         private (string stdOutput, string stdError) ExecuteAwaitedCommand(params string[] args)
         {
             InitProcess();
 
             (string stdOutput, string stdError) = WperfPorcess.StartAwaitedProcess(args);
 
-            if (OutputWindowTextWriter == null) return (stdOutput, stdError);
 
-            OutputWindowTextWriter("Executing wperf command:");
-            OutputWindowTextWriter($"{Path} {string.Join(" ", args)}");
-            OutputWindowTextWriter("wperf command output:");
-            OutputWindowTextWriter("=============================================================");
-            OutputWindowTextWriter(stdOutput);
-            OutputWindowTextWriter("=============================================================");
-
-            if (stdError == "") return (stdOutput, stdError);
-
-            OutputWindowTextWriter("wperf command error:");
-            OutputWindowTextWriter("=============================================================");
-            OutputWindowTextWriter(stdError);
-            OutputWindowTextWriter("=============================================================");
+            LogToOutput(stdOutput, stdError, args);
 
             return (stdOutput, stdError);
         }
@@ -136,6 +141,7 @@ namespace WindowsPerfGUI.SDK
             string stdOutput = string.Join("", WperfPorcess.StdOutput.Output);
             string stdError = string.Join("", WperfPorcess.StdError.Output);
             WperfSampling serializedOutput = WperfSampling.FromJson(stdOutput);
+            LogToOutput(stdOutput, stdError, SamplingSettings.GenerateCommandLineArgsArray(SamplingSettings.samplingSettingsFrom));
             return (serializedOutput, stdError);
         }
     }

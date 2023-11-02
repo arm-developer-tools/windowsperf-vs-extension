@@ -3,26 +3,27 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:WindowsPerfGUI.Components"
     xmlns:tree="clr-namespace:WindowsPerfGUI.Components.TreeListView">
-
-    <SolidColorBrush x:Key="CustomTheme.Colors.DarkGray" Color="#565656" />
-    <SolidColorBrush x:Key="CustomTheme.Colors.DarkestGray" Color="#414141" />
     <CornerRadius
         x:Key="TextBox.Border.CornerRadius"
         BottomLeft="2"
         BottomRight="2"
         TopLeft="2"
         TopRight="2" />
-    <SolidColorBrush x:Key="CustomTheme.Colors.Gray" Color="#FF838383" />
-    <SolidColorBrush x:Key="CustomTheme.Colors.White" Color="White" />
-    <SolidColorBrush x:Key="CustomTheme.Colors.Transparent" Color="Transparent" />
-    <SolidColorBrush x:Key="CustomTheme.Colors.LightGray" Color="#C1C1C1" />
-    <SolidColorBrush x:Key="CustomTheme.Colors.OffWhite" Color="#FFF3F9FF" />
-    <SolidColorBrush x:Key="CustomTheme.Colors.Accent" Color="#FF3C77DD" />
+    <!--  https://vscolor.sboulema.nl/  -->
+    <SolidColorBrush x:Key="VsTransparentColor" Color="Transparent" />
+    <SolidColorBrush x:Key="VsToolWindowText" Color="{DynamicResource VsColor.ToolWindowText}" />
+    <SolidColorBrush x:Key="VsInputBackground" Color="{DynamicResource VsColor.ComboBoxBackground}" />
+    <SolidColorBrush x:Key="VsInputBorder" Color="{DynamicResource VsColor.ComboBoxFocusedBorder}" />
+    <SolidColorBrush x:Key="VsCommandBarHover" Color="{DynamicResource VsColor.CommandBarHover}" />
+    <SolidColorBrush x:Key="VsCommandBarSelectedBorder" Color="{DynamicResource VsColor.CommandBarSelectedBorder}" />
+    <SolidColorBrush x:Key="VsWindowText" Color="{DynamicResource VsColor.WindowText}" />
+    <SolidColorBrush x:Key="VsBrandedUIBorder" Color="{DynamicResource VsColor.BrandedUIBorder}" />
+    <SolidColorBrush x:Key="VsButtonPressedBackground" Color="{DynamicResource VsColor.StartPageButtonPinDown}" />
 
     <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="{x:Type local:CustomTextBoxControl}">
-        <Setter Property="Foreground" Value="{StaticResource CustomTheme.Colors.White}" />
+        <Setter Property="Foreground" Value="{StaticResource VsToolWindowText}" />
         <Setter Property="FontWeight" Value="Medium" />
-        <Setter Property="Background" Value="{StaticResource CustomTheme.Colors.DarkestGray}" />
+        <Setter Property="Background" Value="{StaticResource VsInputBackground}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:CustomTextBoxControl}">
@@ -31,9 +32,9 @@
                     </ControlTemplate.Resources>
                     <Border
                         Background="{TemplateBinding Background}"
-                        BorderBrush="{StaticResource CustomTheme.Colors.DarkGray}"
+                        BorderBrush="{StaticResource VsBrandedUIBorder}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{StaticResource TextBox.Border.CornerRadius}">
+                        CornerRadius="1">
                         <Grid>
                             <ScrollViewer x:Name="PART_ContentHost" />
                             <TextBox
@@ -41,9 +42,9 @@
                                 Padding="{TemplateBinding Padding}"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                Background="{StaticResource CustomTheme.Colors.DarkestGray}"
+                                Background="{StaticResource VsInputBackground}"
                                 BorderThickness="0"
-                                Foreground="{StaticResource CustomTheme.Colors.OffWhite}"
+                                Foreground="{StaticResource VsToolWindowText}"
                                 IsHitTestVisible="False"
                                 Opacity="0.5"
                                 Text="{TemplateBinding Placeholder}"
@@ -58,9 +59,9 @@
     </Style>
 
     <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type local:CustomMonikerButtonControl}">
-        <Setter Property="Background" Value="{StaticResource CustomTheme.Colors.Transparent}" />
-        <Setter Property="Foreground" Value="{StaticResource CustomTheme.Colors.White}" />
-        <Setter Property="BorderBrush" Value="{StaticResource CustomTheme.Colors.White}" />
+        <Setter Property="Background" Value="{StaticResource VsTransparentColor}" />
+        <Setter Property="Foreground" Value="{StaticResource VsWindowText}" />
+        <Setter Property="BorderBrush" Value="{StaticResource VsWindowText}" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Padding" Value="1" />
         <Setter Property="Template">
@@ -83,30 +84,28 @@
                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="Button.IsDefaulted" Value="true">
-                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
-                        </Trigger>
                         <Trigger Property="IsMouseOver" Value="False">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource CustomTheme.Colors.Transparent}" />
-                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource CustomTheme.Colors.Transparent}" />
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource VsTransparentColor}" />
+                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource VsTransparentColor}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource CustomTheme.Colors.Gray}" />
-                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource CustomTheme.Colors.White}" />
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource VsCommandBarHover}" />
+                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource VsToolWindowText}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource CustomTheme.Colors.DarkestGray}" />
-                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource CustomTheme.Colors.White}" />
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource VsButtonPressedBackground}" />
+                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource VsToolWindowText}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
+
     <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type local:CustomButtonControl}">
-        <Setter Property="Background" Value="{StaticResource CustomTheme.Colors.Transparent}" />
-        <Setter Property="Foreground" Value="{StaticResource CustomTheme.Colors.White}" />
-        <Setter Property="BorderBrush" Value="{StaticResource CustomTheme.Colors.White}" />
+        <Setter Property="Background" Value="{StaticResource VsInputBackground}" />
+        <Setter Property="Foreground" Value="{StaticResource VsToolWindowText}" />
+        <Setter Property="BorderBrush" Value="{StaticResource VsBrandedUIBorder}" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Padding" Value="5" />
         <Setter Property="Template">
@@ -117,7 +116,7 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="15"
+                        CornerRadius="1"
                         SnapsToDevicePixels="true">
                         <ContentPresenter
                             x:Name="contentPresenter"
@@ -130,15 +129,15 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="Button.IsDefaulted" Value="true">
-                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource VsBrandedUIBorder}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource CustomTheme.Colors.Gray}" />
-                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource CustomTheme.Colors.White}" />
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource VsCommandBarHover}" />
+                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource VsCommandBarSelectedBorder}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource CustomTheme.Colors.DarkestGray}" />
-                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource CustomTheme.Colors.White}" />
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource VsButtonPressedBackground}" />
+                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource VsBrandedUIBorder}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -155,16 +154,16 @@
             <Border
                 Name="Border"
                 Grid.ColumnSpan="2"
-                Background="{StaticResource CustomTheme.Colors.DarkestGray}"
-                BorderBrush="{StaticResource CustomTheme.Colors.DarkGray}"
+                Background="{StaticResource VsInputBackground}"
+                BorderBrush="{StaticResource VsBrandedUIBorder}"
                 BorderThickness="1,1,1,1"
                 CornerRadius="{StaticResource TextBox.Border.CornerRadius}" />
             <Border
                 Name="ButtonBorder"
                 Grid.Column="1"
                 Margin="1,1,1,1"
-                Background="{StaticResource CustomTheme.Colors.Transparent}"
-                BorderBrush="{StaticResource CustomTheme.Colors.DarkGray}"
+                Background="{StaticResource VsTransparentColor}"
+                BorderBrush="{StaticResource VsWindowText}"
                 BorderThickness="0,0,0,0"
                 CornerRadius="{StaticResource TextBox.Border.CornerRadius}" />
 
@@ -174,15 +173,15 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"
-                Fill="{StaticResource CustomTheme.Colors.White}" />
+                Fill="{StaticResource VsToolWindowText}" />
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="UIElement.IsMouseOver" Value="True">
-                <Setter TargetName="ButtonBorder" Property="Panel.Background" Value="{StaticResource CustomTheme.Colors.Gray}" />
+                <Setter TargetName="ButtonBorder" Property="Panel.Background" Value="{StaticResource VsCommandBarHover}" />
             </Trigger>
             <Trigger Property="ToggleButton.IsChecked" Value="True">
-                <Setter TargetName="ButtonBorder" Property="Panel.Background" Value="{StaticResource CustomTheme.Colors.White}" />
-                <Setter TargetName="Arrow" Property="Shape.Fill" Value="{StaticResource CustomTheme.Colors.Gray}" />
+                <Setter TargetName="ButtonBorder" Property="Panel.Background" Value="{StaticResource VsToolWindowText}" />
+                <Setter TargetName="Arrow" Property="Shape.Fill" Value="{StaticResource VsCommandBarHover}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -192,7 +191,8 @@
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
-        <Setter Property="TextElement.Foreground" Value="{StaticResource CustomTheme.Colors.White}" />
+        <Setter Property="TextElement.Foreground" Value="{StaticResource VsToolWindowText}" />
+        <Setter Property="TextElement.Background" Value="{StaticResource VsInputBackground}" />
         <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Control.Template">
             <Setter.Value>
@@ -201,6 +201,7 @@
                         <ToggleButton
                             Name="ToggleButton"
                             Grid.Column="2"
+                            Background="{StaticResource VsInputBackground}"
                             ClickMode="Press"
                             Focusable="False"
                             IsChecked="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
@@ -220,13 +221,16 @@
                             Margin="3,3,23,3"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
-                            Background="{StaticResource CustomTheme.Colors.DarkestGray}"
+                            Background="{StaticResource VsInputBackground}"
                             Focusable="True"
                             IsReadOnly="{TemplateBinding IsReadOnly}"
                             Visibility="Hidden">
                             <TextBox.Template>
                                 <ControlTemplate TargetType="TextBox">
-                                    <Border Name="PART_ContentHost" Focusable="False" />
+                                    <Border
+                                        Name="PART_ContentHost"
+                                        Background="{DynamicResource VsInputBackground}"
+                                        Focusable="False" />
                                 </ControlTemplate>
                             </TextBox.Template>
                         </TextBox>
@@ -245,8 +249,8 @@
                                 <Border
                                     Name="DropDownBorder"
                                     Margin="0,1,0,0"
-                                    Background="{StaticResource CustomTheme.Colors.Transparent}"
-                                    BorderBrush="{StaticResource CustomTheme.Colors.DarkGray}"
+                                    Background="{StaticResource VsInputBackground}"
+                                    BorderBrush="{StaticResource VsBrandedUIBorder}"
                                     BorderThickness="1,1,1,1"
                                     CornerRadius="0" />
                                 <ScrollViewer Margin="4" SnapsToDevicePixels="True">
@@ -262,16 +266,16 @@
     </Style>
 
     <Style BasedOn="{StaticResource {x:Type RadioButton}}" TargetType="{x:Type local:CustomRadioButtonControl}">
-        <Setter Property="Background" Value="{StaticResource CustomTheme.Colors.Transparent}" />
-        <Setter Property="BorderBrush" Value="{StaticResource CustomTheme.Colors.LightGray}" />
-        <Setter Property="Foreground" Value="{StaticResource CustomTheme.Colors.White}" />
+        <Setter Property="Background" Value="{StaticResource VsTransparentColor}" />
+        <Setter Property="BorderBrush" Value="{StaticResource VsBrandedUIBorder}" />
+        <Setter Property="Foreground" Value="{StaticResource VsToolWindowText}" />
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RadioButton}">
                     <Grid
                         x:Name="templateRoot"
-                        Background="{StaticResource CustomTheme.Colors.Transparent}"
+                        Background="{StaticResource VsTransparentColor}"
                         SnapsToDevicePixels="True">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -291,7 +295,7 @@
                                     x:Name="optionMark"
                                     MinWidth="6"
                                     MinHeight="6"
-                                    Fill="{StaticResource CustomTheme.Colors.LightGray}"
+                                    Fill="{StaticResource VsBrandedUIBorder}"
                                     Opacity="0" />
                             </Grid>
                         </Border>
@@ -310,20 +314,20 @@
                             <Setter Property="Padding" Value="4,-1,0,0" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="radioButtonBorder" Property="Background" Value="{StaticResource CustomTheme.Colors.OffWhite}" />
-                            <Setter TargetName="radioButtonBorder" Property="BorderBrush" Value="{StaticResource CustomTheme.Colors.White}" />
-                            <Setter TargetName="optionMark" Property="Fill" Value="{StaticResource CustomTheme.Colors.LightGray}" />
+                            <Setter TargetName="radioButtonBorder" Property="Background" Value="{StaticResource VsBrandedUIBorder}" />
+                            <Setter TargetName="radioButtonBorder" Property="BorderBrush" Value="{StaticResource VsToolWindowText}" />
+                            <Setter TargetName="optionMark" Property="Fill" Value="{StaticResource VsBrandedUIBorder}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter TargetName="radioButtonBorder" Property="Background" Value="{StaticResource CustomTheme.Colors.OffWhite}" />
-                            <Setter TargetName="radioButtonBorder" Property="BorderBrush" Value="{StaticResource CustomTheme.Colors.Accent}" />
-                            <Setter TargetName="optionMark" Property="Fill" Value="{StaticResource CustomTheme.Colors.White}" />
+                            <Setter TargetName="radioButtonBorder" Property="Background" Value="{StaticResource VsBrandedUIBorder}" />
+                            <Setter TargetName="radioButtonBorder" Property="BorderBrush" Value="{StaticResource VsBrandedUIBorder}" />
+                            <Setter TargetName="optionMark" Property="Fill" Value="{StaticResource VsBrandedUIBorder}" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="true">
                             <Setter TargetName="optionMark" Property="Opacity" Value="1" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="{x:Null}">
-                            <Setter TargetName="optionMark" Property="Opacity" Value="0.56" />
+                            <Setter TargetName="optionMark" Property="Opacity" Value="1" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -341,12 +345,12 @@
                     <Border
                         Width="19"
                         Height="13"
-                        Background="{StaticResource CustomTheme.Colors.Transparent}">
+                        Background="{StaticResource VsTransparentColor}">
                         <Border
                             Width="9"
                             Height="9"
                             Background="Transparent"
-                            BorderBrush="{StaticResource CustomTheme.Colors.Transparent}"
+                            BorderBrush="{StaticResource VsTransparentColor}"
                             BorderThickness="1,1,1,1"
                             CornerRadius="1,1,1,1"
                             SnapsToDevicePixels="True">
@@ -354,7 +358,7 @@
                                 Name="ExpandPath"
                                 Margin="1,1,1,1"
                                 Data="M0,2L0,3 2,3 2,5 3,5 3,3 5,3 5,2 3,2 3,0 2,0 2,2z"
-                                Fill="{StaticResource CustomTheme.Colors.White}" />
+                                Fill="{StaticResource VsToolWindowText}" />
                         </Border>
                     </Border>
                     <ControlTemplate.Triggers>

@@ -84,7 +84,13 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
 
     public partial class WperfList
     {
-        public static WperfList FromJson(string json) => JsonConvert.DeserializeObject<WperfList>(json, WindowsPerfGUI.SDK.WperfOutputs.JsonSettings.Settings);
+        public static WperfList FromJson(string json)
+        {
+            WperfList eventList = JsonConvert.DeserializeObject<WperfList>(json, JsonSettings.Settings);
+            var sortedPredefinedEvents = new List<PredefinedEvent>();
+            eventList.PredefinedEvents.Sort((a, b) => a.AliasName.CompareTo(b.AliasName));
+            return eventList;
+        }
     }
 
 }

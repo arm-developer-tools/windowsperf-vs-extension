@@ -11,7 +11,6 @@
     Width="600"
     Height="500"
     toolkit:Themes.UseVsTheme="True"
-    Background="#535353"
     mc:Ignorable="d">
     <platform:DialogWindow.DataContext>
         <utils:SamplingSettingsForm />
@@ -49,8 +48,7 @@
             <Label
                 Grid.Row="0"
                 Grid.Column="0"
-                Content="CPU Core :"
-                Foreground="White" />
+                Content="CPU Core :" />
             <Components:CustomComboBoxControl
                 x:Name="CpuCoreComboBox"
                 Grid.Row="0"
@@ -75,8 +73,7 @@
             <Label
                 Grid.Row="0"
                 Grid.Column="0"
-                Content="Event :"
-                Foreground="White" />
+                Content="Event :" />
             <Components:CustomComboBoxControl
                 x:Name="EventComboBox"
                 Grid.Row="0"
@@ -86,8 +83,7 @@
             <Label
                 Grid.Row="1"
                 Grid.Column="0"
-                Content="Frequency :"
-                Foreground="White" />
+                Content="Frequency :" />
             <Components:CustomComboBoxControl
                 x:Name="SamplingFrequencyComboBox"
                 Grid.Row="1"
@@ -97,8 +93,7 @@
             <Label
                 Grid.Row="2"
                 Grid.Column="0"
-                Content="Timeout (s):"
-                Foreground="White" />
+                Content="Timeout (s):" />
             <Components:CustomTextBoxControl
                 x:Name="SamplingTimeoutTextBox"
                 Grid.Row="2"
@@ -107,17 +102,16 @@
                 Padding="2"
                 Placeholder="2.5"
                 Text="{Binding SamplingTimeout, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-
         </Grid>
         <StackPanel Grid.Row="3">
             <Separator Grid.Row="3" Padding="0,10,0,10" />
-            <Label Content="Extra arguments :" Foreground="White" />
+            <Label Content="Extra arguments :" />
             <Components:CustomTextBoxControl
                 x:Name="ExtraArgs"
                 Padding="2"
                 Placeholder="extra args..."
                 Text="{Binding ExtraArgs, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-            <Label Content="WindowsPerf command preview :" Foreground="White" />
+            <Label Content="WindowsPerf command preview :" />
             <Components:CustomTextBoxControl
                 x:Name="SamplingCommandCallTextBox"
                 Padding="2"

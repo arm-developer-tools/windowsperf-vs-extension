@@ -13,21 +13,26 @@
     xmlns:tree="clr-namespace:WindowsPerfGUI.Components.TreeListView"
     xmlns:util="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Utilities"
     Name="SamplingExplorerControlWindow"
-    d:DesignHeight="300"
-    d:DesignWidth="300"
     toolkit:Themes.UseVsTheme="True"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <Style TargetType="{x:Type TextBlock}">
-            <Setter Property="Foreground" Value="White" />
-        </Style>
+
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <converters:BooleanToLinkColor
-            x:Key="BooleanToLinkColor"
-            LinkBrush="LightBlue"
-            NormalBrush="White" />
+
         <converters:BooleanToLinkCursor x:Key="BooleanToLinkCursor" />
         <converters:BooleanToLinkTextDecoration x:Key="BooleanToLinkTextDecoration" />
+        <SolidColorBrush x:Key="VsToolWindowText" Color="{DynamicResource VsColor.ToolWindowText}" />
+        <SolidColorBrush x:Key="VsCommandBarHover" Color="{DynamicResource VsColor.CommandBarHover}" />
+        <SolidColorBrush x:Key="VsWindowText" Color="{DynamicResource VsColor.WindowText}" />
+        <SolidColorBrush x:Key="VsLinkTextColor" Color="{DynamicResource VsColor.ControlLinkText}" />
+
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="{StaticResource VsWindowText}" />
+        </Style>
+        <converters:BooleanToLinkColor
+            x:Key="BooleanToLinkColor"
+            LinkBrush="{StaticResource VsLinkTextColor}"
+            NormalBrush="{StaticResource VsWindowText}" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -75,7 +80,7 @@
                     x:Name="_tree"
                     Grid.Column="0"
                     Background="Transparent"
-                    Foreground="White"
+                    Foreground="{StaticResource VsWindowText}"
                     MouseDoubleClick="_tree_MouseDoubleClick"
                     SelectionChanged="_tree_SelectionChanged">
                     <tree:TreeList.ItemContainerStyle>
@@ -103,7 +108,7 @@
                                     <Setter Property="Background" Value="Transparent" />
                                 </Trigger>
                                 <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="#3d3d3d" />
+                                    <Setter Property="Background" Value="{StaticResource VsCommandBarHover}" />
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -112,14 +117,14 @@
                         <GridView>
                             <GridView.ColumnHeaderContainerStyle>
                                 <Style TargetType="{x:Type GridViewColumnHeader}">
-                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="Foreground" Value="{StaticResource VsWindowText}" />
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
                                                 <Grid>
                                                     <Border
                                                         Background="Transparent"
-                                                        BorderBrush="#3d3d3d"
+                                                        BorderBrush="{StaticResource VsCommandBarHover}"
                                                         BorderThickness="0,0,0.5,1">
                                                         <TextBlock
                                                             x:Name="ContentHeader"
@@ -133,12 +138,12 @@
                                                         Width="1"
                                                         Margin="0,0,0,0"
                                                         HorizontalAlignment="Right"
-                                                        Background="#3d3d3d"
-                                                        Foreground="#3d3d3d" />
+                                                        Background="{StaticResource VsCommandBarHover}"
+                                                        Foreground="{StaticResource VsCommandBarHover}" />
                                                 </Grid>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="ContentHeader" Property="Background" Value="#3d3d3d" />
+                                                        <Setter TargetName="ContentHeader" Property="Background" Value="{StaticResource VsCommandBarHover}" />
                                                     </Trigger>
                                                 </ControlTemplate.Triggers>
                                             </ControlTemplate>

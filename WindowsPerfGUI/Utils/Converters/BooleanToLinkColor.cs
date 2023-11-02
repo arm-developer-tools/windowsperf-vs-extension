@@ -43,7 +43,7 @@ namespace WindowsPerfGUI.Utils.Converters
               object value, Type targetType, object parameter,
                  CultureInfo culture)
         {
-            return (bool)value ? LinkBrush : (object)NormalBrush;
+            return (bool)value ? LinkBrush : NormalBrush;
         }
 
         public object ConvertBack(
