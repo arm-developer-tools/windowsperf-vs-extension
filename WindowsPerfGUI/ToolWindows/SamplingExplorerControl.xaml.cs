@@ -93,7 +93,6 @@ namespace WindowsPerfGUI
         private void StartSamplingMonikerButton_Click(object sender, RoutedEventArgs e)
         {
             if (!WPerfOptions.Instance.IsWperfInitialized) return;
-            // TODO: add verification that settings has been filled
             if (!SamplingSettings.AreSettingsFilled)
             {
                 VS.MessageBox.ShowError("To start sampling you need to have at least",
