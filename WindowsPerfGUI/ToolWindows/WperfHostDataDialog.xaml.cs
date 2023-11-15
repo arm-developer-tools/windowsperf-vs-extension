@@ -30,6 +30,7 @@
 
 using Microsoft.VisualStudio.PlatformUI;
 using System.Windows;
+using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK;
 using WindowsPerfGUI.SDK.WperfOutputs;
 
@@ -51,7 +52,7 @@ namespace WindowsPerfGUI
             }
             catch (Exception e)
             {
-                VS.MessageBox.ShowError("Wperf Error", e.Message);
+                VS.MessageBox.ShowError(ErrorLanguagePack.ErrorWindowsPerfCLI, e.Message);
                 Close();
                 return;
             }

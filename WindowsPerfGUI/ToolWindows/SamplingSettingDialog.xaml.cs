@@ -29,6 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using Microsoft.VisualStudio.PlatformUI;
+using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.Utils;
 
 namespace WindowsPerfGUI
@@ -39,10 +40,8 @@ namespace WindowsPerfGUI
         {
             InitializeComponent();
 
-            // TODO: Investigate CPU Core initial state
-
             CpuCoreComboBox.ItemsSource = CpuCores.InitCpuCores();
-            //EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
+            EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
             SamplingFrequencyComboBox.ItemsSource = SamplingFrequency.SamplingFrequencyList;
 
             if (SamplingSettings.samplingSettingsFrom.SamplingEvent == null) EventComboBox.SelectedIndex = 0;
@@ -53,14 +52,13 @@ namespace WindowsPerfGUI
         }
 
 
-        private void CustomButtonControl_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void SaveButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             SyncSamplingSettings();
-            // TODO: verify that all the mandatory fields have been filled before closing
             if (!SamplingSettings.AreSettingsFilled)
             {
-                VS.MessageBox.ShowError("To start sampling you need to have at least",
-                    "The executable file path and the event name as well as the core selected!"
+                VS.MessageBox.ShowError(ErrorLanguagePack.UncompleteSamplingSettingsLine1,
+                    ErrorLanguagePack.UncompleteSamplingSettingsLine2
                     );
                 return;
             }

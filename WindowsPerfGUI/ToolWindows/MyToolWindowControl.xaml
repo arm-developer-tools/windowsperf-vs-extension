@@ -36,6 +36,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:WindowsPerfGUI.Components"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:WindowsPerfGUI.Resources.Locals"
     Name="MyToolWindow"
     d:DesignHeight="300"
     mc:Ignorable="d">
@@ -55,6 +56,6 @@
             Margin="0,0,0,10"
             Padding="4"
             Placeholder="File path... " />
-        <Button Content="Click me " />
+        <Button Content="{x:Static resx:MainLanguagePack.ToolWindow}" />
     </StackPanel>
 </UserControl>

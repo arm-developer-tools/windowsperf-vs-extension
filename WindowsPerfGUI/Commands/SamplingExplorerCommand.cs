@@ -28,11 +28,19 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using WindowsPerfGUI.Resources.Locals;
+
 namespace WindowsPerfGUI
 {
     [Command(PackageIds.SamplingExplorer)]
-    internal sealed class SamplingSettingsCommand : BaseCommand<SamplingSettingsCommand>
+    internal sealed class SamplingExplorerCommand : BaseCommand<SamplingExplorerCommand>
     {
+        protected override void BeforeQueryStatus(EventArgs e)
+        {
+            Command.Text = SamplingExplorerLanguagePack.WindowTitle;
+            base.BeforeQueryStatus(e);
+
+        }
         protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
         {
             await SamplingExplorer.ShowAsync();

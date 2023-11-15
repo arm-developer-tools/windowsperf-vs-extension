@@ -29,7 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System.Collections.Generic;
-
+using WindowsPerfGUI.Resources.Locals;
 namespace WindowsPerfGUI.Utils
 {
     public class CpuCoreElement
@@ -38,7 +38,7 @@ namespace WindowsPerfGUI.Utils
         public IntPtr coreMask;
         public override string ToString()
         {
-            return $"CPU Core {coreNumber}";
+            return $"{SamplingSettingsLanguagePack.CpuCoreNumber} {coreNumber}";
         }
     }
     public static class CpuCores

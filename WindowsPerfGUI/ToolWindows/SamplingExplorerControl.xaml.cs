@@ -35,6 +35,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using WindowsPerfGUI.Components.TreeListView;
+using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK;
 using WindowsPerfGUI.SDK.WperfOutputs;
 using WindowsPerfGUI.Utils;
@@ -52,16 +53,16 @@ namespace WindowsPerfGUI
             StopSamplingMonikerButton.IsEnabled = false;
             if (!string.IsNullOrEmpty(e.stdError))
             {
-                VS.MessageBox.ShowError("Wperf Error", e.stdError);
+                VS.MessageBox.ShowError(ErrorLanguagePack.ErrorWindowsPerfCLI, e.stdError);
                 return;
             }
             if (e.serializedOutput == null)
             {
 
-                VS.MessageBox.ShowError("No results were returned from wperf", e.stdError);
+                VS.MessageBox.ShowError(ErrorLanguagePack.NoWindowsPerfCliData, e.stdError);
                 return;
             }
-            formattedSamplingResults.FormatSamplingResults(e.serializedOutput, $"Executed at {DateTime.Now.ToShortTimeString()}");
+            formattedSamplingResults.FormatSamplingResults(e.serializedOutput, $"{SamplingExplorerLanguagePack.ExecutedAt} {DateTime.Now.ToShortTimeString()}");
             if (_tree.Model == null) _tree.Model = formattedSamplingResults;
             _tree.UpdateTreeList();
         }
@@ -79,14 +80,14 @@ namespace WindowsPerfGUI
             if (!WPerfOptions.Instance.IsWperfInitialized)
             {
                 VS.MessageBox.ShowError(
-                   "Wperf is not initialized please follow the initilization steps",
-                   "To do so go to Tools -> Options -> Windows Perf -> Wperf Path"
+                   ErrorLanguagePack.NotInititiatedWperfErrorLine1,
+                   ErrorLanguagePack.NotInititiatedWperfErrorLine2
                    );
                 return;
             }
 
             SamplingSettingDialog samplingSettingsDialog = new();
-            samplingSettingsDialog.Title = "Sampling settings";
+            samplingSettingsDialog.Title = SamplingSettingsLanguagePack.WindowTitle;
             samplingSettingsDialog.ShowDialog();
         }
 
@@ -95,16 +96,16 @@ namespace WindowsPerfGUI
             if (!WPerfOptions.Instance.IsWperfInitialized) return;
             if (!SamplingSettings.AreSettingsFilled)
             {
-                VS.MessageBox.ShowError("To start sampling you need to have at least",
-                    "The executable file path and the event name as well as the core selected!"
+                VS.MessageBox.ShowError(ErrorLanguagePack.UncompleteSamplingSettingsLine1,
+                   ErrorLanguagePack.UncompleteSamplingSettingsLine2
                     );
                 return;
             }
             if (SamplingSettings.IsSampling)
             {
                 VS.MessageBox.ShowError(
-                   "WindowsPerf is currently sampling",
-                   "Please wait for the current sampling to finish before restarting an other sampling instance"
+                   ErrorLanguagePack.RunningSamplingOverlapLine1,
+                   ErrorLanguagePack.RunningSamplingOverlapLine2
                    );
                 return;
             }
@@ -154,10 +155,10 @@ namespace WindowsPerfGUI
                 return;
             }
 
-            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("File path: ")), new Run(samplingSection.Name) }, _localFontSizes.lg, _localFontWeights.bold));
-            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Line number: ")), new Run(samplingSection.LineNumber.ToString()) }, _localFontSizes.md));
-            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Hits: ")), new Run($"{samplingSection.Hits}") }, _localFontSizes.md));
-            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Overhead: ")), new Run($"{samplingSection.OverheadPercentage}") }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingExplorerLanguagePack.FilePath}: ")), new Run(samplingSection.Name) }, _localFontSizes.lg, _localFontWeights.bold));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingExplorerLanguagePack.LineNumber}: ")), new Run(samplingSection.LineNumber.ToString()) }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingExplorerLanguagePack.Hits}: ")), new Run($"{samplingSection.Hits}") }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingExplorerLanguagePack.Overhead}: ")), new Run($"{samplingSection.OverheadPercentage}") }, _localFontSizes.md));
         }
         private void CreateFunctionSummary(UIElementCollection children, SamplingSection samplingSection)
         {
@@ -166,10 +167,10 @@ namespace WindowsPerfGUI
                 return;
             }
 
-            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Function/Symbol Name: ")), new Run(samplingSection.Name) }, _localFontSizes.lg, _localFontWeights.bold));
-            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Interval: ")), new Run(samplingSection.Parent.Frequency) }, _localFontSizes.md));
-            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Hits: ")), new Run($"{samplingSection.Hits}") }, _localFontSizes.md));
-            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Overhead: ")), new Run($"{samplingSection.OverheadPercentage}") }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingExplorerLanguagePack.FunctionName}: ")), new Run(samplingSection.Name) }, _localFontSizes.lg, _localFontWeights.bold));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingExplorerLanguagePack.Interval}: ")), new Run(samplingSection.Parent.Frequency) }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingExplorerLanguagePack.Hits}: ")), new Run($"{samplingSection.Hits}") }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingExplorerLanguagePack.Overhead}: ")), new Run($"{samplingSection.OverheadPercentage}") }, _localFontSizes.md));
         }
         private void CreateEventSummary(UIElementCollection children, SamplingSection samplingSection)
         {
@@ -177,9 +178,9 @@ namespace WindowsPerfGUI
             {
                 return;
             }
-            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Event Name: ")), new Run(samplingSection.Name) }, _localFontSizes.lg, _localFontWeights.bold));
-            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Interval: ")), new Run(samplingSection.Frequency) }, _localFontSizes.md));
-            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Number of Printed Samples: ")), new Run($"{samplingSection.Hits}") }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingExplorerLanguagePack.EventName}: ")), new Run(samplingSection.Name) }, _localFontSizes.lg, _localFontWeights.bold));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingExplorerLanguagePack.Interval}: ")), new Run(samplingSection.Frequency) }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingExplorerLanguagePack.NumberOfCollectedSamples}: ")), new Run($"{samplingSection.Hits}") }, _localFontSizes.md));
 
         }
 
@@ -189,25 +190,25 @@ namespace WindowsPerfGUI
             {
                 return;
             }
-            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Name: ")), new Run(samplingSection.Name) }, _localFontSizes.lg, _localFontWeights.bold));
-            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Pe File: ")), new Run(samplingSection.PeFile) }, _localFontSizes.md));
-            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Pdb File: ")), new Run(samplingSection.PdbFile) }, _localFontSizes.md));
-            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Samples Generated: ")), new Run($"{samplingSection.Hits}") }, _localFontSizes.md));
-            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Samples Dropped: ")), new Run($"{samplingSection.SamplesDropped}") }, _localFontSizes.md));
-            children.Add(GenerateTextBlock(new List<Inline>() { new Run("Modules: ") }, _localFontSizes.md, _localFontWeights.bold));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingExplorerLanguagePack.Name}: ")), new Run(samplingSection.Name) }, _localFontSizes.lg, _localFontWeights.bold));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingExplorerLanguagePack.PeFile}: ")), new Run(samplingSection.PeFile) }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingExplorerLanguagePack.PdbFile}: ")), new Run(samplingSection.PdbFile) }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingExplorerLanguagePack.SamplesGenerated}: ")), new Run($"{samplingSection.Hits}") }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingExplorerLanguagePack.SamplesDropped}: ")), new Run($"{samplingSection.SamplesDropped}") }, _localFontSizes.md));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Run($"{SamplingExplorerLanguagePack.Modules}: ") }, _localFontSizes.md, _localFontWeights.bold));
 
             foreach (var module in samplingSection.Modules)
             {
-                children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Name: ")), new Run(module.Name) }, layer: 1));
-                children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Path: ")), new Run(module.Path) }, layer: 2));
+                children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingExplorerLanguagePack.Name}: ")), new Run(module.Name) }, layer: 1));
+                children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingExplorerLanguagePack.FilePath}: ")), new Run(module.Path) }, layer: 2));
             }
 
-            children.Add(GenerateTextBlock(new List<Inline>() { new Run("Event List: ") }, _localFontSizes.md, _localFontWeights.bold));
+            children.Add(GenerateTextBlock(new List<Inline>() { new Run($"{SamplingExplorerLanguagePack.EventList}: ") }, _localFontSizes.md, _localFontWeights.bold));
 
             foreach (var sampledEvent in samplingSection.Children)
             {
-                children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Name: ")), new Run(sampledEvent.Name) }, layer: 1));
-                children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run("Frequency: ")), new Run(sampledEvent.Frequency) }, layer: 2));
+                children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingExplorerLanguagePack.Name}: ")), new Run(sampledEvent.Name) }, layer: 1));
+                children.Add(GenerateTextBlock(new List<Inline>() { new Bold(new Run($"{SamplingSettingsLanguagePack.Frequency} ")), new Run(sampledEvent.Frequency) }, layer: 2));
             }
         }
         private enum _localFontSizes

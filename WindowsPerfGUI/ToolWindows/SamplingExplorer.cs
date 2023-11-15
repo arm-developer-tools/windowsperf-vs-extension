@@ -33,13 +33,13 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using WindowsPerfGUI.Resources.Locals;
 
 namespace WindowsPerfGUI
 {
     public class SamplingExplorer : BaseToolWindow<SamplingExplorer>
     {
-        public override string GetTitle(int toolWindowId) => "Sampling Explorer";
-
+        public override string GetTitle(int toolWindowId) => SamplingExplorerLanguagePack.WindowTitle;
         public override Type PaneType => typeof(Pane);
 
         public override Task<FrameworkElement> CreateAsync(int toolWindowId, CancellationToken cancellationToken)

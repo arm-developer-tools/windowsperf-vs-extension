@@ -6,12 +6,10 @@
     xmlns:catalog="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.ImageCatalog"
     xmlns:converters="clr-namespace:WindowsPerfGUI.Utils.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:imaging="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.Imaging"
+    xmlns:locals="clr-namespace:WindowsPerfGUI.Resources.Locals"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:theming="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Imaging"
     xmlns:toolkit="clr-namespace:Community.VisualStudio.Toolkit;assembly=Community.VisualStudio.Toolkit"
     xmlns:tree="clr-namespace:WindowsPerfGUI.Components.TreeListView"
-    xmlns:util="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Utilities"
     Name="SamplingExplorerControlWindow"
     toolkit:Themes.UseVsTheme="True"
     mc:Ignorable="d">
@@ -152,7 +150,7 @@
                                 </Style>
                             </GridView.ColumnHeaderContainerStyle>
                             <GridView.Columns>
-                                <GridViewColumn Width="700" Header="Name">
+                                <GridViewColumn Width="700" Header="{x:Static locals:SamplingExplorerLanguagePack.Name}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
@@ -167,21 +165,21 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Width="100" Header="Line Number">
+                                <GridViewColumn Width="100" Header="{x:Static locals:SamplingExplorerLanguagePack.LineNumber}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding LineNumber}" TextAlignment="Right" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Width="50" Header="Hits">
+                                <GridViewColumn Width="50" Header="{x:Static locals:SamplingExplorerLanguagePack.Hits}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Hits}" TextAlignment="Right" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Width="Auto" Header="Overhead">
+                                <GridViewColumn Width="Auto" Header="{x:Static locals:SamplingExplorerLanguagePack.Overhead}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding OverheadPercentage}" TextAlignment="Right" />
@@ -204,7 +202,7 @@
                     <TextBlock
                         FontSize="16"
                         FontWeight="Bold"
-                        Text="Select an item" />
+                        Text="{x:Static locals:SamplingExplorerLanguagePack.SelectAnItem}" />
                 </StackPanel>
             </ScrollViewer>
         </Grid>

@@ -44,7 +44,7 @@ namespace WindowsPerfGUI
     public class WPerfOptions : BaseOptionModel<WPerfOptions>
     {
         [Category("Windows Perf")]
-        [DisplayName("Wperf path")]
+        [DisplayName("WindowsPerf path")]
         [Description("The path for the wperf.exe file")]
         [DefaultValue(true)]
         public string WperfPath { get; set; } = "wperf.exe";

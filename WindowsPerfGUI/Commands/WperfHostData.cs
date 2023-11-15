@@ -28,24 +28,32 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using WindowsPerfGUI.Resources.Locals;
+
 namespace WindowsPerfGUI
 {
     [Command(PackageIds.WperfHostData)]
     internal sealed class WperfHostData : BaseCommand<WperfHostData>
     {
+        protected override void BeforeQueryStatus(EventArgs e)
+        {
+            Command.Text = WperfHostDataLanguagePack.WindowTitle;
+            base.BeforeQueryStatus(e);
+
+        }
         protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
         {
             if (!WPerfOptions.Instance.IsWperfInitialized)
             {
                 await VS.MessageBox.ShowErrorAsync(
-                    "Wperf is not initialized please follow the initilization steps",
-                    "To do so go to Tools -> Options -> Windows Perf -> Wperf Path"
+                    ErrorLanguagePack.NotInititiatedWperfErrorLine1,
+                    ErrorLanguagePack.NotInititiatedWperfErrorLine2
                     );
                 return;
             }
 
             WperfHostDataDialog wperfHostDataDialog = new();
-            wperfHostDataDialog.Title = "Wperf test results";
+            wperfHostDataDialog.Title = WperfHostDataLanguagePack.WindowTitle;
             wperfHostDataDialog.ShowDialog();
         }
     }

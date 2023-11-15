@@ -22,7 +22,6 @@
         <Parent guid="VSMainMenu" id="Tools.OptionsGroup"/>
         <Icon guid="ImageCatalogGuid" id="ListView"/>
         <CommandFlag>IconIsMoniker</CommandFlag>
-        <CommandFlag>TextChanges</CommandFlag>
         <Strings>
           <ButtonText>WindowsPerf Host Data</ButtonText>
           <LocCanonicalName>.Tools.WperfHostData</LocCanonicalName>
@@ -31,10 +30,9 @@
       <Button guid="WindowsPerfGUI" id="SamplingExplorer" priority="0x0100" type="Button">
         <Parent guid="VSMainMenu" id="View.ExplorerWindowsGroup"/>
         <Icon guid="ImageCatalogGuid" id="StartTime"/>
-        <CommandFlag>TextChanges</CommandFlag>
         <CommandFlag>IconIsMoniker</CommandFlag>
         <Strings>
-          <ButtonText>Sampling Explorer</ButtonText>
+          <ButtonText>Explorateur d'echantionnage</ButtonText>
           <LocCanonicalName>.View.SamplingExplorer</LocCanonicalName>
         </Strings>
       </Button>
