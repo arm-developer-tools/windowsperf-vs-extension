@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -118,30 +118,30 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="NotInititiatedWperfErrorLine1" xml:space="preserve">
-    <value>WidnowsPerf is not initialized please follow the initialization steps</value>
+    <value>WindowsPerf não foi inicializado, por favor siga os passos de inicialização</value>
   </data>
   <data name="NotInititiatedWperfErrorLine2" xml:space="preserve">
-    <value>To do so go to Tools -&gt; Options -&gt; WindowsPerf -&gt; Wperf Path</value>
+    <value>Para fazê-lo vá em Ferramentas -&gt; Opções -&gt; WindowsPerf -&gt; Wperf Path</value>
   </data>
   <data name="UncompleteSamplingSettingsLine1" xml:space="preserve">
-    <value>To start sampling you need to have at least</value>
+    <value>Para inicializar a amostragem você precisa ter pelo menos</value>
   </data>
   <data name="UncompleteSamplingSettingsLine2" xml:space="preserve">
-    <value>The executable file path and the event name as well as the core selected!</value>
+    <value>O endereço do arquivo executável, o nome do evento assim como o núcleo selecionado!</value>
   </data>
   <data name="RunningSamplingOverlapLine1" xml:space="preserve">
-    <value>WindowsPerf is currently sampling</value>
+    <value>WindowsPerf está fazendo a amostragem</value>
   </data>
   <data name="RunningSamplingOverlapLine2" xml:space="preserve">
-    <value>Please wait for the current sampling to finish before starting another sampling instance</value>
+    <value>Por favor espere para a amostragem atual terminar antes de começar outra</value>
   </data>
   <data name="ErrorWindowsPerfCLI" xml:space="preserve">
-    <value>WindowsPerf Error</value>
+    <value>Erro do WindowsPerf</value>
   </data>
   <data name="NoWindowsPerfCliData" xml:space="preserve">
-    <value>No results were returned from WindowsPerf</value>
+    <value>Nenhum resultado retornado pelo WindowsPerf</value>
   </data>
   <data name="WperfUnavailable" xml:space="preserve">
-    <value>WindowsPerf is not available at the indicated path or not initialized</value>
+    <value>WindowsPerf não está disponível no caminho indicado ou não foi inicializado</value>
   </data>
 </root>

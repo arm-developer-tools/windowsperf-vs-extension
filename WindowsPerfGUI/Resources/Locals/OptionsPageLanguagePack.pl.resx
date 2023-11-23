@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,31 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="NotInititiatedWperfErrorLine1" xml:space="preserve">
-    <value>WidnowsPerf is not initialized please follow the initialization steps</value>
+  <data name="WperfPath" xml:space="preserve">
+    <value>Ścieżka WindowsPerf</value>
   </data>
-  <data name="NotInititiatedWperfErrorLine2" xml:space="preserve">
-    <value>To do so go to Tools -&gt; Options -&gt; WindowsPerf -&gt; Wperf Path</value>
+  <data name="WperfPathPlaceholder" xml:space="preserve">
+    <value>Ścieżka do pliku wperf.exe</value>
   </data>
-  <data name="UncompleteSamplingSettingsLine1" xml:space="preserve">
-    <value>To start sampling you need to have at least</value>
+  <data name="Validate" xml:space="preserve">
+    <value>Zweryfikuj</value>
   </data>
-  <data name="UncompleteSamplingSettingsLine2" xml:space="preserve">
-    <value>The executable file path and the event name as well as the core selected!</value>
+  <data name="EventName" xml:space="preserve">
+    <value>Nazwa wydarzenia</value>
   </data>
-  <data name="RunningSamplingOverlapLine1" xml:space="preserve">
-    <value>WindowsPerf is currently sampling</value>
+  <data name="EventRawIndex" xml:space="preserve">
+    <value>Indeks wydarzenia</value>
   </data>
-  <data name="RunningSamplingOverlapLine2" xml:space="preserve">
-    <value>Please wait for the current sampling to finish before starting another sampling instance</value>
+  <data name="EventDescription" xml:space="preserve">
+    <value>Opis wydarzenia</value>
   </data>
-  <data name="ErrorWindowsPerfCLI" xml:space="preserve">
-    <value>WindowsPerf Error</value>
+  <data name="EventType" xml:space="preserve">
+    <value>Typ wydarzenia</value>
   </data>
-  <data name="NoWindowsPerfCliData" xml:space="preserve">
-    <value>No results were returned from WindowsPerf</value>
+  <data name="ListOfAvailableMetrics" xml:space="preserve">
+    <value>Lista dostępnych metryk:</value>
   </data>
-  <data name="WperfUnavailable" xml:space="preserve">
-    <value>WindowsPerf is not available at the indicated path or not initialized</value>
+  <data name="ListOfAvailableEvents" xml:space="preserve">
+    <value>Lista dostępnych wydarzeń:</value>
+  </data>
+  <data name="Metric" xml:space="preserve">
+    <value>Metryczny</value>
+  </data>
+  <data name="Events" xml:space="preserve">
+    <value>Wydarzenia</value>
+  </data>
+  <data name="Formula" xml:space="preserve">
+    <value>Formuła</value>
+  </data>
+  <data name="Unit" xml:space="preserve">
+    <value>Jednostka</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Opis</value>
   </data>
 </root>

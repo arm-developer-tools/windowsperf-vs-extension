@@ -152,7 +152,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
+    <EmbeddedResource Include="Resources\Locals\ErrorLanguagePack.pl.resx" />
+    <EmbeddedResource Include="Resources\Locals\ErrorLanguagePack.pt-BR.resx" />
+    <EmbeddedResource Include="Resources\Locals\MainLanguagePack.pl.resx" />
+    <EmbeddedResource Include="Resources\Locals\MainLanguagePack.pt-BR.resx" />
     <EmbeddedResource Include="Resources\Locals\OptionsPageLanguagePack.fr-FR.resx" />
+    <EmbeddedResource Include="Resources\Locals\OptionsPageLanguagePack.pl.resx" />
+    <EmbeddedResource Include="Resources\Locals\OptionsPageLanguagePack.pt-BR.resx" />
     <EmbeddedResource Include="Resources\Locals\OptionsPageLanguagePack.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>OptionsPageLanguagePack.Designer.cs</LastGenOutput>
@@ -250,17 +256,23 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MainLanguagePack.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Locals\SamplingExplorerLanguagePack.pl.resx" />
+    <EmbeddedResource Include="Resources\Locals\SamplingExplorerLanguagePack.pt-BR.resx" />
     <EmbeddedResource Include="Resources\Locals\SamplingExplorerLanguagePack.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SamplingExplorerLanguagePack.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Locals\SamplingSettingsLanguagePack.fr-FR.resx" />
+    <EmbeddedResource Include="Resources\Locals\SamplingSettingsLanguagePack.pl.resx" />
+    <EmbeddedResource Include="Resources\Locals\SamplingSettingsLanguagePack.pt-BR.resx" />
     <EmbeddedResource Include="Resources\Locals\SamplingSettingsLanguagePack.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SamplingSettingsLanguagePack.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Locals\WperfHostDataLanguagePack.fr-FR.resx" />
+    <EmbeddedResource Include="Resources\Locals\WperfHostDataLanguagePack.pl.resx" />
+    <EmbeddedResource Include="Resources\Locals\WperfHostDataLanguagePack.pt-BR.resx" />
     <EmbeddedResource Include="Resources\Locals\WperfHostDataLanguagePack.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>WperfHostDataLanguagePack.Designer.cs</LastGenOutput>

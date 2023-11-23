@@ -61,24 +61,6 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sampling Explorer.
-        /// </summary>
-        public static string SamplingExplorerWindowTitle {
-            get {
-                return ResourceManager.GetString("SamplingExplorerWindowTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sampling Settings.
-        /// </summary>
-        public static string SamplingSettingsDialogWindowTItle {
-            get {
-                return ResourceManager.GetString("SamplingSettingsDialogWindowTItle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Tool Window.
         /// </summary>
         public static string ToolWindow {

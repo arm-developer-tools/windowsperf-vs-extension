@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,31 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="NotInititiatedWperfErrorLine1" xml:space="preserve">
-    <value>WidnowsPerf is not initialized please follow the initialization steps</value>
+  <data name="CpuCore" xml:space="preserve">
+    <value>Rdzeń procesora:</value>
   </data>
-  <data name="NotInititiatedWperfErrorLine2" xml:space="preserve">
-    <value>To do so go to Tools -&gt; Options -&gt; WindowsPerf -&gt; Wperf Path</value>
+  <data name="Event" xml:space="preserve">
+    <value>Wydarzenie :</value>
   </data>
-  <data name="UncompleteSamplingSettingsLine1" xml:space="preserve">
-    <value>To start sampling you need to have at least</value>
+  <data name="Frequency" xml:space="preserve">
+    <value>Częstotliwość :</value>
   </data>
-  <data name="UncompleteSamplingSettingsLine2" xml:space="preserve">
-    <value>The executable file path and the event name as well as the core selected!</value>
+  <data name="Timeout" xml:space="preserve">
+    <value>Limit czasu:</value>
   </data>
-  <data name="RunningSamplingOverlapLine1" xml:space="preserve">
-    <value>WindowsPerf is currently sampling</value>
+  <data name="ExtraArgs" xml:space="preserve">
+    <value>Dodatkowe argumenty:</value>
   </data>
-  <data name="RunningSamplingOverlapLine2" xml:space="preserve">
-    <value>Please wait for the current sampling to finish before starting another sampling instance</value>
+  <data name="Save" xml:space="preserve">
+    <value>Zapisz</value>
   </data>
-  <data name="ErrorWindowsPerfCLI" xml:space="preserve">
-    <value>WindowsPerf Error</value>
+  <data name="WperfCommandPreview" xml:space="preserve">
+    <value>Podgląd poleceń WindowsPerf :</value>
   </data>
-  <data name="NoWindowsPerfCliData" xml:space="preserve">
-    <value>No results were returned from WindowsPerf</value>
+  <data name="FilePath" xml:space="preserve">
+    <value>Ścieżka pliku...</value>
   </data>
-  <data name="WperfUnavailable" xml:space="preserve">
-    <value>WindowsPerf is not available at the indicated path or not initialized</value>
+  <data name="SelectFile" xml:space="preserve">
+    <value>Wybierz plik</value>
+  </data>
+  <data name="PayloadFromFile" xml:space="preserve">
+    <value>Dane z pliku</value>
+  </data>
+  <data name="ProjectTarget" xml:space="preserve">
+    <value>Cel projektu</value>
+  </data>
+  <data name="WindowTitle" xml:space="preserve">
+    <value>Ustawienia próbkowania</value>
+  </data>
+  <data name="CpuCoreNumber" xml:space="preserve">
+    <value>Numer rdzenia procesora</value>
   </data>
 </root>

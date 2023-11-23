@@ -79,7 +79,7 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To do so go to Tools -&gt; Options -&gt; Windows Perf -&gt; Wperf Path.
+        ///   Looks up a localized string similar to To do so go to Tools -&gt; Options -&gt; WindowsPerf -&gt; Wperf Path.
         /// </summary>
         public static string NotInititiatedWperfErrorLine2 {
             get {

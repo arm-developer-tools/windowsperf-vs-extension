@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,31 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="NotInititiatedWperfErrorLine1" xml:space="preserve">
-    <value>WidnowsPerf is not initialized please follow the initialization steps</value>
+  <data name="WindowTitle" xml:space="preserve">
+    <value>Resultados do teste do WindowsPerf</value>
   </data>
-  <data name="NotInititiatedWperfErrorLine2" xml:space="preserve">
-    <value>To do so go to Tools -&gt; Options -&gt; WindowsPerf -&gt; Wperf Path</value>
+  <data name="TestName" xml:space="preserve">
+    <value>Nome do teste</value>
   </data>
-  <data name="UncompleteSamplingSettingsLine1" xml:space="preserve">
-    <value>To start sampling you need to have at least</value>
+  <data name="TestResult" xml:space="preserve">
+    <value>Resultado do teste</value>
   </data>
-  <data name="UncompleteSamplingSettingsLine2" xml:space="preserve">
-    <value>The executable file path and the event name as well as the core selected!</value>
-  </data>
-  <data name="RunningSamplingOverlapLine1" xml:space="preserve">
-    <value>WindowsPerf is currently sampling</value>
-  </data>
-  <data name="RunningSamplingOverlapLine2" xml:space="preserve">
-    <value>Please wait for the current sampling to finish before starting another sampling instance</value>
-  </data>
-  <data name="ErrorWindowsPerfCLI" xml:space="preserve">
-    <value>WindowsPerf Error</value>
-  </data>
-  <data name="NoWindowsPerfCliData" xml:space="preserve">
-    <value>No results were returned from WindowsPerf</value>
-  </data>
-  <data name="WperfUnavailable" xml:space="preserve">
-    <value>WindowsPerf is not available at the indicated path or not initialized</value>
+  <data name="Close" xml:space="preserve">
+    <value>Fechar</value>
   </data>
 </root>
