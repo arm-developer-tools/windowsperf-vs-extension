@@ -13,37 +13,24 @@ PS: as long as this step has not been fulfilled, the extension will not work.
 
 ![Update settings tutorial](doc/resources/update-settings.gif)
 
-### Checking additional host data
-
-In order to check data about the host running `wperf`, head to `Tools -> Wperf Host Data` and you will see a new window with a list of test ran by `wperf` and their results[^3].
-
-![Additional host data tutorial](doc/resources/wperf-host-data.gif)
-
-### Wperf output
-
-All the commands being executed as well as their output can be found at the `Output` window. To open it, go to `View -> Output` and select `WindowsPerf Output` from the dropdown menu.
-
-## What can you do with Visual Studio extension for WindowsPerfGUI
-
-Under construction...
-
 ## Project Structure
 
 ```bash
 └───WindowsPerfGUI
     ├───Commands    (Commands for the extension)
     ├───Properties  (Contains the AssemblyInfo.cs file that describes the application metadata)
-    ├───Resources   (Contains the icons for the extension)
-    └───ToolWindows (Contains the code for the tool window)
+    ├───Resources   (Contains the icons for the extension as well as all the locals)
+    ├───ToolWindows (Contains the code for the tool window)
+    ├───Options     (Contains The settings page for the extension)
+    ├───SDK         (Contains a wrapper around wperf the cli)
+    ├───Utils       (Contains utility functions and classes)
+    ├───Components  (Contains a set of reusable components)
+    └───Themes      (Contains the main style for the generic components)
 ```
 
-## Authors and acknowledgment
+## Wiki page
 
-Show your appreciation to those who have contributed to the project.
-
-## Code Documentation
-
-To get started with the project, see our [Code Docs](doc/README.md) page.
+To get started with the project, see our [Wiki page](<[doc/README.md](https://gitlab.com/Linaro/WindowsPerf/vs-extension/-/wikis/home)>).
 
 ## Contributing
 
@@ -53,12 +40,7 @@ To contribute to the project follow our [Contributing Guidelines](CONTRIBUTING.m
 
 All code in this repository is licensed under the [BSD 3-Clause License](LICENSE)
 
-## References
+## Articles
 
-[^1]: The output shown is the result of executing `wperf -version`.
-[^2]: The output shown is the result of executing `wperf list`.
-[^3]: The output shown is the result of executing `wperf test`.
-
-# Articles
-
-* [Introducing 1.0.0-beta release of WindowsPerf Visual Studio extension](https://www.linaro.org/blog/introducing-1-0-0-beta-release-of-windowsperf-visual-studio-extension/) blog post.
+- [Introducing the WindowsPerf GUI: the Visual Studio 2022 extension](https://www.linaro.org/blog/introducing-the-windowsperf-gui-the-visual-studio-2022-extension/)
+- [Introducing 1.0.0-beta release of WindowsPerf Visual Studio extension](https://www.linaro.org/blog/introducing-1-0-0-beta-release-of-windowsperf-visual-studio-extension/)
