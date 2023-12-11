@@ -101,10 +101,10 @@
     <value>Noyau du CPU :</value>
   </data>
   <data name="Event" xml:space="preserve">
-    <value>Événement :</value>
+    <value>-- Sélectionnez un événement à ajouter --</value>
   </data>
   <data name="Frequency" xml:space="preserve">
-    <value>Fréquence :</value>
+    <value>-- Sélectionnez la fréquence de l'événement --</value>
   </data>
   <data name="Timeout" xml:space="preserve">
     <value>Délai d'expiration (s) :</value>

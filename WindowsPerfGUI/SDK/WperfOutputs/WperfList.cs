@@ -30,6 +30,7 @@
 
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WindowsPerfGUI.SDK.WperfOutputs
 {
@@ -38,6 +39,17 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
     {
         [JsonProperty("Predefined_Events")]
         public List<PredefinedEvent> PredefinedEvents { get; set; }
+        public (PredefinedEvent, int) GetPredefinedEventFromAliasName(string aliasName)
+        {
+            foreach (var predefinedEvent in PredefinedEvents.Select((value, i) => new { value, i }))
+            {
+                if (predefinedEvent.value.AliasName == aliasName)
+                {
+                    return (predefinedEvent.value, predefinedEvent.i);
+                }
+            }
+            return (null, -1);
+        }
 
         [JsonProperty("Predefined_Metrics")]
         public List<PredefinedMetric> PredefinedMetrics { get; set; }
@@ -61,6 +73,7 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
         {
             return $"{AliasName} | {Description}";
         }
+
     }
 
     public partial class PredefinedMetric

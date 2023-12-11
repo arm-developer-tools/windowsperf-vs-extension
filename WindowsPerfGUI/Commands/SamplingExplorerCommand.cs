@@ -29,8 +29,9 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using WindowsPerfGUI.Resources.Locals;
+using WindowsPerfGUI.ToolWindows.SamplingExplorer;
 
-namespace WindowsPerfGUI
+namespace WindowsPerfGUI.Commands
 {
     [Command(PackageIds.SamplingExplorer)]
     internal sealed class SamplingExplorerCommand : BaseCommand<SamplingExplorerCommand>
@@ -39,7 +40,6 @@ namespace WindowsPerfGUI
         {
             Command.Text = SamplingExplorerLanguagePack.WindowTitle;
             base.BeforeQueryStatus(e);
-
         }
         protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
         {

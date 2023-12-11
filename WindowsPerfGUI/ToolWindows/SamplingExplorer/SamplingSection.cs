@@ -30,8 +30,9 @@
 
 using System.Collections.Generic;
 using WindowsPerfGUI.SDK.WperfOutputs;
+using WindowsPerfGUI.Utils;
 
-namespace WindowsPerfGUI.Utils
+namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
 {
     public class SamplingSection : NotifyPropertyChangedImplementor
     {

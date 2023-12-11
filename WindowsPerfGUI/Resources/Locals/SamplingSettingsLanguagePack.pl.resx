@@ -121,10 +121,10 @@
     <value>Rdzeń procesora:</value>
   </data>
   <data name="Event" xml:space="preserve">
-    <value>Wydarzenie :</value>
+    <value>-- Wybierz wydarzenie do doddania --</value>
   </data>
   <data name="Frequency" xml:space="preserve">
-    <value>Częstotliwość :</value>
+    <value>-- Wybierz częstotliwość wydarzenia --</value>
   </data>
   <data name="Timeout" xml:space="preserve">
     <value>Limit czasu:</value>

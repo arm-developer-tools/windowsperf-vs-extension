@@ -29,43 +29,24 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System.Collections.Generic;
-using WindowsPerfGUI.Resources.Locals;
-namespace WindowsPerfGUI.Utils
+
+namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 {
-    public class CpuCoreElement
+    public static class SamplingFrequency
     {
-        public int coreNumber;
-        public IntPtr coreMask;
-        public override string ToString()
+        public static List<string> SamplingFrequencyList = new List<string>()
         {
-            return $"{SamplingSettingsLanguagePack.CpuCoreNumber} {coreNumber}";
-        }
-    }
-    public static class CpuCores
-    {
-        public static int numberOfAvailableCores = 0;
-
-        public static List<CpuCoreElement> CpuCoreList { get; private set; }
-
-        public static List<CpuCoreElement> InitCpuCores()
-        {
-            if (numberOfAvailableCores > 0) return CpuCoreList;
-            foreach (var item in new
-            System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get())
-            {
-                numberOfAvailableCores += int.Parse(item["NumberOfCores"].ToString());
-            }
-            CreateCpuCoreList();
-            return CpuCoreList;
-        }
-
-        private static void CreateCpuCoreList()
-        {
-            CpuCoreList = new List<CpuCoreElement>();
-            for (int i = 0; i < numberOfAvailableCores; i++)
-            {
-                CpuCoreList.Add(new CpuCoreElement { coreNumber = i, coreMask = (IntPtr)(0x1 << i) });
-            }
-        }
+            "10000",
+            "100000",
+            "200000",
+            "300000",
+            "400000",
+            "500000",
+            "600000",
+            "700000",
+            "800000",
+            "900000",
+            "1000000",
+        };
     }
 }

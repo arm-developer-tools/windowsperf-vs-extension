@@ -101,10 +101,10 @@
     <value>CPU Core :</value>
   </data>
   <data name="Event" xml:space="preserve">
-    <value>Event :</value>
+    <value>-- Select Event to add --</value>
   </data>
   <data name="Frequency" xml:space="preserve">
-    <value>Frequency :</value>
+    <value>-- Select Event frequency --</value>
   </data>
   <data name="Timeout" xml:space="preserve">
     <value>Timeout (s) :</value>

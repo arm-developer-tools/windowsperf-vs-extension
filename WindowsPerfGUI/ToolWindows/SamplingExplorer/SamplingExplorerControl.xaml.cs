@@ -38,9 +38,9 @@ using WindowsPerfGUI.Components.TreeListView;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK;
 using WindowsPerfGUI.SDK.WperfOutputs;
-using WindowsPerfGUI.Utils;
+using WindowsPerfGUI.ToolWindows.SamplingSetting;
 
-namespace WindowsPerfGUI
+namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
 {
     public partial class SamplingExplorerControl : UserControl
     {

@@ -33,8 +33,9 @@ using System.Collections.Generic;
 using System.IO;
 using WindowsPerfGUI.Components.TreeListView;
 using WindowsPerfGUI.SDK.WperfOutputs;
+using WindowsPerfGUI.Utils;
 
-namespace WindowsPerfGUI.Utils
+namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
 {
     public class FormattedSamplingResults : NotifyPropertyChangedImplementor, ITreeModel
     {

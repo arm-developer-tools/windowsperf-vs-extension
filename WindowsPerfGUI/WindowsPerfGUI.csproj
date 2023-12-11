@@ -102,8 +102,10 @@
     </Compile>
     <Compile Include="Utils\Converters\BooleanToLinkCursor.cs" />
     <Compile Include="Utils\Converters\BooleanToLinkTextDecoration.cs" />
-    <Compile Include="Utils\FormattedSamplingResults.cs" />
+    <Compile Include="ToolWindows\SamplingExplorer\FormattedSamplingResults.cs" />
     <Compile Include="Utils\Converters\BooleanToLinkColor.cs" />
+    <Compile Include="Utils\Converters\NullToDisabledConverter.cs" />
+    <Compile Include="Utils\Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Utils\NotifyPropertyChangedImplementor.cs" />
     <Compile Include="Options\WPerfPath.xaml.cs">
       <DependentUpon>WPerfPath.xaml</DependentUpon>
@@ -120,21 +122,21 @@
     <Compile Include="SDK\WperfOutputs\WperfSampling.cs" />
     <Compile Include="SDK\WperfOutputs\WperfTest.cs" />
     <Compile Include="SDK\WperfOutputs\WperfVersion.cs" />
-    <Compile Include="ToolWindows\SamplingExplorer.cs" />
-    <Compile Include="ToolWindows\SamplingExplorerControl.xaml.cs">
+    <Compile Include="ToolWindows\SamplingExplorer\SamplingExplorer.cs" />
+    <Compile Include="ToolWindows\SamplingExplorer\SamplingExplorerControl.xaml.cs">
       <DependentUpon>SamplingExplorerControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ToolWindows\SamplingSettingDialog.xaml.cs">
+    <Compile Include="ToolWindows\SamplingSetting\SamplingSettingDialog.xaml.cs">
       <DependentUpon>SamplingSettingDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="ToolWindows\WperfHostDataDialog.xaml.cs">
       <DependentUpon>WperfHostDataDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\CpuCores.cs" />
-    <Compile Include="Utils\SamplingSection.cs" />
-    <Compile Include="Utils\SamplingFrequency.cs" />
-    <Compile Include="Utils\SamplingSettings.cs" />
-    <Compile Include="Utils\SamplingSettingsForm.cs" />
+    <Compile Include="ToolWindows\SamplingSetting\CpuCores.cs" />
+    <Compile Include="ToolWindows\SamplingExplorer\SamplingSection.cs" />
+    <Compile Include="ToolWindows\SamplingSetting\SamplingFrequency.cs" />
+    <Compile Include="ToolWindows\SamplingSetting\SamplingSettings.cs" />
+    <Compile Include="ToolWindows\SamplingSetting\SamplingSettingsForm.cs" />
     <Compile Include="Utils\SDK\OutputHandler.cs" />
     <Compile Include="Utils\SDK\ProcessRunner.cs" />
     <Compile Include="SDK\WperfClient.cs" />
@@ -208,11 +210,11 @@
     <Compile Include="ToolWindows\MyToolWindowControl.xaml.cs">
       <DependentUpon>MyToolWindowControl.xaml</DependentUpon>
     </Compile>
-    <Page Include="ToolWindows\SamplingExplorerControl.xaml">
+    <Page Include="ToolWindows\SamplingExplorer\SamplingExplorerControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ToolWindows\SamplingSettingDialog.xaml">
+    <Page Include="ToolWindows\SamplingSetting\SamplingSettingDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

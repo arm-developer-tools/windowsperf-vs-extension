@@ -19,6 +19,8 @@
     <SolidColorBrush x:Key="VsWindowText" Color="{DynamicResource VsColor.WindowText}" />
     <SolidColorBrush x:Key="VsBrandedUIBorder" Color="{DynamicResource VsColor.BrandedUIBorder}" />
     <SolidColorBrush x:Key="VsButtonPressedBackground" Color="{DynamicResource VsColor.StartPageButtonPinDown}" />
+    <SolidColorBrush x:Key="VsDisabledForeground" Color="{DynamicResource VsColor.ComboBoxDisabledText}" />
+    <SolidColorBrush x:Key="VsDisabledBackground" Color="{DynamicResource VsColor.ComboBoxDisabledBackground}" />
 
     <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="{x:Type local:CustomTextBoxControl}">
         <Setter Property="Foreground" Value="{StaticResource VsToolWindowText}" />
@@ -138,6 +140,9 @@
                         <Trigger Property="IsPressed" Value="true">
                             <Setter TargetName="border" Property="Background" Value="{StaticResource VsButtonPressedBackground}" />
                             <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource VsBrandedUIBorder}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value=".5" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

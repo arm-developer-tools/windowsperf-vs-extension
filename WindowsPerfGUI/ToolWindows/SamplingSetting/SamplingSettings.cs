@@ -30,7 +30,7 @@
 
 using System.Collections.Generic;
 
-namespace WindowsPerfGUI.Utils
+namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 {
     public static class SamplingSettings
     {
@@ -48,7 +48,7 @@ namespace WindowsPerfGUI.Utils
             List<string> argsList = new List<string>();
             ValidateSettings();
             AppendElementsToList(argsList, "record");
-            AppendElementsToList(argsList, "-e", string.IsNullOrWhiteSpace(samplingSettingsFrom.SamplingFrequency) ? samplingSettingsFrom.SamplingEvent?.AliasName : $"{samplingSettingsFrom.SamplingEvent?.AliasName}:{samplingSettingsFrom.SamplingFrequency}");
+            AppendElementsToList(argsList, "-e", string.Join(",", samplingSettingsFrom.SamplingEventList));
             AppendElementsToList(argsList, "-c", samplingSettingsFrom.CPUCore?.coreNumber.ToString());
             AppendElementsToList(argsList, "--timeout", samplingSettingsFrom.SamplingTimeout);
             AppendElementsToList(argsList, "--annotate");
@@ -61,7 +61,7 @@ namespace WindowsPerfGUI.Utils
 
         private static void ValidateSettings()
         {
-            if (!(string.IsNullOrEmpty(samplingSettingsFrom.SamplingEvent?.AliasName) || string.IsNullOrEmpty(samplingSettingsFrom.FilePath) || string.IsNullOrEmpty(samplingSettingsFrom.CPUCore?.coreNumber.ToString())))
+            if (!(samplingSettingsFrom.SamplingEventList.Count > 0 || string.IsNullOrEmpty(samplingSettingsFrom.FilePath) || string.IsNullOrEmpty(samplingSettingsFrom.CPUCore?.coreNumber.ToString())))
             {
                 AreSettingsFilled = true;
                 return;

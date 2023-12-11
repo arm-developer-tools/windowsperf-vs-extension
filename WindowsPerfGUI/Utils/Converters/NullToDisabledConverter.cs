@@ -28,33 +28,25 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using WindowsPerfGUI.Resources.Locals;
+using System.Globalization;
+using System.Windows.Data;
 
-namespace WindowsPerfGUI.Commands
+namespace WindowsPerfGUI.Utils.Converters
 {
-    [Command(PackageIds.WperfHostData)]
-    internal sealed class WperfHostData : BaseCommand<WperfHostData>
+    public class NullToDisabledConverter : IValueConverter
     {
-        protected override void BeforeQueryStatus(EventArgs e)
-        {
-            Command.Text = WperfHostDataLanguagePack.WindowTitle;
-            base.BeforeQueryStatus(e);
+        #region Implementation of IValueConverter
 
-        }
-        protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!WPerfOptions.Instance.IsWperfInitialized)
-            {
-                await VS.MessageBox.ShowErrorAsync(
-                    ErrorLanguagePack.NotInititiatedWperfErrorLine1,
-                    ErrorLanguagePack.NotInititiatedWperfErrorLine2
-                    );
-                return;
-            }
-
-            WperfHostDataDialog wperfHostDataDialog = new();
-            wperfHostDataDialog.Title = WperfHostDataLanguagePack.WindowTitle;
-            wperfHostDataDialog.ShowDialog();
+            return value == null ? false : true;
         }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

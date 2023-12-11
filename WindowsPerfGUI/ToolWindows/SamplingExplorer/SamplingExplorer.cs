@@ -28,33 +28,32 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using Microsoft.VisualStudio.Imaging;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using WindowsPerfGUI.Resources.Locals;
 
-namespace WindowsPerfGUI.Commands
+namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
 {
-    [Command(PackageIds.WperfHostData)]
-    internal sealed class WperfHostData : BaseCommand<WperfHostData>
+    public class SamplingExplorer : BaseToolWindow<SamplingExplorer>
     {
-        protected override void BeforeQueryStatus(EventArgs e)
-        {
-            Command.Text = WperfHostDataLanguagePack.WindowTitle;
-            base.BeforeQueryStatus(e);
+        public override string GetTitle(int toolWindowId) => SamplingExplorerLanguagePack.WindowTitle;
+        public override Type PaneType => typeof(Pane);
 
+        public override Task<FrameworkElement> CreateAsync(int toolWindowId, CancellationToken cancellationToken)
+        {
+            return Task.FromResult<FrameworkElement>(new SamplingExplorerControl());
         }
-        protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
-        {
-            if (!WPerfOptions.Instance.IsWperfInitialized)
-            {
-                await VS.MessageBox.ShowErrorAsync(
-                    ErrorLanguagePack.NotInititiatedWperfErrorLine1,
-                    ErrorLanguagePack.NotInititiatedWperfErrorLine2
-                    );
-                return;
-            }
 
-            WperfHostDataDialog wperfHostDataDialog = new();
-            wperfHostDataDialog.Title = WperfHostDataLanguagePack.WindowTitle;
-            wperfHostDataDialog.ShowDialog();
+        [Guid("e0b657ee-f2c9-4365-a1db-e0d5a8a59417")]
+        internal class Pane : ToolWindowPane
+        {
+            public Pane()
+            {
+                BitmapImageMoniker = KnownMonikers.ToolWindow;
+            }
         }
     }
 }

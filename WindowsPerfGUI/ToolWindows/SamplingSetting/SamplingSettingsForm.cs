@@ -28,10 +28,34 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using System.Collections.ObjectModel;
 using WindowsPerfGUI.SDK.WperfOutputs;
+using WindowsPerfGUI.Utils;
 
-namespace WindowsPerfGUI.Utils
+namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 {
+    public class SamplingEventConfiguration
+    {
+        private string samplingEvent;
+
+        public string SamplingEvent
+        {
+            get { return samplingEvent; }
+            set { samplingEvent = value; }
+        }
+        private string samplingFrequency;
+#nullable enable
+        public string? SamplingFrequency
+        {
+            get { return samplingFrequency; }
+            set { samplingFrequency = value; }
+        }
+#nullable disable
+        override public string ToString()
+        {
+            return string.IsNullOrWhiteSpace(SamplingFrequency) ? SamplingEvent : $"{SamplingEvent}:{SamplingFrequency}";
+        }
+    }
     public class SamplingSettingsForm : NotifyPropertyChangedImplementor
     {
         private string commandLinePreview;
@@ -68,8 +92,6 @@ namespace WindowsPerfGUI.Utils
             set
             {
                 samplingFrequency = value;
-                OnPropertyChanged();
-                CommandLinePreview = SamplingSettings.GenerateCommandLinePreview();
             }
         }
 
@@ -81,10 +103,22 @@ namespace WindowsPerfGUI.Utils
             set
             {
                 samplingEvent = value;
+            }
+        }
+
+        private ObservableCollection<SamplingEventConfiguration> samplingEventList;
+
+        public ObservableCollection<SamplingEventConfiguration> SamplingEventList
+        {
+            get { return samplingEventList; }
+            set
+            {
+                samplingEventList = value;
                 OnPropertyChanged();
                 CommandLinePreview = SamplingSettings.GenerateCommandLinePreview();
             }
         }
+
 
         private string filePath;
 
@@ -126,6 +160,15 @@ namespace WindowsPerfGUI.Utils
 
         public SamplingSettingsForm()
         {
+            // We deliberatly set the private version of `samplingEventList`
+            // to not trigger the OnPropertyChanged event and generateCommandLinePreview
+            // that depend on the init of SamplingSettings.samplingSettingsFrom
+            if (SamplingEventList == null) samplingEventList = new ObservableCollection<SamplingEventConfiguration>();
+            samplingEventList.CollectionChanged += (sender, e) =>
+            {
+                OnPropertyChanged("SamplingEventList");
+                CommandLinePreview = SamplingSettings.GenerateCommandLinePreview();
+            };
             if (SamplingSettings.samplingSettingsFrom != null)
             {
                 SamplingSettingsForm samplingSettingsForm = SamplingSettings.samplingSettingsFrom;
@@ -135,6 +178,7 @@ namespace WindowsPerfGUI.Utils
                 SamplingTimeout = samplingSettingsForm.SamplingTimeout;
                 CPUCore = samplingSettingsForm.CPUCore;
                 ExtraArgs = samplingSettingsForm.ExtraArgs;
+                SamplingEventList = samplingSettingsForm.SamplingEventList;
             }
             SamplingSettings.samplingSettingsFrom = this;
         }

@@ -28,32 +28,26 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.VisualStudio.Imaging;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Globalization;
 using System.Windows;
-using WindowsPerfGUI.Resources.Locals;
+using System.Windows.Data;
 
-namespace WindowsPerfGUI
+namespace WindowsPerfGUI.Utils.Converters
 {
-    public class SamplingExplorer : BaseToolWindow<SamplingExplorer>
+    public class NullToVisibilityConverter : IValueConverter
     {
-        public override string GetTitle(int toolWindowId) => SamplingExplorerLanguagePack.WindowTitle;
-        public override Type PaneType => typeof(Pane);
+        #region Implementation of IValueConverter
 
-        public override Task<FrameworkElement> CreateAsync(int toolWindowId, CancellationToken cancellationToken)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Task.FromResult<FrameworkElement>(new SamplingExplorerControl());
+            return value == null ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        [Guid("e0b657ee-f2c9-4365-a1db-e0d5a8a59417")]
-        internal class Pane : ToolWindowPane
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            public Pane()
-            {
-                BitmapImageMoniker = KnownMonikers.ToolWindow;
-            }
+            throw new NotImplementedException();
         }
+
+        #endregion
     }
 }

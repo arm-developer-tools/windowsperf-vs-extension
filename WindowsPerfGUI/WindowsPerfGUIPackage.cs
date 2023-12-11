@@ -37,6 +37,7 @@ global using Task = System.Threading.Tasks.Task;
 using System.Runtime.InteropServices;
 using System.Threading;
 using WindowsPerfGUI.Options;
+using WindowsPerfGUI.ToolWindows.SamplingExplorer;
 
 namespace WindowsPerfGUI
 {

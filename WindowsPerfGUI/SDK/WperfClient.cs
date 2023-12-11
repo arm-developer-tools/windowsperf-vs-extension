@@ -29,7 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using WindowsPerfGUI.SDK.WperfOutputs;
-using WindowsPerfGUI.Utils;
+using WindowsPerfGUI.ToolWindows.SamplingSetting;
 using WindowsPerfGUI.Utils.SDK;
 
 namespace WindowsPerfGUI.SDK

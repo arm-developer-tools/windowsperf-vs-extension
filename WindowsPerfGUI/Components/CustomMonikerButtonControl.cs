@@ -61,7 +61,7 @@ namespace WindowsPerfGUI.Components
             monikerImage.Moniker = MonikerName;
             monikerImage.Width = 16;
             monikerImage.Height = 16;
-            monikerImage.Grayscale = false;
+            monikerImage.Grayscale = !this.IsEnabled;
             Content = monikerImage;
             base.OnInitialized(e);
             this.IsEnabledChanged += ToggleGrayScaleMoniker;

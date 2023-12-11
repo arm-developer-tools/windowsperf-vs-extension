@@ -1,0 +1,196 @@
+<platform:DialogWindow
+    x:Class="WindowsPerfGUI.ToolWindows.SamplingSetting.SamplingSettingDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Components="clr-namespace:WindowsPerfGUI.Components"
+    xmlns:catalog="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.ImageCatalog"
+    xmlns:converters="clr-namespace:WindowsPerfGUI.Utils.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:locals="clr-namespace:WindowsPerfGUI.Resources.Locals"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:platform="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
+    xmlns:toolkit="clr-namespace:Community.VisualStudio.Toolkit;assembly=Community.VisualStudio.Toolkit"
+    xmlns:utils="clr-namespace:WindowsPerfGUI.ToolWindows.SamplingSetting"
+    Width="900"
+    Height="600"
+    toolkit:Themes.UseVsTheme="True"
+    mc:Ignorable="d">
+    <platform:DialogWindow.DataContext>
+        <utils:SamplingSettingsForm />
+    </platform:DialogWindow.DataContext>
+    <platform:DialogWindow.Resources>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <converters:NullToDisabledConverter x:Key="NullToDisabledConverter" />
+    </platform:DialogWindow.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Orientation="Vertical">
+            <Components:CustomRadioButtonControl
+                x:Name="CustomProcessRadioButton"
+                Content="{x:Static locals:SamplingSettingsLanguagePack.PayloadFromFile}"
+                GroupName="SamplingSourceRadioButtonGroup"
+                IsChecked="True" />
+            <Components:FilePicker x:Name="SamplingSourcePathFilePicker" OnChange="FilePickerTextBox_TextChanged" />
+            <Components:CustomRadioButtonControl
+                x:Name="CurrentProjectProcessRadioButton"
+                Content="{x:Static locals:SamplingSettingsLanguagePack.ProjectTarget}"
+                GroupName="SamplingSourceRadioButtonGroup" />
+            <Separator Margin="0,10,0,0" />
+        </StackPanel>
+        <StackPanel Grid.Row="1" Margin="0,10,20,0">
+            <Label
+                Grid.Row="0"
+                Grid.Column="0"
+                Content="{x:Static locals:SamplingSettingsLanguagePack.CpuCore}" />
+            <Components:CustomComboBoxControl
+                x:Name="CpuCoreComboBox"
+                Grid.Row="0"
+                Grid.Column="1"
+                SelectedItem="{Binding CPUCore, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            <Label
+                Grid.Row="2"
+                Grid.Column="0"
+                Content="{x:Static locals:SamplingSettingsLanguagePack.Timeout}" />
+            <Components:CustomTextBoxControl
+                x:Name="SamplingTimeoutTextBox"
+                Grid.Row="2"
+                Grid.Column="1"
+                Margin="0,0,0,10"
+                Padding="2"
+                Placeholder="2.5"
+                Text="{Binding SamplingTimeout, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            <Label Content="{x:Static locals:SamplingSettingsLanguagePack.ExtraArgs}" />
+            <Components:CustomTextBoxControl
+                x:Name="ExtraArgs"
+                Padding="2"
+                Placeholder="extra args..."
+                Text="{Binding ExtraArgs, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2">
+            <Separator Grid.Row="3" Padding="0,10,0,10" />
+            <Label Content="{x:Static locals:SamplingSettingsLanguagePack.WperfCommandPreview}" />
+            <Components:CustomTextBoxControl
+                x:Name="SamplingCommandCallTextBox"
+                Padding="2"
+                IsReadOnly="True"
+                Placeholder="wperf sample"
+                Text="{Binding CommandLinePreview, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            <Components:CustomButtonControl
+                Margin="0,10,0,10"
+                Padding="20,5,20,5"
+                HorizontalAlignment="Right"
+                Click="SaveButton_Click"
+                Content="{x:Static locals:SamplingSettingsLanguagePack.Save}" />
+        </StackPanel>
+        <GroupBox
+            Grid.Row="1"
+            Grid.Column="1"
+            BorderThickness="1,1,1,1">
+            <GroupBox.Header>
+                <Label Content="Events" />
+            </GroupBox.Header>
+            <StackPanel Margin="5,10,5,10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0" Margin="0,0,5,10">
+                        <Components:CustomComboBoxControl x:Name="EventComboBox" SelectedItem="{Binding SamplingEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        <TextBlock
+                            Margin="5,3,20,0"
+                            IsHitTestVisible="False"
+                            Text="{x:Static locals:SamplingSettingsLanguagePack.Event}"
+                            Visibility="{Binding SelectedItem, ElementName=EventComboBox, Converter={StaticResource NullToVisibilityConverter}}" />
+                    </Grid>
+                    <Grid Grid.Column="1" Margin="5,0,0,10">
+                        <Components:CustomComboBoxControl x:Name="SamplingFrequencyComboBox" SelectedItem="{Binding SamplingFrequency, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        <TextBlock
+                            Margin="5,3,20,0"
+                            IsHitTestVisible="False"
+                            Text="{x:Static locals:SamplingSettingsLanguagePack.Frequency}"
+                            Visibility="{Binding SelectedItem, ElementName=SamplingFrequencyComboBox, Converter={StaticResource NullToVisibilityConverter}}" />
+                    </Grid>
+                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                        <Components:CustomMonikerButtonControl
+                            x:Name="AddEventButton"
+                            Margin="5,0,0,10"
+                            Click="AddEventButton_Click"
+                            IsEnabled="{Binding SelectedItem, ElementName=EventComboBox, Converter={StaticResource NullToDisabledConverter}}"
+                            MonikerName="{x:Static catalog:KnownMonikers.Add}" />
+                        <Components:CustomMonikerButtonControl
+                            x:Name="RemoveEventButton"
+                            Margin="5,0,0,10"
+                            Click="RemoveEventButton_Click"
+                            IsEnabled="{Binding SelectedItem, ElementName=EventComboBox, Converter={StaticResource NullToDisabledConverter}}"
+                            MonikerName="{x:Static catalog:KnownMonikers.Remove}" />
+                    </StackPanel>
+                </Grid>
+
+                <Grid Margin="0,10,0,5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="190" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Grid.Column="0"
+                            Margin="7,0,5,0"
+                            Text="Event" />
+                        <TextBlock
+                            Grid.Column="1"
+                            Margin="10,0,0,0"
+                            Text="Frequency" />
+                    </Grid>
+                    <ScrollViewer
+                        Grid.Row="1"
+                        MaxHeight="185"
+                        VerticalScrollBarVisibility="Auto">
+                        <ListBox
+                            x:Name="SamplingEventListBox"
+                            d:ItemsSource="{d:SampleData ItemCount=5}"
+                            BorderBrush="Transparent"
+                            ItemsSource="{Binding SamplingEventList}"
+                            SelectionChanged="SamplingEventListBox_SelectionChanged">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid x:Name="GridItem">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="193" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                            x:Name="Parameter"
+                                            Grid.Column="0"
+                                            Text="{Binding Path=SamplingEvent}" />
+                                        <TextBlock
+                                            x:Name="Value"
+                                            Grid.Column="1"
+                                            Text="{Binding Path=SamplingFrequency}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </Grid>
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</platform:DialogWindow>

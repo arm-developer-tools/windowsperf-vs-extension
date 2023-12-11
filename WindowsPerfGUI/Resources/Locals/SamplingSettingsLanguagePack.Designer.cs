@@ -79,7 +79,7 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Event :.
+        ///   Looks up a localized string similar to -- Select Event to add --.
         /// </summary>
         public static string Event {
             get {
@@ -106,7 +106,7 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Frequency :.
+        ///   Looks up a localized string similar to -- Select Event frequency --.
         /// </summary>
         public static string Frequency {
             get {
