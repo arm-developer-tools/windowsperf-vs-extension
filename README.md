@@ -11,8 +11,6 @@ WindowsPerfGUI is a Visual Studio extension that aims to provide a GUI for [Wind
 In order to set the path to the `wperf` executable, go to `Tools -> Options -> Windows Perf -> Wperf Path` and set the **absolute** path to the `wperf.exe` executable and then on the **Validate** button. If all is well, you should see the version[^1] of `wperf.exe` as well as `wperf-driver`, It will also populate the list of available events and metrics[^2] in `wperf. If not, you will see an error message.
 PS: as long as this step has not been fulfilled, the extension will not work.
 
-![Update settings tutorial](doc/resources/update-settings.gif)
-
 ## Project Structure
 
 ```bash
@@ -30,7 +28,7 @@ PS: as long as this step has not been fulfilled, the extension will not work.
 
 ## Wiki page
 
-To get started with the project, see our [Wiki page](<[doc/README.md](https://gitlab.com/Linaro/WindowsPerf/vs-extension/-/wikis/home)>).
+To get started with the project, see our [Wiki page](https://gitlab.com/Linaro/WindowsPerf/vs-extension/-/wikis/home).
 
 ## Contributing
 
