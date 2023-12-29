@@ -56,6 +56,9 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 
         private void SaveButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            Debug.WriteLine(CustomProcessRadioButton.IsChecked);
+            Debug.WriteLine(CurrentProjectProcessRadioButton.IsChecked);
+            Debug.WriteLine(SamplingSourcePathFilePicker.IsEnabled);
             SyncSamplingSettings();
             if (!SamplingSettings.AreSettingsFilled)
             {

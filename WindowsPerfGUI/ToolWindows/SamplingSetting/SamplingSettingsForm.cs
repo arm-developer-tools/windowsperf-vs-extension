@@ -58,6 +58,22 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
     }
     public class SamplingSettingsForm : NotifyPropertyChangedImplementor
     {
+        private bool customProcessRadioButton;
+
+        public bool CustomProcessRadioButton
+        {
+            get { return customProcessRadioButton; }
+            set { customProcessRadioButton = value; }
+        }
+        private bool currentProjectProcessRadioButton;
+
+        public bool CurrentProjectProcessRadioButton
+        {
+            get { return currentProjectProcessRadioButton; }
+            set { currentProjectProcessRadioButton = value; }
+        }
+
+
         private string commandLinePreview;
 
         public string CommandLinePreview
@@ -160,6 +176,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 
         public SamplingSettingsForm()
         {
+            customProcessRadioButton = true;
             // We deliberatly set the private version of `samplingEventList`
             // to not trigger the OnPropertyChanged event and generateCommandLinePreview
             // that depend on the init of SamplingSettings.samplingSettingsFrom

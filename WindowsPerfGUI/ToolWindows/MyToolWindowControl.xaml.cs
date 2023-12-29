@@ -33,7 +33,6 @@ using EnvDTE;
 using EnvDTE80;
 using System.Windows.Controls;
 
-
 namespace WindowsPerfGUI
 {
     public partial class MyToolWindowControl : UserControl
@@ -48,41 +47,42 @@ namespace WindowsPerfGUI
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             _dte = (DTE2)Package.GetGlobalService(typeof(DTE));
-            foreach (EnvDTE.Project project in _dte.Solution.Projects)
-            {
-                Configuration config = project.ConfigurationManager.ActiveConfiguration;
-                if (config != null)
-                {
-                    // Process each configuration
-                    string configName = config.ConfigurationName;
-                    Debug.WriteLine(configName);
-                    Debug.WriteLine(config.PlatformName);
-                    string msg = "";
-                    // Find an outputgroup with at least one file.  
-                    OutputGroups groups = config.OutputGroups;
-                    foreach (OutputGroup group in groups)
-                    {
-                        Debug.WriteLine(group.CanonicalName + " " + configName + " " + config.PlatformName);
-                        if (group.FileCount < 1) continue;
-                        msg += "\nOutputGroup Canonical: " + group.CanonicalName;
-                        msg += "\nOutputGroup DisplayName: " + group.DisplayName;
-                        msg += "\nOutputGroup Description: " + group.Description;
-                        msg += "\nNumber of Associated Files: " + group.FileCount.ToString();
-                        msg += "\nAssociated File Names: ";
-                        foreach (String str in (Array)group.FileNames)
-                        {
-                            msg += "\n" + str;
-                        }
-                        msg += "\nFiles Built in OutputGroup: ";
-                        foreach (String fURL in (Array)group.FileURLs)
-                        {
-                            msg += "\n" + fURL;
-                        }
-                        Debug.WriteLine(msg);
-                    }
 
-                    // Do something with the configuration name
+            Array projects = (Array)_dte.ActiveSolutionProjects;
+            EnvDTE.Project project = (EnvDTE.Project)projects.GetValue(0);
+            Debug.WriteLine(project.Name);
+            Configuration config = project.ConfigurationManager.ActiveConfiguration;
+            if (config != null)
+            {
+                // Process each configuration
+                string configName = config.ConfigurationName;
+                Debug.WriteLine(configName);
+                Debug.WriteLine(config.PlatformName);
+                string msg = "";
+                // Find an outputgroup with at least one file.  
+                OutputGroups groups = config.OutputGroups;
+                foreach (OutputGroup group in groups)
+                {
+                    if (group.FileCount < 1) continue;
+                    if(group.CanonicalName != "Built" && group.CanonicalName != "Symbols") continue;
+                    msg += "\nOutputGroup Canonical: " + group.CanonicalName;
+                    msg += "\nOutputGroup DisplayName: " + group.DisplayName;
+                    msg += "\nOutputGroup Description: " + group.Description;
+                    msg += "\nNumber of Associated Files: " + group.FileCount.ToString();
+                    msg += "\nAssociated File Names: ";
+                    foreach (String str in (Array)group.FileNames)
+                    {
+                        msg += "\n" + str;
+                    }
+                    msg += "\nFiles Built in OutputGroup: ";
+                    foreach (String fURL in (Array)group.FileURLs)
+                    {
+                        msg += "\n" + fURL;
+                    }
+                    Debug.WriteLine(msg);
                 }
+
+                // Do something with the configuration name
             }
         }
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
