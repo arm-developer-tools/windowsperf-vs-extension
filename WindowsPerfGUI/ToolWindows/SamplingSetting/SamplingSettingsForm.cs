@@ -63,14 +63,30 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
         public bool CustomProcessRadioButton
         {
             get { return customProcessRadioButton; }
-            set { customProcessRadioButton = value; }
+            set
+            {
+                customProcessRadioButton = value;
+                OnPropertyChanged();
+                if (value == true)
+                {
+                    FilePath = "";
+                }
+            }
         }
         private bool currentProjectProcessRadioButton;
 
         public bool CurrentProjectProcessRadioButton
         {
             get { return currentProjectProcessRadioButton; }
-            set { currentProjectProcessRadioButton = value; }
+            set
+            {
+                currentProjectProcessRadioButton = value;
+                OnPropertyChanged();
+                if (value == true)
+                {
+                    _ = Task.Run(async () => FilePath = await SolutionProjectOutput.GetProjectOutputAsync());
+                }
+            }
         }
 
 
