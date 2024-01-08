@@ -32,62 +32,66 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <StackPanel
-            Grid.Row="0"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Orientation="Vertical">
-            <Components:CustomRadioButtonControl
-                x:Name="CustomProcessRadioButton"
-                Content="{x:Static locals:SamplingSettingsLanguagePack.PayloadFromFile}"
-                GroupName="SamplingSourceRadioButtonGroup"
-                IsChecked="{Binding CustomProcessRadioButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-            <Components:FilePicker
-                x:Name="SamplingSourcePathFilePicker"
-                IsEnabled="{Binding IsChecked, ElementName=CustomProcessRadioButton, Converter={StaticResource NullToDisabledConverter}}"
-                OnChange="FilePickerTextBox_TextChanged" />
-           <StackPanel Orientation="Horizontal">
+        <GroupBox Padding="5" Grid.Row="0" Grid.Column="0">
+            <GroupBox.Header>
+                <Label Content="Payload" />
+            </GroupBox.Header>
+            <StackPanel Orientation="Vertical">
                 <Components:CustomRadioButtonControl
-                    x:Name="CurrentProjectProcessRadioButton"
-                    Content="{x:Static locals:SamplingSettingsLanguagePack.ProjectTarget}"
+                    x:Name="CustomProcessRadioButton"
+                    Content="{x:Static locals:SamplingSettingsLanguagePack.PayloadFromFile}"
                     GroupName="SamplingSourceRadioButtonGroup"
-                    IsChecked="{Binding CurrentProjectProcessRadioButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                <Label x:Name="ProjectTargetConfigLabel"/>
-           </StackPanel>
-            
-            <Separator Margin="0,10,0,0" />
-        </StackPanel>
-        <StackPanel Grid.Row="1" Margin="0,10,20,0">
-            <Label
-                Grid.Row="0"
-                Grid.Column="0"
-                Content="{x:Static locals:SamplingSettingsLanguagePack.CpuCore}" />
-            <Components:CustomComboBoxControl
-                x:Name="CpuCoreComboBox"
-                Grid.Row="0"
-                Grid.Column="1"
-                SelectedItem="{Binding CPUCore, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-            <Label
-                Grid.Row="2"
-                Grid.Column="0"
-                Content="{x:Static locals:SamplingSettingsLanguagePack.Timeout}" />
-            <Components:CustomTextBoxControl
-                x:Name="SamplingTimeoutTextBox"
-                Grid.Row="2"
-                Grid.Column="1"
-                Margin="0,0,0,10"
-                Padding="2"
-                Placeholder="2.5"
-                Text="{Binding SamplingTimeout, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-            <Label Content="{x:Static locals:SamplingSettingsLanguagePack.ExtraArgs}" />
-            <Components:CustomTextBoxControl
-                x:Name="ExtraArgs"
-                Padding="2"
-                Placeholder="extra args..."
-                Text="{Binding ExtraArgs, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-        </StackPanel>
+                    IsChecked="{Binding CustomProcessRadioButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                <Components:FilePicker
+                    x:Name="SamplingSourcePathFilePicker"
+                    IsEnabled="{Binding IsChecked, ElementName=CustomProcessRadioButton, Converter={StaticResource NullToDisabledConverter}}"
+                    OnChange="FilePickerTextBox_TextChanged" />
+                <StackPanel Orientation="Horizontal">
+                    <Components:CustomRadioButtonControl
+                        x:Name="CurrentProjectProcessRadioButton"
+                        Content="{x:Static locals:SamplingSettingsLanguagePack.ProjectTarget}"
+                        GroupName="SamplingSourceRadioButtonGroup"
+                        IsChecked="{Binding CurrentProjectProcessRadioButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    <Label x:Name="ProjectTargetConfigLabel" />
+                </StackPanel>
+                <Label Content="{x:Static locals:SamplingSettingsLanguagePack.ExtraArgs}" />
+                <Components:CustomTextBoxControl
+                    x:Name="ExtraArgs"
+                    Padding="2"
+                    Placeholder="extra args..."
+                    Text="{Binding ExtraArgs, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Padding="5" Grid.Row="1" Margin="0,0,0,0">
+            <GroupBox.Header>
+                <Label Content="Parameters" />
+            </GroupBox.Header>
+            <StackPanel>
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Content="{x:Static locals:SamplingSettingsLanguagePack.CpuCore}" />
+                <Components:CustomComboBoxControl
+                    x:Name="CpuCoreComboBox"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    SelectedItem="{Binding CPUCore, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Content="{x:Static locals:SamplingSettingsLanguagePack.Timeout}" />
+                <Components:CustomTextBoxControl
+                    x:Name="SamplingTimeoutTextBox"
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Margin="0,0,0,10"
+                    Padding="2"
+                    Placeholder="2.5"
+                    Text="{Binding SamplingTimeout, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            </StackPanel>
+        </GroupBox>
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2">
-            <Separator Grid.Row="3" Padding="0,10,0,10" />
             <Label Content="{x:Static locals:SamplingSettingsLanguagePack.WperfCommandPreview}" />
             <Components:CustomTextBoxControl
                 x:Name="SamplingCommandCallTextBox"
@@ -103,8 +107,10 @@
                 Content="{x:Static locals:SamplingSettingsLanguagePack.Save}" />
         </StackPanel>
         <GroupBox
-            Grid.Row="1"
+            Grid.Row="0"
+            Grid.RowSpan="2"
             Grid.Column="1"
+            Margin="5,0,0,0"
             BorderThickness="1,1,1,1">
             <GroupBox.Header>
                 <Label Content="Events" />
