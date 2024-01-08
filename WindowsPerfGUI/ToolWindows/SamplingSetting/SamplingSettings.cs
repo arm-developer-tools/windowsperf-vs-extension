@@ -53,6 +53,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             AppendElementsToList(argsList, "--timeout", samplingSettingsFrom.SamplingTimeout);
             AppendElementsToList(argsList, "--annotate");
             AppendElementsToList(argsList, "-v", "--json");
+            AppendElementsToList(argsList, "--pdb_file", samplingSettingsFrom.PdbFile);
+            AppendElementsToList(argsList, "--");
             AppendElementsToList(argsList, samplingSettingsFrom.FilePath);
             AppendElementsToList(argsList, samplingSettingsFrom.ExtraArgs);
             ArgsArray = argsList.ToArray();

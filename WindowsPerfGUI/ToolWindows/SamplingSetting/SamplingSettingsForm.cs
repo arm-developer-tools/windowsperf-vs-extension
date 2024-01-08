@@ -84,9 +84,26 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 OnPropertyChanged();
                 if (value == true)
                 {
-                    _ = Task.Run(async () => FilePath = await SolutionProjectOutput.GetProjectOutputAsync());
+                    _ = Task.Run(async () =>
+                    {
+                        (string mainOutput, string pdbFile) = await SolutionProjectOutput.GetProjectOutputAsync();
+                        FilePath = mainOutput;
+                        if (pdbFile != null)
+                        {
+                            PdbFile = pdbFile;
+                        }
+
+                    });
                 }
             }
+        }
+
+        private string pdbFile;
+
+        public string PdbFile
+        {
+            get { return pdbFile; }
+            set { pdbFile = value; }
         }
 
 
@@ -159,8 +176,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             get { return filePath; }
             set
             {
-                if (value == null) return;
-                if (value.StartsWith("\"") || value.StartsWith("--pe_file")) filePath = value;
+                if (value.StartsWith("\"") || string.IsNullOrEmpty(value)) filePath = value;
                 else filePath = $"\"{value}\"";
 
                 OnPropertyChanged();

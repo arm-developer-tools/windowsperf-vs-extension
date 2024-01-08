@@ -83,17 +83,17 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             }
             return (mainOutput, pdbOutput);
         }
-        public static async Task<string> GetProjectOutputAsync()
+        public static async Task<(string, string)> GetProjectOutputAsync()
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             (string mainOutput, string pdbOutput) = EnumerateConfigurations();
             if (string.IsNullOrEmpty(pdbOutput) || getFilePathWithoutExtension(mainOutput) == getFilePathWithoutExtension(pdbOutput))
             {
-                return mainOutput;
+                return (mainOutput, null);
             }
             else
             {
-                return $"--pe_file {mainOutput} --pdb_file {pdbOutput}";
+                return (mainOutput, pdbOutput);
             }
         }
 
