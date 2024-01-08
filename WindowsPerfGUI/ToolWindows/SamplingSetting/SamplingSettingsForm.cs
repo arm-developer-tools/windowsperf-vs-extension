@@ -159,7 +159,10 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             get { return filePath; }
             set
             {
-                filePath = value;
+                if (value == null) return;
+                if (value.StartsWith("\"") || value.StartsWith("--pe_file")) filePath = value;
+                else filePath = $"\"{value}\"";
+
                 OnPropertyChanged();
                 CommandLinePreview = SamplingSettings.GenerateCommandLinePreview();
             }

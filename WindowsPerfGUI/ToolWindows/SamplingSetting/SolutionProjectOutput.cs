@@ -73,11 +73,11 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                     }
                     if (group.CanonicalName == "Built")
                     {
-                        mainOutput = mainFile;
+                        mainOutput = $"\"{mainFile}\"";
                     }
                     if (group.CanonicalName == "Symbols")
                     {
-                        pdbOutput = mainFile;
+                        pdbOutput = $"\"{mainFile}\"";
                     }
                 }
             }
