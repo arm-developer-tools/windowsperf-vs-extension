@@ -39,7 +39,8 @@ namespace WindowsPerfGUI.Utils.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value == null ? false : true;
+            // TODO: fix the casting
+            return (value == null) || (value is bool && (bool)value == false) ? false : true;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

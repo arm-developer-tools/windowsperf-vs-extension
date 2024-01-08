@@ -28,70 +28,79 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 using EnvDTE;
 using EnvDTE80;
-using System.Windows.Controls;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
-namespace WindowsPerfGUI
+namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 {
-    public partial class MyToolWindowControl : UserControl
+    public static class SolutionProjectOutput
     {
-        public MyToolWindowControl()
-        {
-            InitializeComponent();
-        }
-        private DTE2 _dte;
-
-        public void EnumerateConfigurations()
+        private static DTE2 _dte;
+        public static string SelectedConfigName = "";
+        public static string SelectedPlatformName = "";
+        public static string SelectedConfigLabel = "";
+        private static (string, string) EnumerateConfigurations()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+
+            string mainOutput = "";
+            string pdbOutput = "";
+
             _dte = (DTE2)Package.GetGlobalService(typeof(DTE));
 
             Array projects = (Array)_dte.ActiveSolutionProjects;
             EnvDTE.Project project = (EnvDTE.Project)projects.GetValue(0);
-            Debug.WriteLine(project.Name);
             Configuration config = project.ConfigurationManager.ActiveConfiguration;
+            SelectedConfigName = config.ConfigurationName;
+            SelectedPlatformName = config.PlatformName;
+            SelectedConfigLabel = $"({SelectedConfigName} | {SelectedPlatformName})";
             if (config != null)
             {
                 // Process each configuration
-                string configName = config.ConfigurationName;
-                Debug.WriteLine(configName);
-                Debug.WriteLine(config.PlatformName);
-                string msg = "";
-                // Find an outputgroup with at least one file.  
+                // Find an outputgroup with at least one file.
                 OutputGroups groups = config.OutputGroups;
                 foreach (OutputGroup group in groups)
                 {
                     if (group.FileCount < 1) continue;
-                    if(group.CanonicalName != "Built" && group.CanonicalName != "Symbols") continue;
-                    msg += "\nOutputGroup Canonical: " + group.CanonicalName;
-                    msg += "\nOutputGroup DisplayName: " + group.DisplayName;
-                    msg += "\nOutputGroup Description: " + group.Description;
-                    msg += "\nNumber of Associated Files: " + group.FileCount.ToString();
-                    msg += "\nAssociated File Names: ";
-                    foreach (String str in (Array)group.FileNames)
+                    if (group.CanonicalName != "Built" && group.CanonicalName != "Symbols") continue;
+                    string mainFile = "";
+                    foreach (string fURL in (Array)group.FileURLs)
                     {
-                        msg += "\n" + str;
+                        mainFile = Regex.Replace(fURL, "file:///", "");
+                        break;
                     }
-                    msg += "\nFiles Built in OutputGroup: ";
-                    foreach (String fURL in (Array)group.FileURLs)
+                    if (group.CanonicalName == "Built")
                     {
-                        msg += "\n" + fURL;
+                        mainOutput = mainFile;
                     }
-                    Debug.WriteLine(msg);
+                    if (group.CanonicalName == "Symbols")
+                    {
+                        pdbOutput = mainFile;
+                    }
                 }
-
-                // Do something with the configuration name
+            }
+            return (mainOutput, pdbOutput);
+        }
+        public static async Task<string> GetProjectOutputAsync()
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            (string mainOutput, string pdbOutput) = EnumerateConfigurations();
+            if (string.IsNullOrEmpty(pdbOutput) || getFilePathWithoutExtension(mainOutput) == getFilePathWithoutExtension(pdbOutput))
+            {
+                return mainOutput;
+            }
+            else
+            {
+                return $"--pe_file {mainOutput} --pdb_file {pdbOutput}";
             }
         }
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+
+        private static string getFilePathWithoutExtension(string filePath)
         {
-            _ = Task.Run(async () =>
-            {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                EnumerateConfigurations();
-            });
+            if (string.IsNullOrEmpty(filePath)) return filePath;
+            return filePath.Remove(filePath.Length - 4);
         }
     }
 }

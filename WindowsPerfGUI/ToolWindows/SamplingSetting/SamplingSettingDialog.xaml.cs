@@ -40,12 +40,12 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
     {
         public SamplingSettingDialog()
         {
+            SolutionProjectOutput.GetProjectOutputAsync().FireAndForget();
             InitializeComponent();
-
             CpuCoreComboBox.ItemsSource = CpuCores.InitCpuCores();
             EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
             SamplingFrequencyComboBox.ItemsSource = SamplingFrequency.SamplingFrequencyList;
-
+            ProjectTargetConfigLabel.Content = SolutionProjectOutput.SelectedConfigLabel;
             if (SamplingSettings.samplingSettingsFrom.SamplingEvent == null) EventComboBox.SelectedIndex = -1;
             if (SamplingSettings.samplingSettingsFrom.SamplingFrequency == null) SamplingFrequencyComboBox.SelectedIndex = -1;
             if (SamplingSettings.samplingSettingsFrom.CPUCore == null) CpuCoreComboBox.SelectedIndex = 0;
@@ -56,6 +56,9 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 
         private void SaveButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            Debug.WriteLine(CustomProcessRadioButton.IsChecked);
+            Debug.WriteLine(CurrentProjectProcessRadioButton.IsChecked);
+            Debug.WriteLine(SamplingSourcePathFilePicker.IsEnabled);
             SyncSamplingSettings();
             if (!SamplingSettings.AreSettingsFilled)
             {

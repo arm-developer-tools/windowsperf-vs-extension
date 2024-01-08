@@ -100,6 +100,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>WperfHostDataLanguagePack.resx</DependentUpon>
     </Compile>
+    <Compile Include="ToolWindows\SamplingSetting\SolutionProjectOutput.cs" />
     <Compile Include="Utils\Converters\BooleanToLinkCursor.cs" />
     <Compile Include="Utils\Converters\BooleanToLinkTextDecoration.cs" />
     <Compile Include="ToolWindows\SamplingExplorer\FormattedSamplingResults.cs" />
@@ -224,6 +225,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Build" />
     <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="System" />
     <Reference Include="System.Design" />
@@ -231,6 +233,9 @@
     <Reference Include="System.Xaml" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.Serialization" />
     <Reference Include="WindowsBase" />
     <Reference Include="System.ComponentModel.Composition" />
   </ItemGroup>

@@ -61,7 +61,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 
         private static void ValidateSettings()
         {
-            if (!(samplingSettingsFrom.SamplingEventList.Count > 0 || string.IsNullOrEmpty(samplingSettingsFrom.FilePath) || string.IsNullOrEmpty(samplingSettingsFrom.CPUCore?.coreNumber.ToString())))
+            if (!(samplingSettingsFrom.SamplingEventList.Count < 1 || string.IsNullOrEmpty(samplingSettingsFrom.FilePath) || string.IsNullOrEmpty(samplingSettingsFrom.CPUCore?.coreNumber.ToString())))
             {
                 AreSettingsFilled = true;
                 return;
