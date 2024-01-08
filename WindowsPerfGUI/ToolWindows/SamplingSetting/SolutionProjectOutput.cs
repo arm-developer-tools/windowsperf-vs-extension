@@ -30,6 +30,7 @@
 
 using EnvDTE;
 using EnvDTE80;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingSetting
@@ -39,6 +40,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
         private static DTE2 _dte;
         public static string SelectedConfigName = "";
         public static string SelectedPlatformName = "";
+        public static string SelectedConfigLabel = "";
         private static (string, string) EnumerateConfigurations()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
@@ -53,7 +55,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             Configuration config = project.ConfigurationManager.ActiveConfiguration;
             SelectedConfigName = config.ConfigurationName;
             SelectedPlatformName = config.PlatformName;
-
+            SelectedConfigLabel = $"({SelectedConfigName} | {SelectedPlatformName})";
             if (config != null)
             {
                 // Process each configuration
@@ -64,9 +66,9 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                     if (group.FileCount < 1) continue;
                     if (group.CanonicalName != "Built" && group.CanonicalName != "Symbols") continue;
                     string mainFile = "";
-                    foreach (String fURL in (Array)group.FileURLs)
+                    foreach (string fURL in (Array)group.FileURLs)
                     {
-                        mainFile = fURL;
+                        mainFile = Regex.Replace(fURL, "file:///", "");
                         break;
                     }
                     if (group.CanonicalName == "Built")
@@ -85,7 +87,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             (string mainOutput, string pdbOutput) = EnumerateConfigurations();
-            if (getFilePathWithoutExtension(mainOutput) == getFilePathWithoutExtension(pdbOutput))
+            if (string.IsNullOrEmpty(pdbOutput) || getFilePathWithoutExtension(mainOutput) == getFilePathWithoutExtension(pdbOutput))
             {
                 return mainOutput;
             }
@@ -97,6 +99,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 
         private static string getFilePathWithoutExtension(string filePath)
         {
+            if (string.IsNullOrEmpty(filePath)) return filePath;
             return filePath.Remove(filePath.Length - 4);
         }
     }

@@ -281,6 +281,7 @@
                     <Grid
                         x:Name="templateRoot"
                         Background="{StaticResource VsTransparentColor}"
+                        VerticalAlignment="Center"
                         SnapsToDevicePixels="True">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
