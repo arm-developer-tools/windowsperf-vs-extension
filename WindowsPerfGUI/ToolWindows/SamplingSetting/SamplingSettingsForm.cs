@@ -88,11 +88,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                     {
                         (string mainOutput, string pdbFile) = await SolutionProjectOutput.GetProjectOutputAsync();
                         FilePath = mainOutput;
-                        if (pdbFile != null)
-                        {
-                            PdbFile = pdbFile;
-                        }
-
+                        PdbFile = pdbFile;
                     });
                 }
             }
