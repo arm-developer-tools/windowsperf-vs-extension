@@ -48,19 +48,19 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
         public string PdbFile { get; set; }
 
         [JsonProperty("sample_display_row")]
-        public long SampleDisplayRow { get; set; }
+        public ulong SampleDisplayRow { get; set; }
 
         [JsonProperty("samples_generated")]
-        public long SamplesGenerated { get; set; }
+        public ulong SamplesGenerated { get; set; }
 
         [JsonProperty("samples_dropped")]
-        public long SamplesDropped { get; set; }
+        public ulong SamplesDropped { get; set; }
 
         [JsonProperty("base_address")]
-        public long BaseAddress { get; set; }
+        public ulong BaseAddress { get; set; }
 
         [JsonProperty("runtime_delta")]
-        public long RuntimeDelta { get; set; }
+        public ulong RuntimeDelta { get; set; }
 
         [JsonProperty("modules")]
         public List<Module> Modules { get; set; }
@@ -81,10 +81,10 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
         public List<SampleResult> SampleList { get; set; }
 
         [JsonProperty("interval")]
-        public long Interval { get; set; }
+        public ulong Interval { get; set; }
 
         [JsonProperty("printed_sample_num")]
-        public long PrintedSampleNum { get; set; }
+        public ulong PrintedSampleNum { get; set; }
 
         [JsonProperty("pcs")]
         public List<Pc> Pcs { get; set; }
@@ -107,19 +107,19 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
         public string Filename { get; set; }
 
         [JsonProperty("line_number")]
-        public long LineNumber { get; set; }
+        public ulong LineNumber { get; set; }
 
         [JsonProperty("hits")]
-        public long Hits { get; set; }
+        public ulong Hits { get; set; }
     }
 
     public partial class Pc
     {
         [JsonProperty("address")]
-        public long Address { get; set; }
+        public ulong Address { get; set; }
 
         [JsonProperty("count")]
-        public long Count { get; set; }
+        public ulong Count { get; set; }
     }
 
     public partial class SampleResult
@@ -128,7 +128,7 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
         public double Overhead { get; set; }
 
         [JsonProperty("count")]
-        public long Count { get; set; }
+        public ulong Count { get; set; }
 
         [JsonProperty("symbol")]
         public string Symbol { get; set; }
@@ -140,7 +140,7 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
         public string Name { get; set; }
 
         [JsonProperty("address")]
-        public long Address { get; set; }
+        public ulong Address { get; set; }
 
         [JsonProperty("path")]
         public string Path { get; set; }

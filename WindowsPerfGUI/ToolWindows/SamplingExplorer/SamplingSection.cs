@@ -36,9 +36,9 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
 {
     public class SamplingSection : NotifyPropertyChangedImplementor
     {
-        private long? hits;
+        private ulong? hits;
 
-        public long? Hits
+        public ulong? Hits
         {
             get { return hits; }
             set
@@ -62,9 +62,9 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
         }
 
 
-        private long? lineNumber = null;
+        private ulong? lineNumber = null;
 
-        public long? LineNumber
+        public ulong? LineNumber
         {
             get { return lineNumber; }
             set
@@ -160,9 +160,9 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             }
         }
 
-        private long? samplesDropped;
+        private ulong? samplesDropped;
 
-        public long? SamplesDropped
+        public ulong? SamplesDropped
         {
             get { return samplesDropped; }
             set { samplesDropped = value; }

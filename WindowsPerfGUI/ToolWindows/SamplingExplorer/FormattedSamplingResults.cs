@@ -33,6 +33,7 @@ using System.Collections.Generic;
 using System.IO;
 using WindowsPerfGUI.Components.TreeListView;
 using WindowsPerfGUI.SDK.WperfOutputs;
+using WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting;
 using WindowsPerfGUI.Utils;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
@@ -57,6 +58,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
         }
         public void ClearSampling()
         {
+            HighlighterDict.Clear();
             RootSampledEvent = new List<SamplingSection>();
         }
         public void FormatSamplingResults(WperfSampling wperSamplingOutput, string rootName = "Root")
@@ -82,7 +84,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                 {
                     Name = sampledEvent.Type,
                     Children = new List<SamplingSection>(),
-                    Hits = sampledEvent.SampleList.Count,
+                    Hits = (ulong)sampledEvent.SampleList.Count,
                     Layer = 1,
                     SectionType = SamplingSection.SamplingSectionType.SAMPLE_EVENT,
                     Frequency = sampledEvent.Interval.ToString(),

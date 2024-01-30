@@ -38,6 +38,7 @@ using WindowsPerfGUI.Components.TreeListView;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK;
 using WindowsPerfGUI.SDK.WperfOutputs;
+using WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting;
 using WindowsPerfGUI.ToolWindows.SamplingSetting;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
@@ -66,6 +67,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             if (_tree.Model == null) _tree.Model = formattedSamplingResults;
             _tree.UpdateTreeList();
         }
+
+
 
         public SamplingExplorerControl()
         {
@@ -123,6 +126,22 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             StopSamplingMonikerButton.IsEnabled = false;
         }
 
+        private void HighlightEditor(SamplingSection samplingSection)
+        {
+            if (samplingSection.SectionType != SamplingSection.SamplingSectionType.SAMPLE_SOURCE_CODE)
+            {
+                foreach (SamplingSection child in samplingSection.Children)
+                {
+                    HighlightEditor(child);
+                }
+            }
+            if (!samplingSection.IsFileExists)
+            {
+                return;
+            }
+            HighlighterDict.AddFileToHighlight(samplingSection);
+        }
+
         private void _tree_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             TreeList treeList = sender as TreeList;
@@ -133,6 +152,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             {
                 case SamplingSection.SamplingSectionType.ROOT:
                     CreateRootSummary(SummaryStack.Children, selecteditem);
+                    HighlighterDict.Clear();
+                    HighlightEditor(selecteditem);
                     break;
                 case SamplingSection.SamplingSectionType.SAMPLE_EVENT:
                     CreateEventSummary(SummaryStack.Children, selecteditem);
@@ -235,7 +256,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
         private void _tree_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var treeList = sender as TreeList;
-
+            if (treeList.SelectedItem == null) return;
             SamplingSection selecteditem = (treeList.SelectedItem as TreeNode).Tag as SamplingSection;
             if (!selecteditem.IsFileExists) return;
             string filePath = selecteditem.Name;
