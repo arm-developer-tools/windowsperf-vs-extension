@@ -31,6 +31,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using WindowsPerfGUI.Components.TreeListView;
 using WindowsPerfGUI.SDK.WperfOutputs;
 using WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting;
@@ -121,7 +122,13 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                             SectionType = SamplingSection.SamplingSectionType.SAMPLE_SOURCE_CODE,
                             Parent = samplesSection,
                             LineNumber = annotationSourceCode.LineNumber,
-                            IsFileExists = File.Exists(annotationSourceCode.Filename)
+                            IsFileExists = File.Exists(annotationSourceCode.Filename),
+                            Assemblies = annotationSourceCode.DisassembledLine.Assembly.Select(assemblyLine => new ExtendedAssembly()
+                            {
+                                Address = assemblyLine.Address,
+                                Instruction = assemblyLine.Instruction,
+                                IsHighlighted = assemblyLine.Address == annotationSourceCode.InstructionAddress
+                            }).ToList()
                         };
                         samplesSection.Children.Add(annotationSection);
                     }

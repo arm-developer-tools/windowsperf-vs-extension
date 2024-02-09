@@ -111,6 +111,27 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
 
         [JsonProperty("hits")]
         public ulong Hits { get; set; }
+
+        [JsonProperty("instruction_address")]
+        public string InstructionAddress { get; set; }
+
+        [JsonProperty("disassembled_line")]
+        public DisassembledLine DisassembledLine { get; set; }
+    }
+
+    public partial class DisassembledLine
+    {
+        [JsonProperty("disassemble")]
+        public List<Assembly> Assembly { get; set; }
+    }
+
+    public partial class Assembly
+    {
+        [JsonProperty("address")]
+        public string Address { get; set; }
+
+        [JsonProperty("instruction")]
+        public string Instruction { get; set; }
     }
 
     public partial class Pc

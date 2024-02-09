@@ -193,8 +193,11 @@
                 Grid.Column="1"
                 Width="5"
                 HorizontalAlignment="Stretch" />
-            <ScrollViewer Grid.Column="3" VerticalScrollBarVisibility="Auto">
-                <StackPanel x:Name="SummaryStack" Margin="30,30,30,30">
+            <ScrollViewer
+                x:Name="AssemblyScrollViewer"
+                Grid.Column="3"
+                VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="SummaryStack" Margin="10,10,10,10">
                     <ScrollBar Visibility="Collapsed" />
                     <TextBlock
                         FontSize="16"

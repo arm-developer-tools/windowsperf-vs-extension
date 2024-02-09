@@ -52,6 +52,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             AppendElementsToList(argsList, "-c", samplingSettingsFrom.CPUCore?.coreNumber.ToString());
             AppendElementsToList(argsList, "--timeout", samplingSettingsFrom.SamplingTimeout);
             AppendElementsToList(argsList, "--annotate");
+            AppendElementsToList(argsList, "--disassemble");
             AppendElementsToList(argsList, "-v", "--json");
             AppendElementsToList(argsList, "--pdb_file", samplingSettingsFrom.PdbFile);
             AppendElementsToList(argsList, "--");

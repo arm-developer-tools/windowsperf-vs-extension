@@ -34,6 +34,10 @@ using WindowsPerfGUI.Utils;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
 {
+    public class ExtendedAssembly : Assembly
+    {
+        public bool IsHighlighted = false;
+    }
     public class SamplingSection : NotifyPropertyChangedImplementor
     {
         private ulong? hits;
@@ -111,6 +115,13 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
         }
 
 #nullable enable
+        private List<ExtendedAssembly>? assemblies;
+
+        public List<ExtendedAssembly>? Assemblies
+        {
+            get { return assemblies; }
+            set { assemblies = value; }
+        }
 
         private string? overheadPercentage;
 
