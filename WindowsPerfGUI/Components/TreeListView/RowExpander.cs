@@ -37,7 +37,8 @@ namespace WindowsPerfGUI.Components.TreeListView
     {
         static RowExpander()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(RowExpander), new FrameworkPropertyMetadata(typeof(RowExpander)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(RowExpander),
+                new FrameworkPropertyMetadata(typeof(RowExpander)));
         }
     }
 }

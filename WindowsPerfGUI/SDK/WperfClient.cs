@@ -36,13 +36,17 @@ namespace WindowsPerfGUI.SDK
 {
     internal class WperfClient
     {
-        public string Path { get; set; }
-        private bool IsInitilized { get; set; }
+        protected string Path { get; set; }
+        private bool IsInitialized { get; set; }
 
-        private ProcessRunner WperfPorcess;
-        public WperfClient() { }
+        private ProcessRunner _wperfProcess;
 
-        public Action<string> OutputWindowTextWriter { get; set; }
+        public WperfClient()
+        {
+        }
+
+        protected Action<string> OutputWindowTextWriter { get; set; }
+
         private void LogToOutput(string stdOutput, string stdError, params string[] args)
         {
             if (OutputWindowTextWriter == null) return;
@@ -61,15 +65,16 @@ namespace WindowsPerfGUI.SDK
             OutputWindowTextWriter(stdError);
             OutputWindowTextWriter("=============================================================");
         }
+
         protected void InitProcess()
         {
-            if (IsInitilized)
+            if (IsInitialized)
             {
                 return;
             }
 
-            WperfPorcess = new ProcessRunner(Path);
-            IsInitilized = true;
+            _wperfProcess = new ProcessRunner(Path);
+            IsInitialized = true;
         }
 
 
@@ -77,13 +82,14 @@ namespace WindowsPerfGUI.SDK
         {
             InitProcess();
 
-            (string stdOutput, string stdError) = WperfPorcess.StartAwaitedProcess(args);
+            (string stdOutput, string stdError) = _wperfProcess.StartAwaitedProcess(args);
 
 
             LogToOutput(stdOutput, stdError, args);
 
             return (stdOutput, stdError);
         }
+
         /// <summary>
         /// This returns the WPerf and Wperf driver installed version
         /// it runs the command wperf -version --json
@@ -97,6 +103,7 @@ namespace WindowsPerfGUI.SDK
             WperfVersion serializedOutput = WperfVersion.FromJson(stdOutput);
             return (serializedOutput, stdError);
         }
+
         /// <summary>
         /// This returns the list of Wperf's predefined events and metrics
         /// it runs the command wperf list -v --json
@@ -124,9 +131,10 @@ namespace WindowsPerfGUI.SDK
 
         public async Task StartSamplingAsync()
         {
-            string[] samplingArgs = SamplingSettings.GenerateCommandLineArgsArray(SamplingSettings.samplingSettingsFrom);
+            string[] samplingArgs =
+                SamplingSettings.GenerateCommandLineArgsArray(SamplingSettings.samplingSettingsFrom);
             SamplingSettings.IsSampling = true;
-            await WperfPorcess.StartBackgroundProcessAsync(samplingArgs);
+            await _wperfProcess.StartBackgroundProcessAsync(samplingArgs);
             (WperfSampling serializedOutput, string stdError) = StopSampling();
             OnSamplingFinished?.Invoke(this, (serializedOutput, stdError));
             //WperfSampling serializedOutput = WperfSampling.FromJson(stdOutput);
@@ -134,14 +142,16 @@ namespace WindowsPerfGUI.SDK
         }
 
         public EventHandler<(WperfSampling serializedOutput, string stdError)> OnSamplingFinished { get; set; }
+
         public (WperfSampling serializedOutput, string stdError) StopSampling()
         {
-            WperfPorcess.StopProcess();
+            _wperfProcess.StopProcess();
             SamplingSettings.IsSampling = false;
-            string stdOutput = string.Join("", WperfPorcess.StdOutput.Output);
-            string stdError = string.Join("", WperfPorcess.StdError.Output);
+            string stdOutput = string.Join("", _wperfProcess.StdOutput.Output);
+            string stdError = string.Join("", _wperfProcess.StdError.Output);
             WperfSampling serializedOutput = WperfSampling.FromJson(stdOutput);
-            LogToOutput(stdOutput, stdError, SamplingSettings.GenerateCommandLineArgsArray(SamplingSettings.samplingSettingsFrom));
+            LogToOutput(stdOutput, stdError,
+                SamplingSettings.GenerateCommandLineArgsArray(SamplingSettings.samplingSettingsFrom));
             return (serializedOutput, stdError);
         }
     }

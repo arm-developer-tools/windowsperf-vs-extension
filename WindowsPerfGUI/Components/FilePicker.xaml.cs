@@ -42,19 +42,30 @@ namespace WindowsPerfGUI.Components
         public FilePicker()
         {
             InitializeComponent();
-            FilePathTextBox.TextChanged += (sender, e) => onChange?.Invoke(sender, e);
+            FilePathTextBox.TextChanged += (sender, e) => _onChange?.Invoke(sender, e);
         }
-        private TextChangedEventHandler onChange;
-        public string Label { get => LabelTextBlock.Content.ToString(); set => LabelTextBlock.Content = value; }
-        public TextChangedEventHandler OnChange { get => onChange; set => onChange = value; }
+
+        private TextChangedEventHandler _onChange;
+
+        public string Label
+        {
+            get => LabelTextBlock.Content.ToString();
+            set => LabelTextBlock.Content = value;
+        }
+
+        public TextChangedEventHandler OnChange
+        {
+            get => _onChange;
+            set => _onChange = value;
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == true)
                 FilePathTextBox.Text = openFileDialog.FileName;
-
         }
+
         public void Validate()
         {
             if (!IsFileSelected())
@@ -62,14 +73,15 @@ namespace WindowsPerfGUI.Components
                 throw new Exception("File not selected");
             }
         }
+
         public string GetFilePath()
         {
             return FilePathTextBox.Text;
         }
+
         public bool IsFileSelected()
         {
             return FilePathTextBox.Text != "";
         }
-
     }
 }

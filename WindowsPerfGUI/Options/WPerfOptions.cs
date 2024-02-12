@@ -33,12 +33,14 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using WindowsPerfGUI.SDK.WperfOutputs;
 
-namespace WindowsPerfGUI
+namespace WindowsPerfGUI.Options
 {
     internal partial class OptionsProvider
     {
         [ComVisible(true)]
-        public class WPerfPathOptions : BaseOptionPage<WPerfOptions> { }
+        public class WPerfPathOptions : BaseOptionPage<WPerfOptions>
+        {
+        }
     }
 
     public class WPerfOptions : BaseOptionModel<WPerfOptions>
@@ -48,6 +50,7 @@ namespace WindowsPerfGUI
         [Description("The path for the wperf.exe file")]
         [DefaultValue(true)]
         public string WperfPath { get; set; } = "wperf.exe";
+
         public bool IsWperfInitialized { get; set; } = false;
 
         public WperfVersion WperfCurrentVersion { get; set; }

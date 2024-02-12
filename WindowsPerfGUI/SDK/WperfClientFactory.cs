@@ -28,6 +28,8 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using WindowsPerfGUI.Options;
+
 namespace WindowsPerfGUI.SDK
 {
     internal class WperfClientFactory : WperfClient
@@ -36,13 +38,14 @@ namespace WindowsPerfGUI.SDK
         {
             AssignPathAsync().FireAndForget();
         }
+
         private async Task AssignPathAsync()
         {
             WPerfOptions options = await WPerfOptions.GetLiveInstanceAsync();
             Path = options.WperfPath;
             InitProcess();
-            var _OutputPaneTextWriter = await WindowsPerfGUIPackage.WperfOutputWindow.CreateOutputPaneTextWriterAsync();
-            OutputWindowTextWriter = _OutputPaneTextWriter.WriteLine;
+            var outputPaneTextWriter = await WindowsPerfGUIPackage.WperfOutputWindow.CreateOutputPaneTextWriterAsync();
+            OutputWindowTextWriter = outputPaneTextWriter.WriteLine;
         }
     }
 }

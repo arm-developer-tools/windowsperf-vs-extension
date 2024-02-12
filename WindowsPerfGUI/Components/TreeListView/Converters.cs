@@ -39,11 +39,16 @@ namespace WindowsPerfGUI.Components.TreeListView
     /// </summary>
     internal class LevelToIndentConverter : IValueConverter
     {
-        private const double IndentSize = 19.0;
+        private const double INDENT_SIZE = 19.0;
 
         public object Convert(object o, Type type, object parameter, CultureInfo culture)
         {
-            return new Thickness((int)o * IndentSize, 0, 0, 0);
+            if (o != null)
+            {
+                return new Thickness((int)o * INDENT_SIZE, 0, 0, 0);
+            }
+
+            return new Thickness(0);
         }
 
         public object ConvertBack(object o, Type type, object parameter, CultureInfo culture)

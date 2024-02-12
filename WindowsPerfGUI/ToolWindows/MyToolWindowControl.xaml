@@ -29,38 +29,34 @@
     OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
     OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
-<UserControl x:Class="WindowsPerfGUI.MyToolWindowControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:WindowsPerfGUI.Components"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:resx="clr-namespace:WindowsPerfGUI.Resources.Locals"
-             Name="MyToolWindow"
-             d:DesignHeight="300"
-             mc:Ignorable="d">
+<UserControl
+    x:Class="WindowsPerfGUI.ToolWindows.MyToolWindowControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WindowsPerfGUI.Components"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:WindowsPerfGUI.Resources.Locals"
+    Name="MyToolWindow"
+    d:DesignHeight="300"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <Style TargetType="{x:Type Button}">
-            <Setter Property="TextBlock.FontFamily"
-                    Value="{DynamicResource VsFont.EnvironmentFontFamily}" />
-            <Setter Property="TextBlock.FontSize"
-                    Value="{DynamicResource VsFont.EnvironmentFontSize}" />
-            <Setter Property="Background"
-                    Value="{DynamicResource VsBrush.EnvironmentBackgroundGradient}" />
+            <Setter Property="TextBlock.FontFamily" Value="{DynamicResource VsFont.EnvironmentFontFamily}" />
+            <Setter Property="TextBlock.FontSize" Value="{DynamicResource VsFont.EnvironmentFontSize}" />
+            <Setter Property="Background" Value="{DynamicResource VsBrush.EnvironmentBackgroundGradient}" />
         </Style>
     </UserControl.Resources>
     <StackPanel>
-        <TextBlock Background="{DynamicResource VSBrush.InfoTextKey}"
-                   Text="Hello world" />
-        <local:CustomTextBoxControl x:Name="FilePathTextBox"
-                                    Width="Auto"
-                                    Height="Auto"
-                                    Margin="0,0,0,10"
-                                    Padding="4"
-                                    Placeholder="File path... " />
-        <Button Click="Button_Click"
-                Content="{x:Static resx:MainLanguagePack.ToolWindow}" />
-        <Button Click="Button_Click_1"
-                Content="Reset" />
+        <TextBlock Background="{DynamicResource VSBrush.InfoTextKey}" Text="Hello world" />
+        <local:CustomTextBoxControl
+            x:Name="FilePathTextBox"
+            Width="Auto"
+            Height="Auto"
+            Margin="0,0,0,10"
+            Padding="4"
+            Placeholder="File path... " />
+        <Button Click="Button_Click" Content="{x:Static resx:MainLanguagePack.ToolWindow}" />
+        <Button Click="Button_Click_1" Content="Reset" />
     </StackPanel>
 </UserControl>

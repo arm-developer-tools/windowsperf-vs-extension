@@ -41,7 +41,8 @@ namespace WindowsPerfGUI.Components.TreeListView
         {
             this.CheckReentrancy();
             var items = this.Items as List<T>;
-            items.RemoveRange(index, count);
+            items?.RemoveRange(index, count);
+
             OnReset();
         }
 
@@ -49,7 +50,7 @@ namespace WindowsPerfGUI.Components.TreeListView
         {
             this.CheckReentrancy();
             var items = this.Items as List<T>;
-            items.InsertRange(index, collection);
+            items?.InsertRange(index, collection);
             OnReset();
         }
 

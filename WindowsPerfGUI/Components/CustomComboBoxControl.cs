@@ -37,7 +37,8 @@ namespace WindowsPerfGUI.Components
     {
         static CustomComboBoxControl()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomComboBoxControl), new FrameworkPropertyMetadata(typeof(CustomComboBoxControl)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomComboBoxControl),
+                new FrameworkPropertyMetadata(typeof(CustomComboBoxControl)));
         }
     }
 }

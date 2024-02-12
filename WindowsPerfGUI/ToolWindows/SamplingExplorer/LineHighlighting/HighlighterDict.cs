@@ -32,46 +32,49 @@ using System.Collections.Generic;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
 {
-    class LineToHighlight
+    internal class LineToHighlight
     {
         public long LineNumber = 0;
         public double Overhead = 0;
     }
-    class FileToHighlight
-    {
-        public List<LineToHighlight> LinesToHighlight = new List<LineToHighlight>();
 
+    internal class FileToHighlight
+    {
+        public readonly List<LineToHighlight> LinesToHighlight = new();
     }
+
     static class HighlighterDict
     {
         // This will hold the highlighted lines from the previous sampling 
         // This is needed to clear the previous adornments before mounting the new ones
-        public static HashSet<string> PreviousFilePaths = new HashSet<string>();
-        public static Dictionary<string, FileToHighlight> PreviousFilesToHighlight = new Dictionary<string, FileToHighlight>();
+        public static HashSet<string> PreviousFilePaths = new();
+        public static Dictionary<string, FileToHighlight> PreviousFilesToHighlight = new();
 
-        public static HashSet<string> FilePaths = new HashSet<string>();
+        public static readonly HashSet<string> FilePaths = new();
 
-        public static Dictionary<string, FileToHighlight> FilesToHighlight { get; } = new Dictionary<string, FileToHighlight>();
+        public static Dictionary<string, FileToHighlight> FilesToHighlight { get; } =
+            new Dictionary<string, FileToHighlight>();
 
         public static void AddFileToHighlight(SamplingSection samplingSection)
         {
-            if (samplingSection.LineNumber == null || samplingSection.Overhead == null || samplingSection.Overhead == 0) return;
+            if (samplingSection.LineNumber == null || samplingSection.Overhead == null ||
+                samplingSection.Overhead == 0) return;
             FilePaths.Add(samplingSection.Name);
 
-            FilesToHighlight.TryGetValue(samplingSection.Name, out FileToHighlight _fileToHighlight);
+            FilesToHighlight.TryGetValue(samplingSection.Name, out FileToHighlight fileToHighlight);
 
-            if (_fileToHighlight == null)
+            if (fileToHighlight == null)
             {
-                _fileToHighlight = new FileToHighlight();
+                fileToHighlight = new FileToHighlight();
             }
 
-            _fileToHighlight.LinesToHighlight.Add(new LineToHighlight()
+            fileToHighlight.LinesToHighlight.Add(new LineToHighlight()
             {
                 LineNumber = (long)samplingSection.LineNumber,
                 Overhead = (long)samplingSection.Overhead
             });
 
-            FilesToHighlight[samplingSection.Name] = _fileToHighlight;
+            FilesToHighlight[samplingSection.Name] = fileToHighlight;
         }
 
         public static void Clear()

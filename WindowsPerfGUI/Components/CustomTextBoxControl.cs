@@ -37,7 +37,9 @@ namespace WindowsPerfGUI.Components
 
     {
         public static readonly DependencyProperty PlaceholderProperty =
-            DependencyProperty.Register("Placeholder", typeof(string), typeof(CustomTextBoxControl), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register(nameof(Placeholder), typeof(string), typeof(CustomTextBoxControl),
+                new PropertyMetadata(string.Empty));
+
         public string Placeholder
         {
             get { return (string)GetValue(PlaceholderProperty); }
@@ -45,8 +47,8 @@ namespace WindowsPerfGUI.Components
         }
 
         public static readonly DependencyProperty IsEmptyProperty =
-                    DependencyProperty.Register("IsEmpty", typeof(bool), typeof(CustomTextBoxControl),
-                        new PropertyMetadata(false));
+            DependencyProperty.Register(nameof(IsEmpty), typeof(bool), typeof(CustomTextBoxControl),
+                new PropertyMetadata(false));
 
         public bool IsEmpty
         {
@@ -56,7 +58,8 @@ namespace WindowsPerfGUI.Components
 
         static CustomTextBoxControl()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomTextBoxControl), new FrameworkPropertyMetadata(typeof(CustomTextBoxControl)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomTextBoxControl),
+                new FrameworkPropertyMetadata(typeof(CustomTextBoxControl)));
         }
 
 

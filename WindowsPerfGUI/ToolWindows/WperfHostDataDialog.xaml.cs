@@ -28,13 +28,14 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.VisualStudio.PlatformUI;
 using System.Windows;
+using Microsoft.VisualStudio.PlatformUI;
+using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK;
 using WindowsPerfGUI.SDK.WperfOutputs;
 
-namespace WindowsPerfGUI
+namespace WindowsPerfGUI.ToolWindows
 {
     public partial class WperfHostDataDialog : DialogWindow
     {
@@ -57,6 +58,7 @@ namespace WindowsPerfGUI
                 return;
             }
         }
+
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Close();

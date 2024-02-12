@@ -45,7 +45,7 @@ namespace WindowsPerfGUI
 
         public override Task<FrameworkElement> CreateAsync(int toolWindowId, CancellationToken cancellationToken)
         {
-            return Task.FromResult<FrameworkElement>(new MyToolWindowControl());
+            return Task.FromResult<FrameworkElement>(new ToolWindows.MyToolWindowControl());
         }
 
         [Guid("e92265f4-3d92-4a09-a90b-75fe312ffed2")]

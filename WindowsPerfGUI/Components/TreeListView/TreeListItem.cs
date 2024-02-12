@@ -39,6 +39,7 @@ namespace WindowsPerfGUI.Components.TreeListView
         #region Properties
 
         private TreeNode _node;
+
         public TreeNode Node
         {
             get { return _node; }
@@ -53,7 +54,6 @@ namespace WindowsPerfGUI.Components.TreeListView
 
         public TreeListItem()
         {
-
         }
 
         protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
@@ -62,67 +62,75 @@ namespace WindowsPerfGUI.Components.TreeListView
             {
                 Node.IsExpanded = !Node.IsExpanded;
             }
+
             base.OnMouseDoubleClick(e);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (Node != null)
+            if (Node == null)
             {
-                switch (e.Key)
-                {
-                    case Key.Right:
-                        e.Handled = true;
-                        if (!Node.IsExpanded)
-                        {
-                            Node.IsExpanded = true;
-                            ChangeFocus(Node);
-                        }
-                        else if (Node.Children.Count > 0)
-                            ChangeFocus(Node.Children[0]);
-                        break;
-
-                    case Key.Left:
-
-                        e.Handled = true;
-                        if (Node.IsExpanded && Node.IsExpandable)
-                        {
-                            Node.IsExpanded = false;
-                            ChangeFocus(Node);
-                        }
-                        else
-                            ChangeFocus(Node.Parent);
-                        break;
-
-                    case Key.Subtract:
-                        e.Handled = true;
-                        Node.IsExpanded = false;
-                        ChangeFocus(Node);
-                        break;
-
-                    case Key.Add:
-                        e.Handled = true;
-                        Node.IsExpanded = true;
-                        ChangeFocus(Node);
-                        break;
-                }
+                base.OnKeyDown(e);
+                return;
             }
 
-            if (!e.Handled)
-                base.OnKeyDown(e);
+            switch (e.Key)
+            {
+                case Key.Right:
+                    e.Handled = true;
+                    if (!Node.IsExpanded)
+                    {
+                        Node.IsExpanded = true;
+                        ChangeFocus(Node);
+                    }
+                    else if (Node.Children.Count > 0)
+                        ChangeFocus(Node.Children[0]);
+
+                    break;
+
+                case Key.Left:
+
+                    e.Handled = true;
+                    if (Node.IsExpanded && Node.IsExpandable)
+                    {
+                        Node.IsExpanded = false;
+                        ChangeFocus(Node);
+                    }
+                    else
+                        ChangeFocus(Node.Parent);
+
+                    break;
+
+                case Key.Subtract:
+                    e.Handled = true;
+                    Node.IsExpanded = false;
+                    ChangeFocus(Node);
+                    break;
+
+                case Key.Add:
+                    e.Handled = true;
+                    Node.IsExpanded = true;
+                    ChangeFocus(Node);
+                    break;
+                default:
+                    base.OnKeyDown(e);
+                    return;
+            }
         }
 
         private void ChangeFocus(TreeNode node)
         {
             var tree = node.Tree;
-            if (tree != null)
+            if (tree == null)
             {
-                var item = tree.ItemContainerGenerator.ContainerFromItem(node) as TreeListItem;
-                if (item != null)
-                    item.Focus();
-                else
-                    tree.PendingFocusNode = node;
+                return;
             }
+
+            TreeListItem item = (TreeListItem)tree.ItemContainerGenerator.ContainerFromItem(node);
+            if (item != null)
+                item.Focus();
+            else
+                tree.PendingFocusNode = node;
         }
 
         #region INotifyPropertyChanged Members
@@ -131,11 +139,9 @@ namespace WindowsPerfGUI.Components.TreeListView
 
         private void OnPropertyChanged(string name)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         #endregion
     }
-
 }

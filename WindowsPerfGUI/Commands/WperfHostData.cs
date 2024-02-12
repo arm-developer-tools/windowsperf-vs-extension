@@ -28,7 +28,9 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
+using WindowsPerfGUI.ToolWindows;
 
 namespace WindowsPerfGUI.Commands
 {
@@ -39,8 +41,8 @@ namespace WindowsPerfGUI.Commands
         {
             Command.Text = WperfHostDataLanguagePack.WindowTitle;
             base.BeforeQueryStatus(e);
-
         }
+
         protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
         {
             if (!WPerfOptions.Instance.IsWperfInitialized)
@@ -48,12 +50,14 @@ namespace WindowsPerfGUI.Commands
                 await VS.MessageBox.ShowErrorAsync(
                     ErrorLanguagePack.NotInititiatedWperfErrorLine1,
                     ErrorLanguagePack.NotInititiatedWperfErrorLine2
-                    );
+                );
                 return;
             }
 
-            WperfHostDataDialog wperfHostDataDialog = new();
-            wperfHostDataDialog.Title = WperfHostDataLanguagePack.WindowTitle;
+            WperfHostDataDialog wperfHostDataDialog = new()
+            {
+                Title = WperfHostDataLanguagePack.WindowTitle
+            };
             wperfHostDataDialog.ShowDialog();
         }
     }

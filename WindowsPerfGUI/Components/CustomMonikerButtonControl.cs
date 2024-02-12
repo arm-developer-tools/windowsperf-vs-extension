@@ -32,12 +32,11 @@ using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
 using System.Windows;
 using System.Windows.Controls;
+
 namespace WindowsPerfGUI.Components
 {
     public class CustomMonikerButtonControl : Button
     {
-
-
         public ImageMoniker MonikerName
         {
             get { return (ImageMoniker)GetValue(MonikerNameProperty); }
@@ -46,30 +45,32 @@ namespace WindowsPerfGUI.Components
 
         // Using a DependencyProperty as the backing store for MonikerName.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MonikerNameProperty =
-            DependencyProperty.Register("MonikerName", typeof(ImageMoniker), typeof(CustomMonikerButtonControl), new PropertyMetadata(KnownMonikers.Play));
+            DependencyProperty.Register(nameof(MonikerName), typeof(ImageMoniker), typeof(CustomMonikerButtonControl),
+                new PropertyMetadata(KnownMonikers.Play));
 
 
         static CustomMonikerButtonControl()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomMonikerButtonControl), new FrameworkPropertyMetadata(typeof(CustomMonikerButtonControl)));
-
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomMonikerButtonControl),
+                new FrameworkPropertyMetadata(typeof(CustomMonikerButtonControl)));
         }
-        readonly CrispImage monikerImage = new CrispImage();
+
+        private readonly CrispImage _monikerImage = new();
+
         protected override void OnInitialized(EventArgs e)
         {
-
-            monikerImage.Moniker = MonikerName;
-            monikerImage.Width = 16;
-            monikerImage.Height = 16;
-            monikerImage.Grayscale = !this.IsEnabled;
-            Content = monikerImage;
+            _monikerImage.Moniker = MonikerName;
+            _monikerImage.Width = 16;
+            _monikerImage.Height = 16;
+            _monikerImage.Grayscale = !this.IsEnabled;
+            Content = _monikerImage;
             base.OnInitialized(e);
             this.IsEnabledChanged += ToggleGrayScaleMoniker;
         }
 
         private void ToggleGrayScaleMoniker(object sender, DependencyPropertyChangedEventArgs e)
         {
-            monikerImage.Grayscale = !this.IsEnabled;
+            _monikerImage.Grayscale = !this.IsEnabled;
         }
     }
 }

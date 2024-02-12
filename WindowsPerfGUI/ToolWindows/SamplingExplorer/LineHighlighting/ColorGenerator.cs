@@ -28,12 +28,11 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.VisualStudio.Imaging;
 using System.Windows.Media;
+using Microsoft.VisualStudio.Imaging;
 
-namespace WindowsPerfGUI.Utils
+namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
 {
-
     public static class ColorGenerator
     {
         const int GREEN_HUE = 120,
@@ -47,7 +46,7 @@ namespace WindowsPerfGUI.Utils
         /// <param name="saturation">from 0 to 1</param>
         /// <param name="lightness">from 0 to 1</param>
         /// <returns><see cref="Color"/></returns>
-        private static Color GetColorFromHSL(double hue, double saturation, double lightness)
+        private static Color GetColorFromHsl(double hue, double saturation, double lightness)
         {
             var hslColor = new HslColor(hue, saturation, lightness);
             var rgbColor = hslColor.ToColor();
@@ -57,6 +56,7 @@ namespace WindowsPerfGUI.Utils
         private static Color GetColorFromPercentage(double percentage)
         {
             #region Code for getting dynamic color from percentage
+
             // double percentageFraction = percentage / 100.0;
             // RED_HUE is 0 so we need to travel from 0 to GREEN_HUE (120) to get to green
             // if percentage is 100 then percentageFraction is 1 and we get 0 which is RED_HUE
@@ -66,12 +66,14 @@ namespace WindowsPerfGUI.Utils
             // if percentage is 100 then percentageFraction is 1 and we get 0 which is RED_HUE
             // same for GREEN_HUE when percentage is 0 we get GREEN_HUE
             // return GetColorFromHSL(hue, 1, 0.5);
+
             #endregion
 
-            if (percentage < 33) return GetColorFromHSL(GREEN_HUE, 1, 0.5);
-            if (percentage < 66) return GetColorFromHSL(YELLOW_HUE, 1, 0.5);
-            return GetColorFromHSL(RED_HUE, 1, 0.5);
+            if (percentage < 33) return GetColorFromHsl(GREEN_HUE, 1, 0.5);
+            if (percentage < 66) return GetColorFromHsl(YELLOW_HUE, 1, 0.5);
+            return GetColorFromHsl(RED_HUE, 1, 0.5);
         }
+
         /// <summary>
         /// Takes a percentage from 0 to 100 and returns one of 3 colors red, yellow or green
         /// anything beyond 100 will return red

@@ -39,6 +39,7 @@ namespace WindowsPerfGUI.Components.TreeListView
     public sealed class TreeNode : INotifyPropertyChanged
     {
         #region NodeCollection
+
         private class NodeCollection : Collection<TreeNode>
         {
             private TreeNode _owner;
@@ -57,18 +58,19 @@ namespace WindowsPerfGUI.Components.TreeListView
             protected override void InsertItem(int index, TreeNode item)
             {
                 if (item == null)
-                    throw new ArgumentNullException("item");
+                    throw new ArgumentNullException(nameof(item));
 
-                if (item.Parent != _owner)
+                if (item.Parent == _owner)
                 {
-                    if (item.Parent != null)
-                        item.Parent.Children.Remove(item);
-                    item._parent = _owner;
-                    item._index = index;
-                    for (int i = index; i < Count; i++)
-                        this[i]._index++;
-                    base.InsertItem(index, item);
+                    return;
                 }
+
+                item.Parent?.Children.Remove(item);
+                item._parent = _owner;
+                item._index = index;
+                for (int i = index; i < Count; i++)
+                    this[i]._index++;
+                base.InsertItem(index, item);
             }
 
             protected override void RemoveItem(int index)
@@ -84,16 +86,18 @@ namespace WindowsPerfGUI.Components.TreeListView
             protected override void SetItem(int index, TreeNode item)
             {
                 if (item == null)
-                    throw new ArgumentNullException("item");
+                    throw new ArgumentNullException(nameof(item));
                 RemoveAt(index);
                 InsertItem(index, item);
             }
         }
+
         #endregion
 
         #region INotifyPropertyChanged Members
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         private void OnPropertyChanged(string name)
         {
             if (PropertyChanged != null)
@@ -105,12 +109,14 @@ namespace WindowsPerfGUI.Components.TreeListView
         #region Properties
 
         private TreeList _tree;
+
         internal TreeList Tree
         {
             get { return _tree; }
         }
 
         private INotifyCollectionChanged _childrenSource;
+
         internal INotifyCollectionChanged ChildrenSource
         {
             get { return _childrenSource; }
@@ -127,12 +133,10 @@ namespace WindowsPerfGUI.Components.TreeListView
         }
 
         private int _index = -1;
+
         public int Index
         {
-            get
-            {
-                return _index;
-            }
+            get { return _index; }
         }
 
         /// <summary>
@@ -149,34 +153,30 @@ namespace WindowsPerfGUI.Components.TreeListView
                         return false;
                     node = node.Parent;
                 }
+
                 return true;
             }
         }
 
-        public bool IsExpandedOnce
-        {
-            get;
-            internal set;
-        }
+        public bool IsExpandedOnce { get; internal set; }
 
-        public bool HasChildren
-        {
-            get;
-            internal set;
-        }
+        public bool HasChildren { get; internal set; }
 
         private bool _isExpanded;
+
         public bool IsExpanded
         {
             get { return _isExpanded; }
             set
             {
-                if (value != IsExpanded)
+                if (value == IsExpanded)
                 {
-                    Tree.SetIsExpanded(this, value);
-                    OnPropertyChanged("IsExpanded");
-                    OnPropertyChanged("IsExpandable");
+                    return;
                 }
+
+                Tree.SetIsExpanded(this, value);
+                OnPropertyChanged("IsExpanded");
+                OnPropertyChanged("IsExpandable");
             }
         }
 
@@ -187,28 +187,29 @@ namespace WindowsPerfGUI.Components.TreeListView
 
         public bool IsExpandable
         {
-            get
-            {
-                return (HasChildren && !IsExpandedOnce) || Nodes.Count > 0;
-            }
+            get { return (HasChildren && !IsExpandedOnce) || Nodes.Count > 0; }
         }
 
         private bool _isSelected;
+
         public bool IsSelected
         {
             get { return _isSelected; }
             set
             {
-                if (value != _isSelected)
+                if (value == _isSelected)
                 {
-                    _isSelected = value;
-                    OnPropertyChanged("IsSelected");
+                    return;
                 }
+
+                _isSelected = value;
+                OnPropertyChanged("IsSelected");
             }
         }
 
 
         private TreeNode _parent;
+
         public TreeNode Parent
         {
             get { return _parent; }
@@ -235,6 +236,7 @@ namespace WindowsPerfGUI.Components.TreeListView
                     if (index > 0)
                         return _parent.Nodes[index - 1];
                 }
+
                 return null;
             }
         }
@@ -243,12 +245,14 @@ namespace WindowsPerfGUI.Components.TreeListView
         {
             get
             {
-                if (_parent != null)
+                if (_parent == null)
                 {
-                    int index = Index;
-                    if (index < _parent.Nodes.Count - 1)
-                        return _parent.Nodes[index + 1];
+                    return null;
                 }
+
+                int index = Index;
+                if (index < _parent.Nodes.Count - 1)
+                    return _parent.Nodes[index + 1];
                 return null;
             }
         }
@@ -258,14 +262,15 @@ namespace WindowsPerfGUI.Components.TreeListView
             get
             {
                 TreeNode parent = this.Parent;
-                if (parent != null)
+                if (parent == null)
                 {
-                    if (parent.NextNode != null)
-                        return parent.NextNode;
-                    else
-                        return parent.BottomNode;
+                    return null;
                 }
-                return null;
+
+                if (parent.NextNode != null)
+                    return parent.NextNode;
+                else
+                    return parent.BottomNode;
             }
         }
 
@@ -288,10 +293,7 @@ namespace WindowsPerfGUI.Components.TreeListView
 
         public int VisibleChildrenCount
         {
-            get
-            {
-                return AllVisibleChildren.Count();
-            }
+            get { return AllVisibleChildren.Count(); }
         }
 
         public IEnumerable<TreeNode> AllVisibleChildren
@@ -312,18 +314,21 @@ namespace WindowsPerfGUI.Components.TreeListView
         }
 
         private object _tag;
+
         public object Tag
         {
             get { return _tag; }
         }
 
         private Collection<TreeNode> _children;
+
         internal Collection<TreeNode> Children
         {
             get { return _children; }
         }
 
         private ReadOnlyCollection<TreeNode> _nodes;
+
         public ReadOnlyCollection<TreeNode> Nodes
         {
             get { return _nodes; }
@@ -334,7 +339,7 @@ namespace WindowsPerfGUI.Components.TreeListView
         internal TreeNode(TreeList tree, object tag)
         {
             if (tree == null)
-                throw new ArgumentNullException("tree");
+                throw new ArgumentNullException(nameof(tree));
 
             _tree = tree;
             _children = new NodeCollection(this);
@@ -365,6 +370,7 @@ namespace WindowsPerfGUI.Components.TreeListView
                             index++;
                         }
                     }
+
                     break;
 
                 case NotifyCollectionChangedAction.Remove:
@@ -380,6 +386,7 @@ namespace WindowsPerfGUI.Components.TreeListView
                     Tree.CreateChildrenNodes(this);
                     break;
             }
+
             HasChildren = Children.Count > 0;
             OnPropertyChanged("IsExpandable");
         }

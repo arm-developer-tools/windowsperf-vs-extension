@@ -46,14 +46,11 @@ namespace WindowsPerfGUI.Components.TreeListView
         /// <summary>
         /// Internal collection of rows representing visible nodes, actually displayed in the ListView
         /// </summary>
-        internal ObservableCollectionTreeList<TreeNode> Rows
-        {
-            get;
-            private set;
-        }
+        internal ObservableCollectionTreeList<TreeNode> Rows { get; private set; }
 
 
         private ITreeModel _model;
+
         public ITreeModel Model
         {
             get { return _model; }
@@ -68,6 +65,7 @@ namespace WindowsPerfGUI.Components.TreeListView
                 }
             }
         }
+
         public void UpdateTreeList()
         {
             _root.Children?.Clear();
@@ -81,7 +79,9 @@ namespace WindowsPerfGUI.Components.TreeListView
             Rows?.Clear();
             Model = null;
         }
+
         private TreeNode _root;
+
         internal TreeNode Root
         {
             get { return _root; }
@@ -92,18 +92,11 @@ namespace WindowsPerfGUI.Components.TreeListView
             get { return Root.Nodes; }
         }
 
-        internal TreeNode PendingFocusNode
-        {
-            get;
-            set;
-        }
+        internal TreeNode PendingFocusNode { get; set; }
 
         public ICollection<TreeNode> SelectedNodes
         {
-            get
-            {
-                return SelectedItems.Cast<TreeNode>().ToArray();
-            }
+            get { return SelectedItems.Cast<TreeNode>().ToArray(); }
         }
 
         public TreeNode SelectedNode
@@ -116,6 +109,7 @@ namespace WindowsPerfGUI.Components.TreeListView
                     return null;
             }
         }
+
         #endregion
 
         public TreeList()
@@ -195,6 +189,7 @@ namespace WindowsPerfGUI.Components.TreeListView
                     child.HasChildren = HasChildren(child);
                     node.Children.Add(child);
                 }
+
                 Rows.InsertRange(rowIndex + 1, node.Children.ToArray());
             }
         }
@@ -251,8 +246,8 @@ namespace WindowsPerfGUI.Components.TreeListView
                 index = parent.Children.Count;
                 parent.Children.Add(node);
             }
+
             Rows.Insert(rowIndex + index + 1, node);
         }
     }
-
 }
