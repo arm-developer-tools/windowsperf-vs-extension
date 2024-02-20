@@ -52,7 +52,15 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 
             Array projects = (Array)_dte.ActiveSolutionProjects;
             EnvDTE.Project project = (EnvDTE.Project)projects.GetValue(0);
+            if (project.ConfigurationManager == null)
+            {
+                return (mainOutput, pdbOutput);
+            }
             Configuration config = project.ConfigurationManager.ActiveConfiguration;
+            if (config == null)
+            {
+                return (mainOutput, pdbOutput);
+            }
             SelectedConfigName = config.ConfigurationName;
             SelectedPlatformName = config.PlatformName;
             SelectedConfigLabel = $"({SelectedConfigName} | {SelectedPlatformName})";

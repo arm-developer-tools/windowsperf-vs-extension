@@ -275,6 +275,7 @@
     <EmbeddedResource Include="Resources\Locals\SamplingExplorerLanguagePack.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SamplingExplorerLanguagePack.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Locals\SamplingSettingsLanguagePack.fr-FR.resx" />
     <EmbeddedResource Include="Resources\Locals\SamplingSettingsLanguagePack.pl.resx" />

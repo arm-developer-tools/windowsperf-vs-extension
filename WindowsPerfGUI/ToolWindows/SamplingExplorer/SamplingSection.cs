@@ -78,6 +78,15 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             }
         }
 
+        public string VisibleLineNumber
+        {
+            get
+            {
+                return lineNumber == 0xF00F00 | lineNumber == 0xFEEFEE ? string.Format("0x{0:X}", lineNumber) : lineNumber.ToString();
+            }
+        }
+
+
         private string name;
 
         public string Name
