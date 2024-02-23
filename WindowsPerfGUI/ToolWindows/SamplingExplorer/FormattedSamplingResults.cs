@@ -62,6 +62,19 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             HighlighterDict.Clear();
             RootSampledEvent = new List<SamplingSection>();
         }
+
+
+        double CalculateSampleHits(SampledEvent sampledEvent)
+        {
+            double allHits = 0;
+            foreach (SampleResult sample in sampledEvent.SampleList)
+            {
+                allHits += sample.Count;
+
+            }
+            return allHits;
+        }
+
         public void FormatSamplingResults(WperfSampling wperSamplingOutput, string rootName = "Root")
         {
             var rootSample = new SamplingSection()
@@ -79,17 +92,28 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                 SectionType = SamplingSection.SamplingSectionType.ROOT,
             };
             RootSampledEvent.Add(rootSample);
+
+
+            double allHits = 0;
             foreach (SampledEvent sampledEvent in wperSamplingOutput.SamplingSummary.SampledEvents)
             {
+                allHits += CalculateSampleHits(sampledEvent);
+            }
+
+            foreach (SampledEvent sampledEvent in wperSamplingOutput.SamplingSummary.SampledEvents)
+            {
+                double eventHits = CalculateSampleHits(sampledEvent);
+
                 SamplingSection eventSection = new SamplingSection()
                 {
                     Name = sampledEvent.Type,
                     Children = new List<SamplingSection>(),
-                    Hits = (ulong)sampledEvent.SampleList.Count,
+                    Hits = (ulong)eventHits,
                     Layer = 1,
                     SectionType = SamplingSection.SamplingSectionType.SAMPLE_EVENT,
                     Frequency = sampledEvent.Interval.ToString(),
                     Parent = rootSample,
+                    Overhead = CalculatePercentage(eventHits, allHits),
                 };
 
                 rootSample.Children.Add(eventSection);
@@ -114,7 +138,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                         {
                             Name = annotationSourceCode.Filename,
                             Hits = annotationSourceCode.Hits,
-                            Overhead = CalculateFunctionPercentage(
+                            Overhead = CalculatePercentage(
                                           annotationSourceCode.Hits,
                                           (double)samplesSection.Hits
                                           ),
@@ -140,7 +164,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
         }
 
 
-        private double CalculateFunctionPercentage(double value, double total)
+        private double CalculatePercentage(double value, double total)
         {
             return Math.Min(value / total * 100, 100);
         }
