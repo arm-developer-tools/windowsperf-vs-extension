@@ -109,6 +109,8 @@
     <Compile Include="Utils\Converters\BooleanToLinkTextDecoration.cs" />
     <Compile Include="ToolWindows\SamplingExplorer\FormattedSamplingResults.cs" />
     <Compile Include="Utils\Converters\BooleanToLinkColor.cs" />
+    <Compile Include="Utils\Converters\NegativeIntToDisabledConverter.cs" />
+    <Compile Include="Utils\Converters\EmptyStringToDisabledConverter.cs" />
     <Compile Include="Utils\Converters\NullToDisabledConverter.cs" />
     <Compile Include="Utils\Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Utils\NotifyPropertyChangedImplementor.cs" />

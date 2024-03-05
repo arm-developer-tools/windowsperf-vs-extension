@@ -28,9 +28,10 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.VisualStudio.PlatformUI;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
+using Microsoft.VisualStudio.PlatformUI;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK.WperfOutputs;
@@ -47,15 +48,18 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
             SamplingFrequencyComboBox.ItemsSource = SamplingFrequency.SamplingFrequencyList;
             ProjectTargetConfigLabel.Content = SolutionProjectOutput.SelectedConfigLabel;
-            if (SamplingSettings.samplingSettingsFrom.SamplingEvent == null) EventComboBox.SelectedIndex = -1;
+            if (SamplingSettings.samplingSettingsFrom.SamplingEvent == null)
+                EventComboBox.SelectedIndex = -1;
             if (SamplingSettings.samplingSettingsFrom.SamplingFrequency == null)
                 SamplingFrequencyComboBox.SelectedIndex = -1;
-            if (SamplingSettings.samplingSettingsFrom.CPUCore == null) CpuCoreComboBox.SelectedIndex = 0;
+            if (SamplingSettings.samplingSettingsFrom.CPUCore == null)
+                CpuCoreComboBox.SelectedIndex = 0;
 
             if (SamplingSettings.samplingSettingsFrom.FilePath != null)
-                SamplingSourcePathFilePicker.FilePathTextBox.Text = SamplingSettings.samplingSettingsFrom.FilePath;
+                SamplingSourcePathFilePicker.FilePathTextBox.Text = SamplingSettings
+                    .samplingSettingsFrom
+                    .FilePath;
         }
-
 
         private void SaveButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -65,7 +69,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             SyncSamplingSettings();
             if (!SamplingSettings.AreSettingsFilled)
             {
-                VS.MessageBox.ShowError(ErrorLanguagePack.UncompleteSamplingSettingsLine1,
+                VS.MessageBox.ShowError(
+                    ErrorLanguagePack.UncompleteSamplingSettingsLine1,
                     ErrorLanguagePack.UncompleteSamplingSettingsLine2
                 );
                 return;
@@ -85,9 +90,14 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             SamplingCommandCallTextBox.Text = SamplingSettings.GenerateCommandLinePreview();
         }
 
-        private void FilePickerTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void FilePickerTextBox_TextChanged(
+            object sender,
+            System.Windows.Controls.TextChangedEventArgs e
+        )
         {
-            SamplingSettings.samplingSettingsFrom.FilePath = SamplingSourcePathFilePicker.FilePathTextBox.Text;
+            SamplingSettings.samplingSettingsFrom.FilePath = SamplingSourcePathFilePicker
+                .FilePathTextBox
+                .Text;
             UpdateSamplingCommandCallTextBox();
         }
 
@@ -100,19 +110,80 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             };
             EventComboBox.SelectedIndex = -1;
             SamplingFrequencyComboBox.SelectedIndex = -1;
-            foreach (var item in SamplingSettings.samplingSettingsFrom.SamplingEventList.Select((value, i) =>
-                         new { i, value }))
+            foreach (
+                var item in SamplingSettings.samplingSettingsFrom.SamplingEventList.Select(
+                    (value, i) => new { i, value }
+                )
+            )
             {
                 if (item.value.SamplingEvent != newSamplingEventConfig.SamplingEvent)
                 {
                     continue;
                 }
 
-                SamplingSettings.samplingSettingsFrom.SamplingEventList[item.i] = newSamplingEventConfig;
+                SamplingSettings.samplingSettingsFrom.SamplingEventList[item.i] =
+                    newSamplingEventConfig;
                 return;
             }
 
             SamplingSettings.samplingSettingsFrom.SamplingEventList.Add(newSamplingEventConfig);
+        }
+
+        private void AddRawEventButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            string input = RawEventsInput.Text;
+            if (input == null)
+                return;
+
+            string[] inputParts = input.Split(':');
+
+            string eventIndex = inputParts[0];
+            string eventFrequency = "0";
+            if (inputParts.Length > 1)
+            {
+                eventFrequency = inputParts[1];
+            }
+
+            var indexRegex = new Regex("r[\\da-f]{1,4}$", RegexOptions.IgnoreCase);
+            bool indexMatch = indexRegex.Match(eventIndex).Success;
+
+            bool frequencyMatch = true;
+            uint frequency = 0;
+            if (eventFrequency != null)
+            {
+                frequencyMatch = UInt32.TryParse(eventFrequency, out frequency);
+            }
+
+            if (!frequencyMatch || !indexMatch)
+            {
+                // TODO : Translate error message
+                VS.MessageBox.ShowError(
+                    @"Badly formatted raw event.
+Please specify raw events with r<VALUE> where <VALUE> is a 16-bit hexadecimal event index value without leading 0x.
+For example r10 is event with index 0x10"
+                );
+                return;
+            }
+            var eventExists = SamplingSettings.samplingSettingsFrom.SamplingEventList.Any(el =>
+                el.SamplingEvent == eventIndex
+            );
+
+            if (eventExists)
+            {
+                // TODO : Translate error message
+                VS.MessageBox.ShowError("Event already exists");
+                return;
+            }
+
+            SamplingEventConfiguration newSamplingEventConfig = new SamplingEventConfiguration()
+            {
+                SamplingEvent = eventIndex,
+                SamplingFrequency = frequency > 0 ? frequency.ToString() : null
+            };
+
+            SamplingSettings.samplingSettingsFrom.SamplingEventList.Add(newSamplingEventConfig);
+
+            RawEventsInput.Clear();
         }
 
         private void RemoveEventButton_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -123,14 +194,21 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 return;
             }
 
-            SamplingSettings.samplingSettingsFrom.SamplingEventList.RemoveAt(SamplingEventListBox.SelectedIndex);
+            SamplingSettings.samplingSettingsFrom.SamplingEventList.RemoveAt(
+                SamplingEventListBox.SelectedIndex
+            );
 
             SamplingEventListBox.Items.Refresh();
-            SamplingEventListBox.SelectedIndex = Math.Min(selectedIndex, SamplingEventListBox.Items.Count - 1);
+            SamplingEventListBox.SelectedIndex = Math.Min(
+                selectedIndex,
+                SamplingEventListBox.Items.Count - 1
+            );
         }
 
-        private void SamplingEventListBox_SelectionChanged(object sender,
-            System.Windows.Controls.SelectionChangedEventArgs e)
+        private void SamplingEventListBox_SelectionChanged(
+            object sender,
+            System.Windows.Controls.SelectionChangedEventArgs e
+        )
         {
             int eventIndex = -1;
             if (!(SamplingEventListBox.SelectedItems?.Count > 0))
@@ -138,10 +216,15 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 return;
             }
 
-            string aliasName = (SamplingEventListBox.SelectedItems[0] as SamplingEventConfiguration)?.SamplingEvent;
+            string aliasName = (
+                SamplingEventListBox.SelectedItems[0] as SamplingEventConfiguration
+            )?.SamplingEvent;
 
-            foreach (var predefinedEvent in ((List<PredefinedEvent>)EventComboBox.ItemsSource).Select(
-                         (value, i) => new { value, i }))
+            foreach (
+                var predefinedEvent in ((List<PredefinedEvent>)EventComboBox.ItemsSource).Select(
+                    (value, i) => new { value, i }
+                )
+            )
             {
                 if (predefinedEvent.value.AliasName == aliasName)
                 {
@@ -150,8 +233,9 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             }
 
             EventComboBox.SelectedIndex = eventIndex;
-            SamplingFrequencyComboBox.SelectedItem =
-                (SamplingEventListBox.SelectedItems[0] as SamplingEventConfiguration)?.SamplingFrequency;
+            SamplingFrequencyComboBox.SelectedItem = (
+                SamplingEventListBox.SelectedItems[0] as SamplingEventConfiguration
+            )?.SamplingFrequency;
         }
     }
 }

@@ -205,6 +205,20 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             }
         }
 
+
+        private string rawEvents;
+
+        public string RawEvents
+        {
+            get { return rawEvents; }
+            set
+            {
+                rawEvents = value;
+                OnPropertyChanged();
+                commandLinePreview = SamplingSettings.GenerateCommandLinePreview();
+            }
+        }
+
         public SamplingSettingsForm()
         {
             customProcessRadioButton = true;
@@ -227,6 +241,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 CPUCore = samplingSettingsForm.CPUCore;
                 ExtraArgs = samplingSettingsForm.ExtraArgs;
                 SamplingEventList = samplingSettingsForm.SamplingEventList;
+                RawEvents  = samplingSettingsForm.RawEvents;
             }
             SamplingSettings.samplingSettingsFrom = this;
         }
