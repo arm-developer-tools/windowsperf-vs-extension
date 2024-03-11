@@ -28,11 +28,12 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using EnvDTE;
+using EnvDTE80;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using System.Windows.Controls;
 using System.Windows.Media;
-using WindowsPerfGUI.Utils;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
 {
@@ -115,11 +116,19 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
                 foreach (var line in HighlighterDict.FilesToHighlight[filePath].LinesToHighlight)
                 {
                     Brush brush = ColorGenerator.GenerateColor(line.Overhead);
+                    string highlightText = GetHighlightText(line);
 
-                    HighlightLine((int)line.LineNumber - 1, brush);
+                    _ = HighlightLineAsync((int)line.LineNumber - 1, brush, highlightText);
                 }
             }
         }
+
+        private string GetHighlightText(LineToHighlight line)
+        {
+            return $"// {Math.Round(line.Overhead, 2)}% with {line.Hits} {(line.Hits > 1 ? "hits" : "hit")} ({line.EventName}:{line.Frequency})";
+        }
+
+
 
         private SnapshotSpan? GetSpanFromLineNumber(int lineNumber)
         {
@@ -151,13 +160,16 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
             _layer.RemoveAllAdornments();
         }
 
+
         /// <summary>
         /// Highlights a line number with a given color
         /// </summary>
         /// <param name="lineNumber">Line to add the adornments</param>
         /// <param name="brush">The color to use for highlighting</param>
-        public void HighlightLine(int lineNumber, Brush brush)
+        /// <param name="highlightText">Text to be displayed</param>
+        public async Task HighlightLineAsync(int lineNumber, Brush brush, string highlightText)
         {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             SnapshotSpan? span = GetSpanFromLineNumber(lineNumber);
             if (!span.HasValue) { return; }
 
@@ -182,6 +194,24 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
             Canvas.SetTop(image, geometry.Bounds.Top);
             _layer.RemoveAdornmentsByVisualSpan(span.Value);
             _layer.AddAdornment(AdornmentPositioningBehavior.TextRelative, span.Value, null, image, null);
+
+            var lineToHighlight = _view.TextSnapshot.GetLineFromLineNumber(lineNumber);
+
+            DTE2 _dte = (DTE2)Package.GetGlobalService(typeof(DTE));
+            Properties propertiesList = _dte.get_Properties("FontsAndColors", "TextEditor");
+            var fontSize = (short)propertiesList.Item("FontSize").Value;
+            var fontFamily = (string)propertiesList.Item("FontFamily").Value;
+
+            var textBlock = new TextBlock
+            {
+                Foreground = brush,
+                FontFamily = new FontFamily(fontFamily),
+                FontSize = fontSize,
+                Text = highlightText
+            };
+            Canvas.SetLeft(textBlock, geometry.Bounds.Right + 5);
+            Canvas.SetTop(textBlock, geometry.Bounds.Top + Math.Abs(fontSize - geometry.Bounds.Height) * .5);
+            _layer.AddAdornment(AdornmentPositioningBehavior.TextRelative, lineToHighlight.Extent, null, textBlock, null);
         }
     }
 }

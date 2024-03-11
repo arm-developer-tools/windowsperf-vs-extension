@@ -1,4 +1,5 @@
-﻿//
+﻿// BSD 3-Clause License
+//
 // Copyright (c) 2022, Arm Limited
 // All rights reserved.
 //
@@ -27,13 +28,13 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using Microsoft.VisualStudio.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
-using Microsoft.VisualStudio.Text;
 using WindowsPerfGUI.Components.TreeListView;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
@@ -644,7 +645,9 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             _ = Task.Run(async () =>
             {
                 DocumentView docView;
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 docView = await VS.Documents.OpenAsync(filePath);
+
                 SnapshotPoint position = docView.TextView.Caret.Position.BufferPosition;
                 docView.TextView.Caret.MoveTo(
                     position.Snapshot.GetLineFromLineNumber(lineNumber - 1).End
