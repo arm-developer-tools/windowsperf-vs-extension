@@ -36,6 +36,9 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
     {
         public long LineNumber = 0;
         public double Overhead = 0;
+        public string EventName = string.Empty;
+        public string Frequency = string.Empty;
+        public ulong Hits = 0;
     }
 
     internal class FileToHighlight
@@ -71,7 +74,11 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
             fileToHighlight.LinesToHighlight.Add(new LineToHighlight()
             {
                 LineNumber = (long)samplingSection.LineNumber,
-                Overhead = (long)samplingSection.Overhead
+                Overhead = (double)samplingSection.Overhead,
+                EventName = samplingSection.Parent.Parent.Name,
+                Frequency = samplingSection.Parent.Parent.Frequency,
+                Hits = (ulong)samplingSection.Hits
+
             });
 
             FilesToHighlight[samplingSection.Name] = fileToHighlight;
