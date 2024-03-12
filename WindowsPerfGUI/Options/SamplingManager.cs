@@ -28,36 +28,23 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
-global using Community.VisualStudio.Toolkit;
-global using Microsoft.VisualStudio.Shell;
-global using System;
-global using System.Diagnostics;
-global using Task = System.Threading.Tasks.Task;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
-using System.Threading;
-using WindowsPerfGUI.Options;
-using WindowsPerfGUI.ToolWindows.SamplingExplorer;
 
-namespace WindowsPerfGUI
+namespace WindowsPerfGUI.Options
 {
-    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [InstalledProductRegistration(Vsix.Name, Vsix.Description, Vsix.Version)]
-    [ProvideToolWindow(typeof(MyToolWindow.Pane), Style = VsDockStyle.Tabbed, Window = WindowGuids.SolutionExplorer)]
-    [ProvideToolWindow(typeof(SamplingExplorer.Pane), Style = VsDockStyle.Tabbed, Window = WindowGuids.SolutionExplorer)]
-    [ProvideMenuResource("Menus.ctmenu", 1)]
-    [Guid(PackageGuids.WindowsPerfGUIString)]
-    [ProvideOptionPage(typeof(WPerfPathPage), "WindowsPerf", "WindowsPerf Path", 0, 0, true, SupportsProfiles = true)]
-    [ProvideOptionPage(typeof(SamplingManagerOptionsProvider.SamplingManagerOptions), "WindowsPerf", "Sampling Manager", 0, 0, true, SupportsProfiles = true)]
-
-    public sealed class WindowsPerfGUIPackage : ToolkitPackage
+    internal partial class SamplingManagerOptionsProvider
     {
-        public static OutputWindowPane WperfOutputWindow { get; set; }
-        protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
-        {
-            await this.RegisterCommandsAsync();
-            WperfOutputWindow = await OutputWindowPane.CreateAsync("WindowsPerf Output", lazyCreate: true);
-            this.RegisterToolWindows();
-        }
+        [ComVisible(true)]
+        public class SamplingManagerOptions : BaseOptionPage<SamplingManager> { }
+    }
+
+    public class SamplingManager : BaseOptionModel<SamplingManager>
+    {
+        [Category("Windows Perf")]
+        [DisplayName("Sampling Manager")]
+        [Description("The resolution of the colors to use in the line highlighter")]
+        [DefaultValue(3)]
+        public int HighlighterColorResolution { get; set; } = 3;
     }
 }

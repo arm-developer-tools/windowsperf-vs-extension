@@ -70,6 +70,7 @@
     <Compile Include="Components\TreeListView\TreeList.cs" />
     <Compile Include="Components\TreeListView\TreeListItem.cs" />
     <Compile Include="Components\TreeListView\TreeNode.cs" />
+    <Compile Include="Options\SamplingManager.cs" />
     <Compile Include="Resources\Locals\ErrorLanguagePack.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -53,7 +53,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
             return Color.FromArgb(80, rgbColor.R, rgbColor.G, rgbColor.B);
         }
 
-        private static Color GetColorFromPercentage(double percentage)
+        private static Color GetColorFromPercentage(double percentage, int colorResolution)
         {
             #region Code for getting dynamic color from percentage
 
@@ -68,10 +68,10 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
             // return GetColorFromHSL(hue, 1, 0.5);
 
             #endregion
-
-            if (percentage < 33) return GetColorFromHsl(GREEN_HUE, 1, 0.5);
-            if (percentage < 66) return GetColorFromHsl(YELLOW_HUE, 1, 0.5);
-            return GetColorFromHsl(RED_HUE, 1, 0.5);
+            double percentageChunk = 100.0 / (double)colorResolution;
+            double hueChunk = (double)GREEN_HUE / (double)colorResolution;
+            int amountOfChunks = (int)(percentage / percentageChunk);
+            return GetColorFromHsl(hueChunk * amountOfChunks, 1, 0.5);
         }
 
         /// <summary>
@@ -80,9 +80,9 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
         /// </summary>
         /// <param name="percentage">values from 0 to 100</param>
         /// <returns></returns>
-        public static Brush GenerateColor(double percentage)
+        public static Brush GenerateColor(double percentage, int colorResolution)
         {
-            return new SolidColorBrush(GetColorFromPercentage(percentage));
+            return new SolidColorBrush(GetColorFromPercentage(percentage, colorResolution));
         }
     }
 }
