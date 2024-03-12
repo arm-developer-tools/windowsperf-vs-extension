@@ -42,7 +42,7 @@ namespace WindowsPerfGUI.Options
     public class SamplingManager : BaseOptionModel<SamplingManager>
     {
         [Category("Windows Perf")]
-        [DisplayName("Sampling Manager")]
+        [DisplayName("Highlighter Color Resolution")]
         [Description("The resolution of the colors to use in the line highlighter")]
         [DefaultValue(3)]
         public int HighlighterColorResolution { get; set; } = 3;
