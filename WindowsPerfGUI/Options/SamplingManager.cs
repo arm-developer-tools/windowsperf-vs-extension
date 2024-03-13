@@ -43,7 +43,7 @@ namespace WindowsPerfGUI.Options
     {
         [Category("Windows Perf")]
         [DisplayName("Highlighter Color Resolution")]
-        [Description("The resolution of the colors to use in the line highlighter")]
+        [Description("The resolution of the colors to use in the line highlighter. Please chose a value between 3 and 256, defaulting to 3 otherwise.")]
         [DefaultValue(3)]
         public int HighlighterColorResolution { get; set; } = 3;
     }

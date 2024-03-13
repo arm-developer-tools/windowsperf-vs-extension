@@ -55,19 +55,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
 
         private static Color GetColorFromPercentage(double percentage, int colorResolution)
         {
-            #region Code for getting dynamic color from percentage
-
-            // double percentageFraction = percentage / 100.0;
-            // RED_HUE is 0 so we need to travel from 0 to GREEN_HUE (120) to get to green
-            // if percentage is 100 then percentageFraction is 1 and we get 0 which is RED_HUE
-            // same for GREEN_HUE when percentage is 0 we get GREEN_HUE
-            // double hue = ((1 - percentageFraction) * GREEN_HUE);
-            // RED_HUE is 0 so we need to travel from 0 to GREEN_HUE (120) to get to green
-            // if percentage is 100 then percentageFraction is 1 and we get 0 which is RED_HUE
-            // same for GREEN_HUE when percentage is 0 we get GREEN_HUE
-            // return GetColorFromHSL(hue, 1, 0.5);
-
-            #endregion
+            if (colorResolution < 3 || colorResolution > 256) colorResolution = 3;
             double percentageChunk = 100.0 / (double)colorResolution;
             double hueChunk = (double)GREEN_HUE / (double)colorResolution;
             int amountOfChunks = (int)(percentage / percentageChunk);
