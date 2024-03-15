@@ -32,6 +32,8 @@ using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -115,17 +117,29 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
             {
                 foreach (var line in HighlighterDict.FilesToHighlight[filePath].LinesToHighlight)
                 {
-                    Brush brush = ColorGenerator.GenerateColor(line.Overhead);
-                    string highlightText = GetHighlightText(line);
+                    GetHighlightData(filePath, line.LineNumber, out string text, out Brush brush);
 
-                    _ = HighlightLineAsync((int)line.LineNumber - 1, brush, highlightText);
+                    _ = HighlightLineAsync((int)line.LineNumber - 1, brush, text);
                 }
             }
         }
 
+        private void GetHighlightData(string filePath, long lineNumber, out string text, out Brush brush)
+        {
+            List<LineToHighlight> lines = HighlighterDict.FilesToHighlight[filePath].LinesToHighlight.Where(el => el.LineNumber == lineNumber).ToList();
+            double overhead = lines.Average(el => el.Overhead);
+            text = string.Join(", ", lines.Select(GetHighlightText).ToArray());
+            brush = ColorGenerator.GenerateColor(overhead);
+            if (lines.Count > 1)
+            {
+                text = $"{Math.Round(overhead, 2)}% ({text})";
+            }
+            text = $"// {text}";
+        }
+
         private string GetHighlightText(LineToHighlight line)
         {
-            return $"// {Math.Round(line.Overhead, 2)}% with {line.Hits} {(line.Hits > 1 ? "hits" : "hit")} ({line.EventName}:{line.Frequency})";
+            return $"{Math.Round(line.Overhead, 2)}% with {line.Hits} {(line.Hits > 1 ? "hits" : "hit")} ({line.EventName}:{line.Frequency})";
         }
 
 
