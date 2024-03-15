@@ -35,6 +35,10 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
 {
     public static class ColorGenerator
     {
+        public const int colorResolutionDefault = 3;
+        public const int colorResolutionMin = 3;
+        public const int colorResolutionMax = 256;
+
         const int GREEN_HUE = 120,
             YELLOW_HUE = 60,
             RED_HUE = 0;
@@ -55,7 +59,9 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
 
         private static Color GetColorFromPercentage(double percentage, int colorResolution)
         {
-            if (colorResolution < 3 || colorResolution > 256) colorResolution = 3;
+            if (colorResolution < colorResolutionMin || colorResolution > colorResolutionMax)
+                colorResolution = colorResolutionDefault ;
+
             double percentageChunk = 100.0 / (double)colorResolution;
             double hueChunk = (double)GREEN_HUE / (double)colorResolution;
             int amountOfChunks = (int)(percentage / percentageChunk);
