@@ -41,10 +41,10 @@ namespace WindowsPerfGUI.Tests.ToolWindows.SamplingExplorer.LineHighlighting
         [Test]
         [Explicit]
         [Description("Testing return values of the color generator")]
-        [TestCase(0, 3, ExpectedResult = "00ff15")]
-        [TestCase(50, 3, ExpectedResult = "dfff00")]
-        [TestCase(100, 3, ExpectedResult = "ff2a00")]
-        [TestCase(150, 3, ExpectedResult = "ff2a00")] // Test beyond 100%
+        [TestCase(0, 3, ExpectedResult = "00ff00")]
+        [TestCase(50, 3, ExpectedResult = "feff00")]
+        [TestCase(100, 3, ExpectedResult = "ff0000")]
+        [TestCase(150, 3, ExpectedResult = "ff0000")] // Test beyond 100%
         public string GenerateColor_ReturnsExpectedColor_ForGivenPercentage(double percentage, int colorResolution)
         {
             var brush = ColorGenerator.GenerateColor(percentage, colorResolution) as SolidColorBrush;

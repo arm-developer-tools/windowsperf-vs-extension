@@ -56,7 +56,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
         private readonly IWpfTextView _view;
 
         /// <summary>
-        /// Text view where the adornment is created.
+        /// Settings for the the number of available colors in the highlighter.
         /// </summary>
         private int _colorResolution;
 

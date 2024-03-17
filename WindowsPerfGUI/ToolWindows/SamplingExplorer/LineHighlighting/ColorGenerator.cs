@@ -50,7 +50,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
         /// <param name="saturation">from 0 to 1</param>
         /// <param name="lightness">from 0 to 1</param>
         /// <returns><see cref="Color"/></returns>
-        private static Color GetColorFromHsl(double hue, double saturation, double lightness)
+        private static Color GetColorFromHSL(double hue, double saturation, double lightness)
         {
             var hslColor = new HslColor(hue, saturation, lightness);
             var rgbColor = hslColor.ToColor();
@@ -63,9 +63,9 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
                 colorResolution = DEFAULT_COLOR_RESOLUTION ;
 
             double percentageChunk = 100.0 / (double)colorResolution;
-            double hueChunk = (double)GREEN_HUE / (double)colorResolution;
-            int amountOfChunks = (int)(percentage / percentageChunk);
-            return GetColorFromHsl(hueChunk * amountOfChunks, 1, 0.5);
+            double hueChunk = (double)(GREEN_HUE - RED_HUE) / ((double)colorResolution - 1);
+            int amountOfChunks = (int)Math.Min(Math.Floor(percentage / percentageChunk), colorResolution - 1);
+            return GetColorFromHSL(GREEN_HUE - (hueChunk * amountOfChunks) + RED_HUE, 1, 0.5);
         }
 
         /// <summary>

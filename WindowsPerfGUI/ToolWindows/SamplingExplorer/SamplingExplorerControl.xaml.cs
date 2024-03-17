@@ -47,6 +47,11 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
 {
     public partial class SamplingExplorerControl : UserControl
     {
+        /// <summary>
+        /// Settings for the the number of available colors in the highlighter.
+        /// </summary>
+        private int _colorResolution;
+
         readonly WperfClientFactory wperfClient = new();
         static FormattedSamplingResults formattedSamplingResults = new FormattedSamplingResults();
 #if DEBUG
@@ -92,6 +97,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             _tree.Model = formattedSamplingResults;
             wperfClient.OnSamplingFinished += HandleSamplingFinished;
             StopSamplingMonikerButton.IsEnabled = false;
+            this._colorResolution = SamplingManager.Instance.HighlighterColorResolution;
         }
 
         private void SettingsMonikerButton_Click(object sender, RoutedEventArgs e)
@@ -278,7 +284,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
 
             asseblyPanel.Children.Add(asseblyTitleGrid);
 
-            Brush highlightColor = ColorGenerator.GenerateColor(samplingSection.Overhead ?? 0);
+            Brush highlightColor = ColorGenerator.GenerateColor(samplingSection.Overhead ?? 0, this._colorResolution);
             int offset = 1;
             bool stopOffsetCount = false;
             foreach (ExtendedAssembly assemblyLine in samplingSection.Assemblies)
