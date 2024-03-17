@@ -5,7 +5,7 @@
   <Extern href="vsshlids.h"/>
   <Include href="KnownImageIds.vsct"/>
   <Include href="VSGlobals.vsct"/>
-
+  <Include href="VSCommandTable.fr-FR.vsct" />
   <Commands package="WindowsPerfGUI">
     <!--This section defines the elements the user can interact with, like a menu command or a button or combo box in a toolbar. -->
     <Buttons>
