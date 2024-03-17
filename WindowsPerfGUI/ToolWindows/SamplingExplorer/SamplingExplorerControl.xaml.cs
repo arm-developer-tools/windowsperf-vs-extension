@@ -193,6 +193,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                     break;
                 case SamplingSection.SamplingSectionType.SAMPLE_EVENT:
                     CreateEventSummary(SummaryStack.Children, selecteditem);
+                    HighlighterDict.Clear();
+                    HighlightEditor(selecteditem);
                     break;
                 case SamplingSection.SamplingSectionType.SAMPLE_FUNCTION:
                     CreateFunctionSummary(SummaryStack.Children, selecteditem);
