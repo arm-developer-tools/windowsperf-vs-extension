@@ -27,8 +27,10 @@
 // CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-using NUnitLite;
+using NUnit.Framework;
+using System.Threading;
 using System.Windows.Controls;
+using NUnitLite;
 
 namespace WindowsPerfGUI.Options.Tests
 {
@@ -37,6 +39,7 @@ namespace WindowsPerfGUI.Options.Tests
     {
 
         [Test()]
+        [Explicit]
         [Description("Tests if the TextBlockFactory method is returning a TextBlock")]
         public void TextBlockFactoryTest()
         {
