@@ -61,7 +61,7 @@ test:
   tags:
     - win-arm64-builder
   script:
-    - dotnet WindowsPerfGUI.Tests/bin/Release/net6.0-windows/WindowsPerfGUI.Tests.dll
+    - dotnet WindowsPerfGUI.Tests/bin/Release/net481/WindowsPerfGUI.Tests.dll
   rules:
       - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
