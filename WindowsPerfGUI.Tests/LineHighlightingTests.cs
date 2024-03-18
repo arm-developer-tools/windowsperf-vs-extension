@@ -39,7 +39,6 @@ namespace WindowsPerfGUI.Tests.ToolWindows.SamplingExplorer.LineHighlighting
     public class ColorGeneratorTests
     {
         [Test]
-        [Explicit]
         [Description("Testing return values of the color generator")]
         [TestCase(0, 3, ExpectedResult = "00ff00")]
         [TestCase(50, 3, ExpectedResult = "feff00")]
@@ -54,7 +53,6 @@ namespace WindowsPerfGUI.Tests.ToolWindows.SamplingExplorer.LineHighlighting
         }
 
         [Test]
-        [Explicit]
         [Description("Testing out of range color resolution values")]
         [TestCase(-1, ExpectedResult = true)]
         [TestCase(257, ExpectedResult = true)]

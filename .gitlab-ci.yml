@@ -29,12 +29,13 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 default:
-    tags:
-        - win-arm64-builder
-
+  tags:
+    - win-arm64-builder
+variables:
+  vstest: "C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe"
 stages:
-- build
-- test
+  - build
+  - test
 
 # CI machines are not yet setup to run this
 # sast:
@@ -53,15 +54,15 @@ build:
       - WindowsPerfGUI.Tests/bin/Release/*
     expire_in: 60 min
   rules:
-      - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 test:
   stage: test
   tags:
     - win-arm64-builder
   script:
-    - dotnet WindowsPerfGUI.Tests/bin/Release/net481/WindowsPerfGUI.Tests.dll
+    - "$env:vstest WindowsPerfGUI.Tests/bin/Release/net481/WindowsPerfGUI.Tests.dll"
   rules:
-      - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

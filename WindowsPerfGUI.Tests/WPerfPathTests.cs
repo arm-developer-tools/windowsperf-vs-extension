@@ -39,7 +39,6 @@ namespace WindowsPerfGUI.Options.Tests
     {
 
         [Test()]
-        [Explicit]
         [Description("Tests if the TextBlockFactory method is returning a TextBlock")]
         public void TextBlockFactoryTest()
         {
