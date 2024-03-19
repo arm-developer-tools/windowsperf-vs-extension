@@ -62,7 +62,7 @@ test:
   tags:
     - win-arm64-builder
   script:
-    - '& "$env:vstest" WindowsPerfGUI.Tests/bin/Release/net481/WindowsPerfGUI.Tests.dll'
+    - ./WindowsPerfGUI.Tests/bin/Release/net481/WindowsPerfGUI.Tests.exe
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

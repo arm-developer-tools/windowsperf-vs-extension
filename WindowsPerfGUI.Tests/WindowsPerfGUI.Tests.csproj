@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net481</TargetFramework>
-
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -26,4 +25,7 @@
     <ProjectReference Include="..\WindowsPerfGUI\WindowsPerfGUI.csproj" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
 </Project>
