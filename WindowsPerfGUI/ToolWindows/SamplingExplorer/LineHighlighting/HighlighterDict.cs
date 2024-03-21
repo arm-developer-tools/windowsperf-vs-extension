@@ -58,7 +58,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
         public static Dictionary<string, FileToHighlight> FilesToHighlight { get; } =
             new Dictionary<string, FileToHighlight>();
 
-        public static void AddFileToHighlight(SamplingSection samplingSection)
+        public static void AddFileToHighlight(SamplingSection samplingSection, Boolean useAbsoluteOverhead = false)
         {
             if (samplingSection.LineNumber == null || samplingSection.Overhead == null ||
                 samplingSection.Overhead == 0) return;
@@ -71,14 +71,14 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
                 fileToHighlight = new FileToHighlight();
             }
 
+
             fileToHighlight.LinesToHighlight.Add(new LineToHighlight()
             {
                 LineNumber = (long)samplingSection.LineNumber,
-                Overhead = (double)samplingSection.Overhead,
+                Overhead = useAbsoluteOverhead ? (double)samplingSection.AbsoluteOverhead : (double)samplingSection.Overhead,
                 EventName = samplingSection.Parent.Parent.Name,
                 Frequency = samplingSection.Parent.Parent.Frequency,
                 Hits = (ulong)samplingSection.Hits
-
             });
 
             FilesToHighlight[samplingSection.Name] = fileToHighlight;

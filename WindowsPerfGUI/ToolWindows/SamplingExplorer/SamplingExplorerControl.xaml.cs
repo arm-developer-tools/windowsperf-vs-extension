@@ -152,7 +152,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             StopSamplingMonikerButton.IsEnabled = false;
         }
 
-        private void HighlightEditor(SamplingSection samplingSection)
+        private void HighlightEditor(SamplingSection samplingSection, Boolean useAbsoluteOverhead = false)
         {
             if (
                 samplingSection.SectionType
@@ -161,7 +161,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             {
                 foreach (SamplingSection child in samplingSection.Children)
                 {
-                    HighlightEditor(child);
+                    HighlightEditor(child, useAbsoluteOverhead);
                 }
             }
 
@@ -170,7 +170,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                 return;
             }
 
-            HighlighterDict.AddFileToHighlight(samplingSection);
+
+            HighlighterDict.AddFileToHighlight(samplingSection, useAbsoluteOverhead);
         }
 
         private void _tree_SelectionChanged(
@@ -189,7 +190,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                 case SamplingSection.SamplingSectionType.ROOT:
                     CreateRootSummary(SummaryStack.Children, selecteditem);
                     HighlighterDict.Clear();
-                    HighlightEditor(selecteditem);
+                    HighlightEditor(selecteditem, useAbsoluteOverhead: true);
                     break;
                 case SamplingSection.SamplingSectionType.SAMPLE_EVENT:
                     CreateEventSummary(SummaryStack.Children, selecteditem);

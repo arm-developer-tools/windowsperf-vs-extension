@@ -65,6 +65,19 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             }
         }
 
+        private double? absoluteOverhead;
+
+        public double? AbsoluteOverhead
+        {
+            get { return absoluteOverhead; }
+            set
+            {
+                absoluteOverhead = value;
+                OnPropertyChanged();
+                if (value != null)
+                    absoluteOverheadPercentage = RoundToTwoDecimalPlaces(value).ToString() + " %";
+            }
+        }
 
         private ulong? lineNumber = null;
 
@@ -138,6 +151,14 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
         {
             get { return overheadPercentage; }
         }
+
+        private string? absoluteOverheadPercentage;
+
+        public string? AbsoluteOverheadPercentage
+        {
+            get { return absoluteOverheadPercentage; }
+        }
+
         private string? frequency;
 
         public string? Frequency

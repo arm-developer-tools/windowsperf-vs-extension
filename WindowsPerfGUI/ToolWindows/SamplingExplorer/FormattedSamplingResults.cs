@@ -85,6 +85,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                 Modules = wperSamplingOutput.SamplingSummary.Modules,
                 Hits = wperSamplingOutput.SamplingSummary.SamplesGenerated,
                 Overhead = 100,
+                AbsoluteOverhead = 100,
                 Name = rootName,
                 Layer = 0,
                 Children = new List<SamplingSection>(),
@@ -94,11 +95,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             RootSampledEvent.Add(rootSample);
 
 
-            double allHits = 0;
-            foreach (SampledEvent sampledEvent in wperSamplingOutput.SamplingSummary.SampledEvents)
-            {
-                allHits += CalculateSampleHits(sampledEvent);
-            }
+            double allHits = wperSamplingOutput.SamplingSummary.SamplesGenerated;
 
             foreach (SampledEvent sampledEvent in wperSamplingOutput.SamplingSummary.SampledEvents)
             {
@@ -114,6 +111,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                     Frequency = sampledEvent.Interval.ToString(),
                     Parent = rootSample,
                     Overhead = CalculatePercentage(eventHits, allHits),
+                    AbsoluteOverhead = CalculatePercentage(eventHits, allHits),
                 };
 
                 rootSample.Children.Add(eventSection);
@@ -125,6 +123,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                         Name = sample.Symbol,
                         Hits = sample.Count,
                         Overhead = sample.Overhead,
+                        AbsoluteOverhead = CalculatePercentage(sample.Count, allHits),
                         Layer = 2,
                         SectionType = SamplingSection.SamplingSectionType.SAMPLE_FUNCTION,
                         Parent = eventSection,
@@ -141,6 +140,10 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                             Overhead = CalculatePercentage(
                                           annotationSourceCode.Hits,
                                           (double)samplesSection.Hits
+                                          ),
+                            AbsoluteOverhead = CalculatePercentage(
+                                          annotationSourceCode.Hits,
+                                          allHits
                                           ),
                             Layer = 3,
                             SectionType = SamplingSection.SamplingSectionType.SAMPLE_SOURCE_CODE,

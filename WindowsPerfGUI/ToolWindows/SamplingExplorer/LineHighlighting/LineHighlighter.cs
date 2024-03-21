@@ -134,7 +134,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
         private void GetHighlightData(string filePath, long lineNumber, out string text, out Brush brush)
         {
             List<LineToHighlight> lines = HighlighterDict.FilesToHighlight[filePath].LinesToHighlight.Where(el => el.LineNumber == lineNumber).ToList();
-            double overhead = lines.Average(el => el.Overhead);
+            double overhead = lines.Sum(el => el.Overhead);
             text = string.Join(", ", lines.Select(GetHighlightText).ToArray());
             brush = ColorGenerator.GenerateColor(overhead, this._colorResolution);
             if (lines.Count > 1)
