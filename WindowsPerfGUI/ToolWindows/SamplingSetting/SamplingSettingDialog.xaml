@@ -36,7 +36,7 @@
         </Grid.ColumnDefinitions>
         <GroupBox Padding="5" Grid.Row="0" Grid.Column="0">
             <GroupBox.Header>
-                <Label Content="Payload" />
+                <Label Content="{x:Static locals:SamplingSettingsLanguagePack.Payload}" />
             </GroupBox.Header>
             <StackPanel Orientation="Vertical">
                 <Components:CustomRadioButtonControl
@@ -67,7 +67,7 @@
 
         <GroupBox Padding="5" Grid.Row="1" Margin="0,0,0,0">
             <GroupBox.Header>
-                <Label Content="Parameters" />
+                <Label Content="{x:Static locals:SamplingSettingsLanguagePack.Parameters}" />
             </GroupBox.Header>
             <StackPanel>
                 <Label
@@ -115,10 +115,10 @@
             Margin="5,0,0,0"
             BorderThickness="1,1,1,1">
             <GroupBox.Header>
-                <Label Content="Events" />
+                <Label Content="{x:Static locals:SamplingSettingsLanguagePack.RawEvent}" />
             </GroupBox.Header>
             <StackPanel Margin="5,10,5,10">
-                <Label Content="Raw Events" />
+                <Label Content="{x:Static locals:SamplingSettingsLanguagePack.RawEvent}" />
                 <Grid Margin="0,0,0,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -190,11 +190,11 @@
                         <TextBlock
                             Grid.Column="0"
                             Margin="7,0,5,0"
-                            Text="Event" />
+                            Text="{x:Static locals:SamplingSettingsLanguagePack.EventHeader}" />
                         <TextBlock
                             Grid.Column="1"
                             Margin="10,0,0,0"
-                            Text="Frequency" />
+                            Text="{x:Static locals:SamplingSettingsLanguagePack.FrequencyHeader}" />
                     </Grid>
                     <ScrollViewer
                         Grid.Row="1"

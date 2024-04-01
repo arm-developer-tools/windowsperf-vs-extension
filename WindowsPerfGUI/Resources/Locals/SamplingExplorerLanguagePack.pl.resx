@@ -171,4 +171,7 @@
   <data name="Modules" xml:space="preserve">
     <value>Moduły</value>
   </data>
+  <data name="LineAnnotationFormat" xml:space="preserve">
+    <value>{0}% z {1} trafień ({2})</value>
+  </data>
 </root>

@@ -171,4 +171,7 @@
   <data name="Modules" xml:space="preserve">
     <value>Módulos</value>
   </data>
+  <data name="LineAnnotationFormat" xml:space="preserve">
+    <value>{0}% com {1} acertos {{2}}</value>
+  </data>
 </root>

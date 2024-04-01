@@ -144,4 +144,12 @@
   <data name="WperfUnavailable" xml:space="preserve">
     <value>WindowsPerf n'est pas disponible sur le chemin indiqué ou n'est pas initialisé</value>
   </data>
+  <data name="RawEventBadFormat" xml:space="preserve">
+    <value>Événement brut mal formaté.
+Veuillez spécifier les événements explicites avec r&lt;VALEUR&gt; où &lt;VALEUR&gt; est une valeur d'index d'événement hexadécimal de 16 bits sans 0x en tête.
+Par exemple, r10 est un événement avec l'index 0x10</value>
+  </data>
+  <data name="RawEventExists" xml:space="preserve">
+    <value>L'événement brut existe déjà. Veuillez entrer un événement différent.</value>
+  </data>
 </root>

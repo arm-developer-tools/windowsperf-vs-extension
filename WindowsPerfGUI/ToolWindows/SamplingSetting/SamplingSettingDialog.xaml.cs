@@ -144,7 +144,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 eventFrequency = inputParts[1];
             }
 
-            var indexRegex = new Regex("r[\\da-f]{1,4}$", RegexOptions.IgnoreCase);
+            var indexRegex = new Regex("^r[\\da-f]{1,4}$", RegexOptions.IgnoreCase);
             bool indexMatch = indexRegex.Match(eventIndex).Success;
 
             bool frequencyMatch = true;
@@ -156,12 +156,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 
             if (!frequencyMatch || !indexMatch)
             {
-                // TODO : Translate error message
-                VS.MessageBox.ShowError(
-                    @"Badly formatted raw event.
-Please specify raw events with r<VALUE> where <VALUE> is a 16-bit hexadecimal event index value without leading 0x.
-For example r10 is event with index 0x10"
-                );
+                VS.MessageBox.ShowError(ErrorLanguagePack.RawEventBadFormat);
                 return;
             }
             var eventExists = SamplingSettings.samplingSettingsFrom.SamplingEventList.Any(el =>
@@ -170,8 +165,7 @@ For example r10 is event with index 0x10"
 
             if (eventExists)
             {
-                // TODO : Translate error message
-                VS.MessageBox.ShowError("Event already exists");
+                VS.MessageBox.ShowError(ErrorLanguagePack.RawEventExists);
                 return;
             }
 

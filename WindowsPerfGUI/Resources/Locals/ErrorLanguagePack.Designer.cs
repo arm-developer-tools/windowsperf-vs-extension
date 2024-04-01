@@ -97,6 +97,26 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Badly formatted raw event.
+        ///Please specify raw events with r&lt;VALUE&gt; where &lt;VALUE&gt; is a 16-bit hexadecimal event index value without leading 0x.
+        ///For example r10 is event with index 0x10.
+        /// </summary>
+        public static string RawEventBadFormat {
+            get {
+                return ResourceManager.GetString("RawEventBadFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Raw event already exists. Please enter a different event..
+        /// </summary>
+        public static string RawEventExists {
+            get {
+                return ResourceManager.GetString("RawEventExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to WindowsPerf is currently sampling.
         /// </summary>
         public static string RunningSamplingOverlapLine1 {

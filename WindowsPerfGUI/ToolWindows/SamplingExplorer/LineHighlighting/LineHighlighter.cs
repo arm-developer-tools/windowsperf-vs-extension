@@ -28,15 +28,16 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using EnvDTE;
-using EnvDTE80;
-using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Editor;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
+using EnvDTE;
+using EnvDTE80;
+using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Editor;
 using WindowsPerfGUI.Options;
+using WindowsPerfGUI.Resources.Locals;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
 {
@@ -101,9 +102,14 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
             {
                 return;
             }
-            if (HighlighterDict.PreviousFilePaths.Count > 0 && HighlighterDict.PreviousFilePaths.Contains(filePath))
+            if (
+                HighlighterDict.PreviousFilePaths.Count > 0
+                && HighlighterDict.PreviousFilePaths.Contains(filePath)
+            )
             {
-                foreach (var line in HighlighterDict.PreviousFilesToHighlight[filePath].LinesToHighlight)
+                foreach (
+                    var line in HighlighterDict.PreviousFilesToHighlight[filePath].LinesToHighlight
+                )
                 {
                     ClearLineAdornments((int)line.LineNumber - 1);
                 }
@@ -131,9 +137,17 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
             }
         }
 
-        private void GetHighlightData(string filePath, long lineNumber, out string text, out Brush brush)
+        private void GetHighlightData(
+            string filePath,
+            long lineNumber,
+            out string text,
+            out Brush brush
+        )
         {
-            List<LineToHighlight> lines = HighlighterDict.FilesToHighlight[filePath].LinesToHighlight.Where(el => el.LineNumber == lineNumber).ToList();
+            List<LineToHighlight> lines = HighlighterDict
+                .FilesToHighlight[filePath]
+                .LinesToHighlight.Where(el => el.LineNumber == lineNumber)
+                .ToList();
             double overhead = lines.Sum(el => el.Overhead);
             text = string.Join(", ", lines.Select(GetHighlightText).ToArray());
             brush = ColorGenerator.GenerateColor(overhead, this._colorResolution);
@@ -146,24 +160,37 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
 
         private string GetHighlightText(LineToHighlight line)
         {
-            return $"{Math.Round(line.Overhead, 2)}% with {line.Hits} {(line.Hits > 1 ? "hits" : "hit")} ({line.EventName}:{line.Frequency})";
+            return string.Format(
+                SamplingExplorerLanguagePack.LineAnnotationFormat,
+                Math.Round(line.Overhead, 2),
+                line.Hits,
+                $"{line.EventName}:{line.Frequency}"
+            );
         }
-
-
 
         private SnapshotSpan? GetSpanFromLineNumber(int lineNumber)
         {
             ITextSnapshotLine lineToHighlight;
-            // This is to handle out of range line numbers 
+            // This is to handle out of range line numbers
             try
             {
                 lineToHighlight = _view.TextSnapshot.GetLineFromLineNumber(lineNumber);
             }
-            catch (ArgumentOutOfRangeException) { return null; }
+            catch (ArgumentOutOfRangeException)
+            {
+                return null;
+            }
 
-            if (lineToHighlight == null) { return null; }
+            if (lineToHighlight == null)
+            {
+                return null;
+            }
 
-            SnapshotSpan span = new(_view.TextSnapshot, Span.FromBounds(lineToHighlight.Start, lineToHighlight.EndIncludingLineBreak));
+            SnapshotSpan span =
+                new(
+                    _view.TextSnapshot,
+                    Span.FromBounds(lineToHighlight.Start, lineToHighlight.EndIncludingLineBreak)
+                );
             return span;
         }
 
@@ -171,16 +198,17 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
         {
             SnapshotSpan? span = GetSpanFromLineNumber(lineNumber);
 
-            if (!span.HasValue) { return; }
+            if (!span.HasValue)
+            {
+                return;
+            }
             _layer.RemoveAdornmentsByVisualSpan(span.Value);
-
         }
 
         public void ClearHighlighter()
         {
             _layer.RemoveAllAdornments();
         }
-
 
         /// <summary>
         /// Highlights a line number with a given color
@@ -192,13 +220,18 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             SnapshotSpan? span = GetSpanFromLineNumber(lineNumber);
-            if (!span.HasValue) { return; }
+            if (!span.HasValue)
+            {
+                return;
+            }
 
             IWpfTextViewLineCollection textViewLines = _view.TextViewLines;
 
-
             Geometry geometry = textViewLines.GetMarkerGeometry(span.Value);
-            if (geometry == null) { return; }
+            if (geometry == null)
+            {
+                return;
+            }
 
             var drawing = new GeometryDrawing(brush, _pen, geometry);
             drawing.Freeze();
@@ -206,15 +239,18 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
             var drawingImage = new DrawingImage(drawing);
             drawingImage.Freeze();
 
-            var image = new Image
-            {
-                Source = drawingImage,
-            };
+            var image = new Image { Source = drawingImage, };
 
             Canvas.SetLeft(image, geometry.Bounds.Left);
             Canvas.SetTop(image, geometry.Bounds.Top);
             _layer.RemoveAdornmentsByVisualSpan(span.Value);
-            _layer.AddAdornment(AdornmentPositioningBehavior.TextRelative, span.Value, null, image, null);
+            _layer.AddAdornment(
+                AdornmentPositioningBehavior.TextRelative,
+                span.Value,
+                null,
+                image,
+                null
+            );
 
             var lineToHighlight = _view.TextSnapshot.GetLineFromLineNumber(lineNumber);
 
@@ -231,8 +267,17 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
                 Text = highlightText
             };
             Canvas.SetLeft(textBlock, geometry.Bounds.Right + 5);
-            Canvas.SetTop(textBlock, geometry.Bounds.Top + Math.Abs(fontSize - geometry.Bounds.Height) * .5);
-            _layer.AddAdornment(AdornmentPositioningBehavior.TextRelative, lineToHighlight.Extent, null, textBlock, null);
+            Canvas.SetTop(
+                textBlock,
+                geometry.Bounds.Top + Math.Abs(fontSize - geometry.Bounds.Height) * .5
+            );
+            _layer.AddAdornment(
+                AdornmentPositioningBehavior.TextRelative,
+                lineToHighlight.Extent,
+                null,
+                textBlock,
+                null
+            );
         }
     }
 }

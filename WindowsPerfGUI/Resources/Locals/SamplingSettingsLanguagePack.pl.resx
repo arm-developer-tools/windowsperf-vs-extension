@@ -156,4 +156,22 @@
   <data name="CpuCoreNumber" xml:space="preserve">
     <value>Numer rdzenia procesora</value>
   </data>
+  <data name="RawEvent" xml:space="preserve">
+    <value>Wydarzenie :</value>
+  </data>
+  <data name="EventHeader" xml:space="preserve">
+    <value>Wydarzenie</value>
+  </data>
+  <data name="Events" xml:space="preserve">
+    <value>Wydarzenia</value>
+  </data>
+  <data name="FrequencyHeader" xml:space="preserve">
+    <value>Częstotliwość</value>
+  </data>
+  <data name="Parameters" xml:space="preserve">
+    <value>Parametry</value>
+  </data>
+  <data name="Payload" xml:space="preserve">
+    <value>Program</value>
+  </data>
 </root>

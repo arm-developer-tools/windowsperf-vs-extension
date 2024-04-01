@@ -124,6 +124,15 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}% with {1} hits ({2}).
+        /// </summary>
+        public static string LineAnnotationFormat {
+            get {
+                return ResourceManager.GetString("LineAnnotationFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Line Number.
         /// </summary>
         public static string LineNumber {

@@ -88,6 +88,24 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Event.
+        /// </summary>
+        public static string EventHeader {
+            get {
+                return ResourceManager.GetString("EventHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Events.
+        /// </summary>
+        public static string Events {
+            get {
+                return ResourceManager.GetString("Events", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Extra arguments :.
         /// </summary>
         public static string ExtraArgs {
@@ -115,6 +133,33 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Frequency.
+        /// </summary>
+        public static string FrequencyHeader {
+            get {
+                return ResourceManager.GetString("FrequencyHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters.
+        /// </summary>
+        public static string Parameters {
+            get {
+                return ResourceManager.GetString("Parameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Payload.
+        /// </summary>
+        public static string Payload {
+            get {
+                return ResourceManager.GetString("Payload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Payload From File.
         /// </summary>
         public static string PayloadFromFile {
@@ -129,6 +174,15 @@ namespace WindowsPerfGUI.Resources.Locals {
         public static string ProjectTarget {
             get {
                 return ResourceManager.GetString("ProjectTarget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Raw Event :.
+        /// </summary>
+        public static string RawEvent {
+            get {
+                return ResourceManager.GetString("RawEvent", resourceCulture);
             }
         }
         
