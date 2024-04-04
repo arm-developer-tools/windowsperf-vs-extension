@@ -106,6 +106,7 @@
     <Compile Include="ToolWindows\SamplingExplorer\LineHighlighting\ColorGenerator.cs" />
     <Compile Include="ToolWindows\SamplingExplorer\LineHighlighting\LineHighlighter.cs" />
     <Compile Include="ToolWindows\SamplingExplorer\LineHighlighting\LineHighlighterTextViewCreationListener.cs" />
+    <Compile Include="Utils\WperfDefaults.cs" />
     <Compile Include="Utils\Converters\BooleanToLinkCursor.cs" />
     <Compile Include="Utils\Converters\BooleanToLinkTextDecoration.cs" />
     <Compile Include="ToolWindows\SamplingExplorer\FormattedSamplingResults.cs" />

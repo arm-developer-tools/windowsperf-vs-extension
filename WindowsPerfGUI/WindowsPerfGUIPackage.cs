@@ -29,35 +29,83 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-global using Community.VisualStudio.Toolkit;
-global using Microsoft.VisualStudio.Shell;
 global using System;
 global using System.Diagnostics;
+global using Community.VisualStudio.Toolkit;
+global using Microsoft.VisualStudio.Shell;
 global using Task = System.Threading.Tasks.Task;
 using System.Runtime.InteropServices;
 using System.Threading;
 using WindowsPerfGUI.Options;
+using WindowsPerfGUI.SDK;
+using WindowsPerfGUI.SDK.WperfOutputs;
 using WindowsPerfGUI.ToolWindows.SamplingExplorer;
+using WindowsPerfGUI.ToolWindows.SamplingSetting;
 
 namespace WindowsPerfGUI
 {
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [InstalledProductRegistration(Vsix.Name, Vsix.Description, Vsix.Version)]
-    [ProvideToolWindow(typeof(MyToolWindow.Pane), Style = VsDockStyle.Tabbed, Window = WindowGuids.SolutionExplorer)]
-    [ProvideToolWindow(typeof(SamplingExplorer.Pane), Style = VsDockStyle.Tabbed, Window = WindowGuids.SolutionExplorer)]
+    [ProvideToolWindow(
+        typeof(MyToolWindow.Pane),
+        Style = VsDockStyle.Tabbed,
+        Window = WindowGuids.SolutionExplorer
+    )]
+    [ProvideToolWindow(
+        typeof(SamplingExplorer.Pane),
+        Style = VsDockStyle.Tabbed,
+        Window = WindowGuids.SolutionExplorer
+    )]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(PackageGuids.WindowsPerfGUIString)]
-    [ProvideOptionPage(typeof(WPerfPathPage), "WindowsPerf", "WindowsPerf Path", 0, 0, true, SupportsProfiles = true)]
-    [ProvideOptionPage(typeof(SamplingManagerOptionsProvider.SamplingManagerOptions), "WindowsPerf", "Sampling Manager", 0, 0, true, SupportsProfiles = true)]
-
+    [ProvideOptionPage(
+        typeof(WPerfPathPage),
+        "WindowsPerf",
+        "WindowsPerf Path",
+        0,
+        0,
+        true,
+        SupportsProfiles = true
+    )]
+    [ProvideOptionPage(
+        typeof(SamplingManagerOptionsProvider.SamplingManagerOptions),
+        "WindowsPerf",
+        "Sampling Manager",
+        0,
+        0,
+        true,
+        SupportsProfiles = true
+    )]
     public sealed class WindowsPerfGUIPackage : ToolkitPackage
     {
         public static OutputWindowPane WperfOutputWindow { get; set; }
-        protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
+
+        protected override async Task InitializeAsync(
+            CancellationToken cancellationToken,
+            IProgress<ServiceProgressData> progress
+        )
         {
             await this.RegisterCommandsAsync();
-            WperfOutputWindow = await OutputWindowPane.CreateAsync("WindowsPerf Output", lazyCreate: true);
+            WperfOutputWindow = await OutputWindowPane.CreateAsync(
+                "WindowsPerf Output",
+                lazyCreate: true
+            );
             this.RegisterToolWindows();
+            try
+            {
+                WperfClientFactory wperfClient = new();
+                (WperfTest results, string stdError) = wperfClient.GetTest();
+                if (stdError != "")
+                    throw new Exception(stdError);
+
+                WperfDefaults.Frequency = results
+                    .TestResults.Find(el => el.TestName == "pmu_device.sampling.INTERVAL_DEFAULT")
+                    ?.Result;
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine(e.Message);
+            }
         }
     }
 }

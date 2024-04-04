@@ -48,14 +48,18 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
         public string? SamplingFrequency
         {
             get { return samplingFrequency; }
-            set { samplingFrequency = value; }
+            set { samplingFrequency = value ?? WperfDefaults.Frequency; }
         }
+
 #nullable disable
         override public string ToString()
         {
-            return string.IsNullOrWhiteSpace(SamplingFrequency) ? SamplingEvent : $"{SamplingEvent}:{SamplingFrequency}";
+            return string.IsNullOrWhiteSpace(SamplingFrequency)
+                ? SamplingEvent
+                : $"{SamplingEvent}:{SamplingFrequency}";
         }
     }
+
     public class SamplingSettingsForm : NotifyPropertyChangedImplementor
     {
         private bool customProcessRadioButton;
@@ -86,7 +90,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 {
                     _ = Task.Run(async () =>
                     {
-                        (string mainOutput, string pdbFile) = await SolutionProjectOutput.GetProjectOutputAsync();
+                        (string mainOutput, string pdbFile) =
+                            await SolutionProjectOutput.GetProjectOutputAsync();
                         FilePath = mainOutput;
                         PdbFile = pdbFile;
                     });
@@ -102,7 +107,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             set { pdbFile = value; }
         }
 
-
         private string commandLinePreview;
 
         public string CommandLinePreview
@@ -112,7 +116,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             {
                 commandLinePreview = value;
                 OnPropertyChanged();
-
             }
         }
 
@@ -134,10 +137,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
         public string SamplingFrequency
         {
             get { return samplingFrequency; }
-            set
-            {
-                samplingFrequency = value;
-            }
+            set { samplingFrequency = value; }
         }
 
         private PredefinedEvent samplingEvent;
@@ -145,10 +145,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
         public PredefinedEvent SamplingEvent
         {
             get { return samplingEvent; }
-            set
-            {
-                samplingEvent = value;
-            }
+            set { samplingEvent = value; }
         }
 
         private ObservableCollection<SamplingEventConfiguration> samplingEventList;
@@ -164,7 +161,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             }
         }
 
-
         private string filePath;
 
         public string FilePath
@@ -172,8 +168,10 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             get { return filePath; }
             set
             {
-                if (value.StartsWith("\"") || string.IsNullOrEmpty(value)) filePath = value;
-                else filePath = $"\"{value}\"";
+                if (value.StartsWith("\"") || string.IsNullOrEmpty(value))
+                    filePath = value;
+                else
+                    filePath = $"\"{value}\"";
 
                 OnPropertyChanged();
                 CommandLinePreview = SamplingSettings.GenerateCommandLinePreview();
@@ -205,7 +203,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             }
         }
 
-
         private string rawEvents;
 
         public string RawEvents
@@ -225,7 +222,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             // We deliberatly set the private version of `samplingEventList`
             // to not trigger the OnPropertyChanged event and generateCommandLinePreview
             // that depend on the init of SamplingSettings.samplingSettingsFrom
-            if (SamplingEventList == null) samplingEventList = new ObservableCollection<SamplingEventConfiguration>();
+            if (SamplingEventList == null)
+                samplingEventList = new ObservableCollection<SamplingEventConfiguration>();
             samplingEventList.CollectionChanged += (sender, e) =>
             {
                 OnPropertyChanged("SamplingEventList");
@@ -241,7 +239,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 CPUCore = samplingSettingsForm.CPUCore;
                 ExtraArgs = samplingSettingsForm.ExtraArgs;
                 SamplingEventList = samplingSettingsForm.SamplingEventList;
-                RawEvents  = samplingSettingsForm.RawEvents;
+                RawEvents = samplingSettingsForm.RawEvents;
             }
             SamplingSettings.samplingSettingsFrom = this;
         }
