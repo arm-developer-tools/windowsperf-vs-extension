@@ -28,18 +28,46 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using Microsoft.VisualStudio.PlatformUI;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.VisualStudio.PlatformUI;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK.WperfOutputs;
+using WindowsPerfGUI.Utils.ListSearcher;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 {
     public partial class SamplingSettingDialog : DialogWindow
     {
+        private void PreviewKeyDown_EnhanceComboSearch(object sender, KeyEventArgs e)
+        {
+            ComboBox cmb = (ComboBox)sender;
+
+            EventComboBox.IsDropDownOpen = true;
+            EventComboBoxPlaceholder.Visibility = Visibility.Hidden;
+            if (!string.IsNullOrEmpty(EventComboBox.Text))
+            {
+                EventComboBox.ItemsSource = FilterEventList(EventComboBox.Text);
+            }
+            else
+            {
+                EventComboBoxPlaceholder.Visibility = Visibility.Visible;
+                EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
+            }
+        }
+
+        private static List<PredefinedEvent> FilterEventList(string searchText)
+        {
+            var eventList = WPerfOptions.Instance.WperfList.PredefinedEvents;
+            var listSearcher = new ListSearcher<PredefinedEvent>(eventList, new SearchOptions<PredefinedEvent> { IsCaseSensitve = true, GetValue = x => x.AliasName });
+            return listSearcher.Search(searchText);
+        }
+
         public SamplingSettingDialog()
         {
             SolutionProjectOutput.GetProjectOutputAsync().FireAndForget();
@@ -110,6 +138,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             };
             EventComboBox.SelectedIndex = -1;
             SamplingFrequencyComboBox.SelectedIndex = -1;
+            EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
+
             foreach (
                 var item in SamplingSettings.samplingSettingsFrom.SamplingEventList.Select(
                     (value, i) => new { i, value }
@@ -151,7 +181,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             uint frequency = 0;
             if (eventFrequency != null)
             {
-                frequencyMatch = UInt32.TryParse(eventFrequency, out frequency);
+                frequencyMatch = uint.TryParse(eventFrequency, out frequency);
             }
 
             if (!frequencyMatch || !indexMatch)

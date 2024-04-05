@@ -115,6 +115,7 @@
     <Compile Include="Utils\Converters\EmptyStringToDisabledConverter.cs" />
     <Compile Include="Utils\Converters\NullToDisabledConverter.cs" />
     <Compile Include="Utils\Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="Utils\ListSearcher\ListSearcher.cs" />
     <Compile Include="Utils\NotifyPropertyChangedImplementor.cs" />
     <Compile Include="Options\WPerfPath.xaml.cs">
       <DependentUpon>WPerfPath.xaml</DependentUpon>
@@ -251,6 +252,9 @@
     <Reference Include="System.ComponentModel.Composition" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AutoCompleteTextBox">
+      <Version>1.7.2</Version>
+    </PackageReference>
     <PackageReference Include="Community.VisualStudio.VSCT" Version="16.0.29.6" PrivateAssets="all" />
     <PackageReference Include="Community.VisualStudio.Toolkit.17" Version="17.0.507" ExcludeAssets="Runtime">
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
