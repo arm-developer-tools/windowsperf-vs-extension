@@ -9,10 +9,10 @@ namespace WindowsPerfGUI
     {
         public const string Id = "WindowsPerfGUI.73de2c45-cf60-4edb-a092-b09b43acf2ae";
         public const string Name = "WindowsPerfGUI";
-        public const string Description = @"Empty VSIX Project.";
+        public const string Description = @"WindowsPerf GUI (Graphical User Interface) project, a Visual Studio 2022 extension designed to bring a seamless UI experience to WindowsPerf, the command-line performance profiling tool for Windows on Arm.";
         public const string Language = "en-US";
-        public const string Version = "0.0.1";
+        public const string Version = "1.0.0";
         public const string Author = "Nader Zouaoui";
-        public const string Tags = "";
+        public const string Tags = "1.0.0";
     }
 }
