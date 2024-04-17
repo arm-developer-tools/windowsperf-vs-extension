@@ -29,13 +29,12 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-using Microsoft.VisualStudio.Threading;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Microsoft.VisualStudio.Threading;
 
 namespace WindowsPerfGUI.Utils.SDK
 {
-
     class ProcessRunner
     {
         #region Process Control
@@ -56,6 +55,7 @@ namespace WindowsPerfGUI.Utils.SDK
 
         [DllImport("kernel32.dll")]
         static extern bool SetConsoleCtrlHandler(ConsoleCtrlDelegate HandlerRoutine, bool Add);
+
         delegate bool ConsoleCtrlDelegate(CtrlTypes CtrlType);
 
         [DllImport("kernel32.dll")]
@@ -100,15 +100,25 @@ namespace WindowsPerfGUI.Utils.SDK
         public Task StartBackgroundProcessAsync(params string[] args)
         {
             _BackgroundProcessCancelationToken = new CancellationTokenSource();
-            _BackgroundProcessTask = Task.Run(() => _StartBackgroundProcessAsync(args), _BackgroundProcessCancelationToken.Token);
+            _BackgroundProcessTask = Task.Run(
+                () => _StartBackgroundProcessAsync(args),
+                _BackgroundProcessCancelationToken.Token
+            );
             return _BackgroundProcessTask;
         }
 
         public void StopProcess(bool force = false)
         {
             const int waitForExitTimeout = 2000;
-            if (force) { ForceKillProcess(); return; }
-            if (_BackgroundProcess.HasExited) { return; }
+            if (force)
+            {
+                ForceKillProcess();
+                return;
+            }
+            if (_BackgroundProcess.HasExited)
+            {
+                return;
+            }
             _BackgroundProcessCancelationToken.Cancel(true);
             if (!AttachConsole((uint)_BackgroundProcess.Id))
             {
@@ -130,8 +140,8 @@ namespace WindowsPerfGUI.Utils.SDK
             FreeConsole();
 
             SetConsoleCtrlHandler(null, false);
-
         }
+
         public (string stdError, string stdOutput) StartAwaitedProcess(string[] args)
         {
             InitProcess(args);
@@ -142,8 +152,10 @@ namespace WindowsPerfGUI.Utils.SDK
             }
             catch (Exception e)
             {
-
-                throw new Exception($"Failed to start process {_Path} with arguments {string.Join(" ", args)}", e);
+                throw new Exception(
+                    $"Failed to start process {_Path} with arguments {string.Join(" ", args)}",
+                    e
+                );
             }
             if (_ProcessorAffinity != null)
             {
@@ -166,8 +178,12 @@ namespace WindowsPerfGUI.Utils.SDK
             InitProcess(args);
             StdOutput.ClearOutput();
             StdError.ClearOutput();
-            _BackgroundProcess.OutputDataReceived += new DataReceivedEventHandler(StdOutput.OutputhHandler);
-            _BackgroundProcess.ErrorDataReceived += new DataReceivedEventHandler(StdError.OutputhHandler);
+            _BackgroundProcess.OutputDataReceived += new DataReceivedEventHandler(
+                StdOutput.OutputhHandler
+            );
+            _BackgroundProcess.ErrorDataReceived += new DataReceivedEventHandler(
+                StdError.OutputhHandler
+            );
             _BackgroundProcess.Start();
             if (_ProcessorAffinity != null)
             {
@@ -176,27 +192,29 @@ namespace WindowsPerfGUI.Utils.SDK
             _BackgroundProcess.BeginOutputReadLine();
             _BackgroundProcess.BeginErrorReadLine();
             await _BackgroundProcess.WaitForExitAsync();
-
         }
 
         private void InitProcess(string[] args)
         {
-            if (_BackgroundProcess != null && !_BackgroundProcess.HasExited) throw new Exception("Process already running");
+            if (_BackgroundProcess != null && !_BackgroundProcess.HasExited)
+                throw new Exception("Process already running");
             _BackgroundProcess = new Process()
             {
-                StartInfo = {
-                WindowStyle = ProcessWindowStyle.Hidden,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                RedirectStandardInput = true,
-                FileName = _Path,
-                Arguments = string.Join(" ", args)
+                StartInfo =
+                {
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    RedirectStandardInput = true,
+                    FileName = _Path,
+                    Arguments = string.Join(" ", args)
                 },
                 EnableRaisingEvents = true,
             };
         }
+
         private void ForceKillProcess()
         {
             _BackgroundProcessCancelationToken?.Cancel(true);

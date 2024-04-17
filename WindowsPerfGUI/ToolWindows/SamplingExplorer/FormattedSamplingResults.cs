@@ -41,7 +41,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
 {
     public class FormattedSamplingResults : NotifyPropertyChangedImplementor, ITreeModel
     {
-
         private List<SamplingSection> rootSampledEvent;
         public List<SamplingSection> RootSampledEvent
         {
@@ -57,12 +56,12 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
         {
             RootSampledEvent = new List<SamplingSection>();
         }
+
         public void ClearSampling()
         {
             HighlighterDict.Clear();
             RootSampledEvent = new List<SamplingSection>();
         }
-
 
         double CalculateSampleHits(SampledEvent sampledEvent)
         {
@@ -70,12 +69,14 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             foreach (SampleResult sample in sampledEvent.SampleList)
             {
                 allHits += sample.Count;
-
             }
             return allHits;
         }
 
-        public void FormatSamplingResults(WperfSampling wperSamplingOutput, string rootName = "Root")
+        public void FormatSamplingResults(
+            WperfSampling wperSamplingOutput,
+            string rootName = "Root"
+        )
         {
             var rootSample = new SamplingSection()
             {
@@ -93,7 +94,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                 SectionType = SamplingSection.SamplingSectionType.ROOT,
             };
             RootSampledEvent.Add(rootSample);
-
 
             double allHits = wperSamplingOutput.SamplingSummary.SamplesGenerated;
 
@@ -129,8 +129,11 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                         Parent = eventSection,
                     };
                     eventSection.Children.Add(samplesSection);
-                    Annotate annotatedSample = sampledEvent.Annotate.Find((x) => x.FunctionName == sample.Symbol);
-                    if (annotatedSample == null) continue;
+                    Annotate annotatedSample = sampledEvent.Annotate.Find(
+                        (x) => x.FunctionName == sample.Symbol
+                    );
+                    if (annotatedSample == null)
+                        continue;
                     foreach (SourceCode annotationSourceCode in annotatedSample.SourceCode)
                     {
                         SamplingSection annotationSection = new SamplingSection()
@@ -138,34 +141,39 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                             Name = annotationSourceCode.Filename,
                             Hits = annotationSourceCode.Hits,
                             Overhead = CalculatePercentage(
-                                          annotationSourceCode.Hits,
-                                          (double)samplesSection.Hits
-                                          ),
+                                annotationSourceCode.Hits,
+                                (double)samplesSection.Hits
+                            ),
                             AbsoluteOverhead = CalculatePercentage(
-                                          annotationSourceCode.Hits,
-                                          allHits
-                                          ),
+                                annotationSourceCode.Hits,
+                                allHits
+                            ),
                             Layer = 3,
                             SectionType = SamplingSection.SamplingSectionType.SAMPLE_SOURCE_CODE,
                             Parent = samplesSection,
                             LineNumber = annotationSourceCode.LineNumber,
                             IsFileExists = File.Exists(annotationSourceCode.Filename),
-                            Assemblies = annotationSourceCode.DisassembledLine.Assembly.Select(assemblyLine => new ExtendedAssembly()
-                            {
-                                Address = assemblyLine.Address,
-                                Instruction = assemblyLine.Instruction,
-                                IsHighlighted = assemblyLine.Address == annotationSourceCode.InstructionAddress
-                            }).ToList()
+                            Assemblies = annotationSourceCode
+                                .DisassembledLine.Assembly.Select(
+                                    assemblyLine =>
+                                        new ExtendedAssembly()
+                                        {
+                                            Address = assemblyLine.Address,
+                                            Instruction = assemblyLine.Instruction,
+                                            IsHighlighted =
+                                                assemblyLine.Address
+                                                == annotationSourceCode.InstructionAddress
+                                        }
+                                )
+                                .ToList()
                         };
                         samplesSection.Children.Add(annotationSection);
                     }
                 }
-
             }
 
             OnPropertyChanged("RootSampledEvent");
         }
-
 
         private double CalculatePercentage(double value, double total)
         {
@@ -174,7 +182,9 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
 
         public IEnumerable GetChildren(object parent)
         {
-            return parent == null ? RootSampledEvent : (IEnumerable)((SamplingSection)parent).Children;
+            return parent == null
+                ? RootSampledEvent
+                : (IEnumerable)((SamplingSection)parent).Children;
         }
 
         public bool HasChildren(object parent)

@@ -28,13 +28,13 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.VisualStudio.PlatformUI;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft.VisualStudio.PlatformUI;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK.WperfOutputs;
@@ -64,7 +64,14 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
         private static List<PredefinedEvent> FilterEventList(string searchText)
         {
             var eventList = WPerfOptions.Instance.WperfList.PredefinedEvents;
-            var listSearcher = new ListSearcher<PredefinedEvent>(eventList, new SearchOptions<PredefinedEvent> { IsCaseSensitve = true, GetValue = x => x.AliasName });
+            var listSearcher = new ListSearcher<PredefinedEvent>(
+                eventList,
+                new SearchOptions<PredefinedEvent>
+                {
+                    IsCaseSensitve = true,
+                    GetValue = x => x.AliasName
+                }
+            );
             return listSearcher.Search(searchText);
         }
 
@@ -189,8 +196,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 VS.MessageBox.ShowError(ErrorLanguagePack.RawEventBadFormat);
                 return;
             }
-            var eventExists = SamplingSettings.samplingSettingsFrom.SamplingEventList.Any(el =>
-                el.SamplingEvent == eventIndex
+            var eventExists = SamplingSettings.samplingSettingsFrom.SamplingEventList.Any(
+                el => el.SamplingEvent == eventIndex
             );
 
             if (eventExists)

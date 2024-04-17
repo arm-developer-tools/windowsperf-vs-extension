@@ -28,23 +28,23 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using System.Globalization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System.Globalization;
 
 namespace WindowsPerfGUI.SDK.WperfOutputs
 {
     internal static class JsonSettings
     {
-
-        public static readonly JsonSerializerSettings Settings = new()
-        {
-            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
-            DateParseHandling = DateParseHandling.None,
-            Converters =
+        public static readonly JsonSerializerSettings Settings =
+            new()
             {
-                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
-            },
-        };
+                MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
+                DateParseHandling = DateParseHandling.None,
+                Converters =
+                {
+                    new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
+                },
+            };
     }
 }

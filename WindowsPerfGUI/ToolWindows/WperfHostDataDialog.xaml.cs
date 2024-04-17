@@ -42,12 +42,14 @@ namespace WindowsPerfGUI.ToolWindows
         public WperfHostDataDialog()
         {
             InitializeComponent();
-            if (!WPerfOptions.Instance.IsWperfInitialized) return;
+            if (!WPerfOptions.Instance.IsWperfInitialized)
+                return;
             WperfClientFactory wperfClient = new();
             try
             {
                 (WperfTest results, string stdError) = wperfClient.GetTest();
-                if (stdError != "") throw new Exception(stdError);
+                if (stdError != "")
+                    throw new Exception(stdError);
 
                 WperfTestResults.ItemsSource = results.TestResults;
             }

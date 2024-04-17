@@ -38,10 +38,12 @@ namespace WindowsPerfGUI.Utils.SDK
 
         public List<string> Output = new();
         public Action<string> OutputCb { get; set; }
+
         public void ClearOutput()
         {
             Output.Clear();
         }
+
         public void OutputhHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
             // Collect the Std output of the process and store it in a list

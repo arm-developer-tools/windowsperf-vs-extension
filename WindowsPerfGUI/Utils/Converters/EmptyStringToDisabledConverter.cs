@@ -42,7 +42,12 @@ namespace WindowsPerfGUI.Utils.Converters
             return string.IsNullOrEmpty(value as string) ? false : true;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(
+            object value,
+            Type targetType,
+            object parameter,
+            CultureInfo culture
+        )
         {
             throw new NotImplementedException();
         }

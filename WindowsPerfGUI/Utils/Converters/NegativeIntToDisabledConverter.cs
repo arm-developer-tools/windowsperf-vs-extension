@@ -47,7 +47,12 @@ namespace WindowsPerfGUI.Utils.Converters
             return false; // Default to disabled if the value is not an integer
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(
+            object value,
+            Type targetType,
+            object parameter,
+            CultureInfo culture
+        )
         {
             throw new NotImplementedException();
         }
@@ -55,4 +60,3 @@ namespace WindowsPerfGUI.Utils.Converters
         #endregion
     }
 }
-

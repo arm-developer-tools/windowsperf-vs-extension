@@ -44,7 +44,8 @@ namespace WindowsPerfGUI.SDK
             WPerfOptions options = await WPerfOptions.GetLiveInstanceAsync();
             Path = options.WperfPath;
             InitProcess();
-            var outputPaneTextWriter = await WindowsPerfGUIPackage.WperfOutputWindow.CreateOutputPaneTextWriterAsync();
+            var outputPaneTextWriter =
+                await WindowsPerfGUIPackage.WperfOutputWindow.CreateOutputPaneTextWriterAsync();
             OutputWindowTextWriter = outputPaneTextWriter.WriteLine;
         }
     }

@@ -28,13 +28,13 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.VisualStudio.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using Microsoft.VisualStudio.Text;
 using WindowsPerfGUI.Components.TreeListView;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
@@ -152,7 +152,10 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             StopSamplingMonikerButton.IsEnabled = false;
         }
 
-        private void HighlightEditor(SamplingSection samplingSection, Boolean useAbsoluteOverhead = false)
+        private void HighlightEditor(
+            SamplingSection samplingSection,
+            Boolean useAbsoluteOverhead = false
+        )
         {
             if (
                 samplingSection.SectionType
@@ -169,7 +172,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             {
                 return;
             }
-
 
             HighlighterDict.AddFileToHighlight(samplingSection, useAbsoluteOverhead);
         }
@@ -287,7 +289,10 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
 
             asseblyPanel.Children.Add(asseblyTitleGrid);
 
-            Brush highlightColor = ColorGenerator.GenerateColor(samplingSection.Overhead ?? 0, this._colorResolution);
+            Brush highlightColor = ColorGenerator.GenerateColor(
+                samplingSection.Overhead ?? 0,
+                this._colorResolution
+            );
             int offset = 1;
             bool stopOffsetCount = false;
             foreach (ExtendedAssembly assemblyLine in samplingSection.Assemblies)

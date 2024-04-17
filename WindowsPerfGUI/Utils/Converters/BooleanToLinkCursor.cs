@@ -36,17 +36,17 @@ namespace WindowsPerfGUI.Utils.Converters
 {
     public class BooleanToLinkCursor : IValueConverter
     {
-
-        public object Convert(
-              object value, Type targetType, object parameter,
-                 CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return (bool)value ? Cursors.Hand : (object)null;
         }
 
         public object ConvertBack(
-           object value, Type targetType, object parameter,
-              CultureInfo culture)
+            object value,
+            Type targetType,
+            object parameter,
+            CultureInfo culture
+        )
         {
             throw new NotImplementedException();
         }

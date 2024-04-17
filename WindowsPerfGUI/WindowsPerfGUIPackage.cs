@@ -29,10 +29,10 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-global using System;
-global using System.Diagnostics;
 global using Community.VisualStudio.Toolkit;
 global using Microsoft.VisualStudio.Shell;
+global using System;
+global using System.Diagnostics;
 global using Task = System.Threading.Tasks.Task;
 using System.Runtime.InteropServices;
 using System.Threading;

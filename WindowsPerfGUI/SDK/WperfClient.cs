@@ -41,15 +41,14 @@ namespace WindowsPerfGUI.SDK
 
         private ProcessRunner _wperfProcess;
 
-        public WperfClient()
-        {
-        }
+        public WperfClient() { }
 
         protected Action<string> OutputWindowTextWriter { get; set; }
 
         private void LogToOutput(string stdOutput, string stdError, params string[] args)
         {
-            if (OutputWindowTextWriter == null) return;
+            if (OutputWindowTextWriter == null)
+                return;
 
             OutputWindowTextWriter("Executing wperf command:");
             OutputWindowTextWriter($"{Path} {string.Join(" ", args)}");
@@ -58,7 +57,8 @@ namespace WindowsPerfGUI.SDK
             OutputWindowTextWriter(stdOutput);
             OutputWindowTextWriter("=============================================================");
 
-            if (stdError == "") return;
+            if (stdError == "")
+                return;
 
             OutputWindowTextWriter("wperf command error:");
             OutputWindowTextWriter("=============================================================");
@@ -77,13 +77,11 @@ namespace WindowsPerfGUI.SDK
             IsInitialized = true;
         }
 
-
         private (string stdOutput, string stdError) ExecuteAwaitedCommand(params string[] args)
         {
             InitProcess();
 
             (string stdOutput, string stdError) = _wperfProcess.StartAwaitedProcess(args);
-
 
             LogToOutput(stdOutput, stdError, args);
 
@@ -107,7 +105,7 @@ namespace WindowsPerfGUI.SDK
         /// <summary>
         /// This returns the list of Wperf's predefined events and metrics
         /// it runs the command wperf list -v --json
-        /// </summary> 
+        /// </summary>
         /// <returns></returns>
         public (WperfList output, string stdError) GetEventList()
         {
@@ -131,8 +129,9 @@ namespace WindowsPerfGUI.SDK
 
         public async Task StartSamplingAsync()
         {
-            string[] samplingArgs =
-                SamplingSettings.GenerateCommandLineArgsArray(SamplingSettings.samplingSettingsFrom);
+            string[] samplingArgs = SamplingSettings.GenerateCommandLineArgsArray(
+                SamplingSettings.samplingSettingsFrom
+            );
             SamplingSettings.IsSampling = true;
             await _wperfProcess.StartBackgroundProcessAsync(samplingArgs);
             (WperfSampling serializedOutput, string stdError) = StopSampling();
@@ -141,7 +140,10 @@ namespace WindowsPerfGUI.SDK
             //return (serializedOutput, stdError);
         }
 
-        public EventHandler<(WperfSampling serializedOutput, string stdError)> OnSamplingFinished { get; set; }
+        public EventHandler<(
+            WperfSampling serializedOutput,
+            string stdError
+        )> OnSamplingFinished { get; set; }
 
         public (WperfSampling serializedOutput, string stdError) StopSampling()
         {
@@ -150,8 +152,11 @@ namespace WindowsPerfGUI.SDK
             string stdOutput = string.Join("", _wperfProcess.StdOutput.Output);
             string stdError = string.Join("", _wperfProcess.StdError.Output);
             WperfSampling serializedOutput = WperfSampling.FromJson(stdOutput);
-            LogToOutput(stdOutput, stdError,
-                SamplingSettings.GenerateCommandLineArgsArray(SamplingSettings.samplingSettingsFrom));
+            LogToOutput(
+                stdOutput,
+                stdError,
+                SamplingSettings.GenerateCommandLineArgsArray(SamplingSettings.samplingSettingsFrom)
+            );
             return (serializedOutput, stdError);
         }
     }

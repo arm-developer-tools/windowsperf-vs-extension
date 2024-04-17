@@ -37,8 +37,10 @@ namespace WindowsPerfGUI.Components
     {
         static CustomRadioButtonControl()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomRadioButtonControl),
-                new FrameworkPropertyMetadata(typeof(CustomRadioButtonControl)));
+            DefaultStyleKeyProperty.OverrideMetadata(
+                typeof(CustomRadioButtonControl),
+                new FrameworkPropertyMetadata(typeof(CustomRadioButtonControl))
+            );
         }
     }
 }

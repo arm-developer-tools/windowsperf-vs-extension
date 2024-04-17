@@ -34,14 +34,14 @@ namespace WindowsPerfGUI.Components.TreeListView
 {
     public interface ITreeModel
     {
-        /// 
+        ///
         /// Get list of children of the specified parent
-        /// 
+        ///
         IEnumerable GetChildren(object parent);
 
-        /// 
+        ///
         /// returns weather specified parent has any children or not.
-        /// 
+        ///
         bool HasChildren(object parent);
     }
 }

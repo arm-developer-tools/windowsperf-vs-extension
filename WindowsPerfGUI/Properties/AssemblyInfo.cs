@@ -31,8 +31,8 @@
 
 using System.Reflection;
 using System.Runtime.InteropServices;
-using WindowsPerfGUI;
 using System.Windows;
+using WindowsPerfGUI;
 
 [assembly: AssemblyTitle(Vsix.Name)]
 [assembly: AssemblyDescription(Vsix.Description)]

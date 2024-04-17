@@ -165,7 +165,7 @@
                                 <GridViewColumn Width="100" Header="{x:Static locals:SamplingExplorerLanguagePack.LineNumber}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding VisibleLineNumber }"  TextAlignment="Right" />
+                                            <TextBlock Text="{Binding VisibleLineNumber}" TextAlignment="Right" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>

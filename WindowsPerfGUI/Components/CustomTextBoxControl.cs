@@ -34,11 +34,13 @@ using System.Windows.Controls;
 namespace WindowsPerfGUI.Components
 {
     public class CustomTextBoxControl : TextBox
-
     {
-        public static readonly DependencyProperty PlaceholderProperty =
-            DependencyProperty.Register(nameof(Placeholder), typeof(string), typeof(CustomTextBoxControl),
-                new PropertyMetadata(string.Empty));
+        public static readonly DependencyProperty PlaceholderProperty = DependencyProperty.Register(
+            nameof(Placeholder),
+            typeof(string),
+            typeof(CustomTextBoxControl),
+            new PropertyMetadata(string.Empty)
+        );
 
         public string Placeholder
         {
@@ -46,9 +48,12 @@ namespace WindowsPerfGUI.Components
             set { SetValue(PlaceholderProperty, value); }
         }
 
-        public static readonly DependencyProperty IsEmptyProperty =
-            DependencyProperty.Register(nameof(IsEmpty), typeof(bool), typeof(CustomTextBoxControl),
-                new PropertyMetadata(false));
+        public static readonly DependencyProperty IsEmptyProperty = DependencyProperty.Register(
+            nameof(IsEmpty),
+            typeof(bool),
+            typeof(CustomTextBoxControl),
+            new PropertyMetadata(false)
+        );
 
         public bool IsEmpty
         {
@@ -58,10 +63,11 @@ namespace WindowsPerfGUI.Components
 
         static CustomTextBoxControl()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomTextBoxControl),
-                new FrameworkPropertyMetadata(typeof(CustomTextBoxControl)));
+            DefaultStyleKeyProperty.OverrideMetadata(
+                typeof(CustomTextBoxControl),
+                new FrameworkPropertyMetadata(typeof(CustomTextBoxControl))
+            );
         }
-
 
         protected override void OnInitialized(EventArgs e)
         {

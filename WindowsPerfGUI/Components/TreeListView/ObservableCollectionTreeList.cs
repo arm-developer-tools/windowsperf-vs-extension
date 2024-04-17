@@ -58,8 +58,9 @@ namespace WindowsPerfGUI.Components.TreeListView
         {
             OnPropertyChanged("Count");
             OnPropertyChanged("Item[]");
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(
-                NotifyCollectionChangedAction.Reset));
+            OnCollectionChanged(
+                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)
+            );
         }
 
         private void OnPropertyChanged(string propertyName)

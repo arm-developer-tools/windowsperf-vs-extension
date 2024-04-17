@@ -52,9 +52,7 @@ namespace WindowsPerfGUI.Components.TreeListView
 
         #endregion
 
-        public TreeListItem()
-        {
-        }
+        public TreeListItem() { }
 
         protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
         {

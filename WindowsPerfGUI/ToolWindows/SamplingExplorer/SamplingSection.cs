@@ -38,6 +38,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
     {
         public bool IsHighlighted = false;
     }
+
     public class SamplingSection : NotifyPropertyChangedImplementor
     {
         private ulong? hits;
@@ -95,10 +96,11 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
         {
             get
             {
-                return lineNumber == 0xF00F00 | lineNumber == 0xFEEFEE ? string.Format("0x{0:X}", lineNumber) : lineNumber.ToString();
+                return lineNumber == 0xF00F00 | lineNumber == 0xFEEFEE
+                    ? string.Format("0x{0:X}", lineNumber)
+                    : lineNumber.ToString();
             }
         }
-
 
         private string name;
 
@@ -209,7 +211,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             set { samplesDropped = value; }
         }
 
-
 #nullable disable
         public enum SamplingSectionType
         {
@@ -241,12 +242,12 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                 OnPropertyChanged();
             }
         }
+
         private double RoundToTwoDecimalPlaces(double? value)
         {
-            if (value == null) return 0;
+            if (value == null)
+                return 0;
             return Math.Round((double)value, 2);
         }
-
-
     }
 }
