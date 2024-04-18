@@ -91,6 +91,7 @@ namespace WindowsPerfGUI
                 lazyCreate: true
             );
             this.RegisterToolWindows();
+
             try
             {
                 WperfClientFactory wperfClient = new();

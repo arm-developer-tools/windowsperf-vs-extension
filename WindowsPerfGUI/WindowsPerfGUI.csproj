@@ -54,6 +54,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Commands\SamplingExplorerCommand.cs" />
+    <Compile Include="Commands\CountingSettingsCommand.cs" />
     <Compile Include="Commands\WperfHostData.cs" />
     <Compile Include="Components\CustomButtonControl.cs" />
     <Compile Include="Components\CustomComboBoxControl.cs" />
@@ -71,6 +72,11 @@
     <Compile Include="Components\TreeListView\TreeListItem.cs" />
     <Compile Include="Components\TreeListView\TreeNode.cs" />
     <Compile Include="Options\SamplingManager.cs" />
+    <Compile Include="Resources\Locals\CountingSettingsLanguagePack.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CountingSettingsLanguagePack.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\Locals\ErrorLanguagePack.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -102,6 +108,11 @@
       <DependentUpon>WperfHostDataLanguagePack.resx</DependentUpon>
     </Compile>
     <Compile Include="ToolWindows\SamplingExplorer\LineHighlighting\HighlighterDict.cs" />
+    <Compile Include="ToolWindows\CountingSetting\CountingSettingDialog.xaml.cs">
+      <DependentUpon>CountingSettingDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ToolWindows\CountingSetting\CountingSettings.cs" />
+    <Compile Include="ToolWindows\CountingSetting\CountingSettingsForm.cs" />
     <Compile Include="ToolWindows\SamplingSetting\SolutionProjectOutput.cs" />
     <Compile Include="ToolWindows\SamplingExplorer\LineHighlighting\ColorGenerator.cs" />
     <Compile Include="ToolWindows\SamplingExplorer\LineHighlighting\LineHighlighter.cs" />
@@ -164,6 +175,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
+    <EmbeddedResource Include="Resources\Locals\CountingSettingsLanguagePack.fr-FR.resx" />
+    <EmbeddedResource Include="Resources\Locals\CountingSettingsLanguagePack.pl.resx" />
+    <EmbeddedResource Include="Resources\Locals\CountingSettingsLanguagePack.pt-BR.resx" />
+    <EmbeddedResource Include="Resources\Locals\CountingSettingsLanguagePack.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CountingSettingsLanguagePack.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Locals\ErrorLanguagePack.pl.resx" />
     <EmbeddedResource Include="Resources\Locals\ErrorLanguagePack.pt-BR.resx" />
     <EmbeddedResource Include="Resources\Locals\MainLanguagePack.pl.resx" />
@@ -223,6 +241,10 @@
     <Page Include="ToolWindows\SamplingExplorer\SamplingExplorerControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ToolWindows\CountingSetting\CountingSettingDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="ToolWindows\SamplingSetting\SamplingSettingDialog.xaml">
       <SubType>Designer</SubType>
@@ -299,6 +321,7 @@
     <EmbeddedResource Include="Resources\Locals\WperfHostDataLanguagePack.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>WperfHostDataLanguagePack.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
