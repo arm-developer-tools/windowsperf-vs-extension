@@ -28,56 +28,32 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using System.Collections.Generic;
-using System.Linq;
+using WindowsPerfGUI.Options;
+using WindowsPerfGUI.Resources.Locals;
+using WindowsPerfGUI.ToolWindows.CountingSetting;
 
-namespace WindowsPerfGUI.Utils.ListSearcher
+namespace WindowsPerfGUI.Commands
 {
-    public class ListSearcher<T>
+    [Command(PackageIds.CountingSettings)]
+    internal sealed class CountingSettingsCommand : BaseCommand<CountingSettingsCommand>
     {
-        private readonly List<T> _records;
-        private readonly SearchOptions<T> _options;
 
-#nullable enable
-        public ListSearcher(IEnumerable<T> records, SearchOptions<T>? options = null)
+        protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
         {
-            _records = records.ToList();
-            _options = options ?? new SearchOptions<T>();
-        }
-
-#nullable disable
-
-        public List<T> Search(string searchText)
-        {
-            var results = new List<T>();
-            if (!_options.IsCaseSensitve)
+            if (!WPerfOptions.Instance.IsWperfInitialized)
             {
-                searchText = searchText.ToLower();
+                await VS.MessageBox.ShowErrorAsync(
+                    ErrorLanguagePack.NotInititiatedWperfErrorLine1,
+                    ErrorLanguagePack.NotInititiatedWperfErrorLine2
+                );
+                return;
             }
 
-            foreach (var record in _records)
+            CountingSettingDialog countingSettingsDialog = new()
             {
-                var recordValue =
-                        _options.GetValue != null
-                            ? _options.GetValue(record)
-                            : record?.ToString() ?? "";
-                if (!_options.IsCaseSensitve)
-                {
-                    recordValue = recordValue.ToLower();
-                }
-                if (recordValue.Contains(searchText))
-                    results.Add(record);
-            }
-
-            return results;
+                Title = CountingSettingsLanguagePack.WindowTitle
+            };
+            countingSettingsDialog.ShowDialog();
         }
     }
-}
-
-public class SearchOptions<T>
-{
-    public bool IsCaseSensitve { get; init; } = false;
-#nullable enable
-    public Func<T, string>? GetValue { get; set; }
-#nullable disable
 }

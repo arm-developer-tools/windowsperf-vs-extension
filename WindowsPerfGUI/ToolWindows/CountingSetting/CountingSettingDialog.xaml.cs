@@ -28,56 +28,22 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.VisualStudio.PlatformUI;
 
-namespace WindowsPerfGUI.Utils.ListSearcher
+namespace WindowsPerfGUI.ToolWindows.CountingSetting
 {
-    public class ListSearcher<T>
+    public partial class CountingSettingDialog : DialogWindow
     {
-        private readonly List<T> _records;
-        private readonly SearchOptions<T> _options;
 
-#nullable enable
-        public ListSearcher(IEnumerable<T> records, SearchOptions<T>? options = null)
+        public CountingSettingDialog()
         {
-            _records = records.ToList();
-            _options = options ?? new SearchOptions<T>();
+            InitializeComponent();
         }
 
-#nullable disable
-
-        public List<T> Search(string searchText)
+        private void StartCounting_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            var results = new List<T>();
-            if (!_options.IsCaseSensitve)
-            {
-                searchText = searchText.ToLower();
-            }
+            VS.MessageBox.ShowError("Start counting functionnality not implemented yet");
 
-            foreach (var record in _records)
-            {
-                var recordValue =
-                        _options.GetValue != null
-                            ? _options.GetValue(record)
-                            : record?.ToString() ?? "";
-                if (!_options.IsCaseSensitve)
-                {
-                    recordValue = recordValue.ToLower();
-                }
-                if (recordValue.Contains(searchText))
-                    results.Add(record);
-            }
-
-            return results;
         }
     }
-}
-
-public class SearchOptions<T>
-{
-    public bool IsCaseSensitve { get; init; } = false;
-#nullable enable
-    public Func<T, string>? GetValue { get; set; }
-#nullable disable
 }
