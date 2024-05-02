@@ -35,21 +35,16 @@ namespace WindowsPerfGUI.Options
 {
     [ComVisible(true)]
     [Guid("DB55C26B-3270-417D-B496-88EC3CAC6ECC")]
-
     public class WPerfPathPage : UIElementDialogPage
     {
         protected override UIElement Child
         {
             get
             {
-                WPerfPath page = new WPerfPath
-                {
-                    wPerfPathPage = this
-                };
+                WPerfPath page = new WPerfPath { wPerfPathPage = this };
                 page.Initialize();
                 return page;
             }
         }
     }
-
 }

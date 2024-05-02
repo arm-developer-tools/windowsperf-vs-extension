@@ -54,10 +54,8 @@ namespace WindowsPerfGUI.Commands
                 return;
             }
 
-            WperfHostDataDialog wperfHostDataDialog = new()
-            {
-                Title = WperfHostDataLanguagePack.WindowTitle
-            };
+            WperfHostDataDialog wperfHostDataDialog =
+                new() { Title = WperfHostDataLanguagePack.WindowTitle };
             wperfHostDataDialog.ShowDialog();
         }
     }

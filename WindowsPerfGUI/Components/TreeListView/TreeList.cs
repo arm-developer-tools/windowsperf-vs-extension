@@ -48,7 +48,6 @@ namespace WindowsPerfGUI.Components.TreeListView
         /// </summary>
         internal ObservableCollectionTreeList<TreeNode> Rows { get; private set; }
 
-
         private ITreeModel _model;
 
         public ITreeModel Model
@@ -123,9 +122,13 @@ namespace WindowsPerfGUI.Components.TreeListView
 
         void ItemContainerGeneratorStatusChanged(object sender, EventArgs e)
         {
-            if (ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated && PendingFocusNode != null)
+            if (
+                ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated
+                && PendingFocusNode != null
+            )
             {
-                var item = ItemContainerGenerator.ContainerFromItem(PendingFocusNode) as TreeListItem;
+                var item =
+                    ItemContainerGenerator.ContainerFromItem(PendingFocusNode) as TreeListItem;
                 if (item != null)
                     item.Focus();
                 PendingFocusNode = null;
@@ -142,7 +145,10 @@ namespace WindowsPerfGUI.Components.TreeListView
             return item is TreeListItem;
         }
 
-        protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
+        protected override void PrepareContainerForItemOverride(
+            DependencyObject element,
+            object item
+        )
         {
             var ti = element as TreeListItem;
             var node = item as TreeNode;

@@ -38,18 +38,30 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
         public static bool IsSampling = false;
         public static bool AreSettingsFilled = false;
         public static SamplingSettingsForm samplingSettingsFrom;
-        public static string[] GenerateCommandLineArgsArray(SamplingSettingsForm _samplingSettingsFrom)
+
+        public static string[] GenerateCommandLineArgsArray(
+            SamplingSettingsForm _samplingSettingsFrom
+        )
         {
             if (_samplingSettingsFrom != null)
             {
                 samplingSettingsFrom = _samplingSettingsFrom;
             }
-            if (samplingSettingsFrom == null) throw new ArgumentNullException(nameof(samplingSettingsFrom));
+            if (samplingSettingsFrom == null)
+                throw new ArgumentNullException(nameof(samplingSettingsFrom));
             List<string> argsList = new List<string>();
             ValidateSettings();
             AppendElementsToList(argsList, "record");
-            AppendElementsToList(argsList, "-e", string.Join(",", samplingSettingsFrom.SamplingEventList));
-            AppendElementsToList(argsList, "-c", samplingSettingsFrom.CPUCore?.coreNumber.ToString());
+            AppendElementsToList(
+                argsList,
+                "-e",
+                string.Join(",", samplingSettingsFrom.SamplingEventList)
+            );
+            AppendElementsToList(
+                argsList,
+                "-c",
+                samplingSettingsFrom.CPUCore?.coreNumber.ToString()
+            );
             AppendElementsToList(argsList, "--timeout", samplingSettingsFrom.SamplingTimeout);
             AppendElementsToList(argsList, "--annotate");
             AppendElementsToList(argsList, "--disassemble");
@@ -64,7 +76,13 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 
         private static void ValidateSettings()
         {
-            if (!(samplingSettingsFrom.SamplingEventList.Count < 1 || string.IsNullOrEmpty(samplingSettingsFrom.FilePath) || string.IsNullOrEmpty(samplingSettingsFrom.CPUCore?.coreNumber.ToString())))
+            if (
+                !(
+                    samplingSettingsFrom.SamplingEventList.Count < 1
+                    || string.IsNullOrEmpty(samplingSettingsFrom.FilePath)
+                    || string.IsNullOrEmpty(samplingSettingsFrom.CPUCore?.coreNumber.ToString())
+                )
+            )
             {
                 AreSettingsFilled = true;
                 return;
@@ -90,6 +108,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             }
             return source;
         }
+
         public static string GenerateCommandLinePreview()
         {
             string[] argsArray = GenerateCommandLineArgsArray(samplingSettingsFrom);

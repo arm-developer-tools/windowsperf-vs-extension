@@ -27,10 +27,10 @@
 // CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-using WindowsPerfGUI.Utils.ListSearcher;
-using NUnit.Framework;
 using System.Collections.Generic;
 using System.Diagnostics;
+using NUnit.Framework;
+using WindowsPerfGUI.Utils.ListSearcher;
 
 namespace WindowsPerfGUI.Tests.Utils.ListSearcher
 {
@@ -53,8 +53,14 @@ namespace WindowsPerfGUI.Tests.Utils.ListSearcher
             fields.Add(new SearchList { Name = "Other", Application = "Chrome" });
             fields.Add(new SearchList { Name = "Yet another", Application = "Discrpd" });
 
-            var sut = new ListSearcher<SearchList>(fields, new SearchOptions<SearchList> { IsCaseSensitve=false, GetValue = x => x.Application });
-
+            var sut = new ListSearcher<SearchList>(
+                fields,
+                new SearchOptions<SearchList>
+                {
+                    IsCaseSensitve = false,
+                    GetValue = x => x.Application
+                }
+            );
 
             var result = sut.Search(searchString);
             TestContext.WriteLine(result);
@@ -62,6 +68,7 @@ namespace WindowsPerfGUI.Tests.Utils.ListSearcher
             return result.Count;
         }
     }
+
     public class SearchList
     {
         public string Name { get; set; }

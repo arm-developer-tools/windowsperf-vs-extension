@@ -36,16 +36,17 @@ namespace WindowsPerfGUI.Utils.Converters
 {
     public class BooleanToLinkTextDecoration : IValueConverter
     {
-        public object Convert(
-              object value, Type targetType, object parameter,
-                 CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return (bool)value ? TextDecorations.Underline : (object)null;
         }
 
         public object ConvertBack(
-           object value, Type targetType, object parameter,
-              CultureInfo culture)
+            object value,
+            Type targetType,
+            object parameter,
+            CultureInfo culture
+        )
         {
             throw new NotImplementedException();
         }

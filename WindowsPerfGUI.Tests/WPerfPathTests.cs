@@ -27,9 +27,9 @@
 // CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-using NUnit.Framework;
 using System.Threading;
 using System.Windows.Controls;
+using NUnit.Framework;
 using NUnitLite;
 
 namespace WindowsPerfGUI.Options.Tests
@@ -37,7 +37,6 @@ namespace WindowsPerfGUI.Options.Tests
     [TestFixture(), Apartment(ApartmentState.STA)]
     public class WPerfPathTests
     {
-
         [Test()]
         [Description("Tests if the TextBlockFactory method is returning a TextBlock")]
         public void TextBlockFactoryTest()
@@ -46,10 +45,10 @@ namespace WindowsPerfGUI.Options.Tests
             Assert.That(testTextBlock, Is.InstanceOf(typeof(TextBlock)));
             Assert.That(testTextBlock, Is.Not.Null);
         }
+
         public static int Main(string[] args)
         {
             return new AutoRun().Execute(args);
         }
     }
-
 }

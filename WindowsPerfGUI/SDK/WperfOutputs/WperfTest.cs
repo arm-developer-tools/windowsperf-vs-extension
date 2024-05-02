@@ -28,8 +28,8 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Newtonsoft.Json;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace WindowsPerfGUI.SDK.WperfOutputs
 {
@@ -50,6 +50,10 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
 
     public partial class WperfTest
     {
-        public static WperfTest FromJson(string json) => JsonConvert.DeserializeObject<WperfTest>(json, WindowsPerfGUI.SDK.WperfOutputs.JsonSettings.Settings);
+        public static WperfTest FromJson(string json) =>
+            JsonConvert.DeserializeObject<WperfTest>(
+                json,
+                WindowsPerfGUI.SDK.WperfOutputs.JsonSettings.Settings
+            );
     }
 }

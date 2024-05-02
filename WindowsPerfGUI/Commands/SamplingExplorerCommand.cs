@@ -41,6 +41,7 @@ namespace WindowsPerfGUI.Commands
             Command.Text = SamplingExplorerLanguagePack.WindowTitle;
             base.BeforeQueryStatus(e);
         }
+
         protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
         {
             await SamplingExplorer.ShowAsync();

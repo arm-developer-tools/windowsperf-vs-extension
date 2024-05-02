@@ -38,9 +38,7 @@ namespace WindowsPerfGUI.Options
     internal partial class OptionsProvider
     {
         [ComVisible(true)]
-        public class WPerfPathOptions : BaseOptionPage<WPerfOptions>
-        {
-        }
+        public class WPerfPathOptions : BaseOptionPage<WPerfOptions> { }
     }
 
     public class WPerfOptions : BaseOptionModel<WPerfOptions>

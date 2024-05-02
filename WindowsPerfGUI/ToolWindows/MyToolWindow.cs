@@ -29,11 +29,11 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-using Microsoft.VisualStudio.Imaging;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.VisualStudio.Imaging;
 
 namespace WindowsPerfGUI
 {
@@ -43,7 +43,10 @@ namespace WindowsPerfGUI
 
         public override Type PaneType => typeof(Pane);
 
-        public override Task<FrameworkElement> CreateAsync(int toolWindowId, CancellationToken cancellationToken)
+        public override Task<FrameworkElement> CreateAsync(
+            int toolWindowId,
+            CancellationToken cancellationToken
+        )
         {
             return Task.FromResult<FrameworkElement>(new ToolWindows.MyToolWindowControl());
         }

@@ -146,6 +146,76 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style BasedOn="{StaticResource {x:Type RadioButton}}" TargetType="{x:Type local:CustomRadioButtonControl}">
+        <Setter Property="Background" Value="{StaticResource VsTransparentColor}" />
+        <Setter Property="BorderBrush" Value="{StaticResource VsToolWindowText}" />
+        <Setter Property="Foreground" Value="{StaticResource VsToolWindowText}" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RadioButton}">
+                    <Grid
+                        x:Name="templateRoot"
+                        VerticalAlignment="Center"
+                        Background="{StaticResource VsTransparentColor}"
+                        SnapsToDevicePixels="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Border
+                            x:Name="radioButtonBorder"
+                            Margin="1,1,2,1"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="100">
+                            <Grid x:Name="markGrid" Margin="2">
+                                <Ellipse
+                                    x:Name="optionMark"
+                                    MinWidth="6"
+                                    MinHeight="6"
+                                    Fill="{StaticResource VsToolWindowText}"
+                                    Opacity="0" />
+                            </Grid>
+                        </Border>
+                        <ContentPresenter
+                            x:Name="contentPresenter"
+                            Grid.Column="1"
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Focusable="False"
+                            RecognizesAccessKey="True"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasContent" Value="true">
+                            <Setter Property="Padding" Value="4,-1,0,0" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="radioButtonBorder" Property="Background" Value="{StaticResource VsBrandedUIBorder}" />
+                            <Setter TargetName="radioButtonBorder" Property="BorderBrush" Value="{StaticResource VsBrandedUIBorder}" />
+                            <Setter TargetName="optionMark" Property="Fill" Value="{StaticResource VsBrandedUIBorder}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter TargetName="radioButtonBorder" Property="Background" Value="{StaticResource VsBrandedUIBorder}" />
+                            <Setter TargetName="radioButtonBorder" Property="BorderBrush" Value="{StaticResource VsBrandedUIBorder}" />
+                            <Setter TargetName="optionMark" Property="Fill" Value="{StaticResource VsBrandedUIBorder}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Setter TargetName="optionMark" Property="Opacity" Value="1" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter TargetName="optionMark" Property="Opacity" Value="1" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <ControlTemplate x:Key="ComboBoxToggleButtonTemplate" TargetType="ToggleButton">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -260,7 +330,7 @@
                             IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                             Template="{StaticResource ComboBoxToggleButtonTemplate}" />
                         <ContentPresenter
-                            Margin="3,3,23,3"
+                            Margin="10,3,23,3"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
                             Content="{TemplateBinding SelectionBoxItem}"
@@ -269,12 +339,12 @@
                             IsHitTestVisible="False" />
                         <TextBox
                             x:Name="PART_EditableTextBox"
-                            Margin="3,3,23,3"
+                            Margin="0,3,23,3"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
                             Background="{StaticResource VsInputBackground}"
                             BorderBrush="{StaticResource VsTransparentColor}"
-                            BorderThickness="1"
+                            BorderThickness="0"
                             Foreground="{StaticResource VsToolWindowText}"
                             Style="{StaticResource EditableComboBoxTextBoxStyle}" />
                         <Popup

@@ -30,7 +30,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace WindowsPerfGUI.Utils.ListSearcher
 {
@@ -45,6 +44,7 @@ namespace WindowsPerfGUI.Utils.ListSearcher
             _records = records.ToList();
             _options = options ?? new SearchOptions<T>();
         }
+
 #nullable disable
 
         public List<T> Search(string searchText)
@@ -54,23 +54,26 @@ namespace WindowsPerfGUI.Utils.ListSearcher
             {
                 searchText = searchText.ToLower();
             }
-            Parallel.ForEach(_records, record =>
+
+            foreach (var record in _records)
             {
-                var recordValue = _options.GetValue != null ? _options.GetValue(record) : record?.ToString() ?? "";
+                var recordValue =
+                        _options.GetValue != null
+                            ? _options.GetValue(record)
+                            : record?.ToString() ?? "";
                 if (!_options.IsCaseSensitve)
                 {
                     recordValue = recordValue.ToLower();
                 }
-                if (recordValue.Contains(searchText)) results.Add(record);
-            });
+                if (recordValue.Contains(searchText))
+                    results.Add(record);
+            }
 
 
             return results;
         }
     }
-
 }
-
 
 public class SearchOptions<T>
 {
@@ -78,6 +81,4 @@ public class SearchOptions<T>
 #nullable enable
     public Func<T, string>? GetValue { get; set; }
 #nullable disable
-
 }
-

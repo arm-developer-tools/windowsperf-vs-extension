@@ -39,16 +39,18 @@ namespace WindowsPerfGUI.Utils.Converters
         public Brush NormalBrush { get; set; }
 
         public Brush LinkBrush { get; set; }
-        public object Convert(
-              object value, Type targetType, object parameter,
-                 CultureInfo culture)
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return (bool)value ? LinkBrush : NormalBrush;
         }
 
         public object ConvertBack(
-           object value, Type targetType, object parameter,
-              CultureInfo culture)
+            object value,
+            Type targetType,
+            object parameter,
+            CultureInfo culture
+        )
         {
             throw new NotImplementedException();
         }

@@ -37,11 +37,13 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
     {
         public int coreNumber;
         public IntPtr coreMask;
+
         public override string ToString()
         {
             return $"{SamplingSettingsLanguagePack.CpuCoreNumber} {coreNumber}";
         }
     }
+
     public static class CpuCores
     {
         public static int numberOfAvailableCores = 0;
@@ -50,9 +52,13 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 
         public static List<CpuCoreElement> InitCpuCores()
         {
-            if (numberOfAvailableCores > 0) return CpuCoreList;
-            foreach (var item in new
-            System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get())
+            if (numberOfAvailableCores > 0)
+                return CpuCoreList;
+            foreach (
+                var item in new System.Management.ManagementObjectSearcher(
+                    "Select * from Win32_Processor"
+                ).Get()
+            )
             {
                 numberOfAvailableCores += int.Parse(item["NumberOfCores"].ToString());
             }
@@ -65,7 +71,9 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             CpuCoreList = new List<CpuCoreElement>();
             for (int i = 0; i < numberOfAvailableCores; i++)
             {
-                CpuCoreList.Add(new CpuCoreElement { coreNumber = i, coreMask = (IntPtr)(0x1 << i) });
+                CpuCoreList.Add(
+                    new CpuCoreElement { coreNumber = i, coreMask = (IntPtr)(0x1 << i) }
+                );
             }
         }
     }

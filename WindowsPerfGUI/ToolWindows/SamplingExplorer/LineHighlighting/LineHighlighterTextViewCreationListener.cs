@@ -28,9 +28,9 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
-using System.ComponentModel.Composition;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
 {
@@ -52,7 +52,10 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
         /// </summary>
         [Export(typeof(AdornmentLayerDefinition))]
         [Name("LineHighlighter")]
-        [Order(After = PredefinedAdornmentLayers.Selection, Before = PredefinedAdornmentLayers.Text)]
+        [Order(
+            After = PredefinedAdornmentLayers.Selection,
+            Before = PredefinedAdornmentLayers.Text
+        )]
         private AdornmentLayerDefinition editorAdornmentLayer;
 
 #pragma warning restore 649, 169

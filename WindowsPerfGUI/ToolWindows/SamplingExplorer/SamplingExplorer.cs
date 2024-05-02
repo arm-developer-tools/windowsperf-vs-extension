@@ -28,21 +28,26 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.VisualStudio.Imaging;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.VisualStudio.Imaging;
 using WindowsPerfGUI.Resources.Locals;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
 {
     public class SamplingExplorer : BaseToolWindow<SamplingExplorer>
     {
-        public override string GetTitle(int toolWindowId) => SamplingExplorerLanguagePack.WindowTitle;
+        public override string GetTitle(int toolWindowId) =>
+            SamplingExplorerLanguagePack.WindowTitle;
+
         public override Type PaneType => typeof(Pane);
 
-        public override Task<FrameworkElement> CreateAsync(int toolWindowId, CancellationToken cancellationToken)
+        public override Task<FrameworkElement> CreateAsync(
+            int toolWindowId,
+            CancellationToken cancellationToken
+        )
         {
             return Task.FromResult<FrameworkElement>(new SamplingExplorerControl());
         }

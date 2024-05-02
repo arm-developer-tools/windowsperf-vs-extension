@@ -207,7 +207,6 @@ namespace WindowsPerfGUI.Components.TreeListView
             }
         }
 
-
         private TreeNode _parent;
 
         public TreeNode Parent

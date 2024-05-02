@@ -28,10 +28,10 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using System.Windows.Media;
-using WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting;
-using NUnit.Framework;
 using System.Threading;
+using System.Windows.Media;
+using NUnit.Framework;
+using WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting;
 
 namespace WindowsPerfGUI.Tests.ToolWindows.SamplingExplorer.LineHighlighting
 {
@@ -44,9 +44,13 @@ namespace WindowsPerfGUI.Tests.ToolWindows.SamplingExplorer.LineHighlighting
         [TestCase(50, 3, ExpectedResult = "feff00")]
         [TestCase(100, 3, ExpectedResult = "ff0000")]
         [TestCase(150, 3, ExpectedResult = "ff0000")] // Test beyond 100%
-        public string GenerateColor_ReturnsExpectedColor_ForGivenPercentage(double percentage, int colorResolution)
+        public string GenerateColor_ReturnsExpectedColor_ForGivenPercentage(
+            double percentage,
+            int colorResolution
+        )
         {
-            var brush = ColorGenerator.GenerateColor(percentage, colorResolution) as SolidColorBrush;
+            var brush =
+                ColorGenerator.GenerateColor(percentage, colorResolution) as SolidColorBrush;
             Assert.That(brush, Is.Not.Null);
             var color = brush.Color;
             return $"{color.R:x2}{color.G:x2}{color.B:x2}";
@@ -59,7 +63,9 @@ namespace WindowsPerfGUI.Tests.ToolWindows.SamplingExplorer.LineHighlighting
         [TestCase(3, ExpectedResult = true)]
         public bool GenerateColor_UsesDefaultResolution_WhenOutOfRange(int colorResolution)
         {
-            var defaultBrush = ColorGenerator.GenerateColor(50, ColorGenerator.DEFAULT_COLOR_RESOLUTION) as SolidColorBrush;
+            var defaultBrush =
+                ColorGenerator.GenerateColor(50, ColorGenerator.DEFAULT_COLOR_RESOLUTION)
+                as SolidColorBrush;
             var testBrush = ColorGenerator.GenerateColor(50, colorResolution) as SolidColorBrush;
 
             Assert.That(defaultBrush, Is.Not.Null);

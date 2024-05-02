@@ -28,10 +28,10 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.VisualStudio.Imaging;
-using Microsoft.VisualStudio.Imaging.Interop;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.VisualStudio.Imaging;
+using Microsoft.VisualStudio.Imaging.Interop;
 
 namespace WindowsPerfGUI.Components
 {
@@ -44,15 +44,19 @@ namespace WindowsPerfGUI.Components
         }
 
         // Using a DependencyProperty as the backing store for MonikerName.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty MonikerNameProperty =
-            DependencyProperty.Register(nameof(MonikerName), typeof(ImageMoniker), typeof(CustomMonikerButtonControl),
-                new PropertyMetadata(KnownMonikers.Play));
-
+        public static readonly DependencyProperty MonikerNameProperty = DependencyProperty.Register(
+            nameof(MonikerName),
+            typeof(ImageMoniker),
+            typeof(CustomMonikerButtonControl),
+            new PropertyMetadata(KnownMonikers.Play)
+        );
 
         static CustomMonikerButtonControl()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomMonikerButtonControl),
-                new FrameworkPropertyMetadata(typeof(CustomMonikerButtonControl)));
+            DefaultStyleKeyProperty.OverrideMetadata(
+                typeof(CustomMonikerButtonControl),
+                new FrameworkPropertyMetadata(typeof(CustomMonikerButtonControl))
+            );
         }
 
         private readonly CrispImage _monikerImage = new();

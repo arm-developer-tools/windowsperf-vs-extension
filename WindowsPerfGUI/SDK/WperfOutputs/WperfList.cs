@@ -28,17 +28,17 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace WindowsPerfGUI.SDK.WperfOutputs
 {
-
     public partial class WperfList
     {
         [JsonProperty("Predefined_Events")]
         public List<PredefinedEvent> PredefinedEvents { get; set; }
+
         public (PredefinedEvent, int) GetPredefinedEventFromAliasName(string aliasName)
         {
             foreach (var predefinedEvent in PredefinedEvents.Select((value, i) => new { value, i }))
@@ -73,7 +73,6 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
         {
             return $"{AliasName} | {Description}";
         }
-
     }
 
     public partial class PredefinedMetric
@@ -94,17 +93,17 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
         public string Description { get; set; }
     }
 
-
     public partial class WperfList
     {
         public static WperfList FromJson(string json)
         {
-            WperfList eventList = JsonConvert.DeserializeObject<WperfList>(json, JsonSettings.Settings);
+            WperfList eventList = JsonConvert.DeserializeObject<WperfList>(
+                json,
+                JsonSettings.Settings
+            );
             var sortedPredefinedEvents = new List<PredefinedEvent>();
             eventList.PredefinedEvents.Sort((a, b) => a.AliasName.CompareTo(b.AliasName));
             return eventList;
         }
     }
-
 }
-

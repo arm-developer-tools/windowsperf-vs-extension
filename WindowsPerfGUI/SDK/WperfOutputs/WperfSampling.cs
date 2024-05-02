@@ -30,8 +30,8 @@
 
 namespace WindowsPerfGUI.SDK.WperfOutputs
 {
-    using Newtonsoft.Json;
     using System.Collections.Generic;
+    using Newtonsoft.Json;
 
     public partial class WperfSampling
     {
@@ -92,6 +92,7 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
         [JsonProperty("annotate")]
         public List<Annotate> Annotate { get; set; }
     }
+
     public partial class Annotate
     {
         [JsonProperty("function_name")]
@@ -169,7 +170,6 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
 
     public partial class ModulesInfo
     {
-
         [JsonProperty("sections")]
         public List<ModuleSection> Sections { get; set; }
 
@@ -179,6 +179,7 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
         [JsonProperty("pe_name")]
         public string PeName { get; set; }
     }
+
     public partial class ModuleSection
     {
         [JsonProperty("section")]
@@ -193,7 +194,10 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
 
     public partial class WperfSampling
     {
-        public static WperfSampling FromJson(string json) => JsonConvert.DeserializeObject<WperfSampling>(json, WindowsPerfGUI.SDK.WperfOutputs.JsonSettings.Settings);
+        public static WperfSampling FromJson(string json) =>
+            JsonConvert.DeserializeObject<WperfSampling>(
+                json,
+                WindowsPerfGUI.SDK.WperfOutputs.JsonSettings.Settings
+            );
     }
-
 }

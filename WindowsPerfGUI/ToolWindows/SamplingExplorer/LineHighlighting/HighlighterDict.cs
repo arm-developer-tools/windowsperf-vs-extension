@@ -48,7 +48,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
 
     static class HighlighterDict
     {
-        // This will hold the highlighted lines from the previous sampling 
+        // This will hold the highlighted lines from the previous sampling
         // This is needed to clear the previous adornments before mounting the new ones
         public static HashSet<string> PreviousFilePaths = new();
         public static Dictionary<string, FileToHighlight> PreviousFilesToHighlight = new();
@@ -58,10 +58,17 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
         public static Dictionary<string, FileToHighlight> FilesToHighlight { get; } =
             new Dictionary<string, FileToHighlight>();
 
-        public static void AddFileToHighlight(SamplingSection samplingSection, Boolean useAbsoluteOverhead = false)
+        public static void AddFileToHighlight(
+            SamplingSection samplingSection,
+            Boolean useAbsoluteOverhead = false
+        )
         {
-            if (samplingSection.LineNumber == null || samplingSection.Overhead == null ||
-                samplingSection.Overhead == 0) return;
+            if (
+                samplingSection.LineNumber == null
+                || samplingSection.Overhead == null
+                || samplingSection.Overhead == 0
+            )
+                return;
             FilePaths.Add(samplingSection.Name);
 
             FilesToHighlight.TryGetValue(samplingSection.Name, out FileToHighlight fileToHighlight);
@@ -71,15 +78,18 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
                 fileToHighlight = new FileToHighlight();
             }
 
-
-            fileToHighlight.LinesToHighlight.Add(new LineToHighlight()
-            {
-                LineNumber = (long)samplingSection.LineNumber,
-                Overhead = useAbsoluteOverhead ? (double)samplingSection.AbsoluteOverhead : (double)samplingSection.Overhead,
-                EventName = samplingSection.Parent.Parent.Name,
-                Frequency = samplingSection.Parent.Parent.Frequency,
-                Hits = (ulong)samplingSection.Hits
-            });
+            fileToHighlight.LinesToHighlight.Add(
+                new LineToHighlight()
+                {
+                    LineNumber = (long)samplingSection.LineNumber,
+                    Overhead = useAbsoluteOverhead
+                        ? (double)samplingSection.AbsoluteOverhead
+                        : (double)samplingSection.Overhead,
+                    EventName = samplingSection.Parent.Parent.Name,
+                    Frequency = samplingSection.Parent.Parent.Frequency,
+                    Hits = (ulong)samplingSection.Hits
+                }
+            );
 
             FilesToHighlight[samplingSection.Name] = fileToHighlight;
         }

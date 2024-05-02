@@ -37,8 +37,10 @@ namespace WindowsPerfGUI.Components
     {
         static CustomButtonControl()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomButtonControl),
-                new FrameworkPropertyMetadata(typeof(CustomButtonControl)));
+            DefaultStyleKeyProperty.OverrideMetadata(
+                typeof(CustomButtonControl),
+                new FrameworkPropertyMetadata(typeof(CustomButtonControl))
+            );
         }
     }
 }

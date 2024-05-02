@@ -43,7 +43,12 @@ namespace WindowsPerfGUI.Utils.Converters
             return (value == null) || (value is bool && (bool)value == false) ? false : true;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(
+            object value,
+            Type targetType,
+            object parameter,
+            CultureInfo culture
+        )
         {
             throw new NotImplementedException();
         }

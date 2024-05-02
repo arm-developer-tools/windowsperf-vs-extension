@@ -44,30 +44,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 {
     public partial class SamplingSettingDialog : DialogWindow
     {
-        private void PreviewKeyDown_EnhanceComboSearch(object sender, KeyEventArgs e)
-        {
-            ComboBox cmb = (ComboBox)sender;
-
-            EventComboBox.IsDropDownOpen = true;
-            EventComboBoxPlaceholder.Visibility = Visibility.Hidden;
-            if (!string.IsNullOrEmpty(EventComboBox.Text))
-            {
-                EventComboBox.ItemsSource = FilterEventList(EventComboBox.Text);
-            }
-            else
-            {
-                EventComboBoxPlaceholder.Visibility = Visibility.Visible;
-                EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
-            }
-        }
-
-        private static List<PredefinedEvent> FilterEventList(string searchText)
-        {
-            var eventList = WPerfOptions.Instance.WperfList.PredefinedEvents;
-            var listSearcher = new ListSearcher<PredefinedEvent>(eventList, new SearchOptions<PredefinedEvent> { IsCaseSensitve = true, GetValue = x => x.AliasName });
-            return listSearcher.Search(searchText);
-        }
-
         public SamplingSettingDialog()
         {
             SolutionProjectOutput.GetProjectOutputAsync().FireAndForget();
@@ -87,7 +63,16 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 SamplingSourcePathFilePicker.FilePathTextBox.Text = SamplingSettings
                     .samplingSettingsFrom
                     .FilePath;
+            EventComboBox.DropDownOpened += (sender, e) =>
+            {
+                HideEevntComboBoxPlaceholder();
+            };
+            EventComboBox.SelectionChanged += (sender, e) =>
+            {
+                HideEevntComboBoxPlaceholder();
+            };
         }
+
 
         private void SaveButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -157,6 +142,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             }
 
             SamplingSettings.samplingSettingsFrom.SamplingEventList.Add(newSamplingEventConfig);
+            EventComboBoxPlaceholder.Visibility = Visibility.Visible;
         }
 
         private void AddRawEventButton_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -189,8 +175,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 VS.MessageBox.ShowError(ErrorLanguagePack.RawEventBadFormat);
                 return;
             }
-            var eventExists = SamplingSettings.samplingSettingsFrom.SamplingEventList.Any(el =>
-                el.SamplingEvent == eventIndex
+            var eventExists = SamplingSettings.samplingSettingsFrom.SamplingEventList.Any(
+                el => el.SamplingEvent == eventIndex
             );
 
             if (eventExists)
@@ -239,6 +225,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             {
                 return;
             }
+            HideEevntComboBoxPlaceholder();
 
             string aliasName = (
                 SamplingEventListBox.SelectedItems[0] as SamplingEventConfiguration
@@ -260,6 +247,41 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             SamplingFrequencyComboBox.SelectedItem = (
                 SamplingEventListBox.SelectedItems[0] as SamplingEventConfiguration
             )?.SamplingFrequency;
+        }
+        private void PreviewKeyDown_EnhanceComboSearch(object sender, KeyEventArgs e)
+        {
+            ComboBox cmb = (ComboBox)sender;
+
+            EventComboBox.IsDropDownOpen = true;
+            HideEevntComboBoxPlaceholder();
+            if (!string.IsNullOrEmpty(EventComboBox.Text))
+            {
+                EventComboBox.ItemsSource = FilterEventList(EventComboBox.Text);
+            }
+            else
+            {
+                EventComboBoxPlaceholder.Visibility = Visibility.Visible;
+                EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
+            }
+        }
+
+        private void HideEevntComboBoxPlaceholder()
+        {
+            EventComboBoxPlaceholder.Visibility = Visibility.Hidden;
+        }
+
+        private static List<PredefinedEvent> FilterEventList(string searchText)
+        {
+            var eventList = WPerfOptions.Instance.WperfList.PredefinedEvents;
+            var listSearcher = new ListSearcher<PredefinedEvent>(
+                eventList,
+                new SearchOptions<PredefinedEvent>
+                {
+                    IsCaseSensitve = true,
+                    GetValue = x => x.AliasName
+                }
+            );
+            return listSearcher.Search(searchText);
         }
     }
 }

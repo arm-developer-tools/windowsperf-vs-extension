@@ -60,11 +60,12 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
         private static Color GetColorFromPercentage(double percentage, int colorResolution)
         {
             if (colorResolution < MIN_COLOR_RESOLUTION || colorResolution > MAX_COLOR_RESOLUTION)
-                colorResolution = DEFAULT_COLOR_RESOLUTION ;
+                colorResolution = DEFAULT_COLOR_RESOLUTION;
 
             double percentageChunk = 100.0 / (double)colorResolution;
             double hueChunk = (double)(GREEN_HUE - RED_HUE) / ((double)colorResolution - 1);
-            int amountOfChunks = (int)Math.Min(Math.Floor(percentage / percentageChunk), colorResolution - 1);
+            int amountOfChunks = (int)
+                Math.Min(Math.Floor(percentage / percentageChunk), colorResolution - 1);
             return GetColorFromHSL(GREEN_HUE - (hueChunk * amountOfChunks) + RED_HUE, 1, 0.5);
         }
 
