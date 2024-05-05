@@ -26,13 +26,59 @@
     </platform:DialogWindow.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <GroupBox
+            Grid.Row="0"
+            Grid.Column="0"
+            Padding="5">
+            <GroupBox.Header>
+                <Label Content="{x:Static locals:SamplingSettingsLanguagePack.Payload}" />
+            </GroupBox.Header>
+            <StackPanel Orientation="Vertical">
+                <Components:CustomRadioButtonControl
+                    x:Name="CustomProcessRadioButton"
+                    Content="{x:Static locals:SamplingSettingsLanguagePack.PayloadFromFile}"
+                    GroupName="CountingSourceRadioButtonGroup"
+                    IsChecked="{Binding CustomProcessRadioButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                <Components:FilePicker
+                    x:Name="CountingSourcePathFilePicker"
+                    IsEnabled="{Binding IsChecked, ElementName=CustomProcessRadioButton, Converter={StaticResource NullToDisabledConverter}}"
+                    OnChange="FilePickerTextBox_TextChanged" />
+                <StackPanel Orientation="Horizontal">
+                    <Components:CustomRadioButtonControl
+                        x:Name="CurrentProjectProcessRadioButton"
+                        Content="{x:Static locals:SamplingSettingsLanguagePack.ProjectTarget}"
+                        GroupName="CountingSourceRadioButtonGroup"
+                        IsChecked="{Binding CurrentProjectProcessRadioButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    <Label x:Name="ProjectTargetConfigLabel" />
+                </StackPanel>
+                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                    <Components:CustomRadioButtonControl
+                        x:Name="NoTargetRadioButton"
+                        Content="{x:Static locals:CountingSettingsLanguagePack.NoTarget}"
+                        GroupName="CountingSourceRadioButtonGroup"
+                        IsChecked="{Binding NoTarget, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    <Label x:Name="NoTargetConfigLabel" />
+                </StackPanel>
+                <Label Content="{x:Static locals:SamplingSettingsLanguagePack.ExtraArgs}" />
+                <Components:CustomTextBoxControl
+                    x:Name="ExtraArgs"
+                    Padding="2"
+                    Placeholder="extra args..."
+                    Text="{Binding ExtraArgs, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            </StackPanel>
+        </GroupBox>
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2">
             <Label Content="{x:Static locals:SamplingSettingsLanguagePack.WperfCommandPreview}" />
             <Components:CustomTextBoxControl
-                x:Name="SamplingCommandCallTextBox"
+                x:Name="CountingCommandCallTextBox"
                 Padding="2"
                 IsReadOnly="True"
                 Placeholder="wperf sample"

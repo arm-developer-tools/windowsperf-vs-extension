@@ -29,21 +29,43 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using Microsoft.VisualStudio.PlatformUI;
+using WindowsPerfGUI.ToolWindows.SamplingSetting;
 
 namespace WindowsPerfGUI.ToolWindows.CountingSetting
 {
     public partial class CountingSettingDialog : DialogWindow
     {
-
         public CountingSettingDialog()
         {
+            SolutionProjectOutput.GetProjectOutputAsync().FireAndForget();
             InitializeComponent();
+            ProjectTargetConfigLabel.Content = SolutionProjectOutput.SelectedConfigLabel;
+            if (CountingSettings.countingSettingsForm.FilePath != null)
+                CountingSourcePathFilePicker.FilePathTextBox.Text = CountingSettings
+                    .countingSettingsForm
+                    .FilePath;
+        }
+
+        private void UpdateCountingCommandCallTextBox()
+        {
+            CountingSettings.GenerateCommandLineArgsArray(CountingSettings.countingSettingsForm);
+            CountingCommandCallTextBox.Text = CountingSettings.GenerateCommandLinePreview();
+        }
+
+        private void FilePickerTextBox_TextChanged(
+            object sender,
+            System.Windows.Controls.TextChangedEventArgs e
+        )
+        {
+            CountingSettings.countingSettingsForm.FilePath = CountingSourcePathFilePicker
+                .FilePathTextBox
+                .Text;
+            UpdateCountingCommandCallTextBox();
         }
 
         private void StartCounting_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             VS.MessageBox.ShowError("Start counting functionnality not implemented yet");
-
         }
     }
 }

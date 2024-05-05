@@ -126,4 +126,7 @@
   <data name="WindowTitle" xml:space="preserve">
     <value>Paramètres de comptage</value>
   </data>
+  <data name="NoTarget" xml:space="preserve">
+    <value>Pas de cible</value>
+  </data>
 </root>

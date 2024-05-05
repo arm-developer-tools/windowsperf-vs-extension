@@ -61,6 +61,15 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Target.
+        /// </summary>
+        public static string NoTarget {
+            get {
+                return ResourceManager.GetString("NoTarget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start.
         /// </summary>
         public static string Start {
