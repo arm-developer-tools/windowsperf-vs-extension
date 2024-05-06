@@ -19,10 +19,13 @@
         <utils:CountingSettingsForm />
     </platform:DialogWindow.DataContext>
     <platform:DialogWindow.Resources>
+        <SolidColorBrush x:Key="VizSurfaceGreenMedium" Color="{DynamicResource VsColor.VizSurfaceGreenMedium}" />
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
         <converters:NullToDisabledConverter x:Key="NullToDisabledConverter" />
         <converters:EmptyStringToDisabledConverter x:Key="EmptyStringToDisabledConverter" />
         <converters:NegativeIntToDisabledConverter x:Key="NegativeIntToDisabledConverter" />
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </platform:DialogWindow.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -74,6 +77,54 @@
                     Placeholder="extra args..."
                     Text="{Binding ExtraArgs, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
             </StackPanel>
+        </GroupBox>
+        <GroupBox Grid.Row="1" Padding="5">
+            <GroupBox.Header>
+                <Label Content="{x:Static locals:SamplingSettingsLanguagePack.Parameters}" />
+            </GroupBox.Header>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Content="{x:Static locals:SamplingSettingsLanguagePack.Timeout}" />
+                    <Components:CustomTextBoxControl
+                        x:Name="CountingTimeoutTextBox"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="0,0,0,10"
+                        Padding="2"
+                        Placeholder="2.5"
+                        Text="{Binding CountingTimeout, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    <CheckBox
+                        x:Name="EnableTimelineRadioButton"
+                        Content="Timeline"
+                        IsChecked="{Binding IsTimelineSelected, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    <StackPanel Visibility="{Binding IsTimelineSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Label Content="Iterations" />
+                        <Components:CustomTextBoxControl
+                            x:Name="CountingTimelineIterations"
+                            Padding="2"
+                            Placeholder="1"
+                            Text="{Binding TimelineIterations, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        <Label Content="Interval" />
+                        <Components:CustomTextBoxControl
+                            x:Name="CountingTimelineInterval"
+                            Padding="2"
+                            Placeholder="0.5"
+                            Text="{Binding TimelineInterval, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    </StackPanel>
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Content="{x:Static locals:SamplingSettingsLanguagePack.CpuCore}" />
+                    <Components:ButtonGrid
+                        x:Name="CpuCoresGrid"
+                        FilePath="{Binding FilePath}"
+                        SelectedColor="{StaticResource VizSurfaceGreenMedium}"
+                        SelectedItems="{Binding CPUCores, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                </StackPanel>
+            </ScrollViewer>
         </GroupBox>
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2">
             <Label Content="{x:Static locals:SamplingSettingsLanguagePack.WperfCommandPreview}" />

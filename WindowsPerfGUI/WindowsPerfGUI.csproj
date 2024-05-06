@@ -56,6 +56,9 @@
     <Compile Include="Commands\SamplingExplorerCommand.cs" />
     <Compile Include="Commands\CountingSettingsCommand.cs" />
     <Compile Include="Commands\WperfHostData.cs" />
+    <Compile Include="Components\ButtonGrid.xaml.cs">
+      <DependentUpon>ButtonGrid.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Components\CustomButtonControl.cs" />
     <Compile Include="Components\CustomComboBoxControl.cs" />
     <Compile Include="Components\CustomMonikerButtonControl.cs" />
@@ -117,6 +120,8 @@
     <Compile Include="ToolWindows\SamplingExplorer\LineHighlighting\ColorGenerator.cs" />
     <Compile Include="ToolWindows\SamplingExplorer\LineHighlighting\LineHighlighter.cs" />
     <Compile Include="ToolWindows\SamplingExplorer\LineHighlighting\LineHighlighterTextViewCreationListener.cs" />
+    <Compile Include="Utils\Converters\InverseBooleanConverter.cs" />
+    <Compile Include="Utils\Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Utils\WperfDefaults.cs" />
     <Compile Include="Utils\Converters\BooleanToLinkCursor.cs" />
     <Compile Include="Utils\Converters\BooleanToLinkTextDecoration.cs" />
@@ -219,6 +224,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ToolWindows\MyToolWindow.cs" />
+    <Page Include="Components\ButtonGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Components\FilePicker.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -264,6 +273,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Design" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />

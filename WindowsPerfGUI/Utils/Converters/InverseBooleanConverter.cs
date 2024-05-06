@@ -28,59 +28,34 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using System.Windows;
-using System.Windows.Controls;
-using Microsoft.Win32;
+using System.Globalization;
+using System.Windows.Data;
 
-namespace WindowsPerfGUI.Components
+namespace WindowsPerfGUI.Utils.Converters
 {
-    /// <summary>
-    /// Interaction logic for FilePicker.xaml
-    /// </summary>
-    public partial class FilePicker : UserControl
+    public class InverseBooleanConverter : IValueConverter
     {
-        public FilePicker()
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            InitializeComponent();
-            FilePathTextBox.TextChanged += (sender, e) => _onChange?.Invoke(sender, e);
-        }
-
-        public string Label
-        {
-            get => LabelTextBlock.Content.ToString();
-            set => LabelTextBlock.Content = value;
-        }
-
-        private TextChangedEventHandler _onChange;
-        public TextChangedEventHandler OnChange
-        {
-            get => _onChange;
-            set => _onChange = value;
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() == true)
-                FilePathTextBox.Text = openFileDialog.FileName;
-        }
-
-        public void Validate()
-        {
-            if (!IsFileSelected())
+            if (value is bool boolValue)
             {
-                throw new Exception("File not selected");
+                return !boolValue;
             }
+            throw new ArgumentException("Value must be a boolean.");
         }
 
-        public string GetFilePath()
+        public object ConvertBack(
+            object value,
+            Type targetType,
+            object parameter,
+            CultureInfo culture
+        )
         {
-            return FilePathTextBox.Text;
-        }
-
-        public bool IsFileSelected()
-        {
-            return FilePathTextBox.Text != "";
+            if (value is bool boolValue)
+            {
+                return !boolValue;
+            }
+            throw new ArgumentException("Value must be a boolean.");
         }
     }
 }

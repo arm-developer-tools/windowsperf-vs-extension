@@ -51,7 +51,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             }
         }
 
-        private bool customProcessRadioButton;
+        private bool customProcessRadioButton = true;
 
         public bool CustomProcessRadioButton
         {
@@ -135,6 +135,23 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             }
         }
 
+        private bool isTimelineSelected;
+        public bool IsTimelineSelected
+        {
+            get { return isTimelineSelected; }
+            set
+            {
+                isTimelineSelected = value;
+                if (value == true)
+                {
+                    TimelineInterval ??= "0.5";
+                    TimelineIterations ??= "1";
+                }
+                OnPropertyChanged();
+                CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
+            }
+        }
+
         private bool noTarget;
         public bool NoTarget
         {
@@ -142,39 +159,92 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             set
             {
                 noTarget = value;
-                OnPropertyChanged();
                 if (value == true)
                 {
                     FilePath = "";
                     PdbFile = "";
                 }
+                OnPropertyChanged();
+                CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
+            }
+        }
+
+        private string countingTimeout;
+
+        public string CountingTimeout
+        {
+            get { return countingTimeout; }
+            set
+            {
+                countingTimeout = value;
+                OnPropertyChanged();
+                CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
+            }
+        }
+
+        private ObservableCollection<CpuCoreElement> cpuCores =
+            new ObservableCollection<CpuCoreElement>();
+
+        public ObservableCollection<CpuCoreElement> CPUCores
+        {
+            get { return cpuCores; }
+            set
+            {
+                cpuCores = value;
+                OnPropertyChanged();
+                CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
+            }
+        }
+
+        private string timelineIterations;
+
+        public string TimelineIterations
+        {
+            get { return timelineIterations; }
+            set
+            {
+                timelineIterations = value;
+                OnPropertyChanged();
+                CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
+            }
+        }
+
+        private string timelineInterval;
+
+        public string TimelineInterval
+        {
+            get { return timelineInterval; }
+            set
+            {
+                timelineInterval = value;
+                OnPropertyChanged();
+                CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
             }
         }
 
         public CountingSettingsForm()
         {
-            customProcessRadioButton = true;
-            // We deliberatly set the private version of `countingEventList`
-            // to not trigger the OnPropertyChanged event and generateCommandLinePreview
-            // that depend on the init of CountingSEttings.countingSettingsForm
-            if (CountingEventList == null)
-                countingEventList = new ObservableCollection<SamplingEventConfiguration>();
-            countingEventList.CollectionChanged += (sender, e) =>
-            {
-                OnPropertyChanged("CountingEventList");
-                CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
-            };
             if (CountingSettings.countingSettingsForm != null)
             {
                 CountingSettingsForm countingSettingsForm = CountingSettings.countingSettingsForm;
                 FilePath = countingSettingsForm.FilePath;
-                // CountingEvent = countingSettingsForm.SamplingEvent;
-                // CountingTimeout = countingSettingsForm.SamplingTimeout;
-                // CPUCore = countingSettingsForm.CPUCore;
+                CPUCores = countingSettingsForm.CPUCores;
                 ExtraArgs = countingSettingsForm.ExtraArgs;
-                CountingEventList = countingSettingsForm.CountingEventList;
+                CountingTimeout = countingSettingsForm.CountingTimeout;
+                CustomProcessRadioButton = countingSettingsForm.CustomProcessRadioButton;
+                CurrentProjectProcessRadioButton =
+                    countingSettingsForm.CurrentProjectProcessRadioButton;
+                NoTarget = countingSettingsForm.NoTarget;
+                IsTimelineSelected = countingSettingsForm.IsTimelineSelected;
+                TimelineInterval = countingSettingsForm.TimelineInterval;
+                TimelineIterations = countingSettingsForm.TimelineIterations;
             }
             CountingSettings.countingSettingsForm = this;
+            CountingSettings.countingSettingsForm.CPUCores.CollectionChanged += (sender, e) =>
+            {
+                OnPropertyChanged("CPUCores");
+                CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
+            };
         }
     }
 }

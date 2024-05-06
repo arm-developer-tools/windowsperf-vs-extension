@@ -55,14 +55,26 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             AppendElementsToList(argsList, "stat");
             AppendElementsToList(
                 argsList,
-                "-e",
-                string.Join(",", countingSettingsForm.CountingEventList)
+                "-c",
+                string.Join(
+                    ",",
+                    countingSettingsForm.CPUCores.Select(el => el.coreNumber).OrderBy(el => el)
+                )
             );
-            AppendElementsToList(argsList, "--pdb_file", countingSettingsForm.PdbFile);
-            AppendElementsToList(argsList, "--");
-            AppendElementsToList(argsList, countingSettingsForm.FilePath);
-            AppendElementsToList(argsList, countingSettingsForm.ExtraArgs);
-
+            AppendElementsToList(argsList, "--timeout", countingSettingsForm.CountingTimeout);
+            if (countingSettingsForm.IsTimelineSelected)
+            {
+                AppendElementsToList(argsList, "--t");
+                AppendElementsToList(argsList, "-i", countingSettingsForm.TimelineInterval);
+                AppendElementsToList(argsList, "-n", countingSettingsForm.TimelineIterations);
+            }
+            if (!countingSettingsForm.NoTarget)
+            {
+                AppendElementsToList(argsList, "--pdb_file", countingSettingsForm.PdbFile);
+                AppendElementsToList(argsList, "--");
+                AppendElementsToList(argsList, countingSettingsForm.FilePath);
+                AppendElementsToList(argsList, countingSettingsForm.ExtraArgs);
+            }
             ArgsArray = argsList.ToArray();
             return ArgsArray;
         }

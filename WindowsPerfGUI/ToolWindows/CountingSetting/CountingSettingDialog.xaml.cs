@@ -39,6 +39,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
         {
             SolutionProjectOutput.GetProjectOutputAsync().FireAndForget();
             InitializeComponent();
+            CpuCoresGrid.ItemsSource = CpuCores.InitCpuCores();
             ProjectTargetConfigLabel.Content = SolutionProjectOutput.SelectedConfigLabel;
             if (CountingSettings.countingSettingsForm.FilePath != null)
                 CountingSourcePathFilePicker.FilePathTextBox.Text = CountingSettings
@@ -65,6 +66,12 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
 
         private void StartCounting_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            SyncCountingSettings();
+        }
+
+        private void SyncCountingSettings()
+        {
+            UpdateCountingCommandCallTextBox();
             VS.MessageBox.ShowError("Start counting functionnality not implemented yet");
         }
     }
