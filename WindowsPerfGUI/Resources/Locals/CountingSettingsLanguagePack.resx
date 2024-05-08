@@ -129,4 +129,10 @@
   <data name="NoTarget" xml:space="preserve">
     <value>No Target</value>
   </data>
+  <data name="MetricComboboxPlaceholder" xml:space="preserve">
+    <value>-- Select Metric to add --</value>
+  </data>
+  <data name="Metrics" xml:space="preserve">
+    <value>Metrics</value>
+  </data>
 </root>

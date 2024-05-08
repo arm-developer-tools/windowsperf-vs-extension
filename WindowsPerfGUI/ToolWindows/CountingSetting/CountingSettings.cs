@@ -64,10 +64,13 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             AppendElementsToList(argsList, "--timeout", countingSettingsForm.CountingTimeout);
             if (countingSettingsForm.IsTimelineSelected)
             {
-                AppendElementsToList(argsList, "--t");
+                AppendElementsToList(argsList, "-t");
                 AppendElementsToList(argsList, "-i", countingSettingsForm.TimelineInterval);
                 AppendElementsToList(argsList, "-n", countingSettingsForm.TimelineIterations);
             }
+            AppendElementsToList(argsList, "-e", string.Join(",", countingSettingsForm.CountingEventList));
+            AppendElementsToList(argsList, "-m", string.Join(",", countingSettingsForm.CountingMetricList));
+
             if (!countingSettingsForm.NoTarget)
             {
                 AppendElementsToList(argsList, "--pdb_file", countingSettingsForm.PdbFile);

@@ -65,11 +65,11 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                     .FilePath;
             EventComboBox.DropDownOpened += (sender, e) =>
             {
-                HideEevntComboBoxPlaceholder();
+                HideEventComboBoxPlaceholder();
             };
             EventComboBox.SelectionChanged += (sender, e) =>
             {
-                HideEevntComboBoxPlaceholder();
+                HideEventComboBoxPlaceholder();
             };
         }
 
@@ -225,7 +225,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             {
                 return;
             }
-            HideEevntComboBoxPlaceholder();
+            HideEventComboBoxPlaceholder();
 
             string aliasName = (
                 SamplingEventListBox.SelectedItems[0] as SamplingEventConfiguration
@@ -250,10 +250,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
         }
         private void PreviewKeyDown_EnhanceComboSearch(object sender, KeyEventArgs e)
         {
-            ComboBox cmb = (ComboBox)sender;
-
             EventComboBox.IsDropDownOpen = true;
-            HideEevntComboBoxPlaceholder();
+            HideEventComboBoxPlaceholder();
             if (!string.IsNullOrEmpty(EventComboBox.Text))
             {
                 EventComboBox.ItemsSource = FilterEventList(EventComboBox.Text);
@@ -265,7 +263,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             }
         }
 
-        private void HideEevntComboBoxPlaceholder()
+        private void HideEventComboBoxPlaceholder()
         {
             EventComboBoxPlaceholder.Visibility = Visibility.Hidden;
         }

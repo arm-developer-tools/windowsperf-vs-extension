@@ -121,7 +121,7 @@
             Margin="5,0,0,0"
             BorderThickness="1,1,1,1">
             <GroupBox.Header>
-                <Label Content="{x:Static locals:SamplingSettingsLanguagePack.RawEvent}" />
+                <Label Content="{x:Static locals:SamplingSettingsLanguagePack.Event}" />
             </GroupBox.Header>
             <StackPanel Margin="5,10,5,10">
                 <Label Content="{x:Static locals:SamplingSettingsLanguagePack.RawEvent}" />

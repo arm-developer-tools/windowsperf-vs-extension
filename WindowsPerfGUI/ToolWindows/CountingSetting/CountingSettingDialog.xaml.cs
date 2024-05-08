@@ -29,7 +29,15 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using Microsoft.VisualStudio.PlatformUI;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows;
+using WindowsPerfGUI.Options;
+using WindowsPerfGUI.Resources.Locals;
+using WindowsPerfGUI.SDK.WperfOutputs;
 using WindowsPerfGUI.ToolWindows.SamplingSetting;
+using WindowsPerfGUI.Utils.ListSearcher;
 
 namespace WindowsPerfGUI.ToolWindows.CountingSetting
 {
@@ -39,12 +47,34 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
         {
             SolutionProjectOutput.GetProjectOutputAsync().FireAndForget();
             InitializeComponent();
+            EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
+            MetricComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedMetrics;
             CpuCoresGrid.ItemsSource = CpuCores.InitCpuCores();
             ProjectTargetConfigLabel.Content = SolutionProjectOutput.SelectedConfigLabel;
             if (CountingSettings.countingSettingsForm.FilePath != null)
                 CountingSourcePathFilePicker.FilePathTextBox.Text = CountingSettings
                     .countingSettingsForm
                     .FilePath;
+            if (CountingSettings.countingSettingsForm.CountingEvent == null)
+                EventComboBox.SelectedIndex = -1;
+            if (CountingSettings.countingSettingsForm.CountingMetric == null)
+                MetricComboBox.SelectedIndex = -1;
+            MetricComboBox.DropDownOpened += (sender, e) =>
+            {
+                HideMetricComboBoxPlaceholder();
+            };
+            MetricComboBox.SelectionChanged += (sender, e) =>
+            {
+                HideMetricComboBoxPlaceholder();
+            };
+            EventComboBox.DropDownOpened += (sender, e) =>
+            {
+                HideEventComboBoxPlaceholder();
+            };
+            EventComboBox.SelectionChanged += (sender, e) =>
+            {
+                HideEventComboBoxPlaceholder();
+            };
         }
 
         private void UpdateCountingCommandCallTextBox()
@@ -73,6 +103,222 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
         {
             UpdateCountingCommandCallTextBox();
             VS.MessageBox.ShowError("Start counting functionnality not implemented yet");
+        }
+
+        private void CountingEventListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            int eventIndex = -1;
+            if (!(CountingEventListBox.SelectedItems?.Count > 0))
+            {
+                return;
+            }
+            HideEventComboBoxPlaceholder();
+
+            string aliasName =
+                CountingEventListBox.SelectedItems[0] as string;
+
+            foreach (
+                var predefinedEvent in ((List<PredefinedEvent>)EventComboBox.ItemsSource).Select(
+                    (value, i) => new { value, i }
+                )
+            )
+            {
+                if (predefinedEvent.value.AliasName == aliasName)
+                {
+                    eventIndex = predefinedEvent.i;
+                }
+            }
+
+            EventComboBox.SelectedIndex = eventIndex;
+        }
+
+        private void EventComboBox_PreviewKeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            EventComboBox.IsDropDownOpen = true;
+            HideEventComboBoxPlaceholder();
+            if (!string.IsNullOrEmpty(EventComboBox.Text))
+            {
+                EventComboBox.ItemsSource = FilterEventList(EventComboBox.Text);
+            }
+            else
+            {
+                EventComboBoxPlaceholder.Visibility = Visibility.Visible;
+                EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
+            }
+        }
+
+        private void AddEventButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var newCountingEvent = (EventComboBox.SelectedItem as PredefinedEvent)?.AliasName;
+
+            EventComboBox.SelectedIndex = -1;
+            EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
+
+            foreach (
+                var item in CountingSettings.countingSettingsForm.CountingEventList.Select(
+                    (value, i) => new { i, value }
+                )
+            )
+            {
+                if (item.value != newCountingEvent)
+                {
+                    continue;
+                }
+
+                CountingSettings.countingSettingsForm.CountingEventList[item.i] =
+                    newCountingEvent;
+                return;
+            }
+
+            CountingSettings.countingSettingsForm.CountingEventList.Add(newCountingEvent);
+            EventComboBoxPlaceholder.Visibility = Visibility.Visible;
+        }
+
+        private void RemoveEventButton_Click(object sender, RoutedEventArgs e)
+        {
+            int selectedIndex = CountingEventListBox.SelectedIndex;
+            if (selectedIndex < 0)
+            {
+                return;
+            }
+            CountingSettings.countingSettingsForm.CountingEventList.RemoveAt(
+                CountingEventListBox.SelectedIndex
+            );
+
+            CountingEventListBox.Items.Refresh();
+            CountingEventListBox.SelectedIndex = Math.Min(
+                selectedIndex,
+                CountingEventListBox.Items.Count - 1
+            );
+        }
+        private void HideEventComboBoxPlaceholder()
+        {
+            EventComboBoxPlaceholder.Visibility = Visibility.Hidden;
+        }
+        private void HideMetricComboBoxPlaceholder()
+        {
+            MetricComboBoxPlaceholder.Visibility = Visibility.Hidden;
+        }
+
+        private void AddRawEventButton_Click(object sender, RoutedEventArgs e)
+        {
+            string rawEvent = RawEventsInput.Text;
+            if (rawEvent == null)
+                return;
+
+
+            var indexRegex = new Regex("^r[\\da-f]{1,4}$", RegexOptions.IgnoreCase);
+
+            if (!indexRegex.Match(rawEvent).Success)
+            {
+                VS.MessageBox.ShowError(ErrorLanguagePack.RawEventBadFormat);
+                return;
+            }
+            var eventExists = CountingSettings.countingSettingsForm.CountingEventList.Any(
+                el => el == rawEvent
+            );
+
+            if (eventExists)
+            {
+                VS.MessageBox.ShowError(ErrorLanguagePack.RawEventExists);
+                return;
+            }
+
+
+            CountingSettings.countingSettingsForm.CountingEventList.Add(rawEvent);
+
+            RawEventsInput.Clear();
+        }
+
+        private static List<PredefinedEvent> FilterEventList(string searchText)
+        {
+            var eventList = WPerfOptions.Instance.WperfList.PredefinedEvents;
+            var listSearcher = new ListSearcher<PredefinedEvent>(
+                eventList,
+                new SearchOptions<PredefinedEvent>
+                {
+                    IsCaseSensitve = true,
+                    GetValue = x => x.AliasName
+                }
+            );
+            return listSearcher.Search(searchText);
+        }
+
+        private void CountingMetricListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            int metricIndex = -1;
+            if (!(CountingMetricListBox.SelectedItems?.Count > 0))
+            {
+                return;
+            }
+            MetricComboBoxPlaceholder.Visibility = Visibility.Hidden;
+
+            string metricName =
+                CountingMetricListBox.SelectedItems[0] as string;
+
+            foreach (
+                var predefinedMetric in ((List<PredefinedMetric>)MetricComboBox.ItemsSource).Select(
+                    (value, i) => new { value, i }
+                )
+            )
+            {
+                if (predefinedMetric.value.Metric == metricName)
+                {
+                    metricIndex = predefinedMetric.i;
+                }
+            }
+
+            MetricComboBox.SelectedIndex = metricIndex;
+        }
+
+        private void MetricComboBox_PreviewKeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+
+        }
+
+        private void AddMetricButton_Click(object sender, RoutedEventArgs e)
+        {
+            var newCountingMetric = (MetricComboBox.SelectedItem as PredefinedMetric)?.Metric;
+
+            MetricComboBox.SelectedIndex = -1;
+            MetricComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedMetrics;
+
+            foreach (
+                var item in CountingSettings.countingSettingsForm.CountingMetricList.Select(
+                    (value, i) => new { i, value }
+                )
+            )
+            {
+                if (item.value != newCountingMetric)
+                {
+                    continue;
+                }
+
+                CountingSettings.countingSettingsForm.CountingMetricList[item.i] =
+                    newCountingMetric;
+                return;
+            }
+
+            CountingSettings.countingSettingsForm.CountingMetricList.Add(newCountingMetric);
+            MetricComboBoxPlaceholder.Visibility = Visibility.Visible;
+        }
+
+        private void RemoveMetricButton_Click(object sender, RoutedEventArgs e)
+        {
+            int selectedIndex = CountingMetricListBox.SelectedIndex;
+            if (selectedIndex < 0)
+            {
+                return;
+            }
+            CountingSettings.countingSettingsForm.CountingMetricList.RemoveAt(
+                selectedIndex
+            );
+
+            CountingMetricListBox.Items.Refresh();
+            CountingMetricListBox.SelectedIndex = Math.Min(
+                selectedIndex,
+                CountingMetricListBox.Items.Count - 1
+            );
         }
     }
 }

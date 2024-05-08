@@ -61,6 +61,24 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to -- Select Metric to add --.
+        /// </summary>
+        public static string MetricComboboxPlaceholder {
+            get {
+                return ResourceManager.GetString("MetricComboboxPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Metrics.
+        /// </summary>
+        public static string Metrics {
+            get {
+                return ResourceManager.GetString("Metrics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Target.
         /// </summary>
         public static string NoTarget {

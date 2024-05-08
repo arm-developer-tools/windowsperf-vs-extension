@@ -29,6 +29,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using WindowsPerfGUI.SDK.WperfOutputs;
 using WindowsPerfGUI.ToolWindows.SamplingSetting;
 using WindowsPerfGUI.Utils;
 
@@ -38,9 +40,10 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
 
     public class CountingSettingsForm : NotifyPropertyChangedImplementor
     {
-        private ObservableCollection<SamplingEventConfiguration> countingEventList;
+        private ObservableCollection<string> countingEventList =
+            new ObservableCollection<string>();
 
-        public ObservableCollection<SamplingEventConfiguration> CountingEventList
+        public ObservableCollection<string> CountingEventList
         {
             get { return countingEventList; }
             set
@@ -48,6 +51,45 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 countingEventList = value;
                 OnPropertyChanged();
                 CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
+            }
+        }
+
+        private ObservableCollection<string> countingMetricList =
+            new ObservableCollection<string>();
+
+        public ObservableCollection<string> CountingMetricList
+        {
+            get { return countingMetricList; }
+            set
+            {
+                countingMetricList = value;
+                OnPropertyChanged();
+                CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
+            }
+        }
+        private PredefinedMetric countingMetric;
+
+        public PredefinedMetric CountingMetric
+        {
+            get { return countingMetric; }
+            set
+            {
+                countingMetric = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public PredefinedEvent CountingEvent { get; set; }
+        private string rawEvents;
+
+        public string RawEvents
+        {
+            get { return rawEvents; }
+            set
+            {
+                rawEvents = value;
+                OnPropertyChanged();
+                commandLinePreview = SamplingSettings.GenerateCommandLinePreview();
             }
         }
 
@@ -77,13 +119,8 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 OnPropertyChanged();
             }
         }
-        private string pdbFile;
 
-        public string PdbFile
-        {
-            get { return pdbFile; }
-            set { pdbFile = value; }
-        }
+        public string PdbFile { get; set; }
 
         private string extraArgs;
 
@@ -221,6 +258,14 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
             }
         }
+        private NotifyCollectionChangedEventHandler collectionUpdater(string callerMemberName)
+        {
+            return (object sender, NotifyCollectionChangedEventArgs e) =>
+            {
+                OnPropertyChanged(callerMemberName);
+                CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
+            };
+        }
 
         public CountingSettingsForm()
         {
@@ -238,13 +283,14 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 IsTimelineSelected = countingSettingsForm.IsTimelineSelected;
                 TimelineInterval = countingSettingsForm.TimelineInterval;
                 TimelineIterations = countingSettingsForm.TimelineIterations;
+                CountingEventList = countingSettingsForm.CountingEventList;
+                CountingMetricList = countingSettingsForm.CountingMetricList;
             }
             CountingSettings.countingSettingsForm = this;
-            CountingSettings.countingSettingsForm.CPUCores.CollectionChanged += (sender, e) =>
-            {
-                OnPropertyChanged("CPUCores");
-                CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
-            };
+
+            CountingSettings.countingSettingsForm.CPUCores.CollectionChanged += collectionUpdater("CPUCores");
+            CountingSettings.countingSettingsForm.CountingEventList.CollectionChanged += collectionUpdater("CountingEventList");
+            CountingSettings.countingSettingsForm.CountingMetricList.CollectionChanged += collectionUpdater("CountingMetricList");
         }
     }
 }
