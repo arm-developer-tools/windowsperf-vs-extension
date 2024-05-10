@@ -36,7 +36,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
     public static class CountingSettings
     {
         public static string[] ArgsArray;
-        public static bool IsSampling = false;
+        public static bool IsCounting = false;
         public static bool AreSettingsFilled = false;
         public static CountingSettingsForm countingSettingsForm;
 
@@ -68,9 +68,18 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 AppendElementsToList(argsList, "-i", countingSettingsForm.TimelineInterval);
                 AppendElementsToList(argsList, "-n", countingSettingsForm.TimelineIterations);
             }
-            AppendElementsToList(argsList, "-e", string.Join(",", countingSettingsForm.CountingEventList));
-            AppendElementsToList(argsList, "-m", string.Join(",", countingSettingsForm.CountingMetricList));
+            AppendElementsToList(
+                argsList,
+                "-e",
+                string.Join(",", countingSettingsForm.CountingEventList)
+            );
+            AppendElementsToList(
+                argsList,
+                "-m",
+                string.Join(",", countingSettingsForm.CountingMetricList)
+            );
 
+            AppendElementsToList(argsList, "--json");
             if (!countingSettingsForm.NoTarget)
             {
                 AppendElementsToList(argsList, "--pdb_file", countingSettingsForm.PdbFile);

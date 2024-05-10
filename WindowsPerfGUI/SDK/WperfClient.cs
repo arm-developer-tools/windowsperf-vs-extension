@@ -28,7 +28,10 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using System.Collections.Generic;
+using System.Linq;
 using WindowsPerfGUI.SDK.WperfOutputs;
+using WindowsPerfGUI.ToolWindows.CountingSetting;
 using WindowsPerfGUI.ToolWindows.SamplingSetting;
 using WindowsPerfGUI.Utils.SDK;
 
@@ -140,10 +143,30 @@ namespace WindowsPerfGUI.SDK
             //return (serializedOutput, stdError);
         }
 
+        public async Task StartCountingAsync()
+        {
+            string[] countingArgs = CountingSettings.GenerateCommandLineArgsArray(
+                CountingSettings.countingSettingsForm
+            );
+            CountingSettings.IsCounting = true;
+            CountingSettings.countingSettingsForm.GenerateNewOutputPath();
+            List<string> countingArgsList = countingArgs.ToList();
+            int indexToInsertAt = countingArgsList.FindIndex(el => el.StartsWith("--json"));
+            countingArgsList.Insert(
+                indexToInsertAt,
+                $"--output {CountingSettings.countingSettingsForm.OutputPath}"
+            );
+            await _wperfProcess.StartBackgroundProcessAsync([.. countingArgsList]);
+            (object serializedOutput, string stdError) = StopCounting();
+            OnCountingFinished?.Invoke(this, (serializedOutput, stdError));
+        }
+
         public EventHandler<(
             WperfSampling serializedOutput,
             string stdError
         )> OnSamplingFinished { get; set; }
+
+        public EventHandler<(object _, string stdError)> OnCountingFinished { get; set; }
 
         public (WperfSampling serializedOutput, string stdError) StopSampling()
         {
@@ -156,6 +179,21 @@ namespace WindowsPerfGUI.SDK
                 stdOutput,
                 stdError,
                 SamplingSettings.GenerateCommandLineArgsArray(SamplingSettings.samplingSettingsFrom)
+            );
+            return (serializedOutput, stdError);
+        }
+
+        public (object serializedOutput, string stdError) StopCounting()
+        {
+            _wperfProcess.StopProcess();
+            CountingSettings.IsCounting = false;
+            string stdOutput = string.Join("", _wperfProcess.StdOutput.Output);
+            string stdError = string.Join("", _wperfProcess.StdError.Output);
+            WperfCounting serializedOutput = WperfCounting.FromJson(stdOutput);
+            LogToOutput(
+                stdOutput,
+                stdError,
+                CountingSettings.GenerateCommandLineArgsArray(CountingSettings.countingSettingsForm)
             );
             return (serializedOutput, stdError);
         }

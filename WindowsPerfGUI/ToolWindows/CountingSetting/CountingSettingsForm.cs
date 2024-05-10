@@ -28,8 +28,10 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
 using WindowsPerfGUI.SDK.WperfOutputs;
 using WindowsPerfGUI.ToolWindows.SamplingSetting;
 using WindowsPerfGUI.Utils;
@@ -40,8 +42,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
 
     public class CountingSettingsForm : NotifyPropertyChangedImplementor
     {
-        private ObservableCollection<string> countingEventList =
-            new ObservableCollection<string>();
+        private ObservableCollection<string> countingEventList = new ObservableCollection<string>();
 
         public ObservableCollection<string> CountingEventList
         {
@@ -258,6 +259,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
             }
         }
+
         private NotifyCollectionChangedEventHandler collectionUpdater(string callerMemberName)
         {
             return (object sender, NotifyCollectionChangedEventArgs e) =>
@@ -265,6 +267,50 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 OnPropertyChanged(callerMemberName);
                 CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
             };
+        }
+
+        private string outputPath;
+        public string OutputPath
+        {
+            get { return outputPath; }
+            set
+            {
+                if (value.StartsWith("\"") || string.IsNullOrEmpty(value))
+                    outputPath = value;
+                else
+                    outputPath = $"\"{value}\"";
+                OnPropertyChanged();
+            }
+        }
+
+        private bool isCountCollected;
+
+        public bool IsCountCollected
+        {
+            get { return isCountCollected; }
+            set
+            {
+                isCountCollected = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private List<CountingEvent> countingResult;
+
+        public List<CountingEvent> CountingResult
+        {
+            get { return countingResult; }
+            set
+            {
+                countingResult = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public void GenerateNewOutputPath()
+        {
+            string now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds().ToString();
+            OutputPath = Path.Combine(Path.GetTempPath(), "wperf-record-output-" + now + ".json");
         }
 
         public CountingSettingsForm()
@@ -285,12 +331,18 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 TimelineIterations = countingSettingsForm.TimelineIterations;
                 CountingEventList = countingSettingsForm.CountingEventList;
                 CountingMetricList = countingSettingsForm.CountingMetricList;
+                IsCountCollected = countingSettingsForm.IsCountCollected;
+                CountingResult = countingSettingsForm.CountingResult;
             }
             CountingSettings.countingSettingsForm = this;
 
-            CountingSettings.countingSettingsForm.CPUCores.CollectionChanged += collectionUpdater("CPUCores");
-            CountingSettings.countingSettingsForm.CountingEventList.CollectionChanged += collectionUpdater("CountingEventList");
-            CountingSettings.countingSettingsForm.CountingMetricList.CollectionChanged += collectionUpdater("CountingMetricList");
+            CountingSettings.countingSettingsForm.CPUCores.CollectionChanged += collectionUpdater(
+                "CPUCores"
+            );
+            CountingSettings.countingSettingsForm.CountingEventList.CollectionChanged +=
+                collectionUpdater("CountingEventList");
+            CountingSettings.countingSettingsForm.CountingMetricList.CollectionChanged +=
+                collectionUpdater("CountingMetricList");
         }
     }
 }

@@ -12,7 +12,7 @@
     xmlns:toolkit="clr-namespace:Community.VisualStudio.Toolkit;assembly=Community.VisualStudio.Toolkit"
     xmlns:utils="clr-namespace:WindowsPerfGUI.ToolWindows.CountingSetting"
     Width="900"
-    Height="600"
+    Height="900"
     toolkit:Themes.UseVsTheme="True"
     mc:Ignorable="d">
     <platform:DialogWindow.DataContext>
@@ -20,12 +20,24 @@
     </platform:DialogWindow.DataContext>
     <platform:DialogWindow.Resources>
         <SolidColorBrush x:Key="VizSurfaceGreenMedium" Color="{DynamicResource VsColor.VizSurfaceGreenMedium}" />
+        <SolidColorBrush x:Key="VsInputBackground" Color="{DynamicResource VsColor.ComboBoxBackground}" />
+        <SolidColorBrush x:Key="ToolWindowText" Color="{DynamicResource VsColor.ToolWindowText}" />
+        <SolidColorBrush x:Key="ComboBoxFocusedBorder" Color="{DynamicResource VsColor.ToolWindowText}" />
+
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
         <converters:NullToDisabledConverter x:Key="NullToDisabledConverter" />
         <converters:EmptyStringToDisabledConverter x:Key="EmptyStringToDisabledConverter" />
         <converters:NegativeIntToDisabledConverter x:Key="NegativeIntToDisabledConverter" />
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:StringNullOrEmptyToVisibilityConverter x:Key="StringNullOrEmptyToVisibilityConverter" />
+        <Style x:Key="ColumnHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="BorderBrush" Value="{StaticResource ToolWindowText}" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="BorderThickness" Value="0,0,1,2" />
+            <Setter Property="Background" Value="{StaticResource VsInputBackground}" />
+            <Setter Property="Padding" Value="5" />
+        </Style>
     </platform:DialogWindow.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -134,12 +146,48 @@
                 IsReadOnly="True"
                 Placeholder="wperf sample"
                 Text="{Binding CommandLinePreview, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-            <Components:CustomButtonControl
-                Margin="0,10,0,10"
-                Padding="20,5,20,5"
-                HorizontalAlignment="Right"
-                Click="StartCounting_Click"
-                Content="{x:Static locals:CountingSettingsLanguagePack.Start}" />
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                <Components:CustomButtonControl
+                    x:Name="StartCountingButton"
+                    Margin="10"
+                    Padding="20,5,20,5"
+                    Click="StartCounting_Click"
+                    Content="{x:Static locals:CountingSettingsLanguagePack.Start}" />
+                <Components:CustomButtonControl
+                    x:Name="StopCountingButton"
+                    Margin="0,10"
+                    Padding="20,5,20,5"
+                    HorizontalAlignment="Right"
+                    Click="StopCounting_Click"
+                    Content="{x:Static locals:CountingSettingsLanguagePack.Stop}" />
+            </StackPanel>
+            <GroupBox Padding="5">
+                <GroupBox.Header>
+                    <Label Content="Counting output" />
+                </GroupBox.Header>
+                <StackPanel>
+                    <DataGrid
+                        Height="150"
+                        Padding="0"
+                        Background="{StaticResource VsInputBackground}"
+                        BorderThickness="0"
+                        ColumnHeaderStyle="{StaticResource ColumnHeaderStyle}"
+                        Foreground="{StaticResource ToolWindowText}"
+                        HeadersVisibility="Column"
+                        HorizontalGridLinesBrush="{StaticResource ToolWindowText}"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding CountingResult}"
+                        RowBackground="{StaticResource VsInputBackground}"
+                        VerticalGridLinesBrush="{StaticResource ToolWindowText}" />
+                    <Components:CustomButtonControl
+                        x:Name="OpenInWAButton"
+                        Margin="0,10"
+                        Padding="20,5,20,5"
+                        HorizontalAlignment="Right"
+                        Click="OpenInWPA_Click"
+                        Content="Open in WPA" />
+                </StackPanel>
+            </GroupBox>
         </StackPanel>
         <GroupBox
             Grid.Row="0"

@@ -185,6 +185,7 @@ namespace WindowsPerfGUI.Utils.SDK
                 StdError.OutputhHandler
             );
             _BackgroundProcess.Start();
+            _HasProcessStarted = true;
             if (_ProcessorAffinity != null)
             {
                 _BackgroundProcess.ProcessorAffinity = (IntPtr)_ProcessorAffinity;
@@ -192,6 +193,7 @@ namespace WindowsPerfGUI.Utils.SDK
             _BackgroundProcess.BeginOutputReadLine();
             _BackgroundProcess.BeginErrorReadLine();
             await _BackgroundProcess.WaitForExitAsync();
+            ForceKillProcess();
         }
 
         private void InitProcess(string[] args)

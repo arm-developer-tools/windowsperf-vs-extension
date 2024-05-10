@@ -110,6 +110,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>WperfHostDataLanguagePack.resx</DependentUpon>
     </Compile>
+    <Compile Include="SDK\WperfOutputs\WperfCounting.cs" />
+    <Compile Include="ToolWindows\CountingSetting\CountingEvent.cs" />
+    <Compile Include="SDK\WperfOutputs\WperfTimeline.cs" />
     <Compile Include="ToolWindows\SamplingExplorer\LineHighlighting\HighlighterDict.cs" />
     <Compile Include="ToolWindows\CountingSetting\CountingSettingDialog.xaml.cs">
       <DependentUpon>CountingSettingDialog.xaml</DependentUpon>
@@ -122,6 +125,7 @@
     <Compile Include="ToolWindows\SamplingExplorer\LineHighlighting\LineHighlighterTextViewCreationListener.cs" />
     <Compile Include="Utils\Converters\InverseBooleanConverter.cs" />
     <Compile Include="Utils\Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Utils\Converters\StringlNullOrEmptyToVisibilityConverter.cs" />
     <Compile Include="Utils\WperfDefaults.cs" />
     <Compile Include="Utils\Converters\BooleanToLinkCursor.cs" />
     <Compile Include="Utils\Converters\BooleanToLinkTextDecoration.cs" />
