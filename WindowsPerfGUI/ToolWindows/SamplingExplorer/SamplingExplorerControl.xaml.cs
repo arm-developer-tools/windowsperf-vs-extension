@@ -660,6 +660,12 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                 docView.TextView.Caret.MoveTo(
                     position.Snapshot.GetLineFromLineNumber(lineNumber - 1).End
                 );
+                docView.TextView.ViewScroller.EnsureSpanVisible(
+                    new SnapshotSpan(
+                          position.Snapshot.GetLineFromLineNumber(lineNumber - 1).Start,
+                          position.Snapshot.GetLineFromLineNumber(lineNumber - 1).End
+                         )
+                    );
             });
         }
 
@@ -674,7 +680,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             var textBlock = sender as TextBlock;
             string filePath = textBlock.Text;
             SamplingSection selecteditem =
-                (_tree?.SelectedItem as TreeNode)?.Tag as SamplingSection;
+                textBlock.DataContext as SamplingSection;
             bool isFileExists = File.Exists(filePath);
             if (!isFileExists)
                 return;

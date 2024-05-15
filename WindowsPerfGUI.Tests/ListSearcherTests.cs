@@ -57,7 +57,6 @@ namespace WindowsPerfGUI.Tests.Utils.ListSearcher
                 fields,
                 new SearchOptions<SearchList>
                 {
-                    IsCaseSensitve = false,
                     GetValue = x => x.Application
                 }
             );

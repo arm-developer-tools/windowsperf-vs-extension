@@ -275,7 +275,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 eventList,
                 new SearchOptions<PredefinedEvent>
                 {
-                    IsCaseSensitve = true,
                     GetValue = x => x.AliasName
                 }
             );

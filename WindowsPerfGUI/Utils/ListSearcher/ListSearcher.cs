@@ -50,22 +50,14 @@ namespace WindowsPerfGUI.Utils.ListSearcher
         public List<T> Search(string searchText)
         {
             var results = new List<T>();
-            if (!_options.IsCaseSensitve)
-            {
-                searchText = searchText.ToLower();
-            }
-
+            string lowerCaseSearchText = searchText.ToLower();
             foreach (var record in _records)
             {
                 var recordValue =
                         _options.GetValue != null
                             ? _options.GetValue(record)
                             : record?.ToString() ?? "";
-                if (!_options.IsCaseSensitve)
-                {
-                    recordValue = recordValue.ToLower();
-                }
-                if (recordValue.Contains(searchText))
+                if (recordValue.ToLower().Contains(lowerCaseSearchText))
                     results.Add(record);
             }
 
@@ -76,7 +68,6 @@ namespace WindowsPerfGUI.Utils.ListSearcher
 
 public class SearchOptions<T>
 {
-    public bool IsCaseSensitve { get; init; } = false;
 #nullable enable
     public Func<T, string>? GetValue { get; set; }
 #nullable disable

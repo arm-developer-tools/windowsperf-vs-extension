@@ -28,12 +28,12 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using Microsoft.VisualStudio.PlatformUI;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
-using Microsoft.VisualStudio.PlatformUI;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK;
@@ -359,7 +359,6 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 eventList,
                 new SearchOptions<PredefinedEvent>
                 {
-                    IsCaseSensitve = true,
                     GetValue = x => x.AliasName
                 }
             );
@@ -398,7 +397,8 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
         private void MetricComboBox_PreviewKeyUp(
             object sender,
             System.Windows.Input.KeyEventArgs e
-        ) { }
+        )
+        { }
 
         private void AddMetricButton_Click(object sender, RoutedEventArgs e)
         {
