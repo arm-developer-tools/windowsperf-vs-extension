@@ -28,12 +28,12 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.VisualStudio.PlatformUI;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using Microsoft.VisualStudio.PlatformUI;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK;
@@ -51,7 +51,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
         {
             SolutionProjectOutput.GetProjectOutputAsync().FireAndForget();
             InitializeComponent();
-            OpenInWAButton.IsEnabled = false;
+            OpenInWPAButton.IsEnabled = false;
 
             StopCountingButton.IsEnabled = false;
             EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
@@ -89,7 +89,8 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
         {
             StopCountingButton.IsEnabled = false;
             StartCountingButton.IsEnabled = true;
-            OpenInWAButton.IsEnabled = true;
+            BuildAndStartCountingButton.IsEnabled = true;
+            OpenInWPAButton.IsEnabled = true;
             StartCountingButton.Content = "Start";
 
             if (!string.IsNullOrEmpty(e.stdError))
@@ -140,10 +141,8 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             {
                 foreach (CorePerformanceCounterItem rawCountingEvent in core.PerformanceCounter)
                 {
-                    int index = countingEvents.FindIndex(
-                        el =>
-                            el.CoreNumber == core.CoreNumber
-                            && el.Name == rawCountingEvent.EventName
+                    int index = countingEvents.FindIndex(el =>
+                        el.CoreNumber == core.CoreNumber && el.Name == rawCountingEvent.EventName
                     );
                     if (accumulatePerCoreAndEvent && index != -1)
                     {
@@ -184,7 +183,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             UpdateCountingCommandCallTextBox();
         }
 
-        private void StartCounting_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void StartCounting_Click(object sender, RoutedEventArgs e)
         {
             if (!WPerfOptions.Instance.IsWperfInitialized)
                 return;
@@ -211,14 +210,16 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             CountingSettings.countingSettingsForm.IsCountCollected = false;
             StopCountingButton.IsEnabled = true;
             StartCountingButton.IsEnabled = false;
+            BuildAndStartCountingButton.IsEnabled = false;
             StartCountingButton.Content = "Loading...";
         }
 
-        private void StopCounting_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void StopCounting_Click(object sender, RoutedEventArgs e)
         {
             wperfClient.StopCounting();
             StopCountingButton.IsEnabled = false;
             StartCountingButton.IsEnabled = true;
+            BuildAndStartCountingButton.IsEnabled = true;
         }
 
         private void SyncCountingSettings()
@@ -270,7 +271,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             }
         }
 
-        private void AddEventButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void AddEventButton_Click(object sender, RoutedEventArgs e)
         {
             var newCountingEvent = (EventComboBox.SelectedItem as PredefinedEvent)?.AliasName;
 
@@ -337,8 +338,8 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 VS.MessageBox.ShowError(ErrorLanguagePack.RawEventBadFormat);
                 return;
             }
-            var eventExists = CountingSettings.countingSettingsForm.CountingEventList.Any(
-                el => el == rawEvent
+            var eventExists = CountingSettings.countingSettingsForm.CountingEventList.Any(el =>
+                el == rawEvent
             );
 
             if (eventExists)
@@ -357,10 +358,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             var eventList = WPerfOptions.Instance.WperfList.PredefinedEvents;
             var listSearcher = new ListSearcher<PredefinedEvent>(
                 eventList,
-                new SearchOptions<PredefinedEvent>
-                {
-                    GetValue = x => x.AliasName
-                }
+                new SearchOptions<PredefinedEvent> { GetValue = x => x.AliasName }
             );
             return listSearcher.Search(searchText);
         }
@@ -397,8 +395,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
         private void MetricComboBox_PreviewKeyUp(
             object sender,
             System.Windows.Input.KeyEventArgs e
-        )
-        { }
+        ) { }
 
         private void AddMetricButton_Click(object sender, RoutedEventArgs e)
         {
@@ -458,7 +455,26 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             process.StartInfo = startInfo;
             process.Start();
             process.Exited += new EventHandler(WPAProcessExited);
-            OpenInWAButton.IsEnabled = false;
+            OpenInWPAButton.IsEnabled = false;
+        }
+
+#pragma warning disable VSTHRD100 // Avoid async void methods
+        private async void BuildAndStartCounting_Click(object sender, RoutedEventArgs e)
+#pragma warning restore VSTHRD100 // Avoid async void methods
+        {
+            if (string.IsNullOrEmpty(CountingSettings.countingSettingsForm.FilePath))
+                return;
+            Project project = await VS.Solutions.GetActiveProjectAsync();
+            BuildAndStartCountingButton.IsEnabled = false;
+            StartCountingButton.IsEnabled = false;
+            bool buildSucceeded = await project.BuildAsync(BuildAction.Rebuild);
+            BuildAndStartCountingButton.IsEnabled = true;
+            StartCountingButton.IsEnabled = true;
+
+            if (!buildSucceeded)
+                return;
+
+            StartCounting_Click(sender, e);
         }
 
 #pragma warning disable VSTHRD100 // Avoid async void methods
@@ -466,7 +482,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
 #pragma warning restore VSTHRD100 // Avoid async void methods
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            OpenInWAButton.IsEnabled = true;
+            OpenInWPAButton.IsEnabled = true;
         }
     }
 }

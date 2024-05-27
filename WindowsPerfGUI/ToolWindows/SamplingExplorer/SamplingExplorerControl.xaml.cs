@@ -62,6 +62,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
         {
             SamplingSettingsMonikerButton.IsEnabled = true;
             StartSamplingMonikerButton.IsEnabled = true;
+            RunAndStartSamplingMonikerButton.IsEnabled = true;
             StopSamplingMonikerButton.IsEnabled = false;
             if (!string.IsNullOrEmpty(e.stdError))
             {
@@ -135,6 +136,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             wperfClient.StartSamplingAsync().FireAndForget();
             SamplingSettingsMonikerButton.IsEnabled = false;
             StartSamplingMonikerButton.IsEnabled = false;
+            RunAndStartSamplingMonikerButton.IsEnabled = false;
             StopSamplingMonikerButton.IsEnabled = true;
         }
 
@@ -143,6 +145,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             wperfClient.StopSampling();
             SamplingSettingsMonikerButton.IsEnabled = true;
             StartSamplingMonikerButton.IsEnabled = true;
+            RunAndStartSamplingMonikerButton.IsEnabled = true;
             StopSamplingMonikerButton.IsEnabled = false;
         }
 
@@ -662,10 +665,10 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                 );
                 docView.TextView.ViewScroller.EnsureSpanVisible(
                     new SnapshotSpan(
-                          position.Snapshot.GetLineFromLineNumber(lineNumber - 1).Start,
-                          position.Snapshot.GetLineFromLineNumber(lineNumber - 1).End
-                         )
-                    );
+                        position.Snapshot.GetLineFromLineNumber(lineNumber - 1).Start,
+                        position.Snapshot.GetLineFromLineNumber(lineNumber - 1).End
+                    )
+                );
             });
         }
 
@@ -679,13 +682,29 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
         {
             var textBlock = sender as TextBlock;
             string filePath = textBlock.Text;
-            SamplingSection selecteditem =
-                textBlock.DataContext as SamplingSection;
+            SamplingSection selecteditem = textBlock.DataContext as SamplingSection;
             bool isFileExists = File.Exists(filePath);
             if (!isFileExists)
                 return;
             int lineNumber = selecteditem?.LineNumber != null ? (int)selecteditem?.LineNumber : 0;
             OpenVSDocument(filePath, lineNumber);
+        }
+
+#pragma warning disable VSTHRD100 // Avoid async void methods
+        private async void RunAndStartSamplingMonikerButton_Click(object sender, RoutedEventArgs e)
+#pragma warning restore VSTHRD100 // Avoid async void methods
+        {
+            Project project = await VS.Solutions.GetActiveProjectAsync();
+            RunAndStartSamplingMonikerButton.IsEnabled = false;
+            StartSamplingMonikerButton.IsEnabled = false;
+            bool buildSucceeded = await project.BuildAsync(BuildAction.Rebuild);
+            RunAndStartSamplingMonikerButton.IsEnabled = true;
+            StartSamplingMonikerButton.IsEnabled = true;
+
+            if (!buildSucceeded)
+                return;
+
+            StartSamplingMonikerButton_Click(sender, e);
         }
     }
 }

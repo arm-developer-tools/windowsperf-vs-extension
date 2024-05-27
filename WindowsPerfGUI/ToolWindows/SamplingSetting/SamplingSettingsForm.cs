@@ -30,6 +30,7 @@
 
 using System.Collections.ObjectModel;
 using WindowsPerfGUI.SDK.WperfOutputs;
+using WindowsPerfGUI.ToolWindows.SamplingExplorer;
 using WindowsPerfGUI.Utils;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingSetting
@@ -86,7 +87,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             {
                 currentProjectProcessRadioButton = value;
                 OnPropertyChanged();
-                if (value == true)
+                if (value)
                 {
                     _ = Task.Run(async () =>
                     {
@@ -168,7 +169,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             get { return filePath; }
             set
             {
-                if (value.StartsWith("\"") || string.IsNullOrEmpty(value))
+                if (string.IsNullOrEmpty(value) || value.StartsWith("\""))
                     filePath = value;
                 else
                     filePath = $"\"{value}\"";

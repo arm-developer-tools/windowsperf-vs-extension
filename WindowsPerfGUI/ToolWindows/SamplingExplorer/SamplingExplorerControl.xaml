@@ -10,9 +10,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Community.VisualStudio.Toolkit;assembly=Community.VisualStudio.Toolkit"
     xmlns:tree="clr-namespace:WindowsPerfGUI.Components.TreeListView"
+    xmlns:utils="clr-namespace:WindowsPerfGUI.ToolWindows.SamplingSetting"
     Name="SamplingExplorerControlWindow"
     toolkit:Themes.UseVsTheme="True"
     mc:Ignorable="d">
+    <UserControl.DataContext>
+        <utils:SamplingSettingsForm />
+    </UserControl.DataContext>
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converters:BooleanToLinkCursor x:Key="BooleanToLinkCursor" />
@@ -40,6 +44,12 @@
             HorizontalAlignment="Left"
             DockPanel.Dock="Top"
             Orientation="Horizontal">
+            <Components:CustomMonikerButtonControl
+                x:Name="RunAndStartSamplingMonikerButton"
+                Margin="0,4,1,4"
+                Click="RunAndStartSamplingMonikerButton_Click"
+                MonikerName="{x:Static catalog:KnownMonikers.Rerun}"
+                Visibility="{Binding CurrentProjectProcessRadioButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <Components:CustomMonikerButtonControl
                 x:Name="StartSamplingMonikerButton"
                 Margin="0,4,1,4"
