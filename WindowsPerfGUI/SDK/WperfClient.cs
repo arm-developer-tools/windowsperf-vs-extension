@@ -156,7 +156,7 @@ namespace WindowsPerfGUI.SDK
                 indexToInsertAt,
                 $"--output {CountingSettings.countingSettingsForm.OutputPath}"
             );
-            await _wperfProcess.StartBackgroundProcessAsync([.. countingArgsList]);
+            await _wperfProcess.StartBackgroundProcessAsync(countingArgsList.ToArray());
             (object serializedOutput, string stdError) = StopCounting();
             OnCountingFinished?.Invoke(this, (serializedOutput, stdError));
         }
@@ -164,7 +164,8 @@ namespace WindowsPerfGUI.SDK
         public EventHandler<(
             WperfSampling serializedOutput,
             string stdError
-        )> OnSamplingFinished { get; set; }
+        )> OnSamplingFinished
+        { get; set; }
 
         public EventHandler<(object _, string stdError)> OnCountingFinished { get; set; }
 

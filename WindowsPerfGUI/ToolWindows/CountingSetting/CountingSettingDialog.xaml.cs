@@ -28,12 +28,12 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using Microsoft.VisualStudio.PlatformUI;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
-using Microsoft.VisualStudio.PlatformUI;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK;
@@ -105,7 +105,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
 
         private List<CountingEvent> FormatCountingOutput()
         {
-            List<CountingEvent> countingEvents = [];
+            List<CountingEvent> countingEvents = new();
 
             string path = CountingSettings.countingSettingsForm.OutputPath;
 
@@ -233,11 +233,12 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
         )
         {
             int eventIndex = -1;
-            if (!(CountingEventListBox.SelectedItems?.Count > 0))
-            {
-                return;
-            }
+
+            if (!(CountingEventListBox.SelectedItems?.Count > 0)) return;
+
             HideEventComboBoxPlaceholder();
+
+            GroupEventButton.IsEnabled = CanGroupEvents();
 
             string aliasName = CountingEventListBox.SelectedItems[0] as string;
 
@@ -362,6 +363,30 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             );
             return listSearcher.Search(searchText);
         }
+        private void CustomButtonControl_Click(object sender, RoutedEventArgs e)
+        {
+            if (!CanGroupEvents())
+            {
+                return;
+            }
+            var selectedItems = CountingEventListBox.SelectedItems.Cast<string>().ToList();
+            string eventGroup = "{" + string.Join(",", selectedItems) + "}";
+            CountingSettings.countingSettingsForm.CountingEventList.Add(eventGroup);
+            for (int i = 0; i < selectedItems.Count; i++)
+            {
+                CountingSettings.countingSettingsForm.CountingEventList.Remove(selectedItems[i]);
+            }
+            CountingEventListBox.SelectedItems.Add(eventGroup);
+        }
+        private bool CanGroupEvents()
+        {
+            if (CountingEventListBox.SelectedItems.Count < 2) return false;
+            var selectedItems = CountingEventListBox.SelectedItems.Cast<string>().ToList();
+            if (string.Join(",", selectedItems).Contains("{") || string.Join(",", selectedItems).Contains("}")) return false;
+            return true;
+        }
+
+
 
         private void CountingMetricListBox_SelectionChanged(
             object sender,
@@ -395,7 +420,8 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
         private void MetricComboBox_PreviewKeyUp(
             object sender,
             System.Windows.Input.KeyEventArgs e
-        ) { }
+        )
+        { }
 
         private void AddMetricButton_Click(object sender, RoutedEventArgs e)
         {
