@@ -149,6 +149,18 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             set { samplingEvent = value; }
         }
 
+        private bool isEventSelectionEnabled;
+
+        public bool IsEventSelectionEnabled
+        {
+            get { return isEventSelectionEnabled; }
+            set
+            {
+                isEventSelectionEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
         private ObservableCollection<SamplingEventConfiguration> samplingEventList;
 
         public ObservableCollection<SamplingEventConfiguration> SamplingEventList
@@ -225,10 +237,15 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             // that depend on the init of SamplingSettings.samplingSettingsFrom
             if (SamplingEventList == null)
                 samplingEventList = new ObservableCollection<SamplingEventConfiguration>();
+            IsEventSelectionEnabled = samplingEventList.Count < WperfDefaults.TotalGPCNum;
             samplingEventList.CollectionChanged += (sender, e) =>
             {
                 OnPropertyChanged("SamplingEventList");
                 CommandLinePreview = SamplingSettings.GenerateCommandLinePreview();
+                IsEventSelectionEnabled =
+                    (sender as ObservableCollection<SamplingEventConfiguration>).Count
+                    < WperfDefaults.TotalGPCNum;
+                OnPropertyChanged("IsEventSelectionEnabled");
             };
             if (SamplingSettings.samplingSettingsFrom != null)
             {

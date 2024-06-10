@@ -29,10 +29,10 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-global using Community.VisualStudio.Toolkit;
-global using Microsoft.VisualStudio.Shell;
 global using System;
 global using System.Diagnostics;
+global using Community.VisualStudio.Toolkit;
+global using Microsoft.VisualStudio.Shell;
 global using Task = System.Threading.Tasks.Task;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -102,6 +102,10 @@ namespace WindowsPerfGUI
                 WperfDefaults.Frequency = results
                     .TestResults.Find(el => el.TestName == "pmu_device.sampling.INTERVAL_DEFAULT")
                     ?.Result;
+                string gpc_num = results
+                    .TestResults.Find(el => el.TestName == "PMU_CTL_QUERY_HW_CFG [total_gpc_num]")
+                    ?.Result;
+                WperfDefaults.TotalGPCNum = Convert.ToInt32(gpc_num, 16);
             }
             catch (Exception e)
             {

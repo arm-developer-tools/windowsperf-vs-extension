@@ -23,6 +23,7 @@
         <converters:NullToDisabledConverter x:Key="NullToDisabledConverter" />
         <converters:EmptyStringToDisabledConverter x:Key="EmptyStringToDisabledConverter" />
         <converters:NegativeIntToDisabledConverter x:Key="NegativeIntToDisabledConverter" />
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </platform:DialogWindow.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -143,7 +144,8 @@
                             Margin="5,0,0,0"
                             Click="AddRawEventButton_Click"
                             IsEnabled="{Binding Text, ElementName=RawEventsInput, Converter={StaticResource EmptyStringToDisabledConverter}}"
-                            MonikerName="{x:Static catalog:KnownMonikers.Add}" />
+                            MonikerName="{x:Static catalog:KnownMonikers.Add}"
+                            Visibility="{Binding IsEventSelectionEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     </Grid>
                 </Grid>
                 <Grid>
@@ -179,7 +181,8 @@
                             Margin="5,0,0,10"
                             Click="AddEventButton_Click"
                             IsEnabled="{Binding SelectedItem, ElementName=EventComboBox, Converter={StaticResource NullToDisabledConverter}}"
-                            MonikerName="{x:Static catalog:KnownMonikers.Add}" />
+                            MonikerName="{x:Static catalog:KnownMonikers.Add}"
+                            Visibility="{Binding IsEventSelectionEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <Components:CustomMonikerButtonControl
                             x:Name="RemoveEventButton"
                             Margin="5,0,0,10"
