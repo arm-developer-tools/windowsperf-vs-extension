@@ -281,30 +281,30 @@
                             Text="{x:Static locals:SamplingSettingsLanguagePack.EventHeader}" />
                     </Grid>
                     <StackPanel Grid.Row="1" Grid.RowSpan="2">
-                        <ScrollViewer MaxHeight="95" VerticalScrollBarVisibility="Auto">
-                            <ListBox
-                                x:Name="CountingEventListBox"
-                                d:ItemsSource="{d:SampleData ItemCount=5}"
-                                BorderBrush="Transparent"
-                                ItemsSource="{Binding CountingEventList}"
-                                SelectionChanged="CountingEventListBox_SelectionChanged"
-                                SelectionMode="Multiple">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid x:Name="GridItem">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="20" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock
-                                                x:Name="Parameter"
-                                                Grid.Column="1"
-                                                Text="{Binding}" />
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-                        </ScrollViewer>
+                        <ListBox
+                            x:Name="CountingEventListBox"
+                            Height="95"
+                            d:ItemsSource="{d:SampleData ItemCount=5}"
+                            BorderBrush="Transparent"
+                            ItemsSource="{Binding CountingEventList}"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            SelectionChanged="CountingEventListBox_SelectionChanged"
+                            SelectionMode="Multiple">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid x:Name="GridItem">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="20" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                            x:Name="Parameter"
+                                            Grid.Column="1"
+                                            Text="{Binding}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                         <Components:CustomButtonControl
                             x:Name="GroupEventButton"
                             Margin="0,10,0,10"
@@ -364,35 +364,33 @@
                             Margin="7,0,5,0"
                             Text="{x:Static locals:CountingSettingsLanguagePack.Metrics}" />
                     </Grid>
-                    <ScrollViewer
+                    <ListBox
+                        x:Name="CountingMetricListBox"
                         Grid.Row="1"
                         Grid.RowSpan="2"
                         MaxHeight="185"
-                        VerticalScrollBarVisibility="Auto">
-                        <ListBox
-                            x:Name="CountingMetricListBox"
-                            d:ItemsSource="{d:SampleData ItemCount=5}"
-                            BorderBrush="Transparent"
-                            ItemsSource="{Binding CountingMetricList}"
-                            SelectionChanged="CountingMetricListBox_SelectionChanged"
-                            SelectionMode="Multiple">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid x:Name="GridItem">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="20" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock
-                                            x:Name="Parameter"
-                                            Grid.Column="0"
-                                            Grid.ColumnSpan="2"
-                                            Text="{Binding}" />
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </ScrollViewer>
+                        d:ItemsSource="{d:SampleData ItemCount=5}"
+                        BorderBrush="Transparent"
+                        ItemsSource="{Binding CountingMetricList}"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        SelectionChanged="CountingMetricListBox_SelectionChanged"
+                        SelectionMode="Multiple">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid x:Name="GridItem">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                        x:Name="Parameter"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Text="{Binding}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </Grid>
             </StackPanel>
         </GroupBox>

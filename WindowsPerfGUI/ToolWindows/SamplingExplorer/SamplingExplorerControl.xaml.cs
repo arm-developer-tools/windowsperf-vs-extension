@@ -28,13 +28,13 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using Microsoft.VisualStudio.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
-using Microsoft.VisualStudio.Text;
 using WindowsPerfGUI.Components.TreeListView;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
@@ -151,7 +151,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
 
         private void HighlightEditor(
             SamplingSection samplingSection,
-            Boolean useAbsoluteOverhead = false
+            bool useAbsoluteOverhead = false
         )
         {
             if (
