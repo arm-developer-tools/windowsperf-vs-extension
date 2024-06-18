@@ -381,6 +381,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
         private bool CanGroupEvents()
         {
             if (CountingEventListBox.SelectedItems.Count < 2) return false;
+            if (CountingEventListBox.SelectedItems.Count > WperfDefaults.TotalGPCNum) return false;
             var selectedItems = CountingEventListBox.SelectedItems.Cast<string>().ToList();
             if (string.Join(",", selectedItems).Contains("{") || string.Join(",", selectedItems).Contains("}")) return false;
             return true;
