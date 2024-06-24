@@ -28,13 +28,13 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.VisualStudio.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using Microsoft.VisualStudio.Text;
 using WindowsPerfGUI.Components.TreeListView;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
@@ -130,6 +130,24 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                     ErrorLanguagePack.RunningSamplingOverlapLine1,
                     ErrorLanguagePack.RunningSamplingOverlapLine2
                 );
+                return;
+            }
+
+            try
+            {
+                (_, string stdError) = wperfClient.GetVersion();
+                if (!string.IsNullOrEmpty(stdError))
+                {
+                    throw new Exception(stdError);
+                }
+            }
+            catch (Exception error)
+            {
+                Trace.WriteLine(error.Message);
+                VS.MessageBox.ShowError(
+                    "Error starting wperf process. Please double check your wperf path."
+                );
+                wperfClient.Reinitialize();
                 return;
             }
 

@@ -48,6 +48,16 @@ namespace WindowsPerfGUI.SDK
 
         protected Action<string> OutputWindowTextWriter { get; set; }
 
+        public void Reinitialize()
+        {
+            if (!IsInitialized)
+            {
+                return;
+            }
+            _wperfProcess = new ProcessRunner(Path);
+            IsInitialized = true;
+        }
+
         private void LogToOutput(string stdOutput, string stdError, params string[] args)
         {
             if (OutputWindowTextWriter == null)
@@ -164,8 +174,7 @@ namespace WindowsPerfGUI.SDK
         public EventHandler<(
             WperfSampling serializedOutput,
             string stdError
-        )> OnSamplingFinished
-        { get; set; }
+        )> OnSamplingFinished { get; set; }
 
         public EventHandler<(object _, string stdError)> OnCountingFinished { get; set; }
 

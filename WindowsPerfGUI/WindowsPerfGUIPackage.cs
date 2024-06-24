@@ -110,6 +110,9 @@ namespace WindowsPerfGUI
             catch (Exception e)
             {
                 Trace.WriteLine(e.Message);
+                await VS.MessageBox.ShowErrorAsync(
+                    "Error starting wperf process. Please double check your wperf path."
+                );
             }
         }
     }

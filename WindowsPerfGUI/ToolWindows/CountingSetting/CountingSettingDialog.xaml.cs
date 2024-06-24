@@ -28,12 +28,12 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.VisualStudio.PlatformUI;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using Microsoft.VisualStudio.PlatformUI;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK;
@@ -141,8 +141,10 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             {
                 foreach (CorePerformanceCounterItem rawCountingEvent in core.PerformanceCounter)
                 {
-                    int index = countingEvents.FindIndex(el =>
-                        el.CoreNumber == core.CoreNumber && el.Name == rawCountingEvent.EventName
+                    int index = countingEvents.FindIndex(
+                        el =>
+                            el.CoreNumber == core.CoreNumber
+                            && el.Name == rawCountingEvent.EventName
                     );
                     if (accumulatePerCoreAndEvent && index != -1)
                     {
@@ -205,6 +207,23 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 return;
             }
             SyncCountingSettings();
+            try
+            {
+                (_, string stdError) = wperfClient.GetVersion();
+                if (!string.IsNullOrEmpty(stdError))
+                {
+                    throw new Exception(stdError);
+                }
+            }
+            catch (Exception error)
+            {
+                Trace.WriteLine(error.Message);
+                VS.MessageBox.ShowError(
+                    "Error starting wperf process. Please double check your wperf path."
+                );
+                wperfClient.Reinitialize();
+                return;
+            }
             wperfClient.StartCountingAsync().FireAndForget();
             CountingSettings.countingSettingsForm.CountingResult = null;
             CountingSettings.countingSettingsForm.IsCountCollected = false;
@@ -234,7 +253,8 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
         {
             int eventIndex = -1;
 
-            if (!(CountingEventListBox.SelectedItems?.Count > 0)) return;
+            if (!(CountingEventListBox.SelectedItems?.Count > 0))
+                return;
 
             HideEventComboBoxPlaceholder();
 
@@ -339,8 +359,8 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 VS.MessageBox.ShowError(ErrorLanguagePack.RawEventBadFormat);
                 return;
             }
-            var eventExists = CountingSettings.countingSettingsForm.CountingEventList.Any(el =>
-                el == rawEvent
+            var eventExists = CountingSettings.countingSettingsForm.CountingEventList.Any(
+                el => el == rawEvent
             );
 
             if (eventExists)
@@ -363,6 +383,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             );
             return listSearcher.Search(searchText);
         }
+
         private void CustomButtonControl_Click(object sender, RoutedEventArgs e)
         {
             if (!CanGroupEvents())
@@ -378,16 +399,21 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             }
             CountingEventListBox.SelectedItems.Add(eventGroup);
         }
+
         private bool CanGroupEvents()
         {
-            if (CountingEventListBox.SelectedItems.Count < 2) return false;
-            if (CountingEventListBox.SelectedItems.Count > WperfDefaults.TotalGPCNum) return false;
+            if (CountingEventListBox.SelectedItems.Count < 2)
+                return false;
+            if (CountingEventListBox.SelectedItems.Count > WperfDefaults.TotalGPCNum)
+                return false;
             var selectedItems = CountingEventListBox.SelectedItems.Cast<string>().ToList();
-            if (string.Join(",", selectedItems).Contains("{") || string.Join(",", selectedItems).Contains("}")) return false;
+            if (
+                string.Join(",", selectedItems).Contains("{")
+                || string.Join(",", selectedItems).Contains("}")
+            )
+                return false;
             return true;
         }
-
-
 
         private void CountingMetricListBox_SelectionChanged(
             object sender,
@@ -421,8 +447,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
         private void MetricComboBox_PreviewKeyUp(
             object sender,
             System.Windows.Input.KeyEventArgs e
-        )
-        { }
+        ) { }
 
         private void AddMetricButton_Click(object sender, RoutedEventArgs e)
         {

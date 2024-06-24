@@ -48,8 +48,7 @@
                 x:Name="RunAndStartSamplingMonikerButton"
                 Margin="0,4,1,4"
                 Click="RunAndStartSamplingMonikerButton_Click"
-                MonikerName="{x:Static catalog:KnownMonikers.Rerun}"
-                Visibility="{Binding CurrentProjectProcessRadioButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                MonikerName="{x:Static catalog:KnownMonikers.Rerun}" />
             <Components:CustomMonikerButtonControl
                 x:Name="StartSamplingMonikerButton"
                 Margin="0,4,1,4"
