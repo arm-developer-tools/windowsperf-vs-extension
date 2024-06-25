@@ -70,6 +70,15 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Metric List.
+        /// </summary>
+        public static string MetricList {
+            get {
+                return ResourceManager.GetString("MetricList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Metrics.
         /// </summary>
         public static string Metrics {

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CpuCore" xml:space="preserve">
-    <value>Núcleo de CPU :</value>
+    <value>Núcleo de CPU</value>
   </data>
   <data name="Event" xml:space="preserve">
     <value>-- Selecione um evento para adicionar --</value>
@@ -127,10 +127,10 @@
     <value>-- Selecione a frequência do evento --</value>
   </data>
   <data name="Timeout" xml:space="preserve">
-    <value>Tempo de esgoatamento (s) :</value>
+    <value>Tempo de esgoatamento (s)</value>
   </data>
   <data name="ExtraArgs" xml:space="preserve">
-    <value>Argumentos extras :</value>
+    <value>Argumentos extras</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Salvar</value>
@@ -157,7 +157,7 @@
     <value>Núclero de CPU número</value>
   </data>
   <data name="RawEvent" xml:space="preserve">
-    <value>Evento bruto:</value>
+    <value>Evento bruto</value>
   </data>
   <data name="EventHeader" xml:space="preserve">
     <value>Evento</value>

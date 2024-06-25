@@ -61,7 +61,7 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CPU Core :.
+        ///   Looks up a localized string similar to CPU Core.
         /// </summary>
         public static string CpuCore {
             get {
@@ -88,7 +88,7 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Event.
+        ///   Looks up a localized string similar to Event list.
         /// </summary>
         public static string EventHeader {
             get {
@@ -106,7 +106,7 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Extra arguments :.
+        ///   Looks up a localized string similar to Extra arguments.
         /// </summary>
         public static string ExtraArgs {
             get {
@@ -178,7 +178,7 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Raw Event :.
+        ///   Looks up a localized string similar to Raw Event.
         /// </summary>
         public static string RawEvent {
             get {
@@ -205,7 +205,7 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Timeout (s) :.
+        ///   Looks up a localized string similar to Timeout (s).
         /// </summary>
         public static string Timeout {
             get {

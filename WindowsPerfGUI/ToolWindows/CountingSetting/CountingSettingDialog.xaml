@@ -11,7 +11,7 @@
     xmlns:platform="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
     xmlns:toolkit="clr-namespace:Community.VisualStudio.Toolkit;assembly=Community.VisualStudio.Toolkit"
     xmlns:utils="clr-namespace:WindowsPerfGUI.ToolWindows.CountingSetting"
-    Width="900"
+    Width="1200"
     Height="900"
     toolkit:Themes.UseVsTheme="True"
     mc:Ignorable="d">
@@ -46,6 +46,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
@@ -138,7 +139,7 @@
                 </StackPanel>
             </ScrollViewer>
         </GroupBox>
-        <StackPanel Grid.Row="2" Grid.ColumnSpan="2">
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="3">
             <Label Content="{x:Static locals:SamplingSettingsLanguagePack.WperfCommandPreview}" />
             <Components:CustomTextBoxControl
                 x:Name="CountingCommandCallTextBox"
@@ -278,12 +279,11 @@
                             Grid.Column="0"
                             Grid.ColumnSpan="2"
                             Margin="7,0,5,0"
-                            Text="{x:Static locals:SamplingSettingsLanguagePack.EventHeader}" />
+                            Text="{x:Static locals:SamplingSettingsLanguagePack.Events}" />
                     </Grid>
                     <StackPanel Grid.Row="1" Grid.RowSpan="2">
                         <ListBox
                             x:Name="CountingEventListBox"
-                            Height="95"
                             d:ItemsSource="{d:SampleData ItemCount=5}"
                             BorderBrush="Transparent"
                             ItemsSource="{Binding CountingEventList}"
@@ -292,16 +292,10 @@
                             SelectionMode="Multiple">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid x:Name="GridItem">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="20" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock
-                                            x:Name="Parameter"
-                                            Grid.Column="1"
-                                            Text="{Binding}" />
-                                    </Grid>
+                                    <TextBlock
+                                        x:Name="Parameter"
+                                        Grid.Column="1"
+                                        Text="{Binding}" />
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
@@ -315,7 +309,16 @@
                             IsEnabled="False" />
                     </StackPanel>
                 </Grid>
-                <Separator Margin="0,15,0,15" />
+            </StackPanel>
+        </GroupBox>
+        <GroupBox
+            Grid.RowSpan="2"
+            Grid.Column="2"
+            Margin="5,0,0,0">
+            <GroupBox.Header>
+                <Label Content="{x:Static locals:CountingSettingsLanguagePack.MetricList}" />
+            </GroupBox.Header>
+            <StackPanel>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -326,27 +329,41 @@
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         Margin="0,0,5,10">
-                        <Components:CustomComboBoxControl x:Name="MetricComboBox" SelectedItem="{Binding CountingMetric, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                        <TextBlock
-                            x:Name="MetricComboBoxPlaceholder"
-                            Margin="5,3,20,0"
-                            IsHitTestVisible="False"
-                            Text="{x:Static locals:CountingSettingsLanguagePack.MetricComboboxPlaceholder}" />
+                        <StackPanel>
+                            <Label Content="{x:Static locals:CountingSettingsLanguagePack.Metrics}" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Components:CustomComboBoxControl
+                                    x:Name="MetricComboBox"
+                                    Grid.Column="0"
+                                    SelectedItem="{Binding CountingMetric, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                <TextBlock
+                                    x:Name="MetricComboBoxPlaceholder"
+                                    Grid.Column="0"
+                                    Margin="5,3,20,0"
+                                    IsHitTestVisible="False"
+                                    Text="{x:Static locals:CountingSettingsLanguagePack.MetricComboboxPlaceholder}" />
+                                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                    <Components:CustomMonikerButtonControl
+                                        x:Name="AddMetricButton"
+                                        Margin="5,0,0,10"
+                                        Click="AddMetricButton_Click"
+                                        IsEnabled="{Binding SelectedItem, ElementName=MetricComboBox, Converter={StaticResource NullToDisabledConverter}}"
+                                        MonikerName="{x:Static catalog:KnownMonikers.Add}" />
+                                    <Components:CustomMonikerButtonControl
+                                        x:Name="RemoveMetricButton"
+                                        Margin="5,0,0,10"
+                                        Click="RemoveMetricButton_Click"
+                                        IsEnabled="{Binding SelectedIndex, ElementName=CountingMetricListBox, Converter={StaticResource NegativeIntToDisabledConverter}}"
+                                        MonikerName="{x:Static catalog:KnownMonikers.Remove}" />
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
                     </Grid>
-                    <StackPanel Grid.Column="2" Orientation="Horizontal">
-                        <Components:CustomMonikerButtonControl
-                            x:Name="AddMetricButton"
-                            Margin="5,0,0,10"
-                            Click="AddMetricButton_Click"
-                            IsEnabled="{Binding SelectedItem, ElementName=MetricComboBox, Converter={StaticResource NullToDisabledConverter}}"
-                            MonikerName="{x:Static catalog:KnownMonikers.Add}" />
-                        <Components:CustomMonikerButtonControl
-                            x:Name="RemoveMetricButton"
-                            Margin="5,0,0,10"
-                            Click="RemoveMetricButton_Click"
-                            IsEnabled="{Binding SelectedIndex, ElementName=CountingMetricListBox, Converter={StaticResource NegativeIntToDisabledConverter}}"
-                            MonikerName="{x:Static catalog:KnownMonikers.Remove}" />
-                    </StackPanel>
+
                 </Grid>
                 <Grid Margin="0,10,0,5">
                     <Grid.RowDefinitions>
@@ -368,7 +385,6 @@
                         x:Name="CountingMetricListBox"
                         Grid.Row="1"
                         Grid.RowSpan="2"
-                        MaxHeight="185"
                         d:ItemsSource="{d:SampleData ItemCount=5}"
                         BorderBrush="Transparent"
                         ItemsSource="{Binding CountingMetricList}"

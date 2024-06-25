@@ -135,4 +135,7 @@
   <data name="Metrics" xml:space="preserve">
     <value>Metrics</value>
   </data>
+  <data name="MetricList" xml:space="preserve">
+    <value>Metric List</value>
+  </data>
 </root>
