@@ -29,11 +29,12 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-global using System;
-global using System.Diagnostics;
 global using Community.VisualStudio.Toolkit;
 global using Microsoft.VisualStudio.Shell;
+global using System;
+global using System.Diagnostics;
 global using Task = System.Threading.Tasks.Task;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using WindowsPerfGUI.Options;
@@ -79,7 +80,6 @@ namespace WindowsPerfGUI
     public sealed class WindowsPerfGUIPackage : ToolkitPackage
     {
         public static OutputWindowPane WperfOutputWindow { get; set; }
-
         protected override async Task InitializeAsync(
             CancellationToken cancellationToken,
             IProgress<ServiceProgressData> progress
@@ -91,13 +91,32 @@ namespace WindowsPerfGUI
                 lazyCreate: true
             );
             this.RegisterToolWindows();
+           
+        }
+
+        protected override async Task OnAfterPackageLoadedAsync(CancellationToken cancellationToken)
+        {
+            bool shouldIgnoreWperfVersion = WPerfOptions.Instance.WperfVersionCheckIgnore;
 
             try
             {
                 WperfClientFactory wperfClient = new();
+
+                if (!shouldIgnoreWperfVersion)
+                {
+                    (WperfVersion versions, string stdVersionError) = wperfClient.GetVersion();
+                    WPerfOptions.Instance.WperfCurrentVersion = versions;
+                    await WPerfOptions.Instance.SaveAsync();
+                    string wperfVersion = versions.Components.FirstOrDefault().ComponentVersion;
+                    if (wperfVersion != WperfDefaults.WPERF_MIN_VERSION)
+                        await VS.MessageBox.ShowWarningAsync($"This version of the extention was built to only support WindowsPerf version {WperfDefaults.WPERF_MIN_VERSION}!");
+                }
+
                 (WperfTest results, string stdError) = wperfClient.GetTest();
+
                 if (stdError != "")
                     throw new Exception(stdError);
+
 
                 WperfDefaults.Frequency = results
                     .TestResults.Find(el => el.TestName == "pmu_device.sampling.INTERVAL_DEFAULT")
@@ -114,6 +133,9 @@ namespace WindowsPerfGUI
                     "Error starting wperf process. Please double check your wperf path."
                 );
             }
+            await base.OnAfterPackageLoadedAsync(cancellationToken);
         }
+
+
     }
 }

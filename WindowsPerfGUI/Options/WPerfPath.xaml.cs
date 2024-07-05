@@ -33,6 +33,7 @@ using System.Windows;
 using System.Windows.Controls;
 using WindowsPerfGUI.SDK;
 using WindowsPerfGUI.SDK.WperfOutputs;
+using WindowsPerfGUI.ToolWindows.SamplingSetting;
 
 namespace WindowsPerfGUI.Options
 {
@@ -41,6 +42,7 @@ namespace WindowsPerfGUI.Options
     /// </summary>
     public partial class WPerfPath : UserControl
     {
+        const string WPERF_MIN_VERSION = "3.3.3";
         public WPerfPath()
         {
             InitializeComponent();
@@ -66,6 +68,7 @@ namespace WindowsPerfGUI.Options
 
         private void ValidateButton_Click(object sender, RoutedEventArgs e)
         {
+            bool shouldIgnoreWperfVersionCheck = WPerfVersionCheckIgnore.IsChecked != null || WPerfVersionCheckIgnore.IsChecked == true;
             WPerfOptions.Instance.WperfPath = PathInput.Text;
             WperfClientFactory wperf = new WperfClientFactory();
             try
@@ -74,6 +77,9 @@ namespace WindowsPerfGUI.Options
                 if (error != "")
                     throw new Exception(error);
                 SetWperfVersion(versions, shouldForce: true);
+                string wperfVersion = versions.Components.FirstOrDefault().ComponentVersion;
+                if (shouldIgnoreWperfVersionCheck && wperfVersion != WperfDefaults.WPERF_MIN_VERSION) 
+                    VS.MessageBox.ShowWarning($"This version of the extention was built to only support WindowsPerf version {WperfDefaults.WPERF_MIN_VERSION}!");
 
                 (WperfList wperfList, string errorWperfList) = wperf.GetEventList();
                 if (errorWperfList != "")
@@ -154,6 +160,13 @@ namespace WindowsPerfGUI.Options
             textBlock.SetValue(Grid.ColumnProperty, isRight ? 1 : 0);
 
             return textBlock;
+        }
+
+        private void WPerfVersionCheckIgnoreChanged(object sender, RoutedEventArgs e)
+        {
+            bool shouldEnforceVersionCheck = WPerfVersionCheckIgnore.IsChecked == null || WPerfVersionCheckIgnore.IsChecked == false;
+            WPerfOptions.Instance.WperfVersionCheckIgnore = !shouldEnforceVersionCheck;
+            WPerfOptions.Instance.Save();
         }
     }
 }

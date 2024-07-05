@@ -32,6 +32,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 {
     static class WperfDefaults
     {
+        public const string WPERF_MIN_VERSION = "3.3.3";
+
 #nullable enable
         public static string? Frequency;
         public static int? TotalGPCNum;

@@ -104,6 +104,12 @@
                         IsReadOnly="True" />
                 </DataGrid.Columns>
             </DataGrid>
+            <CheckBox
+                x:Name="WPerfVersionCheckIgnore"
+                Margin="0,10,0,0"
+                Checked="WPerfVersionCheckIgnoreChanged"
+                Content="Ignore WindowsPerf version check"
+                Unchecked="WPerfVersionCheckIgnoreChanged" />
         </StackPanel>
     </ScrollViewer>
 </UserControl>

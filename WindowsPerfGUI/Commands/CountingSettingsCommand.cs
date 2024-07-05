@@ -31,6 +31,7 @@
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.ToolWindows.CountingSetting;
+using WindowsPerfGUI.ToolWindows.SamplingSetting;
 
 namespace WindowsPerfGUI.Commands
 {
@@ -48,10 +49,32 @@ namespace WindowsPerfGUI.Commands
                 );
                 return;
             }
+            string windowTitle = CountingSettingsLanguagePack.WindowTitle;
+
+            if (WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion != WperfDefaults.WPERF_MIN_VERSION)
+            {
+                if (WPerfOptions.Instance.WperfVersionCheckIgnore != true)
+                {
+                    await VS.MessageBox.ShowErrorAsync(
+                    $"This version of the extention was built to only support WindowsPerf version {WperfDefaults.WPERF_MIN_VERSION}!",
+                    "In order to bypass this check, please go to Tools -> Options -> WindowsPerf -> WindowsPerf Path and check the 'Ignore WindowsPerf version check' checkbox."
+                );
+                    return;
+
+                }
+                var messageBoxResult = await VS.MessageBox.ShowWarningAsync(
+                $"This version of the extention was built to only support WindowsPerf version {WperfDefaults.WPERF_MIN_VERSION}!"
+            );
+                if (messageBoxResult == Microsoft.VisualStudio.VSConstants.MessageBoxResult.IDCANCEL)
+                {
+                    return;
+                }
+                windowTitle += $" - (UNSTABLE)";
+            }
 
             CountingSettingDialog countingSettingsDialog = new()
             {
-                Title = CountingSettingsLanguagePack.WindowTitle
+                Title = windowTitle
             };
             countingSettingsDialog.ShowDialog();
         }

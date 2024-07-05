@@ -28,8 +28,10 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.ToolWindows.SamplingExplorer;
+using WindowsPerfGUI.ToolWindows.SamplingSetting;
 
 namespace WindowsPerfGUI.Commands
 {
@@ -38,12 +40,43 @@ namespace WindowsPerfGUI.Commands
     {
         protected override void BeforeQueryStatus(EventArgs e)
         {
-            Command.Text = SamplingExplorerLanguagePack.WindowTitle;
+            string windowTitle = SamplingExplorerLanguagePack.WindowTitle;
+            if (WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion != WperfDefaults.WPERF_MIN_VERSION)
+                windowTitle += $" - (UNSTABLE)";
+            Command.Text = windowTitle;
             base.BeforeQueryStatus(e);
         }
 
         protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
         {
+            if (!WPerfOptions.Instance.IsWperfInitialized)
+            {
+                await VS.MessageBox.ShowErrorAsync(
+                    ErrorLanguagePack.NotInititiatedWperfErrorLine1,
+                    ErrorLanguagePack.NotInititiatedWperfErrorLine2
+                );
+                return;
+            }
+
+            if (WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion != WperfDefaults.WPERF_MIN_VERSION)
+            {
+                if (WPerfOptions.Instance.WperfVersionCheckIgnore != true)
+                {
+                    await VS.MessageBox.ShowErrorAsync(
+                    $"This version of the extention was built to only support WindowsPerf version {WperfDefaults.WPERF_MIN_VERSION}!",
+                    "In order to bypass this check, please go to Tools -> Options -> WindowsPerf -> WindowsPerf Path and check the 'Ignore WindowsPerf version check' checkbox."
+                );
+                    return;
+
+                }
+                var messageBoxResult = await VS.MessageBox.ShowWarningAsync(
+                $"This version of the extention was built to only support WindowsPerf version {WperfDefaults.WPERF_MIN_VERSION}!"
+            );
+                if (messageBoxResult == Microsoft.VisualStudio.VSConstants.MessageBoxResult.IDCANCEL)
+                {
+                    return;
+                }
+            }
             await SamplingExplorer.ShowAsync();
         }
     }
