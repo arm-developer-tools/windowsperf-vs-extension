@@ -160,21 +160,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                 return;
             }
 
-            try
-            {
-                (_, string stdError) = wperfClient.GetVersion();
-                if (!string.IsNullOrEmpty(stdError))
-                {
-                    throw new Exception(stdError);
-                }
-            }
-            catch (Exception error)
-            {
-                Trace.WriteLine(error.Message);
-                VS.MessageBox.ShowError(ErrorLanguagePack.WperfPathChanged);
-                wperfClient.Reinitialize();
-                return;
-            }
             _ = wperfClient
                 .StartSamplingAsync()
                 .ContinueWith(
@@ -187,9 +172,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                         if (t.IsFaulted)
                         {
                             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                            await VS.MessageBox.ShowErrorAsync(
-                                "Error starting wperf process. Please double check your wperf path."
-                            );
+
+                            await VS.MessageBox.ShowErrorAsync(ErrorLanguagePack.WperfPathChanged);
                             Trace.WriteLine(t.Exception.Message);
                             wperfClient.Reinitialize();
 

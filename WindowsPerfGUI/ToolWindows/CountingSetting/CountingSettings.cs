@@ -93,8 +93,13 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
 
         private static void ValidateSettings()
         {
-            // TODO: update ValidateSettings as the UI finalizes
-            AreSettingsFilled = true;
+            AreSettingsFilled = !(
+                (
+                    countingSettingsForm.CountingEventList.Count
+                    + countingSettingsForm.CountingMetricList.Count
+                ) < 1
+                || countingSettingsForm.CPUCores.Count == 0
+            );
         }
 
         private static List<string> AppendElementsToList(List<string> source, params string[] args)

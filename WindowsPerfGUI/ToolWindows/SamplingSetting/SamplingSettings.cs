@@ -76,18 +76,11 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 
         private static void ValidateSettings()
         {
-            if (
-                !(
-                    samplingSettingsFrom.SamplingEventList.Count < 1
-                    || string.IsNullOrEmpty(samplingSettingsFrom.FilePath)
-                    || string.IsNullOrEmpty(samplingSettingsFrom.CPUCore?.coreNumber.ToString())
-                )
-            )
-            {
-                AreSettingsFilled = true;
-                return;
-            }
-            AreSettingsFilled = false;
+            AreSettingsFilled = !(
+                samplingSettingsFrom.SamplingEventList.Count < 1
+                || string.IsNullOrEmpty(samplingSettingsFrom.FilePath)
+                || string.IsNullOrEmpty(samplingSettingsFrom.CPUCore?.coreNumber.ToString())
+            );
         }
 
         private static List<string> AppendElementsToList(List<string> source, params string[] args)
