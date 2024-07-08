@@ -29,10 +29,10 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-global using Community.VisualStudio.Toolkit;
-global using Microsoft.VisualStudio.Shell;
 global using System;
 global using System.Diagnostics;
+global using Community.VisualStudio.Toolkit;
+global using Microsoft.VisualStudio.Shell;
 global using Task = System.Threading.Tasks.Task;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -81,6 +81,7 @@ namespace WindowsPerfGUI
     public sealed class WindowsPerfGUIPackage : ToolkitPackage
     {
         public static OutputWindowPane WperfOutputWindow { get; set; }
+
         protected override async Task InitializeAsync(
             CancellationToken cancellationToken,
             IProgress<ServiceProgressData> progress
@@ -92,7 +93,6 @@ namespace WindowsPerfGUI
                 lazyCreate: true
             );
             this.RegisterToolWindows();
-
         }
 
         protected override async Task OnAfterPackageLoadedAsync(CancellationToken cancellationToken)
@@ -110,15 +110,18 @@ namespace WindowsPerfGUI
                     await WPerfOptions.Instance.SaveAsync();
                     string wperfVersion = versions.Components.FirstOrDefault().ComponentVersion;
                     await VS.MessageBox.ShowWarningAsync(
-                        string.Format(ErrorLanguagePack.MinimumVersionMismatch, WperfDefaults.WPERF_MIN_VERSION)
-                        ); ;
+                        string.Format(
+                            ErrorLanguagePack.MinimumVersionMismatch,
+                            WperfDefaults.WPERF_MIN_VERSION
+                        )
+                    );
+                    ;
                 }
 
                 (WperfTest results, string stdError) = wperfClient.GetTest();
 
                 if (stdError != "")
                     throw new Exception(stdError);
-
 
                 WperfDefaults.Frequency = results
                     .TestResults.Find(el => el.TestName == "pmu_device.sampling.INTERVAL_DEFAULT")
@@ -131,13 +134,9 @@ namespace WindowsPerfGUI
             catch (Exception e)
             {
                 Trace.WriteLine(e.Message);
-                await VS.MessageBox.ShowErrorAsync(
-                     ErrorLanguagePack.WperfPathChanged
-                );
+                await VS.MessageBox.ShowErrorAsync(ErrorLanguagePack.WperfPathChanged);
             }
             await base.OnAfterPackageLoadedAsync(cancellationToken);
         }
-
-
     }
 }

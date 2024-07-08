@@ -54,9 +54,9 @@ namespace WindowsPerfGUI.Utils.ListSearcher
             foreach (var record in _records)
             {
                 var recordValue =
-                        _options.GetValue != null
-                            ? _options.GetValue(record)
-                            : record?.ToString() ?? "";
+                    _options.GetValue != null
+                        ? _options.GetValue(record)
+                        : record?.ToString() ?? "";
                 if (recordValue.ToLower().Contains(lowerCaseSearchText))
                     results.Add(record);
             }

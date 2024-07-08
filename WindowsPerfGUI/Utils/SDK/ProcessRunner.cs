@@ -115,7 +115,7 @@ namespace WindowsPerfGUI.Utils.SDK
                 ForceKillProcess();
                 return;
             }
-            if (_BackgroundProcess.HasExited)
+            if (!_HasProcessStarted || _BackgroundProcess == null || _BackgroundProcess.HasExited)
             {
                 return;
             }
@@ -152,6 +152,8 @@ namespace WindowsPerfGUI.Utils.SDK
             }
             catch (Exception e)
             {
+                _BackgroundProcess = null;
+                _HasProcessStarted = false;
                 throw new Exception(
                     $"Failed to start process {_Path} with arguments {string.Join(" ", args)}",
                     e
@@ -184,8 +186,21 @@ namespace WindowsPerfGUI.Utils.SDK
             _BackgroundProcess.ErrorDataReceived += new DataReceivedEventHandler(
                 StdError.OutputhHandler
             );
-            _BackgroundProcess.Start();
-            _HasProcessStarted = true;
+            try
+            {
+                _BackgroundProcess.Start();
+                _HasProcessStarted = true;
+            }
+            catch (Exception e)
+            {
+                _BackgroundProcess = null;
+                _HasProcessStarted = false;
+                throw new Exception(
+                    $"Failed to start process {_Path} with arguments {string.Join(" ", args)}",
+                    e
+                );
+            }
+
             if (_ProcessorAffinity != null)
             {
                 _BackgroundProcess.ProcessorAffinity = (IntPtr)_ProcessorAffinity;

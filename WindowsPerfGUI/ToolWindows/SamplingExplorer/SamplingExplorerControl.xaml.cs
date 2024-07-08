@@ -28,13 +28,15 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.VisualStudio.Text;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using Microsoft.VisualStudio.Text;
 using WindowsPerfGUI.Components.TreeListView;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
@@ -106,19 +108,28 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                 return;
             }
             string dialogWindowTitle = SamplingSettingsLanguagePack.WindowTitle;
-            if (WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion != WperfDefaults.WPERF_MIN_VERSION)
+            if (
+                WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion
+                != WperfDefaults.WPERF_MIN_VERSION
+            )
             {
                 if (WPerfOptions.Instance.WperfVersionCheckIgnore != true)
                 {
                     VS.MessageBox.ShowError(
-                       string.Format(ErrorLanguagePack.MinimumVersionMismatch, WperfDefaults.WPERF_MIN_VERSION),
-                       ErrorLanguagePack.MinimumVersionMismatchLine2);
+                        string.Format(
+                            ErrorLanguagePack.MinimumVersionMismatch,
+                            WperfDefaults.WPERF_MIN_VERSION
+                        ),
+                        ErrorLanguagePack.MinimumVersionMismatchLine2
+                    );
                     return;
-
                 }
                 var messageBoxResult = VS.MessageBox.ShowWarning(
-                        string.Format(ErrorLanguagePack.MinimumVersionMismatch, WperfDefaults.WPERF_MIN_VERSION)
-                        );
+                    string.Format(
+                        ErrorLanguagePack.MinimumVersionMismatch,
+                        WperfDefaults.WPERF_MIN_VERSION
+                    )
+                );
                 dialogWindowTitle += $" - (UNSTABLE)";
             }
 
@@ -160,14 +171,39 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             catch (Exception error)
             {
                 Trace.WriteLine(error.Message);
-                VS.MessageBox.ShowError(
-                   ErrorLanguagePack.WperfPathChanged
-                );
+                VS.MessageBox.ShowError(ErrorLanguagePack.WperfPathChanged);
                 wperfClient.Reinitialize();
                 return;
             }
+            _ = wperfClient
+                .StartSamplingAsync()
+                .ContinueWith(
+                    async (t) =>
+                    {
+                        while (!t.IsCompleted)
+                        {
+                            Thread.Sleep(1000);
+                        }
+                        if (t.IsFaulted)
+                        {
+                            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                            await VS.MessageBox.ShowErrorAsync(
+                                "Error starting wperf process. Please double check your wperf path."
+                            );
+                            Trace.WriteLine(t.Exception.Message);
+                            wperfClient.Reinitialize();
 
-            wperfClient.StartSamplingAsync().FireAndForget();
+                            SamplingSettingsMonikerButton.IsEnabled = true;
+                            StartSamplingMonikerButton.IsEnabled = true;
+                            RunAndStartSamplingMonikerButton.IsEnabled = true;
+                            StopSamplingMonikerButton.IsEnabled = false;
+                        }
+                    },
+                    CancellationToken.None,
+                    (TaskContinuationOptions)TaskCreationOptions.None,
+                    TaskScheduler.Default
+                );
+
             SamplingSettingsMonikerButton.IsEnabled = false;
             StartSamplingMonikerButton.IsEnabled = false;
             RunAndStartSamplingMonikerButton.IsEnabled = false;

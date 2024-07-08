@@ -98,7 +98,11 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
             RefreshTextHighlights(_view, _layer, _colorResolution);
         }
 
-        public static void RefreshTextHighlights(IWpfTextView view, IAdornmentLayer layer, int colorResolution)
+        public static void RefreshTextHighlights(
+            IWpfTextView view,
+            IAdornmentLayer layer,
+            int colorResolution
+        )
         {
             // Clears previous set adornments
             string filePath = view.TextBuffer.GetFileName();
@@ -135,7 +139,13 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
             {
                 foreach (var line in HighlighterDict.FilesToHighlight[filePath].LinesToHighlight)
                 {
-                    GetHighlightData(filePath, line.LineNumber, colorResolution, out string text, out Brush brush);
+                    GetHighlightData(
+                        filePath,
+                        line.LineNumber,
+                        colorResolution,
+                        out string text,
+                        out Brush brush
+                    );
 
                     _ = HighlightLineAsync((int)line.LineNumber - 1, brush, text, view, layer);
                 }
@@ -200,7 +210,11 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
             return span;
         }
 
-        public static void ClearLineAdornments(int lineNumber, IWpfTextView view, IAdornmentLayer layer)
+        public static void ClearLineAdornments(
+            int lineNumber,
+            IWpfTextView view,
+            IAdornmentLayer layer
+        )
         {
             SnapshotSpan? span = GetSpanFromLineNumber(lineNumber, view);
 
@@ -222,7 +236,13 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
         /// <param name="lineNumber">Line to add the adornments</param>
         /// <param name="brush">The color to use for highlighting</param>
         /// <param name="highlightText">Text to be displayed</param>
-        public static async Task HighlightLineAsync(int lineNumber, Brush brush, string highlightText, IWpfTextView view, IAdornmentLayer layer)
+        public static async Task HighlightLineAsync(
+            int lineNumber,
+            Brush brush,
+            string highlightText,
+            IWpfTextView view,
+            IAdornmentLayer layer
+        )
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             SnapshotSpan? span = GetSpanFromLineNumber(lineNumber, view);

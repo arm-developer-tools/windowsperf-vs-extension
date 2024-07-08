@@ -38,7 +38,6 @@ namespace WindowsPerfGUI.Commands
     [Command(PackageIds.CountingSettings)]
     internal sealed class CountingSettingsCommand : BaseCommand<CountingSettingsCommand>
     {
-
         protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
         {
             if (!WPerfOptions.Instance.IsWperfInitialized)
@@ -51,30 +50,38 @@ namespace WindowsPerfGUI.Commands
             }
             string windowTitle = CountingSettingsLanguagePack.WindowTitle;
 
-            if (WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion != WperfDefaults.WPERF_MIN_VERSION)
+            if (
+                WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion
+                != WperfDefaults.WPERF_MIN_VERSION
+            )
             {
                 if (WPerfOptions.Instance.WperfVersionCheckIgnore != true)
                 {
                     await VS.MessageBox.ShowErrorAsync(
-                        string.Format(ErrorLanguagePack.MinimumVersionMismatch, WperfDefaults.WPERF_MIN_VERSION),
-                        ErrorLanguagePack.MinimumVersionMismatchLine2);
+                        string.Format(
+                            ErrorLanguagePack.MinimumVersionMismatch,
+                            WperfDefaults.WPERF_MIN_VERSION
+                        ),
+                        ErrorLanguagePack.MinimumVersionMismatchLine2
+                    );
                     return;
-
                 }
                 var messageBoxResult = await VS.MessageBox.ShowWarningAsync(
-                        string.Format(ErrorLanguagePack.MinimumVersionMismatch, WperfDefaults.WPERF_MIN_VERSION)
-                        );
-                if (messageBoxResult == Microsoft.VisualStudio.VSConstants.MessageBoxResult.IDCANCEL)
+                    string.Format(
+                        ErrorLanguagePack.MinimumVersionMismatch,
+                        WperfDefaults.WPERF_MIN_VERSION
+                    )
+                );
+                if (
+                    messageBoxResult == Microsoft.VisualStudio.VSConstants.MessageBoxResult.IDCANCEL
+                )
                 {
                     return;
                 }
                 windowTitle += $" - (UNSTABLE)";
             }
 
-            CountingSettingDialog countingSettingsDialog = new()
-            {
-                Title = windowTitle
-            };
+            CountingSettingDialog countingSettingsDialog = new() { Title = windowTitle };
             countingSettingsDialog.ShowDialog();
         }
     }

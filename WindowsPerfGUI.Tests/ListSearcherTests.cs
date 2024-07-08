@@ -55,10 +55,7 @@ namespace WindowsPerfGUI.Tests.Utils.ListSearcher
 
             var sut = new ListSearcher<SearchList>(
                 fields,
-                new SearchOptions<SearchList>
-                {
-                    GetValue = x => x.Application
-                }
+                new SearchOptions<SearchList> { GetValue = x => x.Application }
             );
 
             var result = sut.Search(searchString);

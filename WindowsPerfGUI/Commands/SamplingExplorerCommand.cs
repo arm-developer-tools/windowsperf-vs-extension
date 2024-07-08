@@ -41,7 +41,10 @@ namespace WindowsPerfGUI.Commands
         protected override void BeforeQueryStatus(EventArgs e)
         {
             string windowTitle = SamplingExplorerLanguagePack.WindowTitle;
-            if (WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion != WperfDefaults.WPERF_MIN_VERSION)
+            if (
+                WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion
+                != WperfDefaults.WPERF_MIN_VERSION
+            )
                 windowTitle += $" - (UNSTABLE)";
             Command.Text = windowTitle;
             base.BeforeQueryStatus(e);
@@ -58,20 +61,31 @@ namespace WindowsPerfGUI.Commands
                 return;
             }
 
-            if (WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion != WperfDefaults.WPERF_MIN_VERSION)
+            if (
+                WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion
+                != WperfDefaults.WPERF_MIN_VERSION
+            )
             {
                 if (WPerfOptions.Instance.WperfVersionCheckIgnore != true)
                 {
                     await VS.MessageBox.ShowErrorAsync(
-                        string.Format(ErrorLanguagePack.MinimumVersionMismatch, WperfDefaults.WPERF_MIN_VERSION),
-                        ErrorLanguagePack.MinimumVersionMismatchLine2);
+                        string.Format(
+                            ErrorLanguagePack.MinimumVersionMismatch,
+                            WperfDefaults.WPERF_MIN_VERSION
+                        ),
+                        ErrorLanguagePack.MinimumVersionMismatchLine2
+                    );
                     return;
-
                 }
                 var messageBoxResult = await VS.MessageBox.ShowWarningAsync(
-                        string.Format(ErrorLanguagePack.MinimumVersionMismatch, WperfDefaults.WPERF_MIN_VERSION)
-                        );
-                if (messageBoxResult == Microsoft.VisualStudio.VSConstants.MessageBoxResult.IDCANCEL)
+                    string.Format(
+                        ErrorLanguagePack.MinimumVersionMismatch,
+                        WperfDefaults.WPERF_MIN_VERSION
+                    )
+                );
+                if (
+                    messageBoxResult == Microsoft.VisualStudio.VSConstants.MessageBoxResult.IDCANCEL
+                )
                 {
                     return;
                 }

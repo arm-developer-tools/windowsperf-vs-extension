@@ -32,6 +32,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.VisualStudio.PlatformUI;
 using WindowsPerfGUI.Options;
@@ -205,22 +207,34 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 return;
             }
             SyncCountingSettings();
-            try
-            {
-                (_, string stdError) = wperfClient.GetVersion();
-                if (!string.IsNullOrEmpty(stdError))
-                {
-                    throw new Exception(stdError);
-                }
-            }
-            catch (Exception error)
-            {
-                Trace.WriteLine(error.Message);
-                VS.MessageBox.ShowError(ErrorLanguagePack.WperfPathChanged);
-                wperfClient.Reinitialize();
-                return;
-            }
-            wperfClient.StartCountingAsync().FireAndForget();
+            _ = wperfClient
+                .StartCountingAsync()
+                .ContinueWith(
+                    async (t) =>
+                    {
+                        while (!t.IsCompleted)
+                        {
+                            Thread.Sleep(1000);
+                        }
+                        if (t.IsFaulted)
+                        {
+                            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                            await VS.MessageBox.ShowErrorAsync(ErrorLanguagePack.WperfPathChanged);
+                            Trace.WriteLine(t.Exception.Message);
+                            wperfClient.Reinitialize();
+
+                            StopCountingButton.IsEnabled = false;
+                            StartCountingButton.IsEnabled = true;
+                            BuildAndStartCountingButton.IsEnabled = true;
+
+                            StartCountingButton.Content = "Start";
+                        }
+                    },
+                    CancellationToken.None,
+                    (TaskContinuationOptions)TaskCreationOptions.None,
+                    TaskScheduler.Default
+                );
+
             CountingSettings.countingSettingsForm.CountingResult = null;
             CountingSettings.countingSettingsForm.IsCountCollected = false;
             StopCountingButton.IsEnabled = true;
@@ -439,11 +453,6 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
 
             MetricComboBox.SelectedIndex = metricIndex;
         }
-
-        private void MetricComboBox_PreviewKeyUp(
-            object sender,
-            System.Windows.Input.KeyEventArgs e
-        ) { }
 
         private void AddMetricButton_Click(object sender, RoutedEventArgs e)
         {

@@ -73,7 +73,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             };
         }
 
-
         private void SaveButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             Debug.WriteLine(CustomProcessRadioButton.IsChecked);
@@ -175,8 +174,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 VS.MessageBox.ShowError(ErrorLanguagePack.RawEventBadFormat);
                 return;
             }
-            var eventExists = SamplingSettings.samplingSettingsFrom.SamplingEventList.Any(
-                el => el.SamplingEvent == eventIndex
+            var eventExists = SamplingSettings.samplingSettingsFrom.SamplingEventList.Any(el =>
+                el.SamplingEvent == eventIndex
             );
 
             if (eventExists)
@@ -248,6 +247,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 SamplingEventListBox.SelectedItems[0] as SamplingEventConfiguration
             )?.SamplingFrequency;
         }
+
         private void PreviewKeyDown_EnhanceComboSearch(object sender, KeyEventArgs e)
         {
             EventComboBox.IsDropDownOpen = true;
@@ -273,10 +273,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             var eventList = WPerfOptions.Instance.WperfList.PredefinedEvents;
             var listSearcher = new ListSearcher<PredefinedEvent>(
                 eventList,
-                new SearchOptions<PredefinedEvent>
-                {
-                    GetValue = x => x.AliasName
-                }
+                new SearchOptions<PredefinedEvent> { GetValue = x => x.AliasName }
             );
             return listSearcher.Search(searchText);
         }

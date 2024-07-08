@@ -146,11 +146,17 @@ namespace WindowsPerfGUI.SDK
                 SamplingSettings.samplingSettingsFrom
             );
             SamplingSettings.IsSampling = true;
-            await _wperfProcess.StartBackgroundProcessAsync(samplingArgs);
-            (WperfSampling serializedOutput, string stdError) = StopSampling();
-            OnSamplingFinished?.Invoke(this, (serializedOutput, stdError));
-            //WperfSampling serializedOutput = WperfSampling.FromJson(stdOutput);
-            //return (serializedOutput, stdError);
+            try
+            {
+                await _wperfProcess.StartBackgroundProcessAsync(samplingArgs);
+                (WperfSampling serializedOutput, string stdError) = StopSampling();
+                OnSamplingFinished?.Invoke(this, (serializedOutput, stdError));
+            }
+            catch (Exception e)
+            {
+                SamplingSettings.IsSampling = false;
+                throw e;
+            }
         }
 
         public async Task StartCountingAsync()
@@ -166,9 +172,17 @@ namespace WindowsPerfGUI.SDK
                 indexToInsertAt,
                 $"--output {CountingSettings.countingSettingsForm.OutputPath}"
             );
-            await _wperfProcess.StartBackgroundProcessAsync(countingArgsList.ToArray());
-            (object serializedOutput, string stdError) = StopCounting();
-            OnCountingFinished?.Invoke(this, (serializedOutput, stdError));
+            try
+            {
+                await _wperfProcess.StartBackgroundProcessAsync(countingArgsList.ToArray());
+                (object serializedOutput, string stdError) = StopCounting();
+                OnCountingFinished?.Invoke(this, (serializedOutput, stdError));
+            }
+            catch (Exception e)
+            {
+                CountingSettings.IsCounting = false;
+                throw e;
+            }
         }
 
         public EventHandler<(

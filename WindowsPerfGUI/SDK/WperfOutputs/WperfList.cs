@@ -91,6 +91,7 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
 
         [JsonProperty("Description")]
         public string Description { get; set; }
+
         public override string ToString()
         {
             return $"{Metric} | {{{Events}}}";

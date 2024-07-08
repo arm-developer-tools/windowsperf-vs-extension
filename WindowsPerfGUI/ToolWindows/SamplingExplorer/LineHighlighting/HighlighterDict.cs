@@ -28,14 +28,14 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using EnvDTE;
-using EnvDTE80;
-using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Editor;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
+using EnvDTE;
+using EnvDTE80;
+using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Editor;
 using WindowsPerfGUI.Resources.Locals;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
@@ -102,6 +102,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
             FilesToHighlight[samplingSection.Name] = fileToHighlight;
             StartHighlightingAsync().FireAndForget();
         }
+
         public static async Task StartHighlightingAsync()
         {
             DocumentView activeDocument;
@@ -116,8 +117,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
             IWpfTextView _view = activeDocument?.TextView;
             IAdornmentLayer _layer = _view.GetAdornmentLayer("LineHighlighter");
             LineHighlighter.RefreshTextHighlights(_view, _layer, 3);
-
         }
+
         public static void Clear()
         {
             PreviousFilePaths = new HashSet<string>(FilePaths);
