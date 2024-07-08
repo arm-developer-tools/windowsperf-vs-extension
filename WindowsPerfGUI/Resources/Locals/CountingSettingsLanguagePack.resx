@@ -138,4 +138,16 @@
   <data name="MetricList" xml:space="preserve">
     <value>Metric List</value>
   </data>
+  <data name="BuildAndStart" xml:space="preserve">
+    <value>Build and start</value>
+  </data>
+  <data name="CountingOutput" xml:space="preserve">
+    <value>Counting Output</value>
+  </data>
+  <data name="OpenInWPA" xml:space="preserve">
+    <value>Open in WPA</value>
+  </data>
+  <data name="GroupEvents" xml:space="preserve">
+    <value>Group events</value>
+  </data>
 </root>

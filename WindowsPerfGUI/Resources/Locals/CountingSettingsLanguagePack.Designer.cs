@@ -61,6 +61,33 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Build and start.
+        /// </summary>
+        public static string BuildAndStart {
+            get {
+                return ResourceManager.GetString("BuildAndStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Counting Output.
+        /// </summary>
+        public static string CountingOutput {
+            get {
+                return ResourceManager.GetString("CountingOutput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group events.
+        /// </summary>
+        public static string GroupEvents {
+            get {
+                return ResourceManager.GetString("GroupEvents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to -- Select Metric to add --.
         /// </summary>
         public static string MetricComboboxPlaceholder {
@@ -93,6 +120,15 @@ namespace WindowsPerfGUI.Resources.Locals {
         public static string NoTarget {
             get {
                 return ResourceManager.GetString("NoTarget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open in WPA.
+        /// </summary>
+        public static string OpenInWPA {
+            get {
+                return ResourceManager.GetString("OpenInWPA", resourceCulture);
             }
         }
         

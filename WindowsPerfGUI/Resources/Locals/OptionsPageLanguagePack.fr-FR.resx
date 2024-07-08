@@ -159,4 +159,7 @@
   <data name="Description" xml:space="preserve">
     <value>Description</value>
   </data>
+  <data name="IgnoreVersionCheck" xml:space="preserve">
+    <value>Ignorer la version de la version WindowsPerf</value>
+  </data>
 </root>

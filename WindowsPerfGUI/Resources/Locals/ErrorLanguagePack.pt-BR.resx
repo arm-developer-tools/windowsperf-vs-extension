@@ -152,4 +152,25 @@ Por exemplo r10 é um evento com índice 0x10</value>
   <data name="RawEventExists" xml:space="preserve">
     <value>Eventos brutos já existem. Por favor entre um evento diferente.</value>
   </data>
+  <data name="WperfPathChanged" xml:space="preserve">
+    <value>Erro iniciando o processo wperf. Por favor verifique o caminho para wperf.</value>
+  </data>
+  <data name="MinimumVersionMismatch" xml:space="preserve">
+    <value>Essa versão da extensão foi desenvolvida para suportar apenas a versão {0} do WindowsPerf!</value>
+  </data>
+  <data name="MinimumVersionMismatchLine2" xml:space="preserve">
+    <value>Para pular essa verificação, por favor vá para Ferramentas -&gt; Opções -&gt; WindowsPerf -&gt; Local do WindowsPerf e selecione 'Ignorar verificação de versão do WindowsPerf'.</value>
+  </data>
+  <data name="UncompleteCountingSettingsLine1" xml:space="preserve">
+    <value>Para começar a contar você precisa ter pelo menos</value>
+  </data>
+  <data name="UncompleteCountingSettingsLine2" xml:space="preserve">
+    <value>Um evento ou métrica selecionada, bem como pelo menos um núcleo selecionado!</value>
+  </data>
+  <data name="RunningCountingOverlapLine1" xml:space="preserve">
+    <value>WindowsPerf está contando atualmente</value>
+  </data>
+  <data name="RunningCountingOverlapLine2" xml:space="preserve">
+    <value>Aguarde até que a contagem atual termine antes de iniciar outra instância de contagem</value>
+  </data>
 </root>

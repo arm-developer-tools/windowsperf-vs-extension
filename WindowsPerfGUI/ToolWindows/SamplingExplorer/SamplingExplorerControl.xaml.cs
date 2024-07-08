@@ -111,19 +111,14 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                 if (WPerfOptions.Instance.WperfVersionCheckIgnore != true)
                 {
                     VS.MessageBox.ShowError(
-                    $"This version of the extention was built to only support WindowsPerf version {WperfDefaults.WPERF_MIN_VERSION}!",
-                    "In order to bypass this check, please go to Tools -> Options -> WindowsPerf -> WindowsPerf Path and check the 'Ignore WindowsPerf version check' checkbox."
-                );
+                       string.Format(ErrorLanguagePack.MinimumVersionMismatch, WperfDefaults.WPERF_MIN_VERSION),
+                       ErrorLanguagePack.MinimumVersionMismatchLine2);
                     return;
 
                 }
                 var messageBoxResult = VS.MessageBox.ShowWarning(
-                $"This version of the extention was built to only support WindowsPerf version {WperfDefaults.WPERF_MIN_VERSION}!"
-            );
-                if (messageBoxResult == Microsoft.VisualStudio.VSConstants.MessageBoxResult.IDCANCEL)
-                {
-                    return;
-                }
+                        string.Format(ErrorLanguagePack.MinimumVersionMismatch, WperfDefaults.WPERF_MIN_VERSION)
+                        );
                 dialogWindowTitle += $" - (UNSTABLE)";
             }
 
@@ -166,7 +161,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             {
                 Trace.WriteLine(error.Message);
                 VS.MessageBox.ShowError(
-                    "Error starting wperf process. Please double check your wperf path."
+                   ErrorLanguagePack.WperfPathChanged
                 );
                 wperfClient.Reinitialize();
                 return;

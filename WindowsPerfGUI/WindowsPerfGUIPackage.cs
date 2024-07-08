@@ -38,6 +38,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using WindowsPerfGUI.Options;
+using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK;
 using WindowsPerfGUI.SDK.WperfOutputs;
 using WindowsPerfGUI.ToolWindows.SamplingExplorer;
@@ -91,7 +92,7 @@ namespace WindowsPerfGUI
                 lazyCreate: true
             );
             this.RegisterToolWindows();
-           
+
         }
 
         protected override async Task OnAfterPackageLoadedAsync(CancellationToken cancellationToken)
@@ -108,8 +109,9 @@ namespace WindowsPerfGUI
                     WPerfOptions.Instance.WperfCurrentVersion = versions;
                     await WPerfOptions.Instance.SaveAsync();
                     string wperfVersion = versions.Components.FirstOrDefault().ComponentVersion;
-                    if (wperfVersion != WperfDefaults.WPERF_MIN_VERSION)
-                        await VS.MessageBox.ShowWarningAsync($"This version of the extention was built to only support WindowsPerf version {WperfDefaults.WPERF_MIN_VERSION}!");
+                    await VS.MessageBox.ShowWarningAsync(
+                        string.Format(ErrorLanguagePack.MinimumVersionMismatch, WperfDefaults.WPERF_MIN_VERSION)
+                        ); ;
                 }
 
                 (WperfTest results, string stdError) = wperfClient.GetTest();
@@ -130,7 +132,7 @@ namespace WindowsPerfGUI
             {
                 Trace.WriteLine(e.Message);
                 await VS.MessageBox.ShowErrorAsync(
-                    "Error starting wperf process. Please double check your wperf path."
+                     ErrorLanguagePack.WperfPathChanged
                 );
             }
             await base.OnAfterPackageLoadedAsync(cancellationToken);

@@ -117,4 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CountingOutput" xml:space="preserve">
+    <value>Wyjście</value>
+  </data>
+  <data name="NoTarget" xml:space="preserve">
+    <value>Brak celu</value>
+  </data>
+  <data name="WindowTitle" xml:space="preserve">
+    <value>Ustawienia</value>
+  </data>
+  <data name="OpenInWPA" xml:space="preserve">
+    <value>Otwórz za pomocą WPA</value>
+  </data>
+  <data name="Metrics" xml:space="preserve">
+    <value>Metryki</value>
+  </data>
+  <data name="MetricList" xml:space="preserve">
+    <value>Lista metryk</value>
+  </data>
+  <data name="GroupEvents" xml:space="preserve">
+    <value>Grupuj</value>
+  </data>
+  <data name="BuildAndStart" xml:space="preserve">
+    <value>Zbuduj i uruchom</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="MetricComboboxPlaceholder" xml:space="preserve">
+    <value> -- Wybierz metrykę --</value>
+  </data>
 </root>

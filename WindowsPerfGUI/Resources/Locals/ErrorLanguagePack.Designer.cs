@@ -70,6 +70,24 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This version of the extention was built to only support WindowsPerf version {0}!.
+        /// </summary>
+        public static string MinimumVersionMismatch {
+            get {
+                return ResourceManager.GetString("MinimumVersionMismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In order to bypass this check, please go to Tools -&gt; Options -&gt; WindowsPerf -&gt; WindowsPerf Path and check the &apos;Ignore WindowsPerf version check&apos; checkbox..
+        /// </summary>
+        public static string MinimumVersionMismatchLine2 {
+            get {
+                return ResourceManager.GetString("MinimumVersionMismatchLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to WidnowsPerf is not initialized please follow the initialization steps.
         /// </summary>
         public static string NotInititiatedWperfErrorLine1 {
@@ -117,6 +135,24 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to WindowsPerf is currently counting.
+        /// </summary>
+        public static string RunningCountingOverlapLine1 {
+            get {
+                return ResourceManager.GetString("RunningCountingOverlapLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please wait for the current counting to finish before starting another counting instance.
+        /// </summary>
+        public static string RunningCountingOverlapLine2 {
+            get {
+                return ResourceManager.GetString("RunningCountingOverlapLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to WindowsPerf is currently sampling.
         /// </summary>
         public static string RunningSamplingOverlapLine1 {
@@ -135,6 +171,24 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To start counting you need to have at least.
+        /// </summary>
+        public static string UncompleteCountingSettingsLine1 {
+            get {
+                return ResourceManager.GetString("UncompleteCountingSettingsLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An event or a metric selected, as well as at least one core selected!.
+        /// </summary>
+        public static string UncompleteCountingSettingsLine2 {
+            get {
+                return ResourceManager.GetString("UncompleteCountingSettingsLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To start sampling you need to have at least.
         /// </summary>
         public static string UncompleteSamplingSettingsLine1 {
@@ -149,6 +203,15 @@ namespace WindowsPerfGUI.Resources.Locals {
         public static string UncompleteSamplingSettingsLine2 {
             get {
                 return ResourceManager.GetString("UncompleteSamplingSettingsLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error starting wperf process. Please double check your wperf path..
+        /// </summary>
+        public static string WperfPathChanged {
+            get {
+                return ResourceManager.GetString("WperfPathChanged", resourceCulture);
             }
         }
         

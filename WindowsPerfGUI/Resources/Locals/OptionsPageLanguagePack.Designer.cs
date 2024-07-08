@@ -124,6 +124,15 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ignore WindowsPerf version check.
+        /// </summary>
+        public static string IgnoreVersionCheck {
+            get {
+                return ResourceManager.GetString("IgnoreVersionCheck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to List of available events:.
         /// </summary>
         public static string ListOfAvailableEvents {

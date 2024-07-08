@@ -130,6 +130,24 @@
     <value>Pas de cible</value>
   </data>
   <data name="MetricList" xml:space="preserve">
-    <value>Liste des groupes d'évenements</value>
+    <value>Liste des groupes d'évènements</value>
+  </data>
+  <data name="MetricComboboxPlaceholder" xml:space="preserve">
+    <value>-- Sélectionnez le groupe d'évènements à ajouter --</value>
+  </data>
+  <data name="Metrics" xml:space="preserve">
+    <value>Métriques</value>
+  </data>
+  <data name="BuildAndStart" xml:space="preserve">
+    <value>Compiler et lancer</value>
+  </data>
+  <data name="CountingOutput" xml:space="preserve">
+    <value>Resultats du comptage</value>
+  </data>
+  <data name="OpenInWPA" xml:space="preserve">
+    <value>Ouvrir en WPA</value>
+  </data>
+  <data name="GroupEvents" xml:space="preserve">
+    <value>Groupez les evenements</value>
   </data>
 </root>

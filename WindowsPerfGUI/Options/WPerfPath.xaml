@@ -108,7 +108,7 @@
                 x:Name="WPerfVersionCheckIgnore"
                 Margin="0,10,0,0"
                 Checked="WPerfVersionCheckIgnoreChanged"
-                Content="Ignore WindowsPerf version check"
+                Content="{x:Static locals:OptionsPageLanguagePack.IgnoreVersionCheck}"
                 Unchecked="WPerfVersionCheckIgnoreChanged" />
         </StackPanel>
     </ScrollViewer>
