@@ -30,6 +30,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK.WperfOutputs;
 using WindowsPerfGUI.ToolWindows.CountingSetting;
 using WindowsPerfGUI.ToolWindows.SamplingSetting;
@@ -137,6 +138,24 @@ namespace WindowsPerfGUI.SDK
             (string stdOutput, string stdError) = ExecuteAwaitedCommand("test", "--json");
 
             WperfTest serializedOutput = WperfTest.FromJson(stdOutput);
+            try
+            {
+                if (stdError != "")
+                    throw new Exception(stdError);
+
+                WperfDefaults.Frequency = serializedOutput
+                    .TestResults.Find(el => el.TestName == "pmu_device.sampling.INTERVAL_DEFAULT")
+                    ?.Result;
+                string gpc_num = serializedOutput
+                    .TestResults.Find(el => el.TestName == "PMU_CTL_QUERY_HW_CFG [total_gpc_num]")
+                    ?.Result;
+                WperfDefaults.TotalGPCNum = Convert.ToInt32(gpc_num, 16);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine(e.Message);
+                VS.MessageBox.ShowError(ErrorLanguagePack.WperfPathChanged);
+            }
             return (serializedOutput, stdError);
         }
 

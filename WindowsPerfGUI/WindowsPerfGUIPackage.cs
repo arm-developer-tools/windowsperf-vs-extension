@@ -118,24 +118,13 @@ namespace WindowsPerfGUI
                     ;
                 }
 
-                (WperfTest results, string stdError) = wperfClient.GetTest();
-
-                if (stdError != "")
-                    throw new Exception(stdError);
-
-                WperfDefaults.Frequency = results
-                    .TestResults.Find(el => el.TestName == "pmu_device.sampling.INTERVAL_DEFAULT")
-                    ?.Result;
-                string gpc_num = results
-                    .TestResults.Find(el => el.TestName == "PMU_CTL_QUERY_HW_CFG [total_gpc_num]")
-                    ?.Result;
-                WperfDefaults.TotalGPCNum = Convert.ToInt32(gpc_num, 16);
+                wperfClient.GetTest();
             }
             catch (Exception e)
             {
                 Trace.WriteLine(e.Message);
-                await VS.MessageBox.ShowErrorAsync(ErrorLanguagePack.WperfPathChanged);
             }
+
             await base.OnAfterPackageLoadedAsync(cancellationToken);
         }
     }

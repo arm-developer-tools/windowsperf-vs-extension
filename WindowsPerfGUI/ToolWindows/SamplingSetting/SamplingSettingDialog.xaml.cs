@@ -174,8 +174,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 VS.MessageBox.ShowError(ErrorLanguagePack.RawEventBadFormat);
                 return;
             }
-            var eventExists = SamplingSettings.samplingSettingsFrom.SamplingEventList.Any(el =>
-                el.SamplingEvent == eventIndex
+            var eventExists = SamplingSettings.samplingSettingsFrom.SamplingEventList.Any(
+                el => el.SamplingEvent == eventIndex
             );
 
             if (eventExists)

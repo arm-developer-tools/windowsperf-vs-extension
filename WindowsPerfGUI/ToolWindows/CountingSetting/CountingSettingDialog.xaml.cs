@@ -143,8 +143,10 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             {
                 foreach (CorePerformanceCounterItem rawCountingEvent in core.PerformanceCounter)
                 {
-                    int index = countingEvents.FindIndex(el =>
-                        el.CoreNumber == core.CoreNumber && el.Name == rawCountingEvent.EventName
+                    int index = countingEvents.FindIndex(
+                        el =>
+                            el.CoreNumber == core.CoreNumber
+                            && el.Name == rawCountingEvent.EventName
                     );
                     if (accumulatePerCoreAndEvent && index != -1)
                     {
@@ -369,8 +371,8 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 VS.MessageBox.ShowError(ErrorLanguagePack.RawEventBadFormat);
                 return;
             }
-            var eventExists = CountingSettings.countingSettingsForm.CountingEventList.Any(el =>
-                el == rawEvent
+            var eventExists = CountingSettings.countingSettingsForm.CountingEventList.Any(
+                el => el == rawEvent
             );
 
             if (eventExists)

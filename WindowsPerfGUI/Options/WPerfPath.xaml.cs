@@ -76,6 +76,7 @@ namespace WindowsPerfGUI.Options
             try
             {
                 (WperfVersion versions, string error) = wperf.GetVersion();
+                wperf.GetTest();
                 if (error != "")
                     throw new Exception(error);
                 SetWperfVersion(versions, shouldForce: true);

@@ -155,14 +155,15 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                             IsFileExists = File.Exists(annotationSourceCode.Filename),
                             Assemblies = annotationSourceCode
                                 .DisassembledLine.Assembly.Select(
-                                    assemblyLine => new ExtendedAssembly()
-                                    {
-                                        Address = assemblyLine.Address,
-                                        Instruction = assemblyLine.Instruction,
-                                        IsHighlighted =
-                                            assemblyLine.Address
-                                            == annotationSourceCode.InstructionAddress
-                                    }
+                                    assemblyLine =>
+                                        new ExtendedAssembly()
+                                        {
+                                            Address = assemblyLine.Address,
+                                            Instruction = assemblyLine.Instruction,
+                                            IsHighlighted =
+                                                assemblyLine.Address
+                                                == annotationSourceCode.InstructionAddress
+                                        }
                                 )
                                 .ToList()
                         };
