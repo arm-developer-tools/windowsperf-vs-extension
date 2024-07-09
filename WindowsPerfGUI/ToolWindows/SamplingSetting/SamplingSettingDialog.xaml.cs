@@ -49,6 +49,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             SolutionProjectOutput.GetProjectOutputAsync().FireAndForget();
             InitializeComponent();
             CpuCoreComboBox.ItemsSource = CpuCores.InitCpuCores();
+            var eventList = new List<PredefinedEvent>(WPerfOptions.Instance.WperfList.PredefinedEvents);
+            EventComboBox.ItemsSource = eventList;
             EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
             SamplingFrequencyComboBox.ItemsSource = SamplingFrequency.SamplingFrequencyList;
             ProjectTargetConfigLabel.Content = SolutionProjectOutput.SelectedConfigLabel;

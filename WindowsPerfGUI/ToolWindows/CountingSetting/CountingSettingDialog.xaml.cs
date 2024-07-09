@@ -56,8 +56,10 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             OpenInWPAButton.IsEnabled = false;
 
             StopCountingButton.IsEnabled = false;
-            EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
-            MetricComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedMetrics;
+            var metricList = new List<PredefinedMetric>(WPerfOptions.Instance.WperfList.PredefinedMetrics);
+            var eventList = new List<PredefinedEvent>(WPerfOptions.Instance.WperfList.PredefinedEvents);
+            EventComboBox.ItemsSource = eventList;
+            MetricComboBox.ItemsSource = metricList;
             CpuCoresGrid.ItemsSource = CpuCores.InitCpuCores();
             ProjectTargetConfigLabel.Content = SolutionProjectOutput.SelectedConfigLabel;
             if (CountingSettings.countingSettingsForm.FilePath != null)
