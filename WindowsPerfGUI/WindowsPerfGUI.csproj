@@ -183,6 +183,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\icon.png" />
+    <Content Include="Resources\preview.png" />
     <None Include=".editorconfig" />
     <EmbeddedResource Include="Resources\Locals\CountingSettingsLanguagePack.fr-FR.resx" />
     <EmbeddedResource Include="Resources\Locals\CountingSettingsLanguagePack.pl.resx" />
@@ -212,10 +214,6 @@
     </None>
     <Content Include="LICENSE.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="Resources\Icon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
   </ItemGroup>
