@@ -183,8 +183,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\icon.png" />
-    <Content Include="Resources\preview.png" />
+    <Content Include="Resources\icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Resources\preview.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <None Include=".editorconfig" />
     <EmbeddedResource Include="Resources\Locals\CountingSettingsLanguagePack.fr-FR.resx" />
     <EmbeddedResource Include="Resources\Locals\CountingSettingsLanguagePack.pl.resx" />
