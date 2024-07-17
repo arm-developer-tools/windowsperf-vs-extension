@@ -29,7 +29,6 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -56,8 +55,12 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             OpenInWPAButton.IsEnabled = false;
 
             StopCountingButton.IsEnabled = false;
-            var metricList = new List<PredefinedMetric>(WPerfOptions.Instance.WperfList.PredefinedMetrics);
-            var eventList = new List<PredefinedEvent>(WPerfOptions.Instance.WperfList.PredefinedEvents);
+            var metricList = new List<PredefinedMetric>(
+                WPerfOptions.Instance.WperfList.PredefinedMetrics
+            );
+            var eventList = new List<PredefinedEvent>(
+                WPerfOptions.Instance.WperfList.PredefinedEvents
+            );
             EventComboBox.ItemsSource = eventList;
             MetricComboBox.ItemsSource = metricList;
             CpuCoresGrid.ItemsSource = CpuCores.InitCpuCores();
@@ -89,7 +92,10 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             wperfClient.OnCountingFinished += HandleCountingFinished;
         }
 
-        private void HandleCountingFinished(object sender, (object _, string stdError) e)
+        private void HandleCountingFinished(
+            object sender,
+            (List<CountingEvent> countingEvents, string stdError) e
+        )
         {
             StopCountingButton.IsEnabled = false;
             StartCountingButton.IsEnabled = true;
@@ -104,72 +110,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             }
 
             CountingSettings.countingSettingsForm.IsCountCollected = true;
-            CountingSettings.countingSettingsForm.CountingResult = FormatCountingOutput();
-        }
-
-        private List<CountingEvent> FormatCountingOutput()
-        {
-            List<CountingEvent> countingEvents = new();
-
-            string path = CountingSettings.countingSettingsForm.OutputPath;
-
-            if (!string.IsNullOrEmpty(path))
-            {
-                string trimmedPath = path.Substring(1, path.Length - 2);
-                string jsonContent = File.ReadAllText(trimmedPath);
-                if (CountingSettings.countingSettingsForm.IsTimelineSelected)
-                {
-                    WperfTimeline wperfTimeline = WperfTimeline.FromJson(jsonContent);
-                    foreach (var count in wperfTimeline.Timeline)
-                    {
-                        ProcessSingleCount(count, countingEvents, true);
-                    }
-                }
-                else
-                {
-                    WperfCounting wperfCount = WperfCounting.FromJson(jsonContent);
-                    ProcessSingleCount(wperfCount, countingEvents);
-                }
-            }
-
-            return countingEvents;
-        }
-
-        private void ProcessSingleCount(
-            WperfCounting count,
-            List<CountingEvent> countingEvents,
-            bool accumulatePerCoreAndEvent = false
-        )
-        {
-            foreach (CorePerformanceCounter core in count.Core.PerformanceCounters)
-            {
-                foreach (CorePerformanceCounterItem rawCountingEvent in core.PerformanceCounter)
-                {
-                    int index = countingEvents.FindIndex(
-                        el =>
-                            el.CoreNumber == core.CoreNumber
-                            && el.Name == rawCountingEvent.EventName
-                    );
-                    if (accumulatePerCoreAndEvent && index != -1)
-                    {
-                        countingEvents[index].Value += rawCountingEvent.CounterValue;
-                    }
-                    else
-                    {
-                        CountingEvent countingEvent =
-                            new()
-                            {
-                                CoreNumber = core.CoreNumber,
-                                Value = rawCountingEvent.CounterValue,
-                                Name = rawCountingEvent.EventName,
-                                Index = rawCountingEvent.EventIdx,
-                                Note = rawCountingEvent.EventNote,
-                            };
-
-                        countingEvents.Add(countingEvent);
-                    }
-                }
-            }
+            CountingSettings.countingSettingsForm.CountingResult = e.countingEvents;
         }
 
         private void UpdateCountingCommandCallTextBox()
@@ -509,7 +450,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 {
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
-                    Arguments = $"/C wpa -i {CountingSettings.countingSettingsForm.OutputPath}",
+                    Arguments = $"/C wpa -i \"{WperfClient.OutputPath}\"",
                 };
 
             process.EnableRaisingEvents = true;

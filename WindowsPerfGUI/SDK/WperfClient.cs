@@ -29,6 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK.WperfOutputs;
@@ -178,24 +179,33 @@ namespace WindowsPerfGUI.SDK
             }
         }
 
+        public static string OutputPath;
+
+        static string GenerateNewOutputPath()
+        {
+            string now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds().ToString();
+            OutputPath = System.IO.Path.Combine(
+                System.IO.Path.GetTempPath(),
+                "wperf-record-output-" + now + ".json"
+            );
+            return OutputPath;
+        }
+
         public async Task StartCountingAsync()
         {
             string[] countingArgs = CountingSettings.GenerateCommandLineArgsArray(
                 CountingSettings.countingSettingsForm
             );
             CountingSettings.IsCounting = true;
-            CountingSettings.countingSettingsForm.GenerateNewOutputPath();
+            string outputPath = GenerateNewOutputPath();
             List<string> countingArgsList = countingArgs.ToList();
             int indexToInsertAt = countingArgsList.FindIndex(el => el.StartsWith("--json"));
-            countingArgsList.Insert(
-                indexToInsertAt,
-                $"--output {CountingSettings.countingSettingsForm.OutputPath}"
-            );
+            countingArgsList.Insert(indexToInsertAt, $"--output \"{outputPath}\"");
             try
             {
                 await _wperfProcess.StartBackgroundProcessAsync(countingArgsList.ToArray());
-                (object serializedOutput, string stdError) = StopCounting();
-                OnCountingFinished?.Invoke(this, (serializedOutput, stdError));
+                (List<CountingEvent> countingEvents, string stdError) = StopCounting();
+                OnCountingFinished?.Invoke(this, (countingEvents, stdError));
             }
             catch (Exception e)
             {
@@ -204,12 +214,77 @@ namespace WindowsPerfGUI.SDK
             }
         }
 
+        List<CountingEvent> GetCountingEvents()
+        {
+            List<CountingEvent> countingEvents = new();
+
+            if (!string.IsNullOrEmpty(OutputPath))
+            {
+                string jsonContent = File.ReadAllText(OutputPath);
+                if (CountingSettings.countingSettingsForm.IsTimelineSelected)
+                {
+                    WperfTimeline wperfTimeline = WperfTimeline.FromJson(jsonContent);
+                    foreach (var count in wperfTimeline.Timeline)
+                    {
+                        ProcessSingleCount(count, countingEvents, true);
+                    }
+                }
+                else
+                {
+                    WperfCounting wperfCount = WperfCounting.FromJson(jsonContent);
+                    ProcessSingleCount(wperfCount, countingEvents);
+                }
+            }
+
+            return countingEvents;
+        }
+
+        private void ProcessSingleCount(
+            WperfCounting count,
+            List<CountingEvent> countingEvents,
+            bool accumulatePerCoreAndEvent = false
+        )
+        {
+            foreach (CorePerformanceCounter core in count.Core.PerformanceCounters)
+            {
+                foreach (CorePerformanceCounterItem rawCountingEvent in core.PerformanceCounter)
+                {
+                    int index = countingEvents.FindIndex(
+                        el =>
+                            el.CoreNumber == core.CoreNumber
+                            && el.Name == rawCountingEvent.EventName
+                    );
+                    if (accumulatePerCoreAndEvent && index != -1)
+                    {
+                        countingEvents[index].Value += rawCountingEvent.CounterValue;
+                    }
+                    else
+                    {
+                        CountingEvent countingEvent =
+                            new()
+                            {
+                                CoreNumber = core.CoreNumber,
+                                Value = rawCountingEvent.CounterValue,
+                                Name = rawCountingEvent.EventName,
+                                Index = rawCountingEvent.EventIdx,
+                                Note = rawCountingEvent.EventNote,
+                            };
+
+                        countingEvents.Add(countingEvent);
+                    }
+                }
+            }
+        }
+
         public EventHandler<(
             WperfSampling serializedOutput,
             string stdError
         )> OnSamplingFinished { get; set; }
 
-        public EventHandler<(object _, string stdError)> OnCountingFinished { get; set; }
+        public EventHandler<(
+            List<CountingEvent> countingEvents,
+            string stdError
+        )> OnCountingFinished { get; set; }
 
         public (WperfSampling serializedOutput, string stdError) StopSampling()
         {
@@ -226,19 +301,19 @@ namespace WindowsPerfGUI.SDK
             return (serializedOutput, stdError);
         }
 
-        public (object serializedOutput, string stdError) StopCounting()
+        public (List<CountingEvent> countingEvents, string stdError) StopCounting()
         {
             _wperfProcess.StopProcess();
             CountingSettings.IsCounting = false;
             string stdOutput = string.Join("", _wperfProcess.StdOutput.Output);
             string stdError = string.Join("", _wperfProcess.StdError.Output);
-            WperfCounting serializedOutput = WperfCounting.FromJson(stdOutput);
             LogToOutput(
                 stdOutput,
                 stdError,
                 CountingSettings.GenerateCommandLineArgsArray(CountingSettings.countingSettingsForm)
             );
-            return (serializedOutput, stdError);
+            List<CountingEvent> countingEvents = GetCountingEvents();
+            return (countingEvents, stdError);
         }
     }
 }

@@ -31,7 +31,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.IO;
 using WindowsPerfGUI.SDK.WperfOutputs;
 using WindowsPerfGUI.ToolWindows.SamplingSetting;
 using WindowsPerfGUI.Utils;
@@ -269,20 +268,6 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             };
         }
 
-        private string outputPath;
-        public string OutputPath
-        {
-            get { return outputPath; }
-            set
-            {
-                if (value.StartsWith("\"") || string.IsNullOrEmpty(value))
-                    outputPath = value;
-                else
-                    outputPath = $"\"{value}\"";
-                OnPropertyChanged();
-            }
-        }
-
         private bool isCountCollected;
 
         public bool IsCountCollected
@@ -305,12 +290,6 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 countingResult = value;
                 OnPropertyChanged();
             }
-        }
-
-        public void GenerateNewOutputPath()
-        {
-            string now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds().ToString();
-            OutputPath = Path.Combine(Path.GetTempPath(), "wperf-record-output-" + now + ".json");
         }
 
         public CountingSettingsForm()
