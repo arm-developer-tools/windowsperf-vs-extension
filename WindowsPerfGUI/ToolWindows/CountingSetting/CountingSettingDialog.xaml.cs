@@ -34,6 +34,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using Microsoft.VisualStudio.PlatformUI;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
@@ -314,8 +315,8 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 VS.MessageBox.ShowError(ErrorLanguagePack.RawEventBadFormat);
                 return;
             }
-            var eventExists = CountingSettings.countingSettingsForm.CountingEventList.Any(
-                el => el == rawEvent
+            var eventExists = CountingSettings.countingSettingsForm.CountingEventList.Any(el =>
+                el == rawEvent
             );
 
             if (eventExists)
@@ -485,6 +486,23 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             OpenInWPAButton.IsEnabled = true;
+        }
+
+        private void DataGrid_OnAutoGeneratingColumn(
+            object sender,
+            DataGridAutoGeneratingColumnEventArgs e
+        )
+        {
+            if (e.Column is not DataGridTextColumn textColumn)
+            {
+                return;
+            }
+
+            if (e.PropertyName == "Value")
+            {
+                var numericCellStyle = FindResource("NumericDataGridCellStyle") as Style;
+                textColumn.ElementStyle = numericCellStyle;
+            }
         }
     }
 }

@@ -38,6 +38,9 @@
             <Setter Property="Background" Value="{StaticResource VsInputBackground}" />
             <Setter Property="Padding" Value="5" />
         </Style>
+        <Style x:Key="NumericDataGridCellStyle" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Right" />
+        </Style>
     </platform:DialogWindow.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -177,6 +180,8 @@
                     <DataGrid
                         Height="150"
                         Padding="0"
+                        AutoGenerateColumns="True"
+                        AutoGeneratingColumn="DataGrid_OnAutoGeneratingColumn"
                         Background="{StaticResource VsInputBackground}"
                         BorderThickness="0"
                         ColumnHeaderStyle="{StaticResource ColumnHeaderStyle}"
@@ -187,6 +192,7 @@
                         ItemsSource="{Binding CountingResult}"
                         RowBackground="{StaticResource VsInputBackground}"
                         VerticalGridLinesBrush="{StaticResource ToolWindowText}" />
+
                     <Components:CustomButtonControl
                         x:Name="OpenInWPAButton"
                         Margin="0,10"
