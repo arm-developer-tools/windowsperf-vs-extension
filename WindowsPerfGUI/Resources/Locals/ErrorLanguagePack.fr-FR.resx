@@ -123,11 +123,8 @@
   <data name="NotInititiatedWperfErrorLine2" xml:space="preserve">
     <value>Pour ce faire, allez dans Outils -&gt; Options -&gt; WindowsPerf -&gt; Chemin de WindowsPerf</value>
   </data>
-  <data name="UncompleteSamplingSettingsLine1" xml:space="preserve">
-    <value>Pour commencer l'échantillonnage, vous devez avoir au moins</value>
-  </data>
-  <data name="UncompleteSamplingSettingsLine2" xml:space="preserve">
-    <value>Le chemin du fichier exécutable et le nom de l'événement ainsi que le core sélectionné !</value>
+  <data name="IncompleteSamplingSettingsLine1" xml:space="preserve">
+    <value>Pour commencer l'échantillonnage, vous devez avoir au moins le chemin du fichier exécutable et le nom de l'événement ainsi que le core sélectionné !</value>
   </data>
   <data name="RunningSamplingOverlapLine1" xml:space="preserve">
     <value>Un échantillonnage est actuellement en cours</value>
@@ -161,11 +158,8 @@ Par exemple, r10 est un événement avec l'index 0x10</value>
   <data name="WperfPathChanged" xml:space="preserve">
     <value>Erreur Démarrage du processus WindowsPerf. Veuillez vérifier votre chemin WindowsPerf.</value>
   </data>
-  <data name="UncompleteCountingSettingsLine1" xml:space="preserve">
-    <value>Pour commencer le comptage, vous devez avoir au moins</value>
-  </data>
-  <data name="UncompleteCountingSettingsLine2" xml:space="preserve">
-    <value>Un événement ou une métrique ainsi que au moins un core sélectionné !</value>
+  <data name="IncompleteCountingSettingsLine1" xml:space="preserve">
+    <value>Pour commencer le comptage, vous devez avoir au moins un événement ou une métrique ainsi que au moins un core sélectionné !</value>
   </data>
   <data name="RunningCountingOverlapLine1" xml:space="preserve">
     <value>Un comptage est actuellement en cours</value>

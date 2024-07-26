@@ -144,10 +144,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                 return;
             if (!SamplingSettings.AreSettingsFilled)
             {
-                VS.MessageBox.ShowError(
-                    ErrorLanguagePack.UncompleteSamplingSettingsLine1,
-                    ErrorLanguagePack.UncompleteSamplingSettingsLine2
-                );
+                VS.MessageBox.ShowError(ErrorLanguagePack.IncompleteSamplingSettingsLine1);
                 return;
             }
 

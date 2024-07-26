@@ -123,11 +123,8 @@
   <data name="NotInititiatedWperfErrorLine2" xml:space="preserve">
     <value>Aby to zrobić, przejdź do Narzędzia -&gt; Opcje -&gt; WindowsPerf -&gt; Wperf Path</value>
   </data>
-  <data name="UncompleteSamplingSettingsLine1" xml:space="preserve">
-    <value>Aby rozpocząć pobieranie próbek, musisz mieć co najmniej</value>
-  </data>
-  <data name="UncompleteSamplingSettingsLine2" xml:space="preserve">
-    <value>Ścieżka pliku wykonywalnego i nazwa zdarzenia oraz wybrany rdzeń!</value>
+  <data name="IncompleteSamplingSettingsLine1" xml:space="preserve">
+    <value>Aby rozpocząć pobieranie próbek, musisz mieć co najmniej ścieżka pliku wykonywalnego i nazwa zdarzenia oraz wybrany rdzeń!</value>
   </data>
   <data name="RunningSamplingOverlapLine1" xml:space="preserve">
     <value>WindowsPerf obecnie pobiera próbki</value>
@@ -161,11 +158,8 @@ Na przykład r10 jest wydarzeniem o indeksie 0x10</value>
   <data name="MinimumVersionMismatchLine2" xml:space="preserve">
     <value>W celu pominięcia sprawdzenia wersji WindowsPerf, idź do Narzędzia -&gt; Opcje -&gt; WindowsPerf -&gt; Ścieżka i zaznacz 'Ignoruj wersję WindowsPerf.</value>
   </data>
-  <data name="UncompleteCountingSettingsLine1" xml:space="preserve">
-    <value>Żeby zacząć musisz mieć przynajmniej</value>
-  </data>
-  <data name="UncompleteCountingSettingsLine2" xml:space="preserve">
-    <value>Musisz wybrać metrykę, wydarzenie jak i nr. rdzenia procesora!</value>
+  <data name="IncompleteCountingSettingsLine1" xml:space="preserve">
+    <value>Żeby zacząć musisz mieć przynajmniej musisz wybrać metrykę, wydarzenie jak i nr. rdzenia procesora!</value>
   </data>
   <data name="RunningCountingOverlapLine1" xml:space="preserve">
     <value>WindowsPerf jest zajęty</value>

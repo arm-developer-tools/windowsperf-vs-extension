@@ -123,11 +123,8 @@
   <data name="NotInititiatedWperfErrorLine2" xml:space="preserve">
     <value>Para fazê-lo vá em Ferramentas -&gt; Opções -&gt; WindowsPerf -&gt; Wperf Path</value>
   </data>
-  <data name="UncompleteSamplingSettingsLine1" xml:space="preserve">
-    <value>Para inicializar a amostragem você precisa ter pelo menos</value>
-  </data>
-  <data name="UncompleteSamplingSettingsLine2" xml:space="preserve">
-    <value>O endereço do arquivo executável, o nome do evento assim como o núcleo selecionado!</value>
+  <data name="IncompleteSamplingSettingsLine1" xml:space="preserve">
+    <value>Para inicializar a amostragem você precisa ter pelo menos o endereço do arquivo executável, o nome do evento assim como o núcleo selecionado!</value>
   </data>
   <data name="RunningSamplingOverlapLine1" xml:space="preserve">
     <value>WindowsPerf está fazendo a amostragem</value>
@@ -161,11 +158,8 @@ Por exemplo r10 é um evento com índice 0x10</value>
   <data name="MinimumVersionMismatchLine2" xml:space="preserve">
     <value>Para pular essa verificação, por favor vá para Ferramentas -&gt; Opções -&gt; WindowsPerf -&gt; Local do WindowsPerf e selecione 'Ignorar verificação de versão do WindowsPerf'.</value>
   </data>
-  <data name="UncompleteCountingSettingsLine1" xml:space="preserve">
-    <value>Para começar a contar você precisa ter pelo menos</value>
-  </data>
-  <data name="UncompleteCountingSettingsLine2" xml:space="preserve">
-    <value>Um evento ou métrica selecionada, bem como pelo menos um núcleo selecionado!</value>
+  <data name="IncompleteCountingSettingsLine1" xml:space="preserve">
+    <value>Para começar a contar você precisa ter pelo menos um evento ou métrica selecionada assim como pelo menos um processador selecionado!</value>
   </data>
   <data name="RunningCountingOverlapLine1" xml:space="preserve">
     <value>WindowsPerf está contando atualmente</value>

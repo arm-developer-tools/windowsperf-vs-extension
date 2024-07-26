@@ -32,7 +32,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.VisualStudio.PlatformUI;
 using WindowsPerfGUI.Options;
@@ -49,7 +48,9 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             SolutionProjectOutput.GetProjectOutputAsync().FireAndForget();
             InitializeComponent();
             CpuCoreComboBox.ItemsSource = CpuCores.InitCpuCores();
-            var eventList = new List<PredefinedEvent>(WPerfOptions.Instance.WperfList.PredefinedEvents);
+            var eventList = new List<PredefinedEvent>(
+                WPerfOptions.Instance.WperfList.PredefinedEvents
+            );
             EventComboBox.ItemsSource = eventList;
             EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
             SamplingFrequencyComboBox.ItemsSource = SamplingFrequency.SamplingFrequencyList;
@@ -83,10 +84,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             SyncSamplingSettings();
             if (!SamplingSettings.AreSettingsFilled)
             {
-                VS.MessageBox.ShowError(
-                    ErrorLanguagePack.UncompleteSamplingSettingsLine1,
-                    ErrorLanguagePack.UncompleteSamplingSettingsLine2
-                );
+                VS.MessageBox.ShowError(ErrorLanguagePack.IncompleteSamplingSettingsLine1);
                 return;
             }
 
@@ -176,8 +174,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 VS.MessageBox.ShowError(ErrorLanguagePack.RawEventBadFormat);
                 return;
             }
-            var eventExists = SamplingSettings.samplingSettingsFrom.SamplingEventList.Any(
-                el => el.SamplingEvent == eventIndex
+            var eventExists = SamplingSettings.samplingSettingsFrom.SamplingEventList.Any(el =>
+                el.SamplingEvent == eventIndex
             );
 
             if (eventExists)

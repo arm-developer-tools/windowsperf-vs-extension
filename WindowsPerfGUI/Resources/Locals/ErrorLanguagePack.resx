@@ -123,11 +123,8 @@
   <data name="NotInititiatedWperfErrorLine2" xml:space="preserve">
     <value>To do so go to Tools -&gt; Options -&gt; WindowsPerf -&gt; Wperf Path</value>
   </data>
-  <data name="UncompleteSamplingSettingsLine1" xml:space="preserve">
-    <value>To start sampling you need to have at least</value>
-  </data>
-  <data name="UncompleteSamplingSettingsLine2" xml:space="preserve">
-    <value>The executable file path and the event name as well as the core selected!</value>
+  <data name="IncompleteSamplingSettingsLine1" xml:space="preserve">
+    <value>To start sampling you need to have at least the executable file path and the event name as well as the core selected!</value>
   </data>
   <data name="RunningSamplingOverlapLine1" xml:space="preserve">
     <value>WindowsPerf is currently sampling</value>
@@ -161,11 +158,8 @@ For example r10 is event with index 0x10</value>
   <data name="WperfPathChanged" xml:space="preserve">
     <value>Error starting wperf process. Please double check your wperf path.</value>
   </data>
-  <data name="UncompleteCountingSettingsLine1" xml:space="preserve">
-    <value>To start counting you need to have at least</value>
-  </data>
-  <data name="UncompleteCountingSettingsLine2" xml:space="preserve">
-    <value>An event or a metric selected, as well as at least one core selected!</value>
+  <data name="IncompleteCountingSettingsLine1" xml:space="preserve">
+    <value>To start counting you need to have at least an event or a metric selected, as well as at least one core selected!</value>
   </data>
   <data name="RunningCountingOverlapLine1" xml:space="preserve">
     <value>WindowsPerf is currently counting</value>

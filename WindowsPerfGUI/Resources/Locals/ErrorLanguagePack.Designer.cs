@@ -70,6 +70,24 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To start counting you need to have at least an event or a metric selected, as well as at least one core selected!.
+        /// </summary>
+        public static string IncompleteCountingSettingsLine1 {
+            get {
+                return ResourceManager.GetString("IncompleteCountingSettingsLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To start sampling you need to have at least the executable file path and the event name as well as the core selected!.
+        /// </summary>
+        public static string IncompleteSamplingSettingsLine1 {
+            get {
+                return ResourceManager.GetString("IncompleteSamplingSettingsLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This version of the extention was built to only support WindowsPerf version {0}!.
         /// </summary>
         public static string MinimumVersionMismatch {
@@ -167,42 +185,6 @@ namespace WindowsPerfGUI.Resources.Locals {
         public static string RunningSamplingOverlapLine2 {
             get {
                 return ResourceManager.GetString("RunningSamplingOverlapLine2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To start counting you need to have at least.
-        /// </summary>
-        public static string UncompleteCountingSettingsLine1 {
-            get {
-                return ResourceManager.GetString("UncompleteCountingSettingsLine1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to An event or a metric selected, as well as at least one core selected!.
-        /// </summary>
-        public static string UncompleteCountingSettingsLine2 {
-            get {
-                return ResourceManager.GetString("UncompleteCountingSettingsLine2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To start sampling you need to have at least.
-        /// </summary>
-        public static string UncompleteSamplingSettingsLine1 {
-            get {
-                return ResourceManager.GetString("UncompleteSamplingSettingsLine1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The executable file path and the event name as well as the core selected!.
-        /// </summary>
-        public static string UncompleteSamplingSettingsLine2 {
-            get {
-                return ResourceManager.GetString("UncompleteSamplingSettingsLine2", resourceCulture);
             }
         }
         

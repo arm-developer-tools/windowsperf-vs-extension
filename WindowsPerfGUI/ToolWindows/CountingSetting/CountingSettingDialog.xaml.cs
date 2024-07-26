@@ -137,10 +137,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 return;
             if (!CountingSettings.AreSettingsFilled)
             {
-                VS.MessageBox.ShowError(
-                    ErrorLanguagePack.UncompleteCountingSettingsLine1,
-                    ErrorLanguagePack.UncompleteCountingSettingsLine2
-                );
+                VS.MessageBox.ShowError(ErrorLanguagePack.IncompleteCountingSettingsLine1);
                 return;
             }
 
