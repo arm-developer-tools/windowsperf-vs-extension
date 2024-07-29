@@ -279,19 +279,21 @@ namespace WindowsPerfGUI.SDK
         public EventHandler<(
             WperfSampling serializedOutput,
             string stdError
-        )> OnSamplingFinished { get; set; }
+        )> OnSamplingFinished
+        { get; set; }
 
         public EventHandler<(
             List<CountingEvent> countingEvents,
             string stdError
-        )> OnCountingFinished { get; set; }
+        )> OnCountingFinished
+        { get; set; }
 
         public (WperfSampling serializedOutput, string stdError) StopSampling()
         {
             _wperfProcess.StopProcess();
             SamplingSettings.IsSampling = false;
-            string stdOutput = string.Join("", _wperfProcess.StdOutput.Output);
-            string stdError = string.Join("", _wperfProcess.StdError.Output);
+            string stdOutput = string.Join("\n", _wperfProcess.StdOutput.Output);
+            string stdError = string.Join("\n", _wperfProcess.StdError.Output);
             WperfSampling serializedOutput = WperfSampling.FromJson(stdOutput);
             LogToOutput(
                 stdOutput,
@@ -305,8 +307,8 @@ namespace WindowsPerfGUI.SDK
         {
             _wperfProcess.StopProcess();
             CountingSettings.IsCounting = false;
-            string stdOutput = string.Join("", _wperfProcess.StdOutput.Output);
-            string stdError = string.Join("", _wperfProcess.StdError.Output);
+            string stdOutput = string.Join("\n", _wperfProcess.StdOutput.Output);
+            string stdError = string.Join("\n", _wperfProcess.StdError.Output);
             LogToOutput(
                 stdOutput,
                 stdError,
