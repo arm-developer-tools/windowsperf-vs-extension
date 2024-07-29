@@ -29,10 +29,10 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-global using System;
-global using System.Diagnostics;
 global using Community.VisualStudio.Toolkit;
 global using Microsoft.VisualStudio.Shell;
+global using System;
+global using System.Diagnostics;
 global using Task = System.Threading.Tasks.Task;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -109,13 +109,13 @@ namespace WindowsPerfGUI
                     WPerfOptions.Instance.WperfCurrentVersion = versions;
                     await WPerfOptions.Instance.SaveAsync();
                     string wperfVersion = versions.Components.FirstOrDefault().ComponentVersion;
-                    await VS.MessageBox.ShowWarningAsync(
-                        string.Format(
-                            ErrorLanguagePack.MinimumVersionMismatch,
-                            WperfDefaults.WPERF_MIN_VERSION
-                        )
-                    );
-                    ;
+                    if (wperfVersion != WperfDefaults.WPERF_MIN_VERSION)
+                        await VS.MessageBox.ShowWarningAsync(
+                            string.Format(
+                                ErrorLanguagePack.MinimumVersionMismatch,
+                                WperfDefaults.WPERF_MIN_VERSION
+                            )
+                        );
                 }
 
                 wperfClient.GetTest();

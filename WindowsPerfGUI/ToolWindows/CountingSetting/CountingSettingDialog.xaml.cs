@@ -70,9 +70,9 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 CountingSourcePathFilePicker.FilePathTextBox.Text = CountingSettings
                     .countingSettingsForm
                     .FilePath;
-            if (CountingSettings.countingSettingsForm.CountingEvent == null)
+            if (CountingSettings.countingSettingsForm.SelectedEvent == null)
                 EventComboBox.SelectedIndex = -1;
-            if (CountingSettings.countingSettingsForm.CountingMetric == null)
+            if (CountingSettings.countingSettingsForm.SelectedMetric == null)
                 MetricComboBox.SelectedIndex = -1;
             MetricComboBox.DropDownOpened += (sender, e) =>
             {

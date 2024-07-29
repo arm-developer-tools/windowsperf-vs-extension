@@ -55,9 +55,9 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
             SamplingFrequencyComboBox.ItemsSource = SamplingFrequency.SamplingFrequencyList;
             ProjectTargetConfigLabel.Content = SolutionProjectOutput.SelectedConfigLabel;
-            if (SamplingSettings.samplingSettingsFrom.SamplingEvent == null)
+            if (SamplingSettings.samplingSettingsFrom.SelectedEvent == null)
                 EventComboBox.SelectedIndex = -1;
-            if (SamplingSettings.samplingSettingsFrom.SamplingFrequency == null)
+            if (SamplingSettings.samplingSettingsFrom.SelectedEventFrequency == null)
                 SamplingFrequencyComboBox.SelectedIndex = -1;
             if (SamplingSettings.samplingSettingsFrom.CPUCore == null)
                 CpuCoreComboBox.SelectedIndex = 0;

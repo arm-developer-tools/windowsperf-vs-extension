@@ -111,7 +111,7 @@
                         Margin="0,0,0,10"
                         Padding="2"
                         Placeholder="2.5"
-                        Text="{Binding CountingTimeout, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        Text="{Binding Timeout, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                     <CheckBox
                         x:Name="EnableTimelineRadioButton"
                         Content="Timeline"
@@ -139,6 +139,9 @@
                         FilePath="{Binding FilePath}"
                         SelectedColor="{StaticResource VizSurfaceGreenMedium}"
                         SelectedItems="{Binding CPUCores, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    <CheckBox Margin="0,5,0,0" IsChecked="{Binding ForceLock, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                        <TextBlock Text="{x:Static locals:MainLanguagePack.ForceLock}" TextWrapping="Wrap" />
+                    </CheckBox>
                 </StackPanel>
             </ScrollViewer>
         </GroupBox>
@@ -249,7 +252,7 @@
                             IsEditable="True"
                             IsTextSearchEnabled="False"
                             PreviewKeyUp="EventComboBox_PreviewKeyUp"
-                            SelectedItem="{Binding CountingEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                            SelectedItem="{Binding SelectedEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                         <TextBlock
                             x:Name="EventComboBoxPlaceholder"
                             Margin="5,3,20,0"
@@ -345,7 +348,7 @@
                                 <Components:CustomComboBoxControl
                                     x:Name="MetricComboBox"
                                     Grid.Column="0"
-                                    SelectedItem="{Binding CountingMetric, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                    SelectedItem="{Binding SelectedMetric, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 <TextBlock
                                     x:Name="MetricComboBoxPlaceholder"
                                     Grid.Column="0"

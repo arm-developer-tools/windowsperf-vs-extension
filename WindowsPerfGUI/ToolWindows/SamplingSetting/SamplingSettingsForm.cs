@@ -29,9 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System.Collections.ObjectModel;
-using WindowsPerfGUI.SDK.WperfOutputs;
-using WindowsPerfGUI.ToolWindows.SamplingExplorer;
-using WindowsPerfGUI.Utils;
+using WindowsPerfGUI.Utils.CommandBuilder;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 {
@@ -53,7 +51,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
         }
 
 #nullable disable
-        override public string ToString()
+        public override string ToString()
         {
             return string.IsNullOrWhiteSpace(SamplingFrequency)
                 ? SamplingEvent
@@ -61,94 +59,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
         }
     }
 
-    public class SamplingSettingsForm : NotifyPropertyChangedImplementor
+    public class SamplingSettingsForm : CommandSettingsForm
     {
-        private bool customProcessRadioButton;
-
-        public bool CustomProcessRadioButton
-        {
-            get { return customProcessRadioButton; }
-            set
-            {
-                customProcessRadioButton = value;
-                OnPropertyChanged();
-                if (value == true)
-                {
-                    FilePath = "";
-                }
-            }
-        }
-        private bool currentProjectProcessRadioButton;
-
-        public bool CurrentProjectProcessRadioButton
-        {
-            get { return currentProjectProcessRadioButton; }
-            set
-            {
-                currentProjectProcessRadioButton = value;
-                OnPropertyChanged();
-                if (value)
-                {
-                    _ = Task.Run(async () =>
-                    {
-                        (string mainOutput, string pdbFile) =
-                            await SolutionProjectOutput.GetProjectOutputAsync();
-                        FilePath = mainOutput;
-                        PdbFile = pdbFile;
-                    });
-                }
-            }
-        }
-
-        private string pdbFile;
-
-        public string PdbFile
-        {
-            get { return pdbFile; }
-            set { pdbFile = value; }
-        }
-
-        private string commandLinePreview;
-
-        public string CommandLinePreview
-        {
-            get { return commandLinePreview; }
-            set
-            {
-                commandLinePreview = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private CpuCoreElement cpuCore;
-
-        public CpuCoreElement CPUCore
-        {
-            get { return cpuCore; }
-            set
-            {
-                cpuCore = value;
-                OnPropertyChanged("CPUCore");
-                CommandLinePreview = SamplingSettings.GenerateCommandLinePreview();
-            }
-        }
-
-        private string samplingFrequency;
-
-        public string SamplingFrequency
-        {
-            get { return samplingFrequency; }
-            set { samplingFrequency = value; }
-        }
-
-        private PredefinedEvent samplingEvent;
-
-        public PredefinedEvent SamplingEvent
-        {
-            get { return samplingEvent; }
-            set { samplingEvent = value; }
-        }
-
         private bool isEventSelectionEnabled;
 
         public bool IsEventSelectionEnabled
@@ -161,7 +73,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             }
         }
 
-        private ObservableCollection<SamplingEventConfiguration> samplingEventList;
+        private ObservableCollection<SamplingEventConfiguration> samplingEventList = new ();
 
         public ObservableCollection<SamplingEventConfiguration> SamplingEventList
         {
@@ -170,96 +82,38 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             {
                 samplingEventList = value;
                 OnPropertyChanged();
+                IsEventSelectionEnabled =
+                   value.Count
+                   < WperfDefaults.TotalGPCNum;
+                OnPropertyChanged("IsEventSelectionEnabled");
                 CommandLinePreview = SamplingSettings.GenerateCommandLinePreview();
             }
         }
 
-        private string filePath;
-
-        public string FilePath
-        {
-            get { return filePath; }
-            set
-            {
-                if (string.IsNullOrEmpty(value) || value.StartsWith("\""))
-                    filePath = value;
-                else
-                    filePath = $"\"{value}\"";
-
-                OnPropertyChanged();
-                CommandLinePreview = SamplingSettings.GenerateCommandLinePreview();
-            }
-        }
-        private string samplingTimeout;
-
-        public string SamplingTimeout
-        {
-            get { return samplingTimeout; }
-            set
-            {
-                samplingTimeout = value;
-                OnPropertyChanged();
-                CommandLinePreview = SamplingSettings.GenerateCommandLinePreview();
-            }
-        }
-
-        private string extraArgs;
-
-        public string ExtraArgs
-        {
-            get { return extraArgs; }
-            set
-            {
-                extraArgs = value;
-                OnPropertyChanged();
-                CommandLinePreview = SamplingSettings.GenerateCommandLinePreview();
-            }
-        }
-
-        private string rawEvents;
-
-        public string RawEvents
-        {
-            get { return rawEvents; }
-            set
-            {
-                rawEvents = value;
-                OnPropertyChanged();
-                commandLinePreview = SamplingSettings.GenerateCommandLinePreview();
-            }
-        }
+        internal override string GenerateCommandLinePreview() { return SamplingSettings.GenerateCommandLinePreview(); }
 
         public SamplingSettingsForm()
         {
-            customProcessRadioButton = true;
             // We deliberatly set the private version of `samplingEventList`
             // to not trigger the OnPropertyChanged event and generateCommandLinePreview
             // that depend on the init of SamplingSettings.samplingSettingsFrom
-            if (SamplingEventList == null)
-                samplingEventList = new ObservableCollection<SamplingEventConfiguration>();
-            IsEventSelectionEnabled = samplingEventList.Count < WperfDefaults.TotalGPCNum;
-            samplingEventList.CollectionChanged += (sender, e) =>
-            {
-                OnPropertyChanged("SamplingEventList");
-                CommandLinePreview = SamplingSettings.GenerateCommandLinePreview();
-                IsEventSelectionEnabled =
-                    (sender as ObservableCollection<SamplingEventConfiguration>).Count
-                    < WperfDefaults.TotalGPCNum;
-                OnPropertyChanged("IsEventSelectionEnabled");
-            };
+         
             if (SamplingSettings.samplingSettingsFrom != null)
             {
                 SamplingSettingsForm samplingSettingsForm = SamplingSettings.samplingSettingsFrom;
                 FilePath = samplingSettingsForm.FilePath;
-                SamplingFrequency = samplingSettingsForm.SamplingFrequency;
-                SamplingEvent = samplingSettingsForm.SamplingEvent;
-                SamplingTimeout = samplingSettingsForm.SamplingTimeout;
+                SelectedEventFrequency = samplingSettingsForm.SelectedEventFrequency;
+                SelectedEvent = samplingSettingsForm.SelectedEvent;
+                Timeout = samplingSettingsForm.Timeout;
                 CPUCore = samplingSettingsForm.CPUCore;
                 ExtraArgs = samplingSettingsForm.ExtraArgs;
                 SamplingEventList = samplingSettingsForm.SamplingEventList;
                 RawEvents = samplingSettingsForm.RawEvents;
+                ForceLock = samplingSettingsForm.ForceLock;
             }
             SamplingSettings.samplingSettingsFrom = this;
+            SamplingSettings.samplingSettingsFrom.SamplingEventList.CollectionChanged += 
+                CollectionUpdater("SamplingEventList");
         }
     }
 }

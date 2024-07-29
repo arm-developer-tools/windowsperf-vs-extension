@@ -120,4 +120,7 @@
   <data name="ToolWindow" xml:space="preserve">
     <value>Fentre d'outils</value>
   </data>
+  <data name="ForceLock" xml:space="preserve">
+    <value>Utilisez --force-lock pour forcer le pilote à passer le verrouillage vers le processus WindowsPerf actuel</value>
+  </data>
 </root>

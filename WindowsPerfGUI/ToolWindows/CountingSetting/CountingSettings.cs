@@ -30,14 +30,14 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using WindowsPerfGUI.ToolWindows.SamplingSetting;
+using WindowsPerfGUI.Utils.CommandBuilder;
 
 namespace WindowsPerfGUI.ToolWindows.CountingSetting
 {
-    public static class CountingSettings
+    public class CountingSettings : CommandSettings
     {
-        public static string[] ArgsArray;
         public static bool IsCounting = false;
-        public static bool AreSettingsFilled = false;
         public static CountingSettingsForm countingSettingsForm;
 
         public static string[] GenerateCommandLineArgsArray(
@@ -53,6 +53,18 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             List<string> argsList = new List<string>();
             ValidateSettings();
             AppendElementsToList(argsList, "stat");
+
+            AppendElementsToList(
+             argsList,
+             "-e",
+             string.Join(",", countingSettingsForm.CountingEventList)
+         );
+            AppendElementsToList(
+                argsList,
+                "-m",
+                string.Join(",", countingSettingsForm.CountingMetricList)
+            );
+
             AppendElementsToList(
                 argsList,
                 "-c",
@@ -61,25 +73,18 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                     countingSettingsForm.CPUCores.Select(el => el.coreNumber).OrderBy(el => el)
                 )
             );
-            AppendElementsToList(argsList, "--timeout", countingSettingsForm.CountingTimeout);
+
             if (countingSettingsForm.IsTimelineSelected)
             {
                 AppendElementsToList(argsList, "-t");
                 AppendElementsToList(argsList, "-i", countingSettingsForm.TimelineInterval);
                 AppendElementsToList(argsList, "-n", countingSettingsForm.TimelineIterations);
             }
-            AppendElementsToList(
-                argsList,
-                "-e",
-                string.Join(",", countingSettingsForm.CountingEventList)
-            );
-            AppendElementsToList(
-                argsList,
-                "-m",
-                string.Join(",", countingSettingsForm.CountingMetricList)
-            );
-
+         
+            AppendElementsToList(argsList, "--timeout", countingSettingsForm.Timeout);
             AppendElementsToList(argsList, "--json");
+            if (countingSettingsForm.ForceLock) AppendElementsToList(argsList, "--force-lock");
+
             if (!countingSettingsForm.NoTarget)
             {
                 AppendElementsToList(argsList, "--pdb_file", countingSettingsForm.PdbFile);
@@ -100,25 +105,6 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 ) < 1
                 || countingSettingsForm.CPUCores.Count == 0
             );
-        }
-
-        private static List<string> AppendElementsToList(List<string> source, params string[] args)
-        {
-            bool areAllTruthy = true;
-            List<string> tempList = new List<string>();
-            foreach (string arg in args)
-            {
-                tempList.Add(arg);
-                if (string.IsNullOrWhiteSpace(arg))
-                {
-                    areAllTruthy = false;
-                }
-            }
-            if (areAllTruthy)
-            {
-                source.AddRange(tempList);
-            }
-            return source;
         }
 
         public static string GenerateCommandLinePreview()

@@ -30,16 +30,13 @@
 
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using WindowsPerfGUI.SDK.WperfOutputs;
-using WindowsPerfGUI.ToolWindows.SamplingSetting;
-using WindowsPerfGUI.Utils;
+using WindowsPerfGUI.Utils.CommandBuilder;
 
 namespace WindowsPerfGUI.ToolWindows.CountingSetting
 {
     public class CountingEventConfiguration { }
 
-    public class CountingSettingsForm : NotifyPropertyChangedImplementor
+    public class CountingSettingsForm : CommandSettingsForm
     {
         private ObservableCollection<string> countingEventList = new ObservableCollection<string>();
 
@@ -67,111 +64,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
             }
         }
-        private PredefinedMetric countingMetric;
-
-        public PredefinedMetric CountingMetric
-        {
-            get { return countingMetric; }
-            set
-            {
-                countingMetric = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public PredefinedEvent CountingEvent { get; set; }
-        private string rawEvents;
-
-        public string RawEvents
-        {
-            get { return rawEvents; }
-            set
-            {
-                rawEvents = value;
-                OnPropertyChanged();
-                commandLinePreview = SamplingSettings.GenerateCommandLinePreview();
-            }
-        }
-
-        private bool customProcessRadioButton = true;
-
-        public bool CustomProcessRadioButton
-        {
-            get { return customProcessRadioButton; }
-            set
-            {
-                customProcessRadioButton = value;
-                OnPropertyChanged();
-                if (value == true)
-                {
-                    FilePath = "";
-                }
-            }
-        }
-        private string commandLinePreview;
-
-        public string CommandLinePreview
-        {
-            get { return commandLinePreview; }
-            set
-            {
-                commandLinePreview = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string PdbFile { get; set; }
-
-        private string extraArgs;
-
-        public string ExtraArgs
-        {
-            get { return extraArgs; }
-            set
-            {
-                extraArgs = value;
-                OnPropertyChanged();
-                CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
-            }
-        }
-
-        private string filePath;
-
-        public string FilePath
-        {
-            get { return filePath; }
-            set
-            {
-                if (value.StartsWith("\"") || string.IsNullOrEmpty(value))
-                    filePath = value;
-                else
-                    filePath = $"\"{value}\"";
-
-                OnPropertyChanged();
-                CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
-            }
-        }
-        private bool currentProjectProcessRadioButton;
-        public bool CurrentProjectProcessRadioButton
-        {
-            get { return currentProjectProcessRadioButton; }
-            set
-            {
-                currentProjectProcessRadioButton = value;
-                OnPropertyChanged();
-                if (value == true)
-                {
-                    _ = Task.Run(async () =>
-                    {
-                        (string mainOutput, string pdbFile) =
-                            await SolutionProjectOutput.GetProjectOutputAsync();
-                        FilePath = mainOutput;
-                        PdbFile = pdbFile;
-                    });
-                }
-            }
-        }
-
+ 
         private bool isTimelineSelected;
         public bool IsTimelineSelected
         {
@@ -205,34 +98,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
             }
         }
-
-        private string countingTimeout;
-
-        public string CountingTimeout
-        {
-            get { return countingTimeout; }
-            set
-            {
-                countingTimeout = value;
-                OnPropertyChanged();
-                CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
-            }
-        }
-
-        private ObservableCollection<CpuCoreElement> cpuCores =
-            new ObservableCollection<CpuCoreElement>();
-
-        public ObservableCollection<CpuCoreElement> CPUCores
-        {
-            get { return cpuCores; }
-            set
-            {
-                cpuCores = value;
-                OnPropertyChanged();
-                CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
-            }
-        }
-
+       
         private string timelineIterations;
 
         public string TimelineIterations
@@ -259,15 +125,6 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             }
         }
 
-        private NotifyCollectionChangedEventHandler collectionUpdater(string callerMemberName)
-        {
-            return (object sender, NotifyCollectionChangedEventArgs e) =>
-            {
-                OnPropertyChanged(callerMemberName);
-                CommandLinePreview = CountingSettings.GenerateCommandLinePreview();
-            };
-        }
-
         private bool isCountCollected;
 
         public bool IsCountCollected
@@ -291,7 +148,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 OnPropertyChanged();
             }
         }
-
+        internal override string GenerateCommandLinePreview() { return CountingSettings.GenerateCommandLinePreview(); }
         public CountingSettingsForm()
         {
             if (CountingSettings.countingSettingsForm != null)
@@ -300,7 +157,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 FilePath = countingSettingsForm.FilePath;
                 CPUCores = countingSettingsForm.CPUCores;
                 ExtraArgs = countingSettingsForm.ExtraArgs;
-                CountingTimeout = countingSettingsForm.CountingTimeout;
+                Timeout = countingSettingsForm.Timeout;
                 CustomProcessRadioButton = countingSettingsForm.CustomProcessRadioButton;
                 CurrentProjectProcessRadioButton =
                     countingSettingsForm.CurrentProjectProcessRadioButton;
@@ -315,13 +172,13 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             }
             CountingSettings.countingSettingsForm = this;
 
-            CountingSettings.countingSettingsForm.CPUCores.CollectionChanged += collectionUpdater(
+            CountingSettings.countingSettingsForm.CPUCores.CollectionChanged += CollectionUpdater(
                 "CPUCores"
             );
             CountingSettings.countingSettingsForm.CountingEventList.CollectionChanged +=
-                collectionUpdater("CountingEventList");
+                CollectionUpdater("CountingEventList");
             CountingSettings.countingSettingsForm.CountingMetricList.CollectionChanged +=
-                collectionUpdater("CountingMetricList");
+                CollectionUpdater("CountingMetricList");
         }
     }
 }

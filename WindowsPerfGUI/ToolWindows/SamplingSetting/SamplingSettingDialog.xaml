@@ -11,7 +11,7 @@
     xmlns:platform="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
     xmlns:toolkit="clr-namespace:Community.VisualStudio.Toolkit;assembly=Community.VisualStudio.Toolkit"
     xmlns:utils="clr-namespace:WindowsPerfGUI.ToolWindows.SamplingSetting"
-    Width="900"
+    Width="1000"
     Height="600"
     toolkit:Themes.UseVsTheme="True"
     mc:Ignorable="d">
@@ -97,7 +97,10 @@
                     Margin="0,0,0,10"
                     Padding="2"
                     Placeholder="2.5"
-                    Text="{Binding SamplingTimeout, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    Text="{Binding Timeout, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                <CheckBox Margin="0,5,0,0" IsChecked="{Binding ForceLock, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                    <TextBlock Text="{x:Static locals:MainLanguagePack.ForceLock}" TextWrapping="Wrap" />
+                </CheckBox>
             </StackPanel>
         </GroupBox>
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2">
@@ -160,7 +163,7 @@
                             IsEditable="True"
                             IsTextSearchEnabled="False"
                             PreviewKeyUp="PreviewKeyDown_EnhanceComboSearch"
-                            SelectedItem="{Binding SamplingEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                            SelectedItem="{Binding SelectedEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                         <TextBlock
                             x:Name="EventComboBoxPlaceholder"
                             Margin="5,3,20,0"
@@ -168,7 +171,7 @@
                             Text="{x:Static locals:SamplingSettingsLanguagePack.Event}" />
                     </Grid>
                     <Grid Grid.Column="1" Margin="5,0,0,10">
-                        <Components:CustomComboBoxControl x:Name="SamplingFrequencyComboBox" SelectedItem="{Binding SamplingFrequency, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        <Components:CustomComboBoxControl x:Name="SamplingFrequencyComboBox" SelectedItem="{Binding SelectedEventFrequency, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                         <TextBlock
                             Margin="5,3,20,0"
                             IsHitTestVisible="False"

@@ -28,15 +28,39 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-namespace WindowsPerfGUI.ToolWindows.SamplingSetting
-{
-    static class WperfDefaults
-    {
-        public const string WPERF_MIN_VERSION = "3.7.2";
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using WindowsPerfGUI.ToolWindows.CountingSetting;
+using WindowsPerfGUI.ToolWindows.SamplingSetting;
 
-#nullable enable
-        public static string? Frequency;
-        public static int? TotalGPCNum;
-#nullable disable
+namespace WindowsPerfGUI.Utils.CommandBuilder
+{
+    public abstract class CommandSettings
+    {
+        public static string[] ArgsArray;
+        public static bool IsSampling = false;
+        public static bool AreSettingsFilled = false;
+    
+        internal static List<string> AppendElementsToList(List<string> source, params string[] args)
+        {
+            bool areAllTruthy = true;
+            List<string> tempList = new List<string>();
+            foreach (string arg in args)
+            {
+                tempList.Add(arg);
+                if (string.IsNullOrWhiteSpace(arg))
+                {
+                    areAllTruthy = false;
+                }
+            }
+            if (areAllTruthy)
+            {
+                source.AddRange(tempList);
+            }
+            return source;
+        }
     }
 }

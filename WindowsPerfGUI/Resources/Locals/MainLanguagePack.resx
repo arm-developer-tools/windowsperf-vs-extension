@@ -120,4 +120,7 @@
   <data name="ToolWindow" xml:space="preserve">
     <value>Tool Window</value>
   </data>
+  <data name="ForceLock" xml:space="preserve">
+    <value>Use --force-lock to force driver to give lock to current WindowsPerf process</value>
+  </data>
 </root>

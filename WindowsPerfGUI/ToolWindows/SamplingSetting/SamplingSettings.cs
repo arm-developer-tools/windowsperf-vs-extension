@@ -29,14 +29,12 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System.Collections.Generic;
+using WindowsPerfGUI.Utils.CommandBuilder;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 {
-    public static class SamplingSettings
+    public  class SamplingSettings : CommandSettings
     {
-        public static string[] ArgsArray;
-        public static bool IsSampling = false;
-        public static bool AreSettingsFilled = false;
         public static SamplingSettingsForm samplingSettingsFrom;
 
         public static string[] GenerateCommandLineArgsArray(
@@ -62,10 +60,15 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 "-c",
                 samplingSettingsFrom.CPUCore?.coreNumber.ToString()
             );
-            AppendElementsToList(argsList, "--timeout", samplingSettingsFrom.SamplingTimeout);
+
             AppendElementsToList(argsList, "--annotate");
             AppendElementsToList(argsList, "--disassemble");
+
+            AppendElementsToList(argsList, "--timeout", samplingSettingsFrom.Timeout);
             AppendElementsToList(argsList, "-v", "--json");
+
+            if (samplingSettingsFrom.ForceLock) AppendElementsToList(argsList, "--force-lock");
+
             AppendElementsToList(argsList, "--pdb_file", samplingSettingsFrom.PdbFile);
             AppendElementsToList(argsList, "--");
             AppendElementsToList(argsList, samplingSettingsFrom.FilePath);
@@ -81,25 +84,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 || string.IsNullOrEmpty(samplingSettingsFrom.FilePath)
                 || string.IsNullOrEmpty(samplingSettingsFrom.CPUCore?.coreNumber.ToString())
             );
-        }
-
-        private static List<string> AppendElementsToList(List<string> source, params string[] args)
-        {
-            bool areAllTruthy = true;
-            List<string> tempList = new List<string>();
-            foreach (string arg in args)
-            {
-                tempList.Add(arg);
-                if (string.IsNullOrWhiteSpace(arg))
-                {
-                    areAllTruthy = false;
-                }
-            }
-            if (areAllTruthy)
-            {
-                source.AddRange(tempList);
-            }
-            return source;
         }
 
         public static string GenerateCommandLinePreview()

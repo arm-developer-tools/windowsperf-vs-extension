@@ -120,4 +120,7 @@
   <data name="ToolWindow" xml:space="preserve">
     <value>Okno narzędzi</value>
   </data>
+  <data name="ForceLock" xml:space="preserve">
+    <value>Użyj --force-lock żeby przejąć kontrolę obecnym procesem WindowsPerf</value>
+  </data>
 </root>

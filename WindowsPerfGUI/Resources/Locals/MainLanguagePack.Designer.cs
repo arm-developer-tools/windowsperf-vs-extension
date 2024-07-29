@@ -61,6 +61,15 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use --force-lock to force driver to give lock to current WindowsPerf process.
+        /// </summary>
+        public static string ForceLock {
+            get {
+                return ResourceManager.GetString("ForceLock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tool Window.
         /// </summary>
         public static string ToolWindow {
