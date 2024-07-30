@@ -48,26 +48,31 @@
                 x:Name="RunAndStartSamplingMonikerButton"
                 Margin="0,4,1,4"
                 Click="RunAndStartSamplingMonikerButton_Click"
-                MonikerName="{x:Static catalog:KnownMonikers.Rerun}" />
+                MonikerName="{x:Static catalog:KnownMonikers.Rerun}"
+                ToolTip="Build the current project and then start sampling" />
             <Components:CustomMonikerButtonControl
                 x:Name="StartSamplingMonikerButton"
                 Margin="0,4,1,4"
                 Click="StartSamplingMonikerButton_Click"
-                MonikerName="{x:Static catalog:KnownMonikers.Play}" />
+                MonikerName="{x:Static catalog:KnownMonikers.Play}"
+                ToolTip="Start sampling without building the current project" />
             <Components:CustomMonikerButtonControl
                 x:Name="StopSamplingMonikerButton"
                 Margin="0,4,1,4"
                 Click="StopSamplingMonikerButton_Click"
-                MonikerName="{x:Static catalog:KnownMonikers.Stop}" />
+                MonikerName="{x:Static catalog:KnownMonikers.Stop}"
+                ToolTip="Stop sampling" />
             <Components:CustomMonikerButtonControl
                 Margin="0,4,0,4"
                 Click="ClearListMonikerButton_Click"
-                MonikerName="{x:Static catalog:KnownMonikers.ClearWindowContent}" />
+                MonikerName="{x:Static catalog:KnownMonikers.ClearWindowContent}"
+                ToolTip="Clear all the sampling results" />
             <Components:CustomMonikerButtonControl
                 x:Name="SamplingSettingsMonikerButton"
                 Margin="0,4,0,4"
                 Click="SettingsMonikerButton_Click"
-                MonikerName="{x:Static catalog:KnownMonikers.Settings}" />
+                MonikerName="{x:Static catalog:KnownMonikers.Settings}"
+                ToolTip="Configure the sampling command" />
         </StackPanel>
         <Separator Grid.Row="1" />
         <Grid Grid.Row="2">

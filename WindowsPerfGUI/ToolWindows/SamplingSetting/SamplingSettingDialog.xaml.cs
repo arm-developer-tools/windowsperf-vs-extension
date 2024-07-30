@@ -52,7 +52,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 WPerfOptions.Instance.WperfList.PredefinedEvents
             );
             EventComboBox.ItemsSource = eventList;
-            EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
             SamplingFrequencyComboBox.ItemsSource = SamplingFrequency.SamplingFrequencyList;
             ProjectTargetConfigLabel.Content = SolutionProjectOutput.SelectedConfigLabel;
             if (SamplingSettings.samplingSettingsFrom.SelectedEvent == null)

@@ -174,4 +174,19 @@
   <data name="Payload" xml:space="preserve">
     <value>Payload</value>
   </data>
+  <data name="BuildAndRunTooltip" xml:space="preserve">
+    <value>Build the current project and then start sampling</value>
+  </data>
+  <data name="RunTooltip" xml:space="preserve">
+    <value>Start sampling without building the current project</value>
+  </data>
+  <data name="StopSamplingTooltip" xml:space="preserve">
+    <value>Stop sampling</value>
+  </data>
+  <data name="ClearSamplingResultsTooltip" xml:space="preserve">
+    <value>Clear all the sampling results</value>
+  </data>
+  <data name="OpenSamplingSettingsTooltip" xml:space="preserve">
+    <value>Configure the sampling command</value>
+  </data>
 </root>

@@ -61,6 +61,24 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Build the current project and then start sampling.
+        /// </summary>
+        public static string BuildAndRunTooltip {
+            get {
+                return ResourceManager.GetString("BuildAndRunTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear all the sampling results.
+        /// </summary>
+        public static string ClearSamplingResultsTooltip {
+            get {
+                return ResourceManager.GetString("ClearSamplingResultsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CPU Core.
         /// </summary>
         public static string CpuCore {
@@ -142,6 +160,15 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Configure the sampling command.
+        /// </summary>
+        public static string OpenSamplingSettingsTooltip {
+            get {
+                return ResourceManager.GetString("OpenSamplingSettingsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Parameters.
         /// </summary>
         public static string Parameters {
@@ -187,6 +214,15 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start sampling without building the current project.
+        /// </summary>
+        public static string RunTooltip {
+            get {
+                return ResourceManager.GetString("RunTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string Save {
@@ -201,6 +237,15 @@ namespace WindowsPerfGUI.Resources.Locals {
         public static string SelectFile {
             get {
                 return ResourceManager.GetString("SelectFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop sampling.
+        /// </summary>
+        public static string StopSamplingTooltip {
+            get {
+                return ResourceManager.GetString("StopSamplingTooltip", resourceCulture);
             }
         }
         

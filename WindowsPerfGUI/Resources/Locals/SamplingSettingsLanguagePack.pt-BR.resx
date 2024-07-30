@@ -174,4 +174,19 @@
   <data name="Payload" xml:space="preserve">
     <value>Carga</value>
   </data>
+  <data name="BuildAndRunTooltip" xml:space="preserve">
+    <value>Compilar o projeto atual e iniciar amostragem</value>
+  </data>
+  <data name="RunTooltip" xml:space="preserve">
+    <value>Iniciar amostragem sem compilar o projeto atual</value>
+  </data>
+  <data name="StopSamplingTooltip" xml:space="preserve">
+    <value>Parar amostragem</value>
+  </data>
+  <data name="ClearSamplingResultsTooltip" xml:space="preserve">
+    <value>Apagar todos os resultados de amostragem</value>
+  </data>
+  <data name="OpenSamplingSettingsTooltip" xml:space="preserve">
+    <value>Configurar o comando de amostragem</value>
+  </data>
 </root>

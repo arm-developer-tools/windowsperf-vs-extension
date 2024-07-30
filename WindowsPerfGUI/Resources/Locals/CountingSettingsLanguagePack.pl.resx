@@ -148,6 +148,6 @@
     <value>Stop</value>
   </data>
   <data name="MetricComboboxPlaceholder" xml:space="preserve">
-    <value> -- Wybierz metrykę --</value>
+    <value>-- Wybierz metrykę --</value>
   </data>
 </root>

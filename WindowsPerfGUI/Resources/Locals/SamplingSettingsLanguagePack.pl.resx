@@ -174,4 +174,19 @@
   <data name="Payload" xml:space="preserve">
     <value>Program</value>
   </data>
+  <data name="BuildAndRunTooltip" xml:space="preserve">
+    <value>Zbuduj obecny projekt i zacznij próbkowanie</value>
+  </data>
+  <data name="RunTooltip" xml:space="preserve">
+    <value>Zacznij próbkowanie</value>
+  </data>
+  <data name="StopSamplingTooltip" xml:space="preserve">
+    <value>Zatrzymaj próbkowanie</value>
+  </data>
+  <data name="ClearSamplingResultsTooltip" xml:space="preserve">
+    <value>Wyczyść wyniki próbkowania</value>
+  </data>
+  <data name="OpenSamplingSettingsTooltip" xml:space="preserve">
+    <value>Konfiguruj próbkowanie</value>
+  </data>
 </root>

@@ -174,4 +174,19 @@
   <data name="RawEvent" xml:space="preserve">
     <value>Événement explicite</value>
   </data>
+  <data name="BuildAndRunTooltip" xml:space="preserve">
+    <value>Compiler le projet et commencer l'échantillonnage</value>
+  </data>
+  <data name="RunTooltip" xml:space="preserve">
+    <value>Commencer l'échantillonnage</value>
+  </data>
+  <data name="StopSamplingTooltip" xml:space="preserve">
+    <value>Arreter l'échantillonnage</value>
+  </data>
+  <data name="OpenSamplingSettingsTooltip" xml:space="preserve">
+    <value>Configurer la comande d'échantillonnage</value>
+  </data>
+  <data name="ClearSamplingResultsTooltip" xml:space="preserve">
+    <value>Effacer tous les résultats d'échantillonnage</value>
+  </data>
 </root>

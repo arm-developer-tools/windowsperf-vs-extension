@@ -148,6 +148,6 @@
     <value>Parar</value>
   </data>
   <data name="MetricComboboxPlaceholder" xml:space="preserve">
-    <value>"-- Selecione a Métrica para adicionar --</value>
+    <value>-- Selecione a Métrica para adicionar --</value>
   </data>
 </root>
