@@ -189,4 +189,7 @@
   <data name="ClearSamplingResultsTooltip" xml:space="preserve">
     <value>Effacer tous les résultats d'échantillonnage</value>
   </data>
+  <data name="EnableDisassembly" xml:space="preserve">
+    <value>Activer le désassemblage</value>
+  </data>
 </root>

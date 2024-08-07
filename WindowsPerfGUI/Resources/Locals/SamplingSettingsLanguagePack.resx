@@ -189,4 +189,7 @@
   <data name="OpenSamplingSettingsTooltip" xml:space="preserve">
     <value>Configure the sampling command</value>
   </data>
+  <data name="EnableDisassembly" xml:space="preserve">
+    <value>Enable Disassembly</value>
+  </data>
 </root>

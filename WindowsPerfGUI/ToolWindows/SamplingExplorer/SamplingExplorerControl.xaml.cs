@@ -28,6 +28,7 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using Microsoft.VisualStudio.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -36,7 +37,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
-using Microsoft.VisualStudio.Text;
 using WindowsPerfGUI.Components.TreeListView;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
@@ -53,6 +53,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
         /// Settings for the the number of available colors in the highlighter.
         /// </summary>
         private int _colorResolution;
+        const int AVERAGE_LINE_HEIGHT = 30;
 
         readonly WperfClientFactory wperfClient = new();
         static FormattedSamplingResults formattedSamplingResults = new FormattedSamplingResults();
@@ -317,8 +318,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             if (asseblyPanel != null)
                 children.Add(asseblyPanel);
         }
-
-        const int AVERAGE_LINE_HEIGHT = 30;
 
         private StackPanel GenerateAssemblyStackPanel(SamplingSection samplingSection)
         {

@@ -42,3 +42,5 @@ All code in this repository is licensed under the [BSD 3-Clause License](LICENSE
 
 - [Introducing the WindowsPerf GUI: the Visual Studio 2022 extension](https://www.linaro.org/blog/introducing-the-windowsperf-gui-the-visual-studio-2022-extension/)
 - [Introducing 1.0.0-beta release of WindowsPerf Visual Studio extension](https://www.linaro.org/blog/introducing-1-0-0-beta-release-of-windowsperf-visual-studio-extension/)
+- [New Release: WindowsPerf Visual Studio Extension v1.0.0](https://www.linaro.org/blog/new-release-windowsperf-visual-studio-extension-v1000/)
+- [Launching WindowsPerf Visual Studio Extension v2.1.0](https://www.linaro.org/blog/launching--windowsperf-visual-studio-extension-v210/)

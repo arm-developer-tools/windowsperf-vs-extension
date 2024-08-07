@@ -72,8 +72,20 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 OnPropertyChanged();
             }
         }
+        private bool shouldDisassemble = true;
 
-        private ObservableCollection<SamplingEventConfiguration> samplingEventList = new ();
+        public bool ShouldDisassemble
+        {
+            get { return shouldDisassemble; }
+            set
+            {
+                shouldDisassemble = value;
+                OnPropertyChanged();
+                CommandLinePreview = GenerateCommandLinePreview();
+            }
+        }
+
+        private ObservableCollection<SamplingEventConfiguration> samplingEventList = new();
 
         public ObservableCollection<SamplingEventConfiguration> SamplingEventList
         {
@@ -86,7 +98,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                    value.Count
                    < WperfDefaults.TotalGPCNum;
                 OnPropertyChanged("IsEventSelectionEnabled");
-                CommandLinePreview = SamplingSettings.GenerateCommandLinePreview();
+                CommandLinePreview = GenerateCommandLinePreview();
             }
         }
 
@@ -97,7 +109,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             // We deliberatly set the private version of `samplingEventList`
             // to not trigger the OnPropertyChanged event and generateCommandLinePreview
             // that depend on the init of SamplingSettings.samplingSettingsFrom
-         
+
             if (SamplingSettings.samplingSettingsFrom != null)
             {
                 SamplingSettingsForm samplingSettingsForm = SamplingSettings.samplingSettingsFrom;
@@ -112,7 +124,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 ForceLock = samplingSettingsForm.ForceLock;
             }
             SamplingSettings.samplingSettingsFrom = this;
-            SamplingSettings.samplingSettingsFrom.SamplingEventList.CollectionChanged += 
+            SamplingSettings.samplingSettingsFrom.SamplingEventList.CollectionChanged +=
                 CollectionUpdater("SamplingEventList");
         }
     }

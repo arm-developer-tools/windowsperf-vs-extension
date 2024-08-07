@@ -97,6 +97,15 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable Disassembly.
+        /// </summary>
+        public static string EnableDisassembly {
+            get {
+                return ResourceManager.GetString("EnableDisassembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to -- Select Event to add --.
         /// </summary>
         public static string Event {

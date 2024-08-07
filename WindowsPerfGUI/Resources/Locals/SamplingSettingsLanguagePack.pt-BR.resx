@@ -189,4 +189,7 @@
   <data name="OpenSamplingSettingsTooltip" xml:space="preserve">
     <value>Configurar o comando de amostragem</value>
   </data>
+  <data name="EnableDisassembly" xml:space="preserve">
+    <value>Ativar desmontagem</value>
+  </data>
 </root>

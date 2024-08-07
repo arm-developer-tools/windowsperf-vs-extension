@@ -189,4 +189,7 @@
   <data name="OpenSamplingSettingsTooltip" xml:space="preserve">
     <value>Konfiguruj próbkowanie</value>
   </data>
+  <data name="EnableDisassembly" xml:space="preserve">
+    <value>Włącz deasemblację</value>
+  </data>
 </root>

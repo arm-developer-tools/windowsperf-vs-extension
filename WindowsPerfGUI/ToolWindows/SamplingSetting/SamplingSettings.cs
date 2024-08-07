@@ -33,7 +33,7 @@ using WindowsPerfGUI.Utils.CommandBuilder;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 {
-    public  class SamplingSettings : CommandSettings
+    public class SamplingSettings : CommandSettings
     {
         public static SamplingSettingsForm samplingSettingsFrom;
 
@@ -62,7 +62,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             );
 
             AppendElementsToList(argsList, "--annotate");
-            AppendElementsToList(argsList, "--disassemble");
+            if (samplingSettingsFrom.ShouldDisassemble) AppendElementsToList(argsList, "--disassemble");
 
             AppendElementsToList(argsList, "--timeout", samplingSettingsFrom.Timeout);
             AppendElementsToList(argsList, "-v", "--json");
