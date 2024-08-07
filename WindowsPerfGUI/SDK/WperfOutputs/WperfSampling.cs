@@ -195,9 +195,14 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
     public partial class WperfSampling
     {
         public static WperfSampling FromJson(string json) =>
-            JsonConvert.DeserializeObject<WperfSampling>(
-                json,
-                WindowsPerfGUI.SDK.WperfOutputs.JsonSettings.Settings
-            );
+            JsonConvert.DeserializeObject<WperfSampling>(json, JsonSettings.Settings);
+    }
+
+    public static class Serialize
+    {
+        public static string ToJson(this WperfSampling self)
+        {
+            return JsonConvert.SerializeObject(self, JsonSettings.Settings);
+        }
     }
 }

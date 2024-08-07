@@ -92,6 +92,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                 Children = new List<SamplingSection>(),
                 Parent = null,
                 SectionType = SamplingSection.SamplingSectionType.ROOT,
+                StringifiedJsonOutput = wperSamplingOutput.ToJson(),
             };
             RootSampledEvent.Add(rootSample);
 

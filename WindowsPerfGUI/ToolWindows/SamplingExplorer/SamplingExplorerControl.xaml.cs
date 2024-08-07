@@ -37,6 +37,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using Microsoft.VisualStudio.Text;
+using Microsoft.Win32;
+using WindowsPerfGUI.Components;
 using WindowsPerfGUI.Components.TreeListView;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
@@ -637,7 +640,34 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                         layer: 2
                     )
                 );
+                var saveAsButton = new CustomButtonControl()
+                {
+                    Content = SamplingSettingsLanguagePack.Save,
+                    Margin = new Thickness { Top = 10 },
+                    Padding = new Thickness
+                    {
+                        Top = 5,
+                        Bottom = 5,
+                        Left = 20,
+                        Right = 20
+                    },
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                };
+                saveAsButton.Click += (sender, e) => SaveAs_Click(samplingSection);
+                children.Add(saveAsButton);
             }
+        }
+
+        private void SaveAs_Click(SamplingSection samplingSection)
+        {
+            if (string.IsNullOrEmpty(samplingSection.StringifiedJsonOutput))
+                return;
+
+            SaveFileDialog openfileDialog = new SaveFileDialog() { DefaultExt = "json" };
+            if (openfileDialog.ShowDialog() != true)
+                return;
+
+            File.WriteAllText(openfileDialog.FileName, samplingSection.StringifiedJsonOutput);
         }
 
         private enum _localFontSizes

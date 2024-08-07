@@ -243,6 +243,22 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             }
         }
 
+        private string stringifiedJsonOutput;
+
+        public string StringifiedJsonOutput
+        {
+            get
+            {
+                return stringifiedJsonOutput;
+                ;
+            }
+            set
+            {
+                stringifiedJsonOutput = value;
+                OnPropertyChanged();
+            }
+        }
+
         private double RoundToTwoDecimalPlaces(double? value)
         {
             if (value == null)
