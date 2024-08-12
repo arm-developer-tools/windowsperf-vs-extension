@@ -192,4 +192,7 @@
   <data name="EnableDisassembly" xml:space="preserve">
     <value>Enable Disassembly</value>
   </data>
+  <data name="LoadJSONSamplingButton" xml:space="preserve">
+    <value>Load JSON file into extension</value>
+  </data>
 </root>

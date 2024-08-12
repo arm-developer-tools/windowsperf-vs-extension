@@ -169,6 +169,15 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Load JSON file into extension.
+        /// </summary>
+        public static string LoadJSONSamplingButton {
+            get {
+                return ResourceManager.GetString("LoadJSONSamplingButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Configure the sampling command.
         /// </summary>
         public static string OpenSamplingSettingsTooltip {

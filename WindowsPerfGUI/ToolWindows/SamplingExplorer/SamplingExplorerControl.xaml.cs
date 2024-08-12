@@ -29,6 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using Microsoft.VisualStudio.Text;
+using Microsoft.Win32;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -37,8 +38,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
-using Microsoft.VisualStudio.Text;
-using Microsoft.Win32;
 using WindowsPerfGUI.Components;
 using WindowsPerfGUI.Components.TreeListView;
 using WindowsPerfGUI.Options;
@@ -86,8 +85,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                 e.serializedOutput,
                 $"{SamplingExplorerLanguagePack.ExecutedAt} {DateTime.Now.ToShortTimeString()}"
             );
-            if (_tree.Model == null)
-                _tree.Model = formattedSamplingResults;
+            _tree.Model ??= formattedSamplingResults;
             _tree.UpdateTreeList();
         }
 
@@ -785,6 +783,35 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                 return;
 
             StartSamplingMonikerButton_Click(sender, e);
+        }
+
+        private void LoadJSONMonikerButton_Click(object sender, RoutedEventArgs e)
+        {
+            var fileDialog = new OpenFileDialog();
+            fileDialog.DefaultExt = "json";
+            fileDialog.Filter = "JSON files (*.json)|*.json";
+
+            bool? result = fileDialog.ShowDialog();
+            if (result != true) return;
+
+            string filename = fileDialog.FileName;
+            using StreamReader reader = new(filename);
+
+            string json = reader.ReadToEnd();
+
+            try
+            {
+                WperfSampling wperfSampling = WperfSampling.FromJson(json);
+                formattedSamplingResults.FormatSamplingResults(wperfSampling, $"Read from file: {filename}");
+
+                _tree.Model ??= formattedSamplingResults;
+                _tree.UpdateTreeList();
+            }
+            catch (Exception err)
+            {
+                VS.MessageBox.ShowError("Error loading JSON file", err.Message);
+            }
+
         }
     }
 }

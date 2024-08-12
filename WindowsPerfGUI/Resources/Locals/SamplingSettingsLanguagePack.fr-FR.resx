@@ -192,4 +192,7 @@
   <data name="EnableDisassembly" xml:space="preserve">
     <value>Activer le désassemblage</value>
   </data>
+  <data name="LoadJSONSamplingButton" xml:space="preserve">
+    <value>Chargez le fichier JSON dans l'extension</value>
+  </data>
 </root>

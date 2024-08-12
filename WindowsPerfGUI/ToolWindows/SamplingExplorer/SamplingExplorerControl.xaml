@@ -49,30 +49,36 @@
                 Margin="0,4,1,4"
                 Click="RunAndStartSamplingMonikerButton_Click"
                 MonikerName="{x:Static catalog:KnownMonikers.Rerun}"
-                ToolTip="Build the current project and then start sampling" />
+                ToolTip="{x:Static locals:SamplingSettingsLanguagePack.BuildAndRunTooltip}" />
             <Components:CustomMonikerButtonControl
                 x:Name="StartSamplingMonikerButton"
                 Margin="0,4,1,4"
                 Click="StartSamplingMonikerButton_Click"
                 MonikerName="{x:Static catalog:KnownMonikers.Play}"
-                ToolTip="Start sampling without building the current project" />
+                ToolTip="{x:Static locals:SamplingSettingsLanguagePack.RunTooltip}" />
             <Components:CustomMonikerButtonControl
                 x:Name="StopSamplingMonikerButton"
                 Margin="0,4,1,4"
                 Click="StopSamplingMonikerButton_Click"
                 MonikerName="{x:Static catalog:KnownMonikers.Stop}"
-                ToolTip="Stop sampling" />
+                ToolTip="{x:Static locals:SamplingSettingsLanguagePack.StopSamplingTooltip}" />
             <Components:CustomMonikerButtonControl
                 Margin="0,4,0,4"
                 Click="ClearListMonikerButton_Click"
                 MonikerName="{x:Static catalog:KnownMonikers.ClearWindowContent}"
-                ToolTip="Clear all the sampling results" />
+                ToolTip="{x:Static locals:SamplingSettingsLanguagePack.ClearSamplingResultsTooltip}" />
             <Components:CustomMonikerButtonControl
                 x:Name="SamplingSettingsMonikerButton"
                 Margin="0,4,0,4"
                 Click="SettingsMonikerButton_Click"
                 MonikerName="{x:Static catalog:KnownMonikers.Settings}"
-                ToolTip="Configure the sampling command" />
+                ToolTip="{x:Static locals:SamplingSettingsLanguagePack.OpenSamplingSettingsTooltip}" />
+            <Components:CustomMonikerButtonControl
+                x:Name="LoadJSONMonikerButton"
+                Margin="0,4,0,4"
+                Click="LoadJSONMonikerButton_Click"
+                MonikerName="{x:Static catalog:KnownMonikers.OpenFolder}"
+                ToolTip="{x:Static locals:SamplingSettingsLanguagePack.LoadJSONSamplingButton}" />
         </StackPanel>
         <Separator Grid.Row="1" />
         <Grid Grid.Row="2">
