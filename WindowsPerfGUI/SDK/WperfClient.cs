@@ -214,32 +214,32 @@ namespace WindowsPerfGUI.SDK
             }
         }
 
-        List<CountingEvent> GetCountingEvents()
+        static public List<CountingEvent> GetCountingEventsFromJSONFile(string filePath)
         {
             List<CountingEvent> countingEvents = new();
 
-            if (!string.IsNullOrEmpty(OutputPath))
+            if (string.IsNullOrEmpty(filePath)) return countingEvents;
+
+            string jsonContent = File.ReadAllText(filePath);
+            bool isTimelineJSON = jsonContent.Contains("timeline");
+            if (isTimelineJSON)
             {
-                string jsonContent = File.ReadAllText(OutputPath);
-                if (CountingSettings.countingSettingsForm.IsTimelineSelected)
+                WperfTimeline wperfTimeline = WperfTimeline.FromJson(jsonContent);
+                foreach (var count in wperfTimeline.Timeline)
                 {
-                    WperfTimeline wperfTimeline = WperfTimeline.FromJson(jsonContent);
-                    foreach (var count in wperfTimeline.Timeline)
-                    {
-                        ProcessSingleCount(count, countingEvents, true);
-                    }
+                    ProcessSingleCount(count, countingEvents, true);
                 }
-                else
-                {
-                    WperfCounting wperfCount = WperfCounting.FromJson(jsonContent);
-                    ProcessSingleCount(wperfCount, countingEvents);
-                }
+            }
+            else
+            {
+                WperfCounting wperfCount = WperfCounting.FromJson(jsonContent);
+                ProcessSingleCount(wperfCount, countingEvents);
             }
 
             return countingEvents;
         }
 
-        private void ProcessSingleCount(
+        static private void ProcessSingleCount(
             WperfCounting count,
             List<CountingEvent> countingEvents,
             bool accumulatePerCoreAndEvent = false
@@ -314,7 +314,7 @@ namespace WindowsPerfGUI.SDK
                 stdError,
                 CountingSettings.GenerateCommandLineArgsArray(CountingSettings.countingSettingsForm)
             );
-            List<CountingEvent> countingEvents = GetCountingEvents();
+            List<CountingEvent> countingEvents = GetCountingEventsFromJSONFile(OutputPath);
             return (countingEvents, stdError);
         }
     }

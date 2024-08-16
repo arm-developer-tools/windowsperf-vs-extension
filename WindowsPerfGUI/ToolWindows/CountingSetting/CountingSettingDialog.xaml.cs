@@ -29,6 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -36,6 +37,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.VisualStudio.PlatformUI;
+using Microsoft.Win32;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK;
@@ -499,6 +501,29 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             {
                 var numericCellStyle = FindResource("NumericDataGridCellStyle") as Style;
                 textColumn.ElementStyle = numericCellStyle;
+            }
+        }
+
+        private void LoadFromJSONButton_Click(object sender, RoutedEventArgs e)
+        {
+            var fileDialog = new OpenFileDialog();
+            fileDialog.DefaultExt = "json";
+            fileDialog.Filter = "JSON files (*.json)|*.json";
+
+            bool? result = fileDialog.ShowDialog();
+            if (result != true) return;
+
+            string filename = fileDialog.FileName;
+            try
+            {
+                List<CountingEvent> wperfSampling = WperfClient.GetCountingEventsFromJSONFile(filename);
+                CountingSettings.countingSettingsForm.IsCountCollected = true;
+                CountingSettings.countingSettingsForm.CountingResult = wperfSampling;
+
+            }
+            catch (Exception err)
+            {
+                VS.MessageBox.ShowError("Error loading JSON file", err.Message);
             }
         }
     }

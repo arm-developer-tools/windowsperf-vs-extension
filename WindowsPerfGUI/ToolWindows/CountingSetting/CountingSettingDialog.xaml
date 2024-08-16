@@ -155,6 +155,12 @@
                 Text="{Binding CommandLinePreview, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                 <Components:CustomButtonControl
+                    x:Name="LoadFromJSONButton"
+                    Margin="10"
+                    Padding="20,5,20,5"
+                    Click="LoadFromJSONButton_Click"
+                    Content="Load from JSON" />
+                <Components:CustomButtonControl
                     x:Name="BuildAndStartCountingButton"
                     Margin="0,10"
                     Padding="20,5,20,5"
