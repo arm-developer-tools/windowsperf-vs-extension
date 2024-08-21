@@ -28,21 +28,26 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WindowsPerfGUI.SDK.WperfOutputs;
-using WindowsPerfGUI.ToolWindows.CountingSetting;
 using WindowsPerfGUI.ToolWindows.SamplingSetting;
 
 namespace WindowsPerfGUI.Utils.CommandBuilder
 {
     public abstract class CommandSettingsForm : NotifyPropertyChangedImplementor
     {
+        private bool kernelMode;
+        public bool KernelMode
+        {
+            get { return kernelMode; }
+            set
+            {
+                kernelMode = value;
+                OnPropertyChanged();
+                CommandLinePreview = GenerateCommandLinePreview();
+            }
+        }
         private bool forceLock;
         public bool ForceLock
         {

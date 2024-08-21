@@ -30,7 +30,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using WindowsPerfGUI.ToolWindows.SamplingSetting;
 using WindowsPerfGUI.Utils.CommandBuilder;
 
 namespace WindowsPerfGUI.ToolWindows.CountingSetting
@@ -80,10 +79,11 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 AppendElementsToList(argsList, "-i", countingSettingsForm.TimelineInterval);
                 AppendElementsToList(argsList, "-n", countingSettingsForm.TimelineIterations);
             }
-         
+
             AppendElementsToList(argsList, "--timeout", countingSettingsForm.Timeout);
             AppendElementsToList(argsList, "--json");
             if (countingSettingsForm.ForceLock) AppendElementsToList(argsList, "--force-lock");
+            if (countingSettingsForm.KernelMode) AppendElementsToList(argsList, "-k");
 
             if (!countingSettingsForm.NoTarget)
             {

@@ -68,6 +68,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             AppendElementsToList(argsList, "-v", "--json");
 
             if (samplingSettingsFrom.ForceLock) AppendElementsToList(argsList, "--force-lock");
+            if (samplingSettingsFrom.KernelMode) AppendElementsToList(argsList, "-k");
 
             AppendElementsToList(argsList, "--pdb_file", samplingSettingsFrom.PdbFile);
             AppendElementsToList(argsList, "--");
