@@ -55,8 +55,8 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
         {
             SolutionProjectOutput.GetProjectOutputAsync().FireAndForget();
             InitializeComponent();
-            OpenInWPAButton.IsEnabled = false;
-
+            OpenInWPAButton.IsEnabled = !string.IsNullOrEmpty(WperfClient.OutputPath);
+            SaveAsButton.IsEnabled = OpenInWPAButton.IsEnabled;
             StopCountingButton.IsEnabled = false;
             var metricList = new List<PredefinedMetric>(
                 WPerfOptions.Instance.WperfList.PredefinedMetrics
@@ -104,7 +104,8 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             StartCountingButton.IsEnabled = true;
             BuildAndStartCountingButton.IsEnabled = true;
             OpenInWPAButton.IsEnabled = true;
-            StartCountingButton.Content = "Start";
+            SaveAsButton.IsEnabled = OpenInWPAButton.IsEnabled;
+            StartCountingButton.Content = CountingSettingsLanguagePack.Start;
 
             if (!string.IsNullOrEmpty(e.stdError))
             {
@@ -172,7 +173,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                             StartCountingButton.IsEnabled = true;
                             BuildAndStartCountingButton.IsEnabled = true;
 
-                            StartCountingButton.Content = "Start";
+                            StartCountingButton.Content = SamplingSettingsLanguagePack.Save;
                         }
                     },
                     CancellationToken.None,
@@ -450,7 +451,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 {
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
-                    Arguments = $"/C wpa -i \"{WperfClient.OutputPath}\"",
+                    Arguments = $"/C wpa -i \"{WperfClient.OutputPath}.json\"",
                 };
 
             process.EnableRaisingEvents = true;
@@ -524,6 +525,37 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             catch (Exception err)
             {
                 VS.MessageBox.ShowError("Error loading JSON file", err.Message);
+            }
+        }
+        
+        private void OpenSaveAsDialog(string extension)
+        {
+            SaveFileDialog SaveFileDialog =
+                new()
+                {
+                    DefaultExt = extension,
+                    FileName = WperfClient.OutputPath.Split('\\').Last(),
+                    Filter = $"{extension.ToUpper()} files (*.{extension})|*.{extension}",
+                };
+            if (SaveFileDialog.ShowDialog() != true)
+            {
+                return;
+            }
+
+            System.IO.File.Copy(WperfClient.OutputPath + $".{extension}", SaveFileDialog.FileName);
+        }
+
+        private void SaveAs_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(WperfClient.OutputPath))
+            {
+                return;
+            }
+
+            OpenSaveAsDialog("json");
+            if (System.IO.File.Exists(WperfClient.OutputPath + ".csv"))
+            {
+                OpenSaveAsDialog("csv");
             }
         }
     }

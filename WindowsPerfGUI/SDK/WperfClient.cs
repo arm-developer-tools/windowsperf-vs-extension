@@ -181,14 +181,13 @@ namespace WindowsPerfGUI.SDK
 
         public static string OutputPath;
 
-        static string GenerateNewOutputPath()
+        static void GenerateNewOutputPath()
         {
             string now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds().ToString();
             OutputPath = System.IO.Path.Combine(
                 System.IO.Path.GetTempPath(),
-                "wperf-record-output-" + now + ".json"
+                "wperf-stat-output-" + now
             );
-            return OutputPath;
         }
 
         public async Task StartCountingAsync()
@@ -197,10 +196,16 @@ namespace WindowsPerfGUI.SDK
                 CountingSettings.countingSettingsForm
             );
             CountingSettings.IsCounting = true;
-            string outputPath = GenerateNewOutputPath();
+            GenerateNewOutputPath();
             List<string> countingArgsList = countingArgs.ToList();
             int indexToInsertAt = countingArgsList.FindIndex(el => el.StartsWith("--json"));
-            countingArgsList.Insert(indexToInsertAt, $"--output \"{outputPath}\"");
+            string wperfOutputCommand = $"--output {OutputPath}.json";
+
+            if (CountingSettings.countingSettingsForm.IsTimelineSelected)
+            {
+                wperfOutputCommand += $" --output-csv {OutputPath}.csv";
+            }
+            countingArgsList.Insert(indexToInsertAt, wperfOutputCommand);
             try
             {
                 await _wperfProcess.StartBackgroundProcessAsync(countingArgsList.ToArray());
@@ -279,14 +284,12 @@ namespace WindowsPerfGUI.SDK
         public EventHandler<(
             WperfSampling serializedOutput,
             string stdError
-        )> OnSamplingFinished
-        { get; set; }
+        )> OnSamplingFinished { get; set; }
 
         public EventHandler<(
             List<CountingEvent> countingEvents,
             string stdError
-        )> OnCountingFinished
-        { get; set; }
+        )> OnCountingFinished { get; set; }
 
         public (WperfSampling serializedOutput, string stdError) StopSampling()
         {
@@ -314,7 +317,7 @@ namespace WindowsPerfGUI.SDK
                 stdError,
                 CountingSettings.GenerateCommandLineArgsArray(CountingSettings.countingSettingsForm)
             );
-            List<CountingEvent> countingEvents = GetCountingEventsFromJSONFile(OutputPath);
+            List<CountingEvent> countingEvents = GetCountingEventsFromJSONFile(OutputPath + ".json");
             return (countingEvents, stdError);
         }
     }

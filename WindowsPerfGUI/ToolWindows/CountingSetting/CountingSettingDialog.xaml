@@ -205,13 +205,20 @@
                         RowBackground="{StaticResource VsInputBackground}"
                         VerticalGridLinesBrush="{StaticResource ToolWindowText}" />
 
-                    <Components:CustomButtonControl
-                        x:Name="OpenInWPAButton"
-                        Margin="0,10"
-                        Padding="20,5,20,5"
-                        HorizontalAlignment="Right"
-                        Click="OpenInWPA_Click"
-                        Content="{x:Static locals:CountingSettingsLanguagePack.OpenInWPA}" />
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Components:CustomButtonControl
+                            x:Name="SaveAsButton"
+                            Margin="10"
+                            Padding="20,5,20,5"
+                            Click="SaveAs_Click"
+                            Content="{x:Static locals:SamplingSettingsLanguagePack.Save}" />
+                        <Components:CustomButtonControl
+                            x:Name="OpenInWPAButton"
+                            Margin="0,10"
+                            Padding="20,5,20,5"
+                            Click="OpenInWPA_Click"
+                            Content="{x:Static locals:CountingSettingsLanguagePack.OpenInWPA}" />
+                    </StackPanel>
                 </StackPanel>
             </GroupBox>
         </StackPanel>

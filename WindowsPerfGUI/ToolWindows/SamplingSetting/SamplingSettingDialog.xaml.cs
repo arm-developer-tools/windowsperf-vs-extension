@@ -75,11 +75,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             };
         }
 
-        private void SaveButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine(CustomProcessRadioButton.IsChecked);
-            Debug.WriteLine(CurrentProjectProcessRadioButton.IsChecked);
-            Debug.WriteLine(SamplingSourcePathFilePicker.IsEnabled);
             SyncSamplingSettings();
             if (!SamplingSettings.AreSettingsFilled)
             {
@@ -112,7 +109,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             UpdateSamplingCommandCallTextBox();
         }
 
-        private void AddEventButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void AddEventButton_Click(object sender, RoutedEventArgs e)
         {
             var newSamplingEventConfig = new SamplingEventConfiguration()
             {
@@ -143,7 +140,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             EventComboBoxPlaceholder.Visibility = Visibility.Visible;
         }
 
-        private void AddRawEventButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void AddRawEventButton_Click(object sender, RoutedEventArgs e)
         {
             string input = RawEventsInput.Text;
             if (input == null)
@@ -183,18 +180,19 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 return;
             }
 
-            SamplingEventConfiguration newSamplingEventConfig = new SamplingEventConfiguration()
-            {
-                SamplingEvent = eventIndex,
-                SamplingFrequency = frequency > 0 ? frequency.ToString() : null
-            };
+            SamplingEventConfiguration newSamplingEventConfig =
+                new()
+                {
+                    SamplingEvent = eventIndex,
+                    SamplingFrequency = frequency > 0 ? frequency.ToString() : null
+                };
 
             SamplingSettings.samplingSettingsFrom.SamplingEventList.Add(newSamplingEventConfig);
 
             RawEventsInput.Clear();
         }
 
-        private void RemoveEventButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void RemoveEventButton_Click(object sender, RoutedEventArgs e)
         {
             int selectedIndex = SamplingEventListBox.SelectedIndex;
             if (selectedIndex < 0)
