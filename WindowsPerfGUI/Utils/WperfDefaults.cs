@@ -32,7 +32,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 {
     static class WperfDefaults
     {
-        public const string WPERF_MIN_VERSION = "3.7.2";
+        public const string WPERF_MIN_VERSION = "3.8.0";
 
 #nullable enable
         public static string? Frequency;

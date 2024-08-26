@@ -28,6 +28,7 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.Win32;
 using System.Collections.Generic;
@@ -69,6 +70,21 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             StartSamplingMonikerButton.IsEnabled = true;
             RunAndStartSamplingMonikerButton.IsEnabled = true;
             StopSamplingMonikerButton.IsEnabled = false;
+            if (e.stdError.Contains("other WindowsPerf process acquired the wperf-driver."))
+            {
+                var messageBoxResult = VS.MessageBox.Show(
+                    "Other WindowsPerf process acquired the wperf-driver.",
+                    "Click 'Retry' to use --force-lock to force driver to give lock to current `wperf` process.",
+                    icon: OLEMSGICON.OLEMSGICON_CRITICAL,
+                    buttons: OLEMSGBUTTON.OLEMSGBUTTON_RETRYCANCEL);
+                if (messageBoxResult == Microsoft.VisualStudio.VSConstants.MessageBoxResult.IDRETRY)
+                {
+                    SamplingSettings.samplingSettingsFrom.ForceLock = true;
+                    StartSamplingMonikerButton_Click(sender, new RoutedEventArgs());
+
+                }
+                return;
+            }
             if (!string.IsNullOrEmpty(e.stdError))
             {
                 VS.MessageBox.ShowError(ErrorLanguagePack.ErrorWindowsPerfCLI, e.stdError);
@@ -132,6 +148,12 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                         WperfDefaults.WPERF_MIN_VERSION
                     )
                 );
+                if (
+                    messageBoxResult == Microsoft.VisualStudio.VSConstants.MessageBoxResult.IDCANCEL
+                )
+                {
+                    return;
+                }
                 dialogWindowTitle += $" - (UNSTABLE)";
             }
 
