@@ -45,7 +45,7 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
         public Dsu Dsu { get; set; }
 
         [JsonProperty(
-            "time_elapsed",
+            "Time_elapsed",
             Required = Required.DisallowNull,
             NullValueHandling = NullValueHandling.Ignore
         )]
@@ -54,10 +54,10 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
 
     public partial class Core
     {
-        [JsonProperty("kernel_mode", Required = Required.Always)]
+        [JsonProperty("Kernel_mode", Required = Required.Always)]
         public bool KernelMode { get; set; }
 
-        [JsonProperty("multiplexing", Required = Required.Always)]
+        [JsonProperty("Multiplexing", Required = Required.Always)]
         public bool Multiplexing { get; set; }
 
         [JsonProperty("overall", Required = Required.Always)]

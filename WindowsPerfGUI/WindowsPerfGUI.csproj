@@ -111,6 +111,7 @@
       <DependentUpon>WperfHostDataLanguagePack.resx</DependentUpon>
     </Compile>
     <Compile Include="SDK\WperfOutputs\WperfCounting.cs" />
+    <Compile Include="SDK\WperfOutputs\WperfSPE.cs" />
     <Compile Include="ToolWindows\CountingSetting\CountingEvent.cs" />
     <Compile Include="SDK\WperfOutputs\WperfTimeline.cs" />
     <Compile Include="ToolWindows\SamplingExplorer\LineHighlighting\HighlighterDict.cs" />
