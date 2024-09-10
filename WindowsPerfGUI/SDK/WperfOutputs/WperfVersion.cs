@@ -28,8 +28,8 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace WindowsPerfGUI.SDK.WperfOutputs
 {
@@ -49,6 +49,9 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
 
         [JsonProperty("GitVer")]
         public string GitVersion { get; set; }
+
+        [JsonProperty("FeatureString")]
+        public string FeatureString { get; set; }
     }
 
     public partial class WperfVersion

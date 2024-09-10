@@ -96,6 +96,7 @@ namespace WindowsPerfGUI.Options
                 if (errorWperfList != "")
                     throw new Exception(errorWperfList);
                 SetPredefinedEventsAndMetrics(wperfList, shouldForce: true);
+                WPerfOptions.Instance.UpdateWperfOptions(versions, wperfList);
             }
             catch (Exception ex)
             {
@@ -123,12 +124,13 @@ namespace WindowsPerfGUI.Options
                 string component = item.component.Component;
                 string componentVersion = item.component.ComponentVersion;
                 string gitVersion = item.component.GitVersion;
+                string featureString = item.component.FeatureString;
 
                 MainStack.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
 
                 TextBlock componentLabel = TextBlockFactory(component, offset);
                 TextBlock componentVersionLabel = TextBlockFactory(
-                    $"{componentVersion} ({gitVersion})",
+                    $"{componentVersion} ({gitVersion}) -- ${featureString}",
                     offset,
                     true
                 );
@@ -142,9 +144,6 @@ namespace WindowsPerfGUI.Options
                 return;
             }
 
-            WPerfOptions.Instance.IsWperfInitialized = true;
-            WPerfOptions.Instance.WperfCurrentVersion = wperfVersion;
-            WPerfOptions.Instance.Save();
         }
 
         private void SetPredefinedEventsAndMetrics(WperfList wperfList, bool shouldForce = false)
@@ -156,8 +155,7 @@ namespace WindowsPerfGUI.Options
                 return;
             }
 
-            WPerfOptions.Instance.WperfList = wperfList;
-            WPerfOptions.Instance.Save();
+
         }
 
         public static TextBlock TextBlockFactory(string text, int offset, bool isRight = false)

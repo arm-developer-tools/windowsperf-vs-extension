@@ -118,6 +118,35 @@ namespace WindowsPerfGUI.SDK
         }
 
         /// <summary>
+        /// This returns wether or not SPE is supported on this machine
+        /// it runs the command wperf -version --json and wperf test --json
+        /// it then checks for "spe_device.version_name" in the test results and the feature string in the version results
+        /// </summary>
+        /// <returns>
+        ///     bool
+        /// </returns>
+        public bool CheckIsSPESupported()
+        {
+            (WperfVersion versionSerializedOutput, _) = GetVersion();
+            foreach (var component in versionSerializedOutput.Components)
+            {
+                if (!component.FeatureString.Contains("+spe"))
+                {
+                    return false;
+                }
+            }
+
+            (WperfTest testSerializedOutput, _) = GetTest();
+
+            TestResult speDeviceConf = testSerializedOutput
+                .TestResults.Find(el => el.TestName == "spe_device.version_name");
+            if (speDeviceConf == null) { return false; }
+
+            return speDeviceConf.Result.StartsWith("FEAT_SPE");
+
+        }
+
+        /// <summary>
         /// This returns the list of Wperf's predefined events and metrics
         /// it runs the command wperf list -v --json
         /// </summary>
@@ -219,7 +248,7 @@ namespace WindowsPerfGUI.SDK
             }
         }
 
-        static public List<CountingEvent> GetCountingEventsFromJSONFile(string filePath)
+        public static List<CountingEvent> GetCountingEventsFromJSONFile(string filePath)
         {
             List<CountingEvent> countingEvents = new();
 
@@ -244,7 +273,7 @@ namespace WindowsPerfGUI.SDK
             return countingEvents;
         }
 
-        static private void ProcessSingleCount(
+        private static void ProcessSingleCount(
             WperfCounting count,
             List<CountingEvent> countingEvents,
             bool accumulatePerCoreAndEvent = false
@@ -284,12 +313,14 @@ namespace WindowsPerfGUI.SDK
         public EventHandler<(
             WperfSampling serializedOutput,
             string stdError
-        )> OnSamplingFinished { get; set; }
+        )> OnSamplingFinished
+        { get; set; }
 
         public EventHandler<(
             List<CountingEvent> countingEvents,
             string stdError
-        )> OnCountingFinished { get; set; }
+        )> OnCountingFinished
+        { get; set; }
 
         public (WperfSampling serializedOutput, string stdError) StopSampling()
         {

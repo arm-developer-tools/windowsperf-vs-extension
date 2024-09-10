@@ -32,6 +32,7 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using WindowsPerfGUI.SDK.WperfOutputs;
+using WindowsPerfGUI.ToolWindows.SamplingSetting;
 
 namespace WindowsPerfGUI.Options
 {
@@ -50,8 +51,45 @@ namespace WindowsPerfGUI.Options
         public string WperfPath { get; set; } = "wperf.exe";
         public bool WperfVersionCheckIgnore { get; set; } = false;
         public bool IsWperfInitialized { get; set; } = false;
-
+        public bool HasSPESupport { get; set; } = false;
         public WperfVersion WperfCurrentVersion { get; set; }
         public WperfList WperfList { get; set; }
+        public void UpdateWperfVersion(WperfVersion wperfVersion)
+        {
+            IsWperfInitialized = true;
+            WperfCurrentVersion = wperfVersion;
+        }
+        public void UpdateWperfOptions(WperfVersion wperfVersion, WperfList wperfList)
+        {
+            UpdateWperfVersion(wperfVersion);
+            if (wperfList != null)
+            {
+                WperfList = wperfList;
+            }
+            Save();
+        }
+        public void UpdateWperfOptions(WperfVersion wperfVersion, bool hasSPESupport)
+        {
+            UpdateWperfVersion(wperfVersion);
+
+            HasSPESupport = hasSPESupport;
+            WperfDefaults.HasSPESupport = hasSPESupport;
+            Save();
+        }
+#nullable enable
+        public void UpdateWperfOptions(WperfVersion wperfVersion, WperfList? wperfList, bool? hasSPESupport)
+        {
+            UpdateWperfVersion(wperfVersion);
+            if (wperfList != null)
+            {
+                WperfList = wperfList;
+            }
+            if (hasSPESupport != null)
+            {
+                HasSPESupport = (bool)hasSPESupport;
+            }
+            Save();
+        }
+#nullable disable
     }
 }

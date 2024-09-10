@@ -57,6 +57,5 @@
             Padding="4"
             Placeholder="File path... " />
         <Button Click="Button_Click" Content="{x:Static resx:MainLanguagePack.ToolWindow}" />
-        <Button Click="Button_Click_1" Content="Reset" />
     </StackPanel>
 </UserControl>

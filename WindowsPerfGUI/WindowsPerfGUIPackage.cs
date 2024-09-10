@@ -107,9 +107,8 @@ namespace WindowsPerfGUI
                 {
                     (WperfVersion versions, string stdVersionError) = wperfClient.GetVersion();
                     if (!string.IsNullOrEmpty(stdVersionError)) throw new Exception("Unable to get WindowsPerf version");
-
-                    WPerfOptions.Instance.WperfCurrentVersion = versions;
-                    await WPerfOptions.Instance.SaveAsync();
+                    bool speSupport = wperfClient.CheckIsSPESupported();
+                    WPerfOptions.Instance.UpdateWperfOptions(versions, speSupport);
                     string wperfVersion = versions.Components.FirstOrDefault().ComponentVersion;
                     if (wperfVersion != WperfDefaults.WPERF_MIN_VERSION)
                         await VS.MessageBox.ShowWarningAsync(
