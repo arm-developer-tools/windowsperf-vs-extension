@@ -29,13 +29,15 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System.Collections.Generic;
-using System.IO;
+using System.ComponentModel;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using CliWrap;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.Win32;
 using WindowsPerfGUI.Options;
@@ -443,8 +445,61 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             );
         }
 
-        private void OpenInWPA_Click(object sender, RoutedEventArgs e)
+        volatile bool checkingWPAInstallation = false;
+
+        private async Task<bool> CheckWPAInstallationAsync()
         {
+            if (checkingWPAInstallation)
+            {
+                return false;
+            }
+
+            try
+            {
+                checkingWPAInstallation = true;
+                StringBuilder outputStringBuilder = new();
+                var request = await Cli.Wrap("wpa")
+                    .WithArguments(["-listplugins"])
+                    .WithStandardOutputPipe(PipeTarget.ToStringBuilder(outputStringBuilder))
+                    .ExecuteAsync();
+
+                checkingWPAInstallation = false;
+                string output = outputStringBuilder.ToString();
+
+                if (request.ExitCode != 0)
+                {
+                    await VS.MessageBox.ShowErrorAsync(ErrorLanguagePack.WPANotInstalled);
+                    return false;
+                }
+
+                bool isWPAPluginInstalled =
+                    !string.IsNullOrEmpty(output) && output.Contains("WindowsPerf WPA Plugin");
+                if (!isWPAPluginInstalled)
+                {
+                    await VS.MessageBox.ShowErrorAsync(ErrorLanguagePack.WPAPluginNotInstalled);
+                }
+
+                return isWPAPluginInstalled;
+            }
+            catch (Win32Exception error)
+            {
+                Trace.WriteLine($"[ERROR]: {error.Message}");
+                checkingWPAInstallation = false;
+                await VS.MessageBox.ShowErrorAsync(ErrorLanguagePack.WPANotInstalled);
+                return false;
+            }
+        }
+
+        private async void OpenInWPA_Click(object sender, RoutedEventArgs e)
+        {
+            OpenInWPAButton.IsEnabled = false;
+            bool wpaInstalled = await CheckWPAInstallationAsync();
+
+            if (!wpaInstalled)
+            {
+                OpenInWPAButton.IsEnabled = true;
+                return;
+            }
             Process process = new();
             ProcessStartInfo startInfo =
                 new()
@@ -458,6 +513,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             process.StartInfo = startInfo;
             process.Start();
             process.Exited += new EventHandler(WPAProcessExited);
+
             OpenInWPAButton.IsEnabled = false;
         }
 
@@ -512,22 +568,24 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             fileDialog.Filter = "JSON files (*.json)|*.json";
 
             bool? result = fileDialog.ShowDialog();
-            if (result != true) return;
+            if (result != true)
+                return;
 
             string filename = fileDialog.FileName;
             try
             {
-                List<CountingEvent> wperfSampling = WperfClient.GetCountingEventsFromJSONFile(filename);
+                List<CountingEvent> wperfSampling = WperfClient.GetCountingEventsFromJSONFile(
+                    filename
+                );
                 CountingSettings.countingSettingsForm.IsCountCollected = true;
                 CountingSettings.countingSettingsForm.CountingResult = wperfSampling;
-
             }
             catch (Exception err)
             {
                 VS.MessageBox.ShowError("Error loading JSON file", err.Message);
             }
         }
-        
+
         private void OpenSaveAsDialog(string extension)
         {
             SaveFileDialog SaveFileDialog =

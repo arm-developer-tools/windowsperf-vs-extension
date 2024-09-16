@@ -189,6 +189,24 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to WPA is not installed. Please make sure it&apos;s installed correctly and added to the PATH environment variable..
+        /// </summary>
+        public static string WPANotInstalled {
+            get {
+                return ResourceManager.GetString("WPANotInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not detect WindowsPerf WPA Plugin. Please make sure the plugin is installed correctly..
+        /// </summary>
+        public static string WPAPluginNotInstalled {
+            get {
+                return ResourceManager.GetString("WPAPluginNotInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error starting wperf process. Please double check your wperf path..
         /// </summary>
         public static string WperfPathChanged {

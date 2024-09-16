@@ -167,4 +167,10 @@ For example r10 is event with index 0x10</value>
   <data name="RunningCountingOverlapLine2" xml:space="preserve">
     <value>Please wait for the current counting to finish before starting another counting instance</value>
   </data>
+  <data name="WPANotInstalled" xml:space="preserve">
+    <value>WPA is not installed. Please make sure it's installed correctly and added to the PATH environment variable.</value>
+  </data>
+  <data name="WPAPluginNotInstalled" xml:space="preserve">
+    <value>Could not detect WindowsPerf WPA Plugin. Please make sure the plugin is installed correctly.</value>
+  </data>
 </root>

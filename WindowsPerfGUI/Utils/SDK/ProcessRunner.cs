@@ -142,7 +142,7 @@ namespace WindowsPerfGUI.Utils.SDK
             SetConsoleCtrlHandler(null, false);
         }
 
-        public (string stdError, string stdOutput) StartAwaitedProcess(string[] args)
+        public (string stdOutput, string stdError) StartAwaitedProcess(string[] args)
         {
             InitProcess(args);
             try
