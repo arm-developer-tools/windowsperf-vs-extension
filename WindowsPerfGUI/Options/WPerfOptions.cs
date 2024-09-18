@@ -52,13 +52,17 @@ namespace WindowsPerfGUI.Options
         public bool WperfVersionCheckIgnore { get; set; } = false;
         public bool IsWperfInitialized { get; set; } = false;
         public bool HasSPESupport { get; set; } = false;
+        public bool UseDefaultSearchDirectory { get; set; } = true;
+        public string WPAPluginSearchDirectory { get; set; }
         public WperfVersion WperfCurrentVersion { get; set; }
         public WperfList WperfList { get; set; }
+
         public void UpdateWperfVersion(WperfVersion wperfVersion)
         {
             IsWperfInitialized = true;
             WperfCurrentVersion = wperfVersion;
         }
+
         public void UpdateWperfOptions(WperfVersion wperfVersion, WperfList wperfList)
         {
             UpdateWperfVersion(wperfVersion);
@@ -68,6 +72,7 @@ namespace WindowsPerfGUI.Options
             }
             Save();
         }
+
         public void UpdateWperfOptions(WperfVersion wperfVersion, bool hasSPESupport)
         {
             UpdateWperfVersion(wperfVersion);
@@ -76,8 +81,13 @@ namespace WindowsPerfGUI.Options
             WperfDefaults.HasSPESupport = hasSPESupport;
             Save();
         }
+
 #nullable enable
-        public void UpdateWperfOptions(WperfVersion wperfVersion, WperfList? wperfList, bool? hasSPESupport)
+        public void UpdateWperfOptions(
+            WperfVersion wperfVersion,
+            WperfList? wperfList,
+            bool? hasSPESupport
+        )
         {
             UpdateWperfVersion(wperfVersion);
             if (wperfList != null)

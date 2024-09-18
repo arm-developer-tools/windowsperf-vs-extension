@@ -1,0 +1,41 @@
+﻿<UserControl
+    x:Class="WindowsPerfGUI.Options.WPAOptions"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <ScrollViewer>
+        <StackPanel>
+            <Label Content="Custom search directory" />
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="100" />
+                </Grid.ColumnDefinitions>
+                <TextBox
+                    x:Name="CustomSearchDir"
+                    Grid.Column="0"
+                    Margin="0,0,5,0"
+                    TextChanged="CustomSearchDir_TextChanged" />
+                <Button
+                    Name="SelectDirectoryButton"
+                    Grid.Column="1"
+                    Click="Button_Click"
+                    Content="Select" />
+            </Grid>
+            <StackPanel x:Name="CheckboxContainer" Margin="5">
+                <CheckBox
+                    Name="UseDefaultSearchLocation"
+                    Margin="0,0,0,5"
+                    Click="UseDefaultSearchLocation_Click" />
+                <TextBlock
+                    x:Name="EnvironmentVariableNotice"
+                    FontSize="10"
+                    Visibility="Collapsed" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

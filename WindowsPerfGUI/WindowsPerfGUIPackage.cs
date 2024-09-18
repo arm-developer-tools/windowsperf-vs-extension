@@ -29,10 +29,10 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-global using Community.VisualStudio.Toolkit;
-global using Microsoft.VisualStudio.Shell;
 global using System;
 global using System.Diagnostics;
+global using Community.VisualStudio.Toolkit;
+global using Microsoft.VisualStudio.Shell;
 global using Task = System.Threading.Tasks.Task;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -78,6 +78,15 @@ namespace WindowsPerfGUI
         true,
         SupportsProfiles = true
     )]
+    [ProvideOptionPage(
+        typeof(WPAOptionsPage),
+        "WindowsPerf",
+        "WPA Options",
+        0,
+        0,
+        true,
+        SupportsProfiles = true
+    )]
     public sealed class WindowsPerfGUIPackage : ToolkitPackage
     {
         public static OutputWindowPane WperfOutputWindow { get; set; }
@@ -106,7 +115,8 @@ namespace WindowsPerfGUI
                 if (!shouldIgnoreWperfVersion)
                 {
                     (WperfVersion versions, string stdVersionError) = wperfClient.GetVersion();
-                    if (!string.IsNullOrEmpty(stdVersionError)) throw new Exception("Unable to get WindowsPerf version");
+                    if (!string.IsNullOrEmpty(stdVersionError))
+                        throw new Exception("Unable to get WindowsPerf version");
                     bool speSupport = wperfClient.CheckIsSPESupported();
                     WPerfOptions.Instance.UpdateWperfOptions(versions, speSupport);
                     string wperfVersion = versions.Components.FirstOrDefault().ComponentVersion;

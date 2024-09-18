@@ -445,6 +445,21 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             );
         }
 
+        private List<string> GenerateWPACommand(List<string> args)
+        {
+            List<string> _args = [];
+            if (
+                !WPerfOptions.Instance.UseDefaultSearchDirectory
+                && !string.IsNullOrEmpty(WPerfOptions.Instance.WPAPluginSearchDirectory)
+            )
+            {
+                _args.Add($"-addsearchdir {WPerfOptions.Instance.WPAPluginSearchDirectory}");
+            }
+
+            _args.AddRange(args);
+            return _args;
+        }
+
         volatile bool checkingWPAInstallation = false;
 
         private async Task<bool> CheckWPAInstallationAsync()
@@ -459,7 +474,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 checkingWPAInstallation = true;
                 StringBuilder outputStringBuilder = new();
                 var request = await Cli.Wrap("wpa")
-                    .WithArguments(["-listplugins"])
+                    .WithArguments(GenerateWPACommand(["-listplugins"]))
                     .WithStandardOutputPipe(PipeTarget.ToStringBuilder(outputStringBuilder))
                     .ExecuteAsync();
 
@@ -500,13 +515,17 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 OpenInWPAButton.IsEnabled = true;
                 return;
             }
+            string args = string.Join(
+                " ",
+                GenerateWPACommand([$"-i \"{WperfClient.OutputPath}.json\""])
+            );
             Process process = new();
             ProcessStartInfo startInfo =
                 new()
                 {
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
-                    Arguments = $"/C wpa -i \"{WperfClient.OutputPath}.json\"",
+                    Arguments = $"/C wpa {args}",
                 };
 
             process.EnableRaisingEvents = true;

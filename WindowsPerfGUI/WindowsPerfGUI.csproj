@@ -75,6 +75,12 @@
     <Compile Include="Components\TreeListView\TreeListItem.cs" />
     <Compile Include="Components\TreeListView\TreeNode.cs" />
     <Compile Include="Options\SamplingManager.cs" />
+    <Compile Include="Options\WPAOptions.xaml.cs">
+      <DependentUpon>WPAOptions.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Options\WPAOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Resources\Locals\CountingSettingsLanguagePack.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -212,6 +218,7 @@
     <EmbeddedResource Include="Resources\Locals\OptionsPageLanguagePack.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>OptionsPageLanguagePack.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Locals\SamplingExplorerLanguagePack.fr-FR.resx">
       <SubType>Designer</SubType>
@@ -240,6 +247,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Components\FilePicker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Options\WPAOptions.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
