@@ -38,6 +38,10 @@ namespace WindowsPerfGUI.Utils
 #nullable enable
         public static string? Frequency;
         public static int? TotalGPCNum;
+
+        public static string DefaultWPASearchDir = Environment.GetEnvironmentVariable(
+            "WPA_ADDITIONAL_SEARCH_DIRECTORIES"
+        );
 #nullable disable
     }
 }

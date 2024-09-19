@@ -131,7 +131,7 @@ namespace WindowsPerfGUI.Options
 
                 TextBlock componentLabel = TextBlockFactory(component, offset);
                 TextBlock componentVersionLabel = TextBlockFactory(
-                    $"{componentVersion} ({gitVersion}) -- ${featureString}",
+                    $"{componentVersion} ({gitVersion}) -- {featureString}",
                     offset,
                     true
                 );
@@ -144,7 +144,6 @@ namespace WindowsPerfGUI.Options
             {
                 return;
             }
-
         }
 
         private void SetPredefinedEventsAndMetrics(WperfList wperfList, bool shouldForce = false)
@@ -155,8 +154,6 @@ namespace WindowsPerfGUI.Options
             {
                 return;
             }
-
-
         }
 
         public static TextBlock TextBlockFactory(string text, int offset, bool isRight = false)

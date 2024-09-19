@@ -30,6 +30,7 @@
 
 using System.Windows.Controls;
 using System.Windows.Forms;
+using WindowsPerfGUI.Utils;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace WindowsPerfGUI.Options
@@ -48,23 +49,19 @@ namespace WindowsPerfGUI.Options
 
         public void Initialize()
         {
-            string defaultSearchDir = Environment.GetEnvironmentVariable(
-                "WPA_ADDITIONAL_SEARCH_DIRECTORIES"
-            );
-
             string checkboxLabel = "Use default search directory";
-            if (!string.IsNullOrEmpty(defaultSearchDir))
+            if (!string.IsNullOrEmpty(WperfDefaults.DefaultWPASearchDir))
             {
-                checkboxLabel += $": {defaultSearchDir}";
+                checkboxLabel += $": {WperfDefaults.DefaultWPASearchDir}";
             }
 
             UseDefaultSearchLocation.Content = checkboxLabel;
 
-            if (!string.IsNullOrEmpty(defaultSearchDir))
+            if (!string.IsNullOrEmpty(WperfDefaults.DefaultWPASearchDir))
             {
                 EnvironmentVariableNotice.Visibility = System.Windows.Visibility.Visible;
                 EnvironmentVariableNotice.Text =
-                    $"WPA_ADDITIONAL_SEARCH_DIRECTORIES=\"{defaultSearchDir}\"";
+                    $"WPA_ADDITIONAL_SEARCH_DIRECTORIES=\"{WperfDefaults.DefaultWPASearchDir}\"";
             }
             UseDefaultSearchLocation.IsChecked = WPerfOptions.Instance.UseDefaultSearchDirectory;
             CustomSearchDir.IsEnabled = !WPerfOptions.Instance.UseDefaultSearchDirectory;
@@ -78,6 +75,10 @@ namespace WindowsPerfGUI.Options
             CustomSearchDir.IsEnabled = !newValue;
             SelectDirectoryButton.IsEnabled = !newValue;
             UseDefaultSearchLocation.IsChecked = newValue;
+            if (newValue)
+            {
+                CustomSearchDir.Text = WperfDefaults.DefaultWPASearchDir;
+            }
             WPerfOptions.Instance.UseDefaultSearchDirectory = newValue;
             WPerfOptions.Instance.Save();
         }
