@@ -34,8 +34,36 @@ using System.Linq;
 
 namespace WindowsPerfGUI.SDK.WperfOutputs
 {
+
     public partial class WperfList
     {
+        #region Default hardcoded values
+
+        private List<PredefinedEvent> defaultPredefinedSPEFilters = [
+                new PredefinedEvent() {
+                            AliasName = "load_filter",
+                            RawIndex = "",
+                            Description = "Enables collection of load sampled operations, including atomic operations that return a value to a register.",
+                            EventType = "[SPE filter]"
+                        },
+                new PredefinedEvent() {
+                            AliasName = "store_filter",
+                            RawIndex = "",
+                            Description = "Enables collection of store sampled operations, including all atomic operations.",
+                            EventType = "[SPE filter]"
+                        },
+                new PredefinedEvent() {
+                            AliasName = "branch_filter",
+                            RawIndex = "",
+                            Description = "Enables collection of branch sampled operations, including direct and indirect branches and exception returns.",
+                            EventType = "[SPE filter]"
+                        },
+            ];
+        public const string SPE_EVENT_BASE_NAME = "arm_spe_0";
+        public const string SPE_EVENT_SEPARATOR = "/";
+
+        #endregion
+
         private List<PredefinedEvent> predefinedEvents;
 
         [JsonProperty("Predefined_Events")]
@@ -45,12 +73,13 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
             set
             {
                 predefinedEvents = value.Where(e => e.EventType != "[Kernel PMU event]" && e.EventType != "[SPE filter]").ToList();
-                PredefinedSPEFilters = value.Where(e => e.EventType == "[SPE filter]").ToList();
+                List<PredefinedEvent> _speFilters = value.Where(e => e.EventType == "[SPE filter]").ToList();
+                
+                if (_speFilters.Count == 0) _speFilters = defaultPredefinedSPEFilters;
+                
+                PredefinedSPEFilters = _speFilters;
             }
         }
-
-        public const string SPE_EVENT_BASE_NAME = "arm_spe_0";
-        public const string SPE_EVENT_SEPARATOR = "/";
 
         public List<PredefinedEvent> PredefinedSPEFilters { get; set; }
 
