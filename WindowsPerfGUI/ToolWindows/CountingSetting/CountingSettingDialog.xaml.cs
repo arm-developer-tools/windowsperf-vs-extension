@@ -47,6 +47,7 @@ using WindowsPerfGUI.SDK.WperfOutputs;
 using WindowsPerfGUI.ToolWindows.SamplingSetting;
 using WindowsPerfGUI.Utils;
 using WindowsPerfGUI.Utils.ListSearcher;
+using static WindowsPerfGUI.SDK.WperfOutputs.WperfList;
 
 namespace WindowsPerfGUI.ToolWindows.CountingSetting
 {
@@ -61,14 +62,8 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             OpenInWPAButton.IsEnabled = !string.IsNullOrEmpty(WperfClient.OutputPath);
             SaveAsButton.IsEnabled = OpenInWPAButton.IsEnabled;
             StopCountingButton.IsEnabled = false;
-            var metricList = new List<PredefinedMetric>(
-                WPerfOptions.Instance.WperfList.PredefinedMetrics
-            );
-            var eventList = new List<PredefinedEvent>(
-                WPerfOptions.Instance.WperfList.PredefinedEvents
-            );
-            EventComboBox.ItemsSource = eventList;
-            MetricComboBox.ItemsSource = metricList;
+            ResetMetricComboBox();
+            ResetEventComboBox();
             CpuCoresGrid.ItemsSource = CpuCores.InitCpuCores();
             ProjectTargetConfigLabel.Content = SolutionProjectOutput.SelectedConfigLabel;
             if (CountingSettings.countingSettingsForm.FilePath != null)
@@ -97,6 +92,8 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             };
             wperfClient.OnCountingFinished += HandleCountingFinished;
         }
+
+   
 
         private void HandleCountingFinished(
             object sender,
@@ -247,7 +244,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             else
             {
                 EventComboBoxPlaceholder.Visibility = Visibility.Visible;
-                EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
+                ResetEventComboBox();
             }
         }
 
@@ -256,7 +253,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             var newCountingEvent = (EventComboBox.SelectedItem as PredefinedEvent)?.AliasName;
 
             EventComboBox.SelectedIndex = -1;
-            EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
+            ResetEventComboBox();
 
             foreach (
                 var item in CountingSettings.countingSettingsForm.CountingEventList.Select(
@@ -405,10 +402,9 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
 
         private void AddMetricButton_Click(object sender, RoutedEventArgs e)
         {
-            var newCountingMetric = (MetricComboBox.SelectedItem as PredefinedMetric)?.Metric;
+            var newCountingMetric = (MetricComboBox.SelectedItem as PredefinedMetricAndGroupOfMetrics)?.Metric;
 
-            MetricComboBox.SelectedIndex = -1;
-            MetricComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedMetrics;
+            ResetMetricComboBox();
 
             foreach (
                 var item in CountingSettings.countingSettingsForm.CountingMetricList.Select(
@@ -429,7 +425,20 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             CountingSettings.countingSettingsForm.CountingMetricList.Add(newCountingMetric);
             MetricComboBoxPlaceholder.Visibility = Visibility.Visible;
         }
-
+        private void ResetEventComboBox()
+        {
+            var eventList = new List<PredefinedEvent>(
+                WPerfOptions.Instance.WperfList.PredefinedEvents
+            );
+            EventComboBox.ItemsSource = eventList;
+        }
+        private void ResetMetricComboBox ()
+        {
+            var metricList = new List<PredefinedMetricAndGroupOfMetrics>(
+                WPerfOptions.Instance.WperfList.PredefinedMetricsAndGroupsOfMetrics
+            );
+            MetricComboBox.ItemsSource = metricList;
+        }
         private void RemoveMetricButton_Click(object sender, RoutedEventArgs e)
         {
             int selectedIndex = CountingMetricListBox.SelectedIndex;
