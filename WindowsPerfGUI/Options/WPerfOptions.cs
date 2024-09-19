@@ -32,7 +32,7 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using WindowsPerfGUI.SDK.WperfOutputs;
-using WindowsPerfGUI.ToolWindows.SamplingSetting;
+using WindowsPerfGUI.Utils;
 
 namespace WindowsPerfGUI.Options
 {

@@ -45,6 +45,7 @@ using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK;
 using WindowsPerfGUI.SDK.WperfOutputs;
 using WindowsPerfGUI.ToolWindows.SamplingSetting;
+using WindowsPerfGUI.Utils;
 using WindowsPerfGUI.Utils.ListSearcher;
 
 namespace WindowsPerfGUI.ToolWindows.CountingSetting

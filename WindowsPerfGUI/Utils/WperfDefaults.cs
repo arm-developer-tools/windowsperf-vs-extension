@@ -28,12 +28,13 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-namespace WindowsPerfGUI.ToolWindows.SamplingSetting
+namespace WindowsPerfGUI.Utils
 {
     static class WperfDefaults
     {
         public const string WPERF_MIN_VERSION = "3.8.0";
         public static bool HasSPESupport = false;
+        public static string SPEFeatureName = "";
 #nullable enable
         public static string? Frequency;
         public static int? TotalGPCNum;

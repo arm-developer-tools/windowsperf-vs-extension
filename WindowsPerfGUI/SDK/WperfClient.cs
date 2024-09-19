@@ -35,6 +35,7 @@ using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK.WperfOutputs;
 using WindowsPerfGUI.ToolWindows.CountingSetting;
 using WindowsPerfGUI.ToolWindows.SamplingSetting;
+using WindowsPerfGUI.Utils;
 using WindowsPerfGUI.Utils.SDK;
 
 namespace WindowsPerfGUI.SDK
@@ -127,22 +128,32 @@ namespace WindowsPerfGUI.SDK
         /// </returns>
         public bool CheckIsSPESupported()
         {
-            (WperfVersion versionSerializedOutput, _) = GetVersion();
-            foreach (var component in versionSerializedOutput.Components)
+            try
             {
-                if (!component.FeatureString.Contains("+spe"))
+                (WperfVersion versionSerializedOutput, _) = GetVersion();
+                foreach (var component in versionSerializedOutput.Components)
                 {
-                    return false;
+                    if (!component.FeatureString.Contains("+spe"))
+                    {
+                        return false;
+                    }
                 }
+
+                (WperfTest testSerializedOutput, _) = GetTest();
+
+                TestResult speDeviceConf = testSerializedOutput
+                    .TestResults.Find(el => el.TestName == "spe_device.version_name");
+                if (speDeviceConf == null) { return false; }
+
+                WperfDefaults.SPEFeatureName = speDeviceConf.Result;
+                return speDeviceConf.Result.StartsWith("FEAT_SPE");
+            }
+            catch (Exception)
+            {
+
+                return false;
             }
 
-            (WperfTest testSerializedOutput, _) = GetTest();
-
-            TestResult speDeviceConf = testSerializedOutput
-                .TestResults.Find(el => el.TestName == "spe_device.version_name");
-            if (speDeviceConf == null) { return false; }
-
-            return speDeviceConf.Result.StartsWith("FEAT_SPE");
 
         }
 
@@ -198,8 +209,17 @@ namespace WindowsPerfGUI.SDK
             try
             {
                 await _wperfProcess.StartBackgroundProcessAsync(samplingArgs);
-                (WperfSampling serializedOutput, string stdError) = StopSampling();
-                OnSamplingFinished?.Invoke(this, (serializedOutput, stdError));
+                if (SamplingSettings.samplingSettingsFrom.IsSPEEnabled)
+                {
+                    (WperfSPE serializedOutput, string stdError) = StopSPESampling();
+                    OnSPESamplingFinished?.Invoke(this, (serializedOutput, stdError));
+                }
+                else
+                {
+                    (WperfSampling serializedOutput, string stdError) = StopSampling();
+                    OnSamplingFinished?.Invoke(this, (serializedOutput, stdError));
+                }
+
             }
             catch (Exception e)
             {
@@ -317,6 +337,12 @@ namespace WindowsPerfGUI.SDK
         { get; set; }
 
         public EventHandler<(
+          WperfSPE serializedOutput,
+          string stdError
+      )> OnSPESamplingFinished
+        { get; set; }
+
+        public EventHandler<(
             List<CountingEvent> countingEvents,
             string stdError
         )> OnCountingFinished
@@ -328,6 +354,11 @@ namespace WindowsPerfGUI.SDK
             SamplingSettings.IsSampling = false;
             string stdOutput = string.Join("\n", _wperfProcess.StdOutput.Output);
             string stdError = string.Join("\n", _wperfProcess.StdError.Output);
+            if (SamplingSettings.samplingSettingsFrom.IsSPEEnabled)
+            {
+                WperfSPE wperfSPE = WperfSPE.FromJson(stdOutput);
+
+            }
             WperfSampling serializedOutput = WperfSampling.FromJson(stdOutput);
             LogToOutput(
                 stdOutput,
@@ -336,7 +367,20 @@ namespace WindowsPerfGUI.SDK
             );
             return (serializedOutput, stdError);
         }
-
+        public (WperfSPE serializedOutput, string stdError) StopSPESampling()
+        {
+            _wperfProcess.StopProcess();
+            SamplingSettings.IsSampling = false;
+            string stdOutput = string.Join("\n", _wperfProcess.StdOutput.Output);
+            string stdError = string.Join("\n", _wperfProcess.StdError.Output);
+            WperfSPE serializedOutput = WperfSPE.FromJson(stdOutput);
+            LogToOutput(
+                stdOutput,
+                stdError,
+                SamplingSettings.GenerateCommandLineArgsArray(SamplingSettings.samplingSettingsFrom)
+            );
+            return (serializedOutput, stdError);
+        }
         public (List<CountingEvent> countingEvents, string stdError) StopCounting()
         {
             _wperfProcess.StopProcess();

@@ -28,16 +28,31 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 
 namespace WindowsPerfGUI.SDK.WperfOutputs
 {
     public partial class WperfList
     {
+        private List<PredefinedEvent> predefinedEvents;
+
         [JsonProperty("Predefined_Events")]
-        public List<PredefinedEvent> PredefinedEvents { get; set; }
+        public List<PredefinedEvent> PredefinedEvents
+        {
+            get { return predefinedEvents; }
+            set
+            {
+                predefinedEvents = value.Where(e => e.EventType != "[Kernel PMU event]" && e.EventType != "[SPE filter]").ToList();
+                PredefinedSPEFilters = value.Where(e => e.EventType == "[SPE filter]").ToList();
+            }
+        }
+
+        public const string SPE_EVENT_BASE_NAME = "arm_spe_0";
+        public const string SPE_EVENT_SEPARATOR = "/";
+
+        public List<PredefinedEvent> PredefinedSPEFilters { get; set; }
 
         public (PredefinedEvent, int) GetPredefinedEventFromAliasName(string aliasName)
         {
@@ -47,6 +62,7 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
                 {
                     return (predefinedEvent.value, predefinedEvent.i);
                 }
+
             }
             return (null, -1);
         }

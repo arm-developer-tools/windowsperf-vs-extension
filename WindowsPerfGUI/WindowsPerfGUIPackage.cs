@@ -1,4 +1,4 @@
-﻿// BSD 3-Clause License
+// BSD 3-Clause License
 //
 // Copyright (c) 2022, Arm Limited
 // All rights reserved.
@@ -29,10 +29,10 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-global using System;
-global using System.Diagnostics;
 global using Community.VisualStudio.Toolkit;
 global using Microsoft.VisualStudio.Shell;
+global using System;
+global using System.Diagnostics;
 global using Task = System.Threading.Tasks.Task;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -42,7 +42,7 @@ using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK;
 using WindowsPerfGUI.SDK.WperfOutputs;
 using WindowsPerfGUI.ToolWindows.SamplingExplorer;
-using WindowsPerfGUI.ToolWindows.SamplingSetting;
+using WindowsPerfGUI.Utils;
 
 namespace WindowsPerfGUI
 {
@@ -111,14 +111,14 @@ namespace WindowsPerfGUI
             try
             {
                 WperfClientFactory wperfClient = new();
+                bool speSupport = wperfClient.CheckIsSPESupported();
+                WperfDefaults.HasSPESupport = speSupport;
+                (WperfVersion versions, string stdVersionError) = wperfClient.GetVersion();
+                if (!string.IsNullOrEmpty(stdVersionError)) throw new Exception("Unable to get WindowsPerf version");
+                WPerfOptions.Instance.UpdateWperfOptions(versions, speSupport);
 
                 if (!shouldIgnoreWperfVersion)
                 {
-                    (WperfVersion versions, string stdVersionError) = wperfClient.GetVersion();
-                    if (!string.IsNullOrEmpty(stdVersionError))
-                        throw new Exception("Unable to get WindowsPerf version");
-                    bool speSupport = wperfClient.CheckIsSPESupported();
-                    WPerfOptions.Instance.UpdateWperfOptions(versions, speSupport);
                     string wperfVersion = versions.Components.FirstOrDefault().ComponentVersion;
                     if (wperfVersion != WperfDefaults.WPERF_MIN_VERSION)
                         await VS.MessageBox.ShowWarningAsync(

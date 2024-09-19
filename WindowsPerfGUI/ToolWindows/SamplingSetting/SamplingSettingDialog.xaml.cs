@@ -28,15 +28,16 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using Microsoft.VisualStudio.PlatformUI;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
-using Microsoft.VisualStudio.PlatformUI;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK.WperfOutputs;
+using WindowsPerfGUI.Utils;
 using WindowsPerfGUI.Utils.ListSearcher;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingSetting
@@ -45,13 +46,18 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
     {
         public SamplingSettingDialog()
         {
-            SolutionProjectOutput.GetProjectOutputAsync().FireAndForget();
             InitializeComponent();
             CpuCoreComboBox.ItemsSource = CpuCores.InitCpuCores();
-            var eventList = new List<PredefinedEvent>(
-                WPerfOptions.Instance.WperfList.PredefinedEvents
-            );
-            EventComboBox.ItemsSource = eventList;
+
+            if (SamplingSettings.samplingSettingsFrom.IsSPEEnabled)
+            {
+                ToggleSPEMode(true);
+            }
+            else
+            {
+                ToggleSPEMode(false);
+            }
+
             SamplingFrequencyComboBox.ItemsSource = SamplingFrequency.SamplingFrequencyList;
             ProjectTargetConfigLabel.Content = SolutionProjectOutput.SelectedConfigLabel;
             if (SamplingSettings.samplingSettingsFrom.SelectedEvent == null)
@@ -73,6 +79,10 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             {
                 HideEventComboBoxPlaceholder();
             };
+            if (!WperfDefaults.HasSPESupport)
+            {
+                EnableSPECheckBox.IsEnabled = false;
+            }
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -116,9 +126,10 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 SamplingEvent = (EventComboBox.SelectedItem as PredefinedEvent)?.AliasName,
                 SamplingFrequency = SamplingFrequencyComboBox.SelectedItem as string
             };
+            if (!SamplingSettings.samplingSettingsFrom.IsSPEEnabled) newSamplingEventConfig.SamplingFrequency = SamplingFrequencyComboBox.SelectedItem as string ?? WperfDefaults.Frequency;
             EventComboBox.SelectedIndex = -1;
             SamplingFrequencyComboBox.SelectedIndex = -1;
-            EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
+            EventComboBox.ItemsSource = SamplingSettings.samplingSettingsFrom.IsSPEEnabled ? WPerfOptions.Instance.WperfList.PredefinedSPEFilters : WPerfOptions.Instance.WperfList.PredefinedEvents;
 
             foreach (
                 var item in SamplingSettings.samplingSettingsFrom.SamplingEventList.Select(
@@ -273,6 +284,52 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 new SearchOptions<PredefinedEvent> { GetValue = x => x.AliasName }
             );
             return listSearcher.Search(searchText);
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            ToggleSPEMode(true, true);
+
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ToggleSPEMode(false, true);
+        }
+
+        private void ToggleSPEMode(bool enable, bool forceRefreshList = false)
+        {
+            if (EventComboBox == null) return;
+            var eventList = new List<PredefinedEvent>(
+                WPerfOptions.Instance.WperfList.PredefinedEvents
+            );
+            var speFilterList = new List<PredefinedEvent>(
+                WPerfOptions.Instance.WperfList.PredefinedSPEFilters
+            );
+            if (enable)
+            {
+                EventComboBox.ItemsSource = speFilterList;
+                if (forceRefreshList)
+                    SamplingSettings.samplingSettingsFrom.SamplingEventList.Clear();
+                SamplingFrequencyGrid.Visibility = Visibility.Collapsed;
+                RawEventStackPanel.Visibility = Visibility.Collapsed;
+                FrequencyListBoxHeader.Visibility = Visibility.Collapsed;
+                EventListBoxHeader.Text = "SPE Filters";
+                EventComboBoxPlaceholder.Text = "-- Add SPE Filters --";
+                EventGroupBoxHeaderLabel.Content = "SPE Filters";
+            }
+            else
+            {
+                EventComboBox.ItemsSource = eventList;
+                if (forceRefreshList)
+                    SamplingSettings.samplingSettingsFrom.SamplingEventList.Clear();
+                SamplingFrequencyGrid.Visibility = Visibility.Visible;
+                RawEventStackPanel.Visibility = Visibility.Visible;
+                FrequencyListBoxHeader.Visibility = Visibility.Visible;
+                EventListBoxHeader.Text = SamplingSettingsLanguagePack.EventHeader;
+                EventComboBoxPlaceholder.Text = SamplingSettingsLanguagePack.Event;
+                EventGroupBoxHeaderLabel.Content = SamplingSettingsLanguagePack.Event;
+            }
         }
     }
 }

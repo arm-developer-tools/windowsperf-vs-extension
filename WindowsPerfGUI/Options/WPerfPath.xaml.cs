@@ -34,7 +34,7 @@ using System.Windows.Controls;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK;
 using WindowsPerfGUI.SDK.WperfOutputs;
-using WindowsPerfGUI.ToolWindows.SamplingSetting;
+using WindowsPerfGUI.Utils;
 
 namespace WindowsPerfGUI.Options
 {
@@ -97,6 +97,7 @@ namespace WindowsPerfGUI.Options
                     throw new Exception(errorWperfList);
                 SetPredefinedEventsAndMetrics(wperfList, shouldForce: true);
                 WPerfOptions.Instance.UpdateWperfOptions(versions, wperfList);
+                WperfDefaults.HasSPESupport = wperf.CheckIsSPESupported();
             }
             catch (Exception ex)
             {

@@ -47,6 +47,7 @@ using WindowsPerfGUI.SDK;
 using WindowsPerfGUI.SDK.WperfOutputs;
 using WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting;
 using WindowsPerfGUI.ToolWindows.SamplingSetting;
+using WindowsPerfGUI.Utils;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
 {
@@ -66,11 +67,59 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             (WperfSampling serializedOutput, string stdError) e
         )
         {
+            HandleSamplingStateReset(sender, e.stdError);
+            try
+            {
+                HandleSamplingError(sender, e.serializedOutput, e.stdError);
+
+                formattedSamplingResults.FormatSamplingResults(
+                    e.serializedOutput,
+                    $"{SamplingExplorerLanguagePack.ExecutedAt} {DateTime.Now.ToShortTimeString()}"
+                );
+                _tree.Model ??= formattedSamplingResults;
+                _tree.UpdateTreeList();
+            }
+            catch (Exception)
+            {
+                return;
+            }
+        }
+
+        private void HandleSPESamplingFinished(
+            object sender,
+            (WperfSPE serializedOutput, string stdError) e
+        )
+        {
+            HandleSamplingStateReset(sender, e.stdError);
+            try
+            {
+                HandleSamplingError(sender, e.serializedOutput, e.stdError);
+
+                formattedSamplingResults.FormatSamplingResults(
+                    e.serializedOutput.Sampling,
+                    $"({WperfDefaults.SPEFeatureName}) - {SamplingExplorerLanguagePack.ExecutedAt} {DateTime.Now.ToShortTimeString()}"
+                );
+                _tree.Model ??= formattedSamplingResults;
+                _tree.UpdateTreeList();
+            }
+            catch (Exception)
+            {
+                return;
+            }
+        }
+
+
+        private void HandleSamplingStateReset(object sender, string stdError)
+        {
             SamplingSettingsMonikerButton.IsEnabled = true;
             StartSamplingMonikerButton.IsEnabled = true;
             RunAndStartSamplingMonikerButton.IsEnabled = true;
             StopSamplingMonikerButton.IsEnabled = false;
-            if (e.stdError.Contains("other WindowsPerf process acquired the wperf-driver."))
+        }
+
+        private void HandleSamplingError(object sender, object serializedOutput, string stdError)
+        {
+            if (stdError.Contains("other WindowsPerf process acquired the wperf-driver."))
             {
                 var messageBoxResult = VS.MessageBox.Show(
                     "Other WindowsPerf process acquired the wperf-driver.",
@@ -83,26 +132,18 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                     StartSamplingMonikerButton_Click(sender, new RoutedEventArgs());
 
                 }
-                return;
+                throw new Exception();
             }
-            if (!string.IsNullOrEmpty(e.stdError))
+            if (!string.IsNullOrEmpty(stdError))
             {
-                VS.MessageBox.ShowError(ErrorLanguagePack.ErrorWindowsPerfCLI, e.stdError);
-                return;
+                VS.MessageBox.ShowError(ErrorLanguagePack.ErrorWindowsPerfCLI, stdError);
+                throw new Exception();
             }
-
-            if (e.serializedOutput == null)
+            if (serializedOutput == null)
             {
-                VS.MessageBox.ShowError(ErrorLanguagePack.NoWindowsPerfCliData, e.stdError);
-                return;
+                VS.MessageBox.ShowError(ErrorLanguagePack.NoWindowsPerfCliData, stdError);
+                throw new Exception();
             }
-
-            formattedSamplingResults.FormatSamplingResults(
-                e.serializedOutput,
-                $"{SamplingExplorerLanguagePack.ExecutedAt} {DateTime.Now.ToShortTimeString()}"
-            );
-            _tree.Model ??= formattedSamplingResults;
-            _tree.UpdateTreeList();
         }
 
         public SamplingExplorerControl()
@@ -111,6 +152,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
 
             _tree.Model = formattedSamplingResults;
             wperfClient.OnSamplingFinished += HandleSamplingFinished;
+            wperfClient.OnSPESamplingFinished += HandleSPESamplingFinished;
             StopSamplingMonikerButton.IsEnabled = false;
             this._colorResolution = SamplingManager.Instance.HighlighterColorResolution;
         }
@@ -125,6 +167,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                 );
                 return;
             }
+            SolutionProjectOutput.GetProjectOutputAsync().FireAndForget();
             string dialogWindowTitle = SamplingSettingsLanguagePack.WindowTitle;
             if (
                 WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion
@@ -217,7 +260,14 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
 
         private void StopSamplingMonikerButton_Click(object sender, RoutedEventArgs e)
         {
-            wperfClient.StopSampling();
+            if (SamplingSettings.samplingSettingsFrom.IsSPEEnabled)
+            {
+                wperfClient.StopSPESampling();
+            }
+            else
+            {
+                wperfClient.StopSampling();
+            }
             SamplingSettingsMonikerButton.IsEnabled = true;
             StartSamplingMonikerButton.IsEnabled = true;
             RunAndStartSamplingMonikerButton.IsEnabled = true;

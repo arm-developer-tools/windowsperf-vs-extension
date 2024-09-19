@@ -28,8 +28,8 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using System.Windows.Media;
 using Microsoft.VisualStudio.Imaging;
+using System.Windows.Media;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
 {
@@ -62,11 +62,11 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
             if (colorResolution < MIN_COLOR_RESOLUTION || colorResolution > MAX_COLOR_RESOLUTION)
                 colorResolution = DEFAULT_COLOR_RESOLUTION;
 
-            double percentageChunk = 100.0 / (double)colorResolution;
+            double percentageChunk = Math.Floor(100.0 / (double)colorResolution);
             double hueChunk = (double)(GREEN_HUE - RED_HUE) / ((double)colorResolution - 1);
             int amountOfChunks = (int)
                 Math.Min(Math.Floor(percentage / percentageChunk), colorResolution - 1);
-            return GetColorFromHSL(GREEN_HUE - (hueChunk * amountOfChunks) + RED_HUE, 1, 0.5);
+            return GetColorFromHSL(GREEN_HUE - (hueChunk * amountOfChunks) + RED_HUE, 1, 0.67);
         }
 
         /// <summary>

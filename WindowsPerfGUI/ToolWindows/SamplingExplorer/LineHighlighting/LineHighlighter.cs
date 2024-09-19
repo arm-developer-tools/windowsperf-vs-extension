@@ -28,14 +28,14 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Controls;
-using System.Windows.Media;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Controls;
+using System.Windows.Media;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
 
@@ -105,7 +105,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
         )
         {
             // Clears previous set adornments
-            string filePath = view.TextBuffer.GetFileName();
+            string filePath = view.TextBuffer.GetFileName().ToLower();
             // Highlights the lines
             if (filePath == null)
             {
@@ -295,7 +295,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
             Canvas.SetLeft(textBlock, geometry.Bounds.Right + 5);
             Canvas.SetTop(
                 textBlock,
-                geometry.Bounds.Top + Math.Abs(fontSize - geometry.Bounds.Height) * .5
+                geometry.Bounds.Top + (Math.Abs(fontSize - geometry.Bounds.Height) * .5)
             );
             layer.AddAdornment(
                 AdornmentPositioningBehavior.TextRelative,

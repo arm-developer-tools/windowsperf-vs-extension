@@ -29,6 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System.Collections.ObjectModel;
+using WindowsPerfGUI.Utils;
 using WindowsPerfGUI.Utils.CommandBuilder;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingSetting
@@ -47,7 +48,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
         public string? SamplingFrequency
         {
             get { return samplingFrequency; }
-            set { samplingFrequency = value ?? WperfDefaults.Frequency; }
+            set { samplingFrequency = value; }
         }
 
 #nullable disable
@@ -69,6 +70,18 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             set
             {
                 isEventSelectionEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool isSPEEnabled;
+
+        public bool IsSPEEnabled
+        {
+            get { return isSPEEnabled; }
+            set
+            {
+                isSPEEnabled = value;
                 OnPropertyChanged();
             }
         }
@@ -122,6 +135,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 SamplingEventList = samplingSettingsForm.SamplingEventList;
                 RawEvents = samplingSettingsForm.RawEvents;
                 ForceLock = samplingSettingsForm.ForceLock;
+                IsSPEEnabled = samplingSettingsForm.IsSPEEnabled;
+                ShouldDisassemble = samplingSettingsForm.ShouldDisassemble;
             }
             SamplingSettings.samplingSettingsFrom = this;
             SamplingSettings.samplingSettingsFrom.SamplingEventList.CollectionChanged +=

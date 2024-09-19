@@ -62,7 +62,26 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             HighlighterDict.Clear();
             RootSampledEvent = new List<SamplingSection>();
         }
+        private ulong RecalculateOverhead(SamplingSection rootSamplingSection)
+        {
+            ulong hits = 0;
+            foreach (SamplingSection samplingEvents in rootSamplingSection.Children)
+            {
+                hits += (ulong)samplingEvents.Hits;
+            }
 
+            return hits;
+        }
+        private ulong CalculateAllSamplesGenerated(WperfSampling rootSampling)
+        {
+            ulong hits = 0;
+            foreach (SampledEvent sampledEvent in rootSampling.SamplingSummary.SampledEvents)
+            {
+                hits += (ulong)CalculateSampleHits(sampledEvent);
+            }
+
+            return hits;
+        }
         double CalculateSampleHits(SampledEvent sampledEvent)
         {
             double allHits = 0;
@@ -96,7 +115,11 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             };
             RootSampledEvent.Add(rootSample);
 
-            double allHits = wperSamplingOutput.SamplingSummary.SamplesGenerated;
+            if (rootSample.Hits == 0)
+                rootSample.Hits = CalculateAllSamplesGenerated(wperSamplingOutput);
+
+
+            double allHits = (double)rootSample.Hits;
 
             foreach (SampledEvent sampledEvent in wperSamplingOutput.SamplingSummary.SampledEvents)
             {
@@ -172,6 +195,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                     }
                 }
             }
+
+
 
             OnPropertyChanged("RootSampledEvent");
         }

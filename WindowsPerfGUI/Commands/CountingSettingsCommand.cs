@@ -31,7 +31,7 @@
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.ToolWindows.CountingSetting;
-using WindowsPerfGUI.ToolWindows.SamplingSetting;
+using WindowsPerfGUI.Utils;
 
 namespace WindowsPerfGUI.Commands
 {

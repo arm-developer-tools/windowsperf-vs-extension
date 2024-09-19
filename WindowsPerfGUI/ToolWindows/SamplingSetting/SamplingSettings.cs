@@ -29,6 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System.Collections.Generic;
+using WindowsPerfGUI.SDK.WperfOutputs;
 using WindowsPerfGUI.Utils.CommandBuilder;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingSetting
@@ -50,11 +51,25 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             List<string> argsList = new List<string>();
             ValidateSettings();
             AppendElementsToList(argsList, "record");
-            AppendElementsToList(
+            if (samplingSettingsFrom.IsSPEEnabled)
+            {
+                string SPEFilters = string.Join("=1,", samplingSettingsFrom.SamplingEventList);
+                if (samplingSettingsFrom.SamplingEventList.Count > 0) SPEFilters = $"{SPEFilters}=1";
+                AppendElementsToList(
+                argsList,
+                "-e",
+                $"{WperfList.SPE_EVENT_BASE_NAME}{WperfList.SPE_EVENT_SEPARATOR}{SPEFilters}{WperfList.SPE_EVENT_SEPARATOR}"
+            );
+            }
+            else
+            {
+                AppendElementsToList(
                 argsList,
                 "-e",
                 string.Join(",", samplingSettingsFrom.SamplingEventList)
             );
+            }
+
             AppendElementsToList(
                 argsList,
                 "-c",
@@ -81,7 +96,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
         private static void ValidateSettings()
         {
             AreSettingsFilled = !(
-                samplingSettingsFrom.SamplingEventList.Count < 1
+                (samplingSettingsFrom.SamplingEventList.Count < 1 && !samplingSettingsFrom.IsSPEEnabled)
                 || string.IsNullOrEmpty(samplingSettingsFrom.FilePath)
                 || string.IsNullOrEmpty(samplingSettingsFrom.CPUCore?.coreNumber.ToString())
             );

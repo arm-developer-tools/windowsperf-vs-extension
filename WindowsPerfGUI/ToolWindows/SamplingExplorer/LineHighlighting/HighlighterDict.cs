@@ -28,15 +28,8 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Controls;
-using System.Windows.Media;
-using EnvDTE;
-using EnvDTE80;
-using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
-using WindowsPerfGUI.Resources.Locals;
+using System.Collections.Generic;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
 {
@@ -68,7 +61,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
 
         public static void AddFileToHighlight(
             SamplingSection samplingSection,
-            Boolean useAbsoluteOverhead = false
+            bool useAbsoluteOverhead = false
         )
         {
             if (
@@ -77,9 +70,9 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
                 || samplingSection.Overhead == 0
             )
                 return;
-            FilePaths.Add(samplingSection.Name);
+            FilePaths.Add(samplingSection.Name.ToLower());
 
-            FilesToHighlight.TryGetValue(samplingSection.Name, out FileToHighlight fileToHighlight);
+            FilesToHighlight.TryGetValue(samplingSection.Name.ToLower(), out FileToHighlight fileToHighlight);
 
             if (fileToHighlight == null)
             {
@@ -99,7 +92,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
                 }
             );
 
-            FilesToHighlight[samplingSection.Name] = fileToHighlight;
+            FilesToHighlight[samplingSection.Name.ToLower()] = fileToHighlight;
             StartHighlightingAsync().FireAndForget();
         }
 
@@ -121,6 +114,13 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
 
         public static void Clear()
         {
+            if (FilePaths.Count == 0)
+            {
+                FilePaths.Clear();
+                FilesToHighlight.Clear();
+                return;
+            }
+
             PreviousFilePaths = new HashSet<string>(FilePaths);
             PreviousFilesToHighlight = new Dictionary<string, FileToHighlight>(FilesToHighlight);
 
