@@ -195,4 +195,16 @@
   <data name="LoadJSONSamplingButton" xml:space="preserve">
     <value>Załaduj plik JSON do rozszerzenia</value>
   </data>
+  <data name="SPEEventListBoxHeader" xml:space="preserve">
+    <value>Filtry SPE</value>
+  </data>
+  <data name="SPEEventComboBoxPlaceholder" xml:space="preserve">
+    <value>-- Dodaj filtry SPE --</value>
+  </data>
+  <data name="SPEEventGroupBoxHeaderLabel" xml:space="preserve">
+    <value>Filtry SPE</value>
+  </data>
+  <data name="EnableSPECheckBoxText" xml:space="preserve">
+    <value>Włącz tryb SPE</value>
+  </data>
 </root>

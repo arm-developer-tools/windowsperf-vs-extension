@@ -31,7 +31,6 @@
 using Microsoft.VisualStudio.PlatformUI;
 using System.Collections.Generic;
 using System.Linq;
-using System.Management.Instrumentation;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
@@ -88,11 +87,11 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
         private void ResetEventComboBox()
         {
             var eventList = new List<PredefinedEvent>(
-                SamplingSettings.samplingSettingsFrom.IsSPEEnabled 
-                ? WPerfOptions.Instance.WperfList.PredefinedSPEFilters 
+                SamplingSettings.samplingSettingsFrom.IsSPEEnabled
+                ? WPerfOptions.Instance.WperfList.PredefinedSPEFilters
                 : WPerfOptions.Instance.WperfList.PredefinedEvents
             );
-            
+
             EventComboBox.ItemsSource = eventList;
         }
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -328,9 +327,9 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 SamplingFrequencyGrid.Visibility = Visibility.Collapsed;
                 RawEventStackPanel.Visibility = Visibility.Collapsed;
                 FrequencyListBoxHeader.Visibility = Visibility.Collapsed;
-                EventListBoxHeader.Text = "SPE Filters";
-                EventComboBoxPlaceholder.Text = "-- Add SPE Filters --";
-                EventGroupBoxHeaderLabel.Content = "SPE Filters";
+                EventListBoxHeader.Text = SamplingSettingsLanguagePack.SPEEventListBoxHeader;
+                EventComboBoxPlaceholder.Text = SamplingSettingsLanguagePack.SPEEventComboBoxPlaceholder;
+                EventGroupBoxHeaderLabel.Content = SamplingSettingsLanguagePack.SPEEventGroupBoxHeaderLabel;
             }
             else
             {
