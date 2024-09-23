@@ -106,6 +106,15 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable SPE mode.
+        /// </summary>
+        public static string EnableSPECheckBoxText {
+            get {
+                return ResourceManager.GetString("EnableSPECheckBoxText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to -- Select Event to add --.
         /// </summary>
         public static string Event {
@@ -255,6 +264,33 @@ namespace WindowsPerfGUI.Resources.Locals {
         public static string SelectFile {
             get {
                 return ResourceManager.GetString("SelectFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to -- Add SPE Filters --.
+        /// </summary>
+        public static string SPEEventComboBoxPlaceholder {
+            get {
+                return ResourceManager.GetString("SPEEventComboBoxPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SPE Filters.
+        /// </summary>
+        public static string SPEEventGroupBoxHeaderLabel {
+            get {
+                return ResourceManager.GetString("SPEEventGroupBoxHeaderLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SPE Filters.
+        /// </summary>
+        public static string SPEEventListBoxHeader {
+            get {
+                return ResourceManager.GetString("SPEEventListBoxHeader", resourceCulture);
             }
         }
         

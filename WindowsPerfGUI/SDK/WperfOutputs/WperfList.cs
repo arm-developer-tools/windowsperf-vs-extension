@@ -31,6 +31,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 
 namespace WindowsPerfGUI.SDK.WperfOutputs
 {
@@ -74,9 +75,9 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
             {
                 predefinedEvents = value.Where(e => e.EventType != "[Kernel PMU event]" && e.EventType != "[SPE filter]").ToList();
                 List<PredefinedEvent> _speFilters = value.Where(e => e.EventType == "[SPE filter]").ToList();
-                
+
                 if (_speFilters.Count == 0) _speFilters = defaultPredefinedSPEFilters;
-                
+
                 PredefinedSPEFilters = _speFilters;
             }
         }
@@ -98,7 +99,64 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
 
         [JsonProperty("Predefined_Metrics")]
         public List<PredefinedMetric> PredefinedMetrics { get; set; }
+
+        [JsonProperty("Predefined_Groups_of_Metrics")]
+        public List<PredefinedGroupsOfMetric> PredefinedGroupsOfMetrics { get; set; }
+
+
+        public List<PredefinedMetricAndGroupOfMetrics> PredefinedMetricsAndGroupsOfMetrics
+        {
+            get
+            {
+                List<PredefinedMetricAndGroupOfMetrics> metricsAndGroupsOfMetrics = new List<PredefinedMetricAndGroupOfMetrics>();
+                foreach (var predefinedMetric in PredefinedMetrics)
+                {
+                    metricsAndGroupsOfMetrics.Add(new PredefinedMetricAndGroupOfMetrics()
+                    {
+                        Label = predefinedMetric.ToString(),
+                        Metric = predefinedMetric.Metric
+                    });
+                }
+                foreach (var predefinedGroupOfMetric in PredefinedGroupsOfMetrics)
+                {
+                    metricsAndGroupsOfMetrics.Add(new PredefinedMetricAndGroupOfMetrics()
+                    {
+                        Label = predefinedGroupOfMetric.ToString(),
+                        Metric = predefinedGroupOfMetric.Group
+                    });
+                }
+                return metricsAndGroupsOfMetrics;
+            }
+        }
+           
+        public class PredefinedMetricAndGroupOfMetrics
+        {
+            public string Metric { get; set; }
+            public string Label { get; set; }
+            public override string ToString()
+            {
+                return Label;
+
+            }
+        }
     }
+
+    public partial class PredefinedGroupsOfMetric
+    {
+        [JsonProperty("Group")]
+        public string Group { get; set; }
+
+        [JsonProperty("Metrics")]
+        public string Metrics { get; set; }
+
+        [JsonProperty("Description")]
+        public string Description { get; set; }
+        public override string ToString()
+        {
+            return $"{Group} | {{{Metrics}}}";
+        }
+    }
+
 
     public partial class PredefinedEvent
     {

@@ -107,7 +107,7 @@
                     Checked="CheckBox_Checked"
                     IsChecked="{Binding IsSPEEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                     Unchecked="CheckBox_Unchecked">
-                    <TextBlock Text="Enable SPE mode" TextWrapping="Wrap" />
+                    <TextBlock Text="{x:Static locals:SamplingSettingsLanguagePack.EnableSPECheckBoxText}" TextWrapping="Wrap" />
                 </CheckBox>
                 <CheckBox Margin="0,5,0,0" IsChecked="{Binding ForceLock, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                     <TextBlock Text="{x:Static locals:MainLanguagePack.ForceLock}" TextWrapping="Wrap" />
