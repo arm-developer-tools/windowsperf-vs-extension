@@ -53,13 +53,15 @@ namespace WindowsPerfGUI.Options
             if (!string.IsNullOrEmpty(WperfDefaults.DefaultWPASearchDir))
             {
                 checkboxLabel += $": {WperfDefaults.DefaultWPASearchDir}";
+            }else
+            {
+                checkboxLabel += ": Environment variable is not set";
             }
 
             UseDefaultSearchLocation.Content = checkboxLabel;
 
             if (!string.IsNullOrEmpty(WperfDefaults.DefaultWPASearchDir))
             {
-                EnvironmentVariableNotice.Visibility = System.Windows.Visibility.Visible;
                 EnvironmentVariableNotice.Text =
                     $"WPA_ADDITIONAL_SEARCH_DIRECTORIES=\"{WperfDefaults.DefaultWPASearchDir}\"";
             }

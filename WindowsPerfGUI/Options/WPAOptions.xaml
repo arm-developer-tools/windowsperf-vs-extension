@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    Background="white"
     mc:Ignorable="d">
     <ScrollViewer>
         <StackPanel>
@@ -34,7 +35,7 @@
                 <TextBlock
                     x:Name="EnvironmentVariableNotice"
                     FontSize="10"
-                    Visibility="Collapsed" />
+                    Text="Note: The default search location is the directory specified by the WPA_ADDITIONAL_SEARCH_DIRECTORIES environment variable." />
             </StackPanel>
         </StackPanel>
     </ScrollViewer>
