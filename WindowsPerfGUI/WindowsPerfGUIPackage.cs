@@ -115,7 +115,9 @@ namespace WindowsPerfGUI
                 WperfDefaults.HasSPESupport = speSupport;
                 (WperfVersion versions, string stdVersionError) = wperfClient.GetVersion();
                 if (!string.IsNullOrEmpty(stdVersionError)) throw new Exception("Unable to get WindowsPerf version");
-                WPerfOptions.Instance.UpdateWperfOptions(versions, speSupport);
+                (WperfList wperfList, string stdListError) = wperfClient.GetEventList();
+
+                WPerfOptions.Instance.UpdateWperfOptions(versions, wperfList, speSupport);
 
                 if (!shouldIgnoreWperfVersion)
                 {

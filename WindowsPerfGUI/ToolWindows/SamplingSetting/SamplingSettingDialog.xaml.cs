@@ -84,7 +84,16 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 EnableSPECheckBox.IsEnabled = false;
             }
         }
+        private void ResetEventComboBox()
+        {
+            var eventList = new List<PredefinedEvent>(
+                SamplingSettings.samplingSettingsFrom.IsSPEEnabled
+                ? WPerfOptions.Instance.WperfList.PredefinedSPEFilters
+                : WPerfOptions.Instance.WperfList.PredefinedEvents
+            );
 
+            EventComboBox.ItemsSource = eventList;
+        }
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             SyncSamplingSettings();
@@ -129,7 +138,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             if (!SamplingSettings.samplingSettingsFrom.IsSPEEnabled) newSamplingEventConfig.SamplingFrequency = SamplingFrequencyComboBox.SelectedItem as string ?? WperfDefaults.Frequency;
             EventComboBox.SelectedIndex = -1;
             SamplingFrequencyComboBox.SelectedIndex = -1;
-            EventComboBox.ItemsSource = SamplingSettings.samplingSettingsFrom.IsSPEEnabled ? WPerfOptions.Instance.WperfList.PredefinedSPEFilters : WPerfOptions.Instance.WperfList.PredefinedEvents;
+            ResetEventComboBox();
 
             foreach (
                 var item in SamplingSettings.samplingSettingsFrom.SamplingEventList.Select(
@@ -267,7 +276,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             else
             {
                 EventComboBoxPlaceholder.Visibility = Visibility.Visible;
-                EventComboBox.ItemsSource = WPerfOptions.Instance.WperfList.PredefinedEvents;
+                ResetEventComboBox();
             }
         }
 
@@ -278,7 +287,11 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 
         private static List<PredefinedEvent> FilterEventList(string searchText)
         {
-            var eventList = WPerfOptions.Instance.WperfList.PredefinedEvents;
+            var eventList = new List<PredefinedEvent>(
+               SamplingSettings.samplingSettingsFrom.IsSPEEnabled
+               ? WPerfOptions.Instance.WperfList.PredefinedSPEFilters
+               : WPerfOptions.Instance.WperfList.PredefinedEvents
+           );
             var listSearcher = new ListSearcher<PredefinedEvent>(
                 eventList,
                 new SearchOptions<PredefinedEvent> { GetValue = x => x.AliasName }
@@ -306,21 +319,20 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             var speFilterList = new List<PredefinedEvent>(
                 WPerfOptions.Instance.WperfList.PredefinedSPEFilters
             );
+            ResetEventComboBox();
             if (enable)
             {
-                EventComboBox.ItemsSource = speFilterList;
                 if (forceRefreshList)
                     SamplingSettings.samplingSettingsFrom.SamplingEventList.Clear();
                 SamplingFrequencyGrid.Visibility = Visibility.Collapsed;
                 RawEventStackPanel.Visibility = Visibility.Collapsed;
                 FrequencyListBoxHeader.Visibility = Visibility.Collapsed;
-                EventListBoxHeader.Text = "SPE Filters";
-                EventComboBoxPlaceholder.Text = "-- Add SPE Filters --";
-                EventGroupBoxHeaderLabel.Content = "SPE Filters";
+                EventListBoxHeader.Text = SamplingSettingsLanguagePack.SPEEventListBoxHeader;
+                EventComboBoxPlaceholder.Text = SamplingSettingsLanguagePack.SPEEventComboBoxPlaceholder;
+                EventGroupBoxHeaderLabel.Content = SamplingSettingsLanguagePack.SPEEventGroupBoxHeaderLabel;
             }
             else
             {
-                EventComboBox.ItemsSource = eventList;
                 if (forceRefreshList)
                     SamplingSettings.samplingSettingsFrom.SamplingEventList.Clear();
                 SamplingFrequencyGrid.Visibility = Visibility.Visible;
