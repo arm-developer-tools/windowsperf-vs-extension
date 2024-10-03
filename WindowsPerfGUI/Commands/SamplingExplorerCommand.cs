@@ -41,11 +41,16 @@ namespace WindowsPerfGUI.Commands
         protected override void BeforeQueryStatus(EventArgs e)
         {
             string windowTitle = SamplingExplorerLanguagePack.WindowTitle;
-            if (
-                WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion
-                != WperfDefaults.WPERF_MIN_VERSION
-            )
-                windowTitle += $" - (UNSTABLE)";
+            try
+            {
+                if (
+                    WPerfOptions.Instance.WperfCurrentVersion != null
+                    && WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion
+                    != WperfDefaults.WPERF_MIN_VERSION
+                )
+                    windowTitle += $" - (UNSTABLE)";
+            }
+            catch (Exception) { }
             Command.Text = windowTitle;
             base.BeforeQueryStatus(e);
         }

@@ -386,7 +386,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             string metricName = CountingMetricListBox.SelectedItems[0] as string;
 
             foreach (
-                var predefinedMetric in ((List<PredefinedMetric>)MetricComboBox.ItemsSource).Select(
+                var predefinedMetric in ((List<PredefinedMetricAndGroupOfMetrics>)MetricComboBox.ItemsSource).Select(
                     (value, i) => new { value, i }
                 )
             )

@@ -126,11 +126,10 @@ namespace WindowsPerfGUI.SDK
         /// <returns>
         ///     bool
         /// </returns>
-        public bool CheckIsSPESupported()
+        public bool CheckIsSPESupported(WperfVersion versionSerializedOutput, WperfTest testSerializedOutput)
         {
             try
             {
-                (WperfVersion versionSerializedOutput, _) = GetVersion();
                 foreach (var component in versionSerializedOutput.Components)
                 {
                     if (!component.FeatureString.Contains("+spe"))
@@ -138,8 +137,6 @@ namespace WindowsPerfGUI.SDK
                         return false;
                     }
                 }
-
-                (WperfTest testSerializedOutput, _) = GetTest();
 
                 TestResult speDeviceConf = testSerializedOutput
                     .TestResults.Find(el => el.TestName == "spe_device.version_name");
