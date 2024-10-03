@@ -107,14 +107,22 @@ namespace WindowsPerfGUI
         protected override async Task OnAfterPackageLoadedAsync(CancellationToken cancellationToken)
         {
             bool shouldIgnoreWperfVersion = WPerfOptions.Instance.WperfVersionCheckIgnore;
-
+            WperfClientFactory wperfClient = new();
+            
             try
             {
-                WperfClientFactory wperfClient = new();
-                bool speSupport = wperfClient.CheckIsSPESupported();
-                WperfDefaults.HasSPESupport = speSupport;
                 (WperfVersion versions, string stdVersionError) = wperfClient.GetVersion();
-                if (!string.IsNullOrEmpty(stdVersionError)) throw new Exception("Unable to get WindowsPerf version");
+                (WperfTest wperfTest, _) = wperfClient.GetTest();
+
+                bool speSupport = wperfClient.CheckIsSPESupported(versions, wperfTest);
+                WperfDefaults.HasSPESupport = speSupport;
+                
+                if (!string.IsNullOrEmpty(stdVersionError)) 
+                {
+                    WPerfOptions.Instance.IsWperfInitialized = false;
+                    throw new Exception("Unable to get WindowsPerf version"); 
+                }
+
                 (WperfList wperfList, string stdListError) = wperfClient.GetEventList();
 
                 WPerfOptions.Instance.UpdateWperfOptions(versions, wperfList, speSupport);
@@ -130,9 +138,8 @@ namespace WindowsPerfGUI
                             )
                         );
                 }
-
-                wperfClient.GetTest();
             }
+
             catch (Exception e)
             {
                 Trace.WriteLine(e.Message);

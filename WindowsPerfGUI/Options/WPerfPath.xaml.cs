@@ -61,6 +61,7 @@ namespace WindowsPerfGUI.Options
             {
                 SetWperfVersion(WPerfOptions.Instance.WperfCurrentVersion);
                 SetPredefinedEventsAndMetrics(WPerfOptions.Instance.WperfList);
+                WPerfVersionCheckIgnore.IsChecked = WPerfOptions.Instance.WperfVersionCheckIgnore;
             }
 
             WPerfOptions.Instance.Save();
@@ -76,7 +77,7 @@ namespace WindowsPerfGUI.Options
             try
             {
                 (WperfVersion versions, string error) = wperf.GetVersion();
-                wperf.GetTest();
+                (WperfTest wperfTest, _) = wperf.GetTest();
                 if (error != "")
                     throw new Exception(error);
                 SetWperfVersion(versions, shouldForce: true);
@@ -95,9 +96,10 @@ namespace WindowsPerfGUI.Options
                 (WperfList wperfList, string errorWperfList) = wperf.GetEventList();
                 if (errorWperfList != "")
                     throw new Exception(errorWperfList);
+
                 SetPredefinedEventsAndMetrics(wperfList, shouldForce: true);
                 WPerfOptions.Instance.UpdateWperfOptions(versions, wperfList);
-                WperfDefaults.HasSPESupport = wperf.CheckIsSPESupported();
+                WperfDefaults.HasSPESupport = wperf.CheckIsSPESupported(versions, wperfTest);
             }
             catch (Exception ex)
             {
