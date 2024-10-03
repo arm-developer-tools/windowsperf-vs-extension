@@ -85,19 +85,20 @@ namespace WindowsPerfGUI.Options
 #nullable enable
         public void UpdateWperfOptions(
             WperfVersion wperfVersion,
-            WperfList? wperfList,
+            WperfList wperfList,
             bool? hasSPESupport
         )
         {
             UpdateWperfVersion(wperfVersion);
-            if (wperfList != null)
-            {
-                WperfList = wperfList;
-            }
+
+            WperfList = wperfList;
+
             if (hasSPESupport != null)
-            {
                 HasSPESupport = (bool)hasSPESupport;
-            }
+
+            if (wperfList != null && hasSPESupport != null)
+                IsWperfInitialized = true;
+
             Save();
         }
 #nullable disable
