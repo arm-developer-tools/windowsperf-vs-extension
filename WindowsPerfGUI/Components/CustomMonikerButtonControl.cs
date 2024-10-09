@@ -28,15 +28,38 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using System.Windows;
-using System.Windows.Controls;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace WindowsPerfGUI.Components
 {
+    /// <summary>
+    /// Like the button control, the MonikerButton control is a styled button that inherets from the native `System.Windows.Controls.Button` class. 
+    /// The only difference is that it hosts an image (from the KnownMonikers) instead of text.
+    /// </summary>
+    /// <example>
+    /// Include the Components and the ImageCataloge namespaces in your XAML file
+    ///     <code>
+    ///         xmlns:Components="clr-namespace:WindowsPerfGUI.Components"
+    ///         xmlns:catalog="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.ImageCatalog"
+    ///     </code>
+    /// Then use the control in your page
+    ///     <code>
+    ///         <Components:CustomMonikerButtonControl
+    ///                x:Name="StopSamplingMonikerButton"
+    ///                Margin="0,4,1,4"
+    ///                Click="StopSamplingMonikerButton_Click"
+    ///                MonikerName="{x:Static catalog:KnownMonikers.Stop}" />
+    ///     </code>
+    /// </example>
     public class CustomMonikerButtonControl : Button
     {
+        /// <summary>
+        /// This is the MonikerName property that is used to set the image of the button.
+        /// <seealso cref="Microsoft.VisualStudio.Imaging.KnownMonikers"/>
+        /// </summary>
         public ImageMoniker MonikerName
         {
             get { return (ImageMoniker)GetValue(MonikerNameProperty); }

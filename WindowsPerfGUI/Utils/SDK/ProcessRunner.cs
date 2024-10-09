@@ -29,12 +29,17 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+using Microsoft.VisualStudio.Threading;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Microsoft.VisualStudio.Threading;
 
 namespace WindowsPerfGUI.Utils.SDK
 {
+    /// <summary>
+    /// The `ProcessRunner` class provides an interface for running and managing system processes. 
+    /// It resides within the `WindowsPerfGUI.Utils.SDK` namespace and contains methods for starting, stopping, 
+    /// and managing system processes both asynchronously and synchronously.
+    /// </summary>
     class ProcessRunner
     {
         #region Process Control
@@ -64,16 +69,34 @@ namespace WindowsPerfGUI.Utils.SDK
         #endregion Process Control
 
         #region Properties
+        /// <summary>
+        /// An output handler for standard output of the process.
+        /// </summary>
         public OutputHandler StdOutput;
 
+        /// <summary>
+        /// OutputHandler StdError: An output handler for error output of the process.
+        /// </summary>
         public OutputHandler StdError;
 
+        /// <summary>
+        /// Represents the ongoing process task when running asynchronously.
+        /// </summary>
         private Task _BackgroundProcessTask;
 
+        /// <summary>
+        /// The actual system process that this class manages.
+        /// </summary>
         private Process _BackgroundProcess;
 
+        /// <summary>
+        /// The path to the executable that the ProcessRunner will manage.
+        /// </summary>
         private readonly string _Path;
 
+        /// <summary>
+        /// Specifies a processor for the system to run the process on.
+        /// </summary>
         private readonly IntPtr? _ProcessorAffinity;
 
         private CancellationTokenSource _BackgroundProcessCancelationToken;
@@ -82,13 +105,21 @@ namespace WindowsPerfGUI.Utils.SDK
 
         #endregion Properties
 
+        /// <summary>
+        /// Constructor that takes the path of the executable as a parameter.
+        /// </summary>
+        /// <param name="path">A string pointing to the process that you want to run </param>
         public ProcessRunner(string path)
         {
             _Path = path;
             StdOutput = new OutputHandler();
             StdError = new OutputHandler();
         }
-
+        /// <summary>
+        /// Constructor that takes the path of the executable and an optional processor affinity.
+        /// </summary>
+        /// <param name="path">A string pointing to the process that you want to run </param>
+        /// <param name="processorAffinity">The processor number that you want to pin that process to.</param>
         public ProcessRunner(string path, IntPtr? processorAffinity)
         {
             _Path = path;
@@ -97,6 +128,53 @@ namespace WindowsPerfGUI.Utils.SDK
             _ProcessorAffinity = processorAffinity;
         }
 
+        /// <summary>
+        /// Starts the process in the background with optional command-line arguments. Returns a task - representing the ongoing process.
+        /// </summary>
+        /// <param name="args">an array of strings that will be appended to the process as command line arguments</param>
+        /// <returns>void</returns>
+        /// <example>
+        /// <code>
+        ///          internal class Program
+        ///             {
+        ///                 private static ProcessRunner _Process;
+        ///                 static void start()
+        ///                 {
+        ///                     // set the affinity to core 3
+        ///                     IntPtr affinity = (IntPtr)(1 << 3);
+        ///                     // using the ping.exe as an example
+        ///                     _Process = new ProcessRunner("ping.exe", affinity);
+        ///                     // passing the -t 127.0.0.1 as argument to ping.exe and starting the process
+        ///                     _Process.StartBackgroundProcessAsync("-t", "127.0.0.1");
+        ///                     Console.WriteLine("process Started");
+        ///         
+        ///                 }
+        ///                 static void stop()
+        ///                 {
+        ///                     // gracefully stopping the process
+        ///                     _Process.StopProcess();
+        ///                     Console.WriteLine("process should be stopped");
+        ///         
+        ///                 }
+        ///                 static void Main(string[] args)
+        ///                 {
+        ///                     start();
+        ///         
+        ///                     _Process.StdOutput.OutputhCb = (string data) =>
+        ///                     {
+        ///                         // capturing the output of the process in this callback function
+        ///                         Console.WriteLine(data);
+        ///                         return data;
+        ///                     };
+        ///                     // running the process for 3 seconds
+        ///                     Thread.Sleep(3000);
+        ///                     // shutting down the process
+        ///                     stop();
+        ///                     Console.WriteLine("Hello World!");
+        ///                 }
+        ///             }
+        /// </code>
+        /// </example>
         public Task StartBackgroundProcessAsync(params string[] args)
         {
             _BackgroundProcessCancelationToken = new CancellationTokenSource();
@@ -107,6 +185,11 @@ namespace WindowsPerfGUI.Utils.SDK
             return _BackgroundProcessTask;
         }
 
+        /// <summary>
+        /// Stops the process. If force is true, the process will be killed immediately, otherwise a graceful shutdown will be attempted first.
+        /// a graceful shutdown is done by sending a <kbd>Ctrl</kbd> + <kbd>c</kbd> (`SIGINT`) signal to the process.
+        /// </summary>
+        /// <param name="force">If true, the process will be killed immediately</param>
         public void StopProcess(bool force = false)
         {
             const int waitForExitTimeout = 2000;
@@ -141,7 +224,25 @@ namespace WindowsPerfGUI.Utils.SDK
 
             SetConsoleCtrlHandler(null, false);
         }
-
+        /// <summary>
+        /// Starts the process and waits for it to finish before returning the standard - output and error output as a tuple.
+        /// </summary>
+        /// <param name="args">an array of strings that will be appended to the process as command line arguments</param>
+        /// <returns>the standard output and error output as a tuple</returns>
+        /// <exception cref="Exception"></exception>
+        /// <example>
+        ///     <code>
+        ///       // create a new ProcessRunner instance
+        ///       ProcessRunner pr = new ProcessRunner("path_to_executable");
+        ///       
+        ///       // start the process with arguments and wait for it to finish
+        ///       (string stdError, string stdOutput) result = pr.StartAwaitedProcess(new string[] { "arg1", "arg2" });
+        ///       
+        ///       // print standard output and error
+        ///       Console.WriteLine("Standard Output: " + result.stdOutput);
+        ///       Console.WriteLine("Standard Error: " + result.stdError);
+        ///     </code>
+        /// </example>
         public (string stdOutput, string stdError) StartAwaitedProcess(string[] args)
         {
             InitProcess(args);
@@ -218,16 +319,16 @@ namespace WindowsPerfGUI.Utils.SDK
             _BackgroundProcess = new Process()
             {
                 StartInfo =
-                {
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    RedirectStandardInput = true,
-                    FileName = _Path,
-                    Arguments = string.Join(" ", args)
-                },
+        {
+            WindowStyle = ProcessWindowStyle.Hidden,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            RedirectStandardInput = true,
+            FileName = _Path,
+            Arguments = string.Join(" ", args)
+        },
                 EnableRaisingEvents = true,
             };
         }

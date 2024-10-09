@@ -40,17 +40,54 @@ using WindowsPerfGUI.Utils.SDK;
 
 namespace WindowsPerfGUI.SDK
 {
+
+    /// <summary>
+    /// This class is responsible for running WindowsPerf commands and handling their output.
+    /// It uses the ProcessRunner class to run the commands and parse the output.
+    /// <example>
+    /// <code >
+    ///  // create a new WperfClient instance
+    ///  WperfClient client = new WperfClient();
+    ///
+    ///  // set the path to the Wperf executable
+    ///  client.Path = "wperf.exe";
+    ///
+    ///  // retrieve the version information
+    ///  (WperfVersion version, string error) = client.GetVersion();
+    ///
+    ///  // print version information for each component
+    ///  foreach (Version component in version.Version)
+    ///  {
+    ///      Console.WriteLine($"Component: {component.Component}, Version: {component.ComponentVersion}");
+    ///  }
+    ///
+    ///  // print any errors
+    ///  if (!string.IsNullOrEmpty(error))
+    ///  {
+    ///      Console.WriteLine("Error: " + error);
+    ///  }
+    /// </code>
+    /// </example>
+    /// </summary>
     internal class WperfClient
     {
+        // Path to the WindowsPerf executable.
         protected string Path { get; set; }
         private bool IsInitialized { get; set; }
 
+        // Helper class for running external processes (WindowsPerf commands in this case).
         private ProcessRunner _wperfProcess;
+
+        /// Constructor for WperfClient, does not initialize the process.
 
         public WperfClient() { }
 
+        // Delegate used to output messages to the Visual Studio output window.
         protected Action<string> OutputWindowTextWriter { get; set; }
 
+        /// <summary>
+        /// Reinitializes the WindowsPerf process.
+        /// </summary>
         public void Reinitialize()
         {
             if (!IsInitialized)
@@ -61,6 +98,9 @@ namespace WindowsPerfGUI.SDK
             IsInitialized = true;
         }
 
+        /// <summary>
+        /// Logs the output and errors from a WidnowsPerf command to the Visual Studio output window.
+        /// </summary>
         private void LogToOutput(string stdOutput, string stdError, params string[] args)
         {
             if (OutputWindowTextWriter == null)
@@ -82,6 +122,10 @@ namespace WindowsPerfGUI.SDK
             OutputWindowTextWriter("=============================================================");
         }
 
+        /// <summary>
+        /// This protected method initializes the `WperfClient` for command execution. 
+        /// It creates a new `ProcessRunner` instance that is used to run the commands.
+        /// </summary>
         protected void InitProcess()
         {
             if (IsInitialized)
@@ -93,14 +137,15 @@ namespace WindowsPerfGUI.SDK
             IsInitialized = true;
         }
 
+        /// <summary>
+        ///This private method runs a Wperf command, specified by the `args` parameter, and waits for the command to complete. 
+        ///It returns the standard output and standard error from the command.
+        /// </summary>
         private (string stdOutput, string stdError) ExecuteAwaitedCommand(params string[] args)
         {
             InitProcess();
-
             (string stdOutput, string stdError) = _wperfProcess.StartAwaitedProcess(args);
-
             LogToOutput(stdOutput, stdError, args);
-
             return (stdOutput, stdError);
         }
 
@@ -117,9 +162,8 @@ namespace WindowsPerfGUI.SDK
             WperfVersion serializedOutput = WperfVersion.FromJson(stdOutput);
             return (serializedOutput, stdError);
         }
-
         /// <summary>
-        /// This returns wether or not SPE is supported on this machine
+        /// This returns whether or not SPE is supported on this machine
         /// it runs the command wperf -version --json and wperf test --json
         /// it then checks for "spe_device.version_name" in the test results and the feature string in the version results
         /// </summary>
@@ -147,18 +191,15 @@ namespace WindowsPerfGUI.SDK
             }
             catch (Exception)
             {
-
                 return false;
             }
-
-
         }
 
         /// <summary>
-        /// This returns the list of Wperf's predefined events and metrics
-        /// it runs the command wperf list -v --json
+        /// Retrieves the list of predefined WindowsPerf events, metrics and groups of metrics
+        /// by running the command `wperf list -v --json`.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A tuple containing the parsed list of events and any errors.</returns>
         public (WperfList output, string stdError) GetEventList()
         {
             (string stdOutput, string stdError) = ExecuteAwaitedCommand("list", "-v", "--json");
@@ -167,14 +208,12 @@ namespace WindowsPerfGUI.SDK
         }
 
         /// <summary>
-        /// This returns the additional data about the host
-        /// it runs the command wperf test --json
+        /// Retrieves additional data about the host system by running the command `wperf test --json`.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A tuple containing the parsed test results and any errors.</returns>
         public (WperfTest output, string stdError) GetTest()
         {
             (string stdOutput, string stdError) = ExecuteAwaitedCommand("test", "--json");
-
             WperfTest serializedOutput = WperfTest.FromJson(stdOutput);
             try
             {
@@ -197,6 +236,9 @@ namespace WindowsPerfGUI.SDK
             return (serializedOutput, stdError);
         }
 
+        /// <summary>
+        /// Starts the WindowsPerf sampling process asynchronously.
+        /// </summary>
         public async Task StartSamplingAsync()
         {
             string[] samplingArgs = SamplingSettings.GenerateCommandLineArgsArray(
@@ -216,7 +258,6 @@ namespace WindowsPerfGUI.SDK
                     (WperfSampling serializedOutput, string stdError) = StopSampling();
                     OnSamplingFinished?.Invoke(this, (serializedOutput, stdError));
                 }
-
             }
             catch (Exception e)
             {
@@ -225,8 +266,12 @@ namespace WindowsPerfGUI.SDK
             }
         }
 
+
         public static string OutputPath;
 
+        /// <summary>
+        /// Generates a new output path for WindowsPerf count results, to be stored in a temporary directory.
+        /// </summary>
         static void GenerateNewOutputPath()
         {
             string now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds().ToString();
@@ -236,6 +281,10 @@ namespace WindowsPerfGUI.SDK
             );
         }
 
+        /// <summary>
+        /// This public method executes the
+        /// `wperf stat<...args> --json` command in the background..
+        /// </summary>
         public async Task StartCountingAsync()
         {
             string[] countingArgs = CountingSettings.GenerateCommandLineArgsArray(
@@ -265,6 +314,9 @@ namespace WindowsPerfGUI.SDK
             }
         }
 
+        /// <summary>
+        /// Parses the counting results from a JSON file and returns a list of events and their corresponding number of hits.
+        /// </summary>
         public static List<CountingEvent> GetCountingEventsFromJSONFile(string filePath)
         {
             List<CountingEvent> countingEvents = new();
@@ -290,6 +342,9 @@ namespace WindowsPerfGUI.SDK
             return countingEvents;
         }
 
+        /// <summary>
+        /// Processes a single WindowsPerf counting event and adds it to a countingEvents list.
+        /// </summary>
         private static void ProcessSingleCount(
             WperfCounting count,
             List<CountingEvent> countingEvents,
@@ -327,6 +382,12 @@ namespace WindowsPerfGUI.SDK
             }
         }
 
+        // Event handlers for when sampling, SPE sampling, or counting are finished.
+        /// <summary>
+        /// This public event is raised when the sampling process is finished. The standard
+        /// output is deserialized into a `WperfSampling` object and returned,
+        /// along with the standard error.
+        /// </summary>
         public EventHandler<(
             WperfSampling serializedOutput,
             string stdError
@@ -338,13 +399,22 @@ namespace WindowsPerfGUI.SDK
           string stdError
       )> OnSPESamplingFinished
         { get; set; }
-
+        /// <summary>
+        /// This public event is raised when the counting process is finished. The standard
+        /// output is deserialized into a `List<CountingEvents>` list and returned,
+        /// along with the standard error.
+        /// </summary>
         public EventHandler<(
             List<CountingEvent> countingEvents,
             string stdError
         )> OnCountingFinished
         { get; set; }
 
+        /// <summary>
+        /// This public method greacefully stops the sampling command and returns the output.
+        /// The standard output is deserialized into a `WperfSampling` object and returned,
+        /// along with the standard error.
+        /// </summary>
         public (WperfSampling serializedOutput, string stdError) StopSampling()
         {
             _wperfProcess.StopProcess();
@@ -354,7 +424,6 @@ namespace WindowsPerfGUI.SDK
             if (SamplingSettings.samplingSettingsFrom.IsSPEEnabled)
             {
                 WperfSPE wperfSPE = WperfSPE.FromJson(stdOutput);
-
             }
             WperfSampling serializedOutput = WperfSampling.FromJson(stdOutput);
             LogToOutput(
@@ -364,6 +433,10 @@ namespace WindowsPerfGUI.SDK
             );
             return (serializedOutput, stdError);
         }
+
+        /// <summary>
+        /// Stops the SPE sampling process and returns the SPE sampling data and any errors.
+        /// </summary>
         public (WperfSPE serializedOutput, string stdError) StopSPESampling()
         {
             _wperfProcess.StopProcess();
@@ -378,6 +451,12 @@ namespace WindowsPerfGUI.SDK
             );
             return (serializedOutput, stdError);
         }
+
+        /// <summary>
+        /// This public method greacefully stops the counting command and returns the output.
+        /// The standard output is deserialized into a `List<CountingEvents>` list and returned,
+        /// along with the standard error.
+        /// </summary>
         public (List<CountingEvent> countingEvents, string stdError) StopCounting()
         {
             _wperfProcess.StopProcess();
