@@ -33,6 +33,22 @@ using System.Windows.Controls;
 
 namespace WindowsPerfGUI.Components
 {
+    /// <summary>
+    /// Custom TextBox control is a styled TextBox that inherets from the native `System.Windows.Controls.TextBox` class.
+    /// </summary>
+    /// <example>
+    ///     Include the Components namespace in your XAML file
+    ///     <code>
+    ///         xmlns:Components="clr-namespace:WindowsPerfGUI.Components"
+    ///     </code>
+    ///     Then use the control in your page
+    ///     <code>
+    ///         <Components:CustomTextBoxControl x:Name="ExtraArgs"
+    ///                                          Padding="2"
+    ///                                          Placeholder="extra args..."
+    ///                                          Text="{Binding ExtraArgs, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+    ///     </code>
+    /// </example>
     public class CustomTextBoxControl : TextBox
     {
         public static readonly DependencyProperty PlaceholderProperty = DependencyProperty.Register(
