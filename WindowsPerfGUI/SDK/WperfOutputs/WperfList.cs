@@ -31,7 +31,6 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
 
 namespace WindowsPerfGUI.SDK.WperfOutputs
 {
@@ -101,7 +100,7 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
         public List<PredefinedMetric> PredefinedMetrics { get; set; }
 
         [JsonProperty("Predefined_Groups_of_Metrics")]
-        public List<PredefinedGroupsOfMetric> PredefinedGroupsOfMetrics { get; set; }
+        public List<PredefinedGroupsOfMetric>? PredefinedGroupsOfMetrics { get; set; }
 
 
         public List<PredefinedMetricAndGroupOfMetrics> PredefinedMetricsAndGroupsOfMetrics
@@ -117,6 +116,7 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
                         Metric = predefinedMetric.Metric
                     });
                 }
+                if (PredefinedGroupsOfMetrics == null) return metricsAndGroupsOfMetrics;
                 foreach (var predefinedGroupOfMetric in PredefinedGroupsOfMetrics)
                 {
                     metricsAndGroupsOfMetrics.Add(new PredefinedMetricAndGroupOfMetrics()
@@ -128,7 +128,7 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
                 return metricsAndGroupsOfMetrics;
             }
         }
-           
+
         public class PredefinedMetricAndGroupOfMetrics
         {
             public string Metric { get; set; }
