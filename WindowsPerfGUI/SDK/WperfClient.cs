@@ -40,7 +40,6 @@ using WindowsPerfGUI.Utils.SDK;
 
 namespace WindowsPerfGUI.SDK
 {
-
     /// <summary>
     /// This class is responsible for running WindowsPerf commands and handling their output.
     /// It uses the ProcessRunner class to run the commands and parse the output.
@@ -123,7 +122,7 @@ namespace WindowsPerfGUI.SDK
         }
 
         /// <summary>
-        /// This protected method initializes the `WperfClient` for command execution. 
+        /// This protected method initializes the `WperfClient` for command execution.
         /// It creates a new `ProcessRunner` instance that is used to run the commands.
         /// </summary>
         protected void InitProcess()
@@ -138,7 +137,7 @@ namespace WindowsPerfGUI.SDK
         }
 
         /// <summary>
-        ///This private method runs a Wperf command, specified by the `args` parameter, and waits for the command to complete. 
+        ///This private method runs a Wperf command, specified by the `args` parameter, and waits for the command to complete.
         ///It returns the standard output and standard error from the command.
         /// </summary>
         private (string stdOutput, string stdError) ExecuteAwaitedCommand(params string[] args)
@@ -162,6 +161,7 @@ namespace WindowsPerfGUI.SDK
             WperfVersion serializedOutput = WperfVersion.FromJson(stdOutput);
             return (serializedOutput, stdError);
         }
+
         /// <summary>
         /// This returns whether or not SPE is supported on this machine
         /// it runs the command wperf -version --json and wperf test --json
@@ -170,7 +170,10 @@ namespace WindowsPerfGUI.SDK
         /// <returns>
         ///     bool
         /// </returns>
-        public bool CheckIsSPESupported(WperfVersion versionSerializedOutput, WperfTest testSerializedOutput)
+        public bool CheckIsSPESupported(
+            WperfVersion versionSerializedOutput,
+            WperfTest testSerializedOutput
+        )
         {
             try
             {
@@ -182,9 +185,13 @@ namespace WindowsPerfGUI.SDK
                     }
                 }
 
-                TestResult speDeviceConf = testSerializedOutput
-                    .TestResults.Find(el => el.TestName == "spe_device.version_name");
-                if (speDeviceConf == null) { return false; }
+                TestResult speDeviceConf = testSerializedOutput.TestResults.Find(el =>
+                    el.TestName == "spe_device.version_name"
+                );
+                if (speDeviceConf == null)
+                {
+                    return false;
+                }
 
                 WperfDefaults.SPEFeatureName = speDeviceConf.Result;
                 return speDeviceConf.Result.StartsWith("FEAT_SPE");
@@ -237,6 +244,16 @@ namespace WindowsPerfGUI.SDK
         }
 
         /// <summary>
+        /// Gets manual information for given event
+        /// </summary>
+        public (WperfManOutput output, string stdError) GetManOutput(string eventName)
+        {
+            (string stdOutput, string stdError) = ExecuteAwaitedCommand("man", eventName, "--json");
+            WperfManOutput serializedOutput = WperfManOutput.FromJson(stdOutput);
+            return (serializedOutput, stdError);
+        }
+
+        /// <summary>
         /// Starts the WindowsPerf sampling process asynchronously.
         /// </summary>
         public async Task StartSamplingAsync()
@@ -265,7 +282,6 @@ namespace WindowsPerfGUI.SDK
                 throw e;
             }
         }
-
 
         public static string OutputPath;
 
@@ -321,7 +337,8 @@ namespace WindowsPerfGUI.SDK
         {
             List<CountingEvent> countingEvents = new();
 
-            if (string.IsNullOrEmpty(filePath)) return countingEvents;
+            if (string.IsNullOrEmpty(filePath))
+                return countingEvents;
 
             string jsonContent = File.ReadAllText(filePath);
             bool isTimelineJSON = jsonContent.Contains("timeline");
@@ -355,10 +372,8 @@ namespace WindowsPerfGUI.SDK
             {
                 foreach (CorePerformanceCounterItem rawCountingEvent in core.PerformanceCounter)
                 {
-                    int index = countingEvents.FindIndex(
-                        el =>
-                            el.CoreNumber == core.CoreNumber
-                            && el.Name == rawCountingEvent.EventName
+                    int index = countingEvents.FindIndex(el =>
+                        el.CoreNumber == core.CoreNumber && el.Name == rawCountingEvent.EventName
                     );
                     if (accumulatePerCoreAndEvent && index != -1)
                     {
@@ -391,14 +406,13 @@ namespace WindowsPerfGUI.SDK
         public EventHandler<(
             WperfSampling serializedOutput,
             string stdError
-        )> OnSamplingFinished
-        { get; set; }
+        )> OnSamplingFinished { get; set; }
 
         public EventHandler<(
-          WperfSPE serializedOutput,
-          string stdError
-      )> OnSPESamplingFinished
-        { get; set; }
+            WperfSPE serializedOutput,
+            string stdError
+        )> OnSPESamplingFinished { get; set; }
+
         /// <summary>
         /// This public event is raised when the counting process is finished. The standard
         /// output is deserialized into a `List<CountingEvents>` list and returned,
@@ -407,8 +421,7 @@ namespace WindowsPerfGUI.SDK
         public EventHandler<(
             List<CountingEvent> countingEvents,
             string stdError
-        )> OnCountingFinished
-        { get; set; }
+        )> OnCountingFinished { get; set; }
 
         /// <summary>
         /// This public method greacefully stops the sampling command and returns the output.
@@ -468,7 +481,9 @@ namespace WindowsPerfGUI.SDK
                 stdError,
                 CountingSettings.GenerateCommandLineArgsArray(CountingSettings.countingSettingsForm)
             );
-            List<CountingEvent> countingEvents = GetCountingEventsFromJSONFile(OutputPath + ".json");
+            List<CountingEvent> countingEvents = GetCountingEventsFromJSONFile(
+                OutputPath + ".json"
+            );
             return (countingEvents, stdError);
         }
     }

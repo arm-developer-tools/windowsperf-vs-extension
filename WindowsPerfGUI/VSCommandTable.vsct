@@ -28,6 +28,16 @@
           <LocCanonicalName>.Tools.WperfHostData</LocCanonicalName>
         </Strings>
       </Button>
+      <Button guid="WindowsPerfGUI" id="WperfMan" priority="0x0100" type="Button">
+        <Parent guid="VSMainMenu" id="Tools.OptionsGroup"/>
+        <Icon guid="ImageCatalogGuid" id="Dictionary"/>
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <CommandFlag>TextChanges</CommandFlag>
+        <Strings>
+          <ButtonText>WindowsPerf Manual</ButtonText>
+          <LocCanonicalName>.Tools.WperfManCommand</LocCanonicalName>
+        </Strings>
+      </Button>
       <Button guid="WindowsPerfGUI" id="SamplingExplorer" priority="0x0100" type="Button">
         <Parent guid="VSMainMenu" id="View.ExplorerWindowsGroup"/>
         <Icon guid="ImageCatalogGuid" id="StartTime"/>
@@ -57,6 +67,7 @@
       <IDSymbol name="WperfHostData" value="0x0101"/>
       <IDSymbol name="SamplingExplorer" value="0x0102"/>
       <IDSymbol name="CountingSettings" value="0x0103"/>
+      <IDSymbol name="WperfMan" value="0x0104"/>
     </GuidSymbol>
   </Symbols>
 </CommandTable>
