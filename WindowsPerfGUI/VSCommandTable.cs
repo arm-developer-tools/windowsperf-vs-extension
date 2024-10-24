@@ -24,5 +24,6 @@ namespace WindowsPerfGUI
         public const int WperfHostData = 0x0101;
         public const int SamplingExplorer = 0x0102;
         public const int CountingSettings = 0x0103;
+        public const int WperfMan = 0x0104;
     }
 }

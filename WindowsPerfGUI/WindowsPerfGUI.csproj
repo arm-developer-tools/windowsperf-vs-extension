@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Commands\SamplingExplorerCommand.cs" />
     <Compile Include="Commands\CountingSettingsCommand.cs" />
+    <Compile Include="Commands\WperfManCommand.cs" />
     <Compile Include="Commands\WperfHostData.cs" />
     <Compile Include="Components\ButtonGrid.xaml.cs">
       <DependentUpon>ButtonGrid.xaml</DependentUpon>
@@ -116,7 +117,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>WperfHostDataLanguagePack.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\Locals\WperfManLanguagePack.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WperfManLanguagePack.resx</DependentUpon>
+    </Compile>
     <Compile Include="SDK\WperfOutputs\WperfCounting.cs" />
+    <Compile Include="SDK\WperfOutputs\WperfManOutput.cs" />
     <Compile Include="SDK\WperfOutputs\WperfSPE.cs" />
     <Compile Include="ToolWindows\CountingSetting\CountingEvent.cs" />
     <Compile Include="SDK\WperfOutputs\WperfTimeline.cs" />
@@ -130,6 +137,9 @@
     <Compile Include="ToolWindows\SamplingExplorer\LineHighlighting\ColorGenerator.cs" />
     <Compile Include="ToolWindows\SamplingExplorer\LineHighlighting\LineHighlighter.cs" />
     <Compile Include="ToolWindows\SamplingExplorer\LineHighlighting\LineHighlighterTextViewCreationListener.cs" />
+    <Compile Include="ToolWindows\WperfManDialog.xaml.cs">
+      <DependentUpon>WperfManDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utils\CommandBuilder\CommandSettings.cs" />
     <Compile Include="Utils\CommandBuilder\CommandSettingsForm.cs" />
     <Compile Include="Utils\Converters\InverseBooleanConverter.cs" />
@@ -200,6 +210,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <EmbeddedResource Include="Resources\Locals\WperfManLanguagePack.fr-FR.resx" />
+    <EmbeddedResource Include="Resources\Locals\WperfManLanguagePack.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WperfManLanguagePack.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <None Include=".editorconfig" />
     <EmbeddedResource Include="Resources\Locals\CountingSettingsLanguagePack.fr-FR.resx" />
     <EmbeddedResource Include="Resources\Locals\CountingSettingsLanguagePack.pl.resx" />
@@ -280,6 +295,10 @@
     <Page Include="ToolWindows\SamplingSetting\SamplingSettingDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ToolWindows\WperfManDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="ToolWindows\WperfHostDataDialog.xaml">
       <SubType>Designer</SubType>
