@@ -33,12 +33,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Input;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK.WperfOutputs;
 using WindowsPerfGUI.Utils;
-using WindowsPerfGUI.Utils.ListSearcher;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 {
@@ -71,14 +69,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 SamplingSourcePathFilePicker.FilePathTextBox.Text = SamplingSettings
                     .samplingSettingsFrom
                     .FilePath;
-            EventComboBox.DropDownOpened += (sender, e) =>
-            {
-                HideEventComboBoxPlaceholder();
-            };
-            EventComboBox.SelectionChanged += (sender, e) =>
-            {
-                HideEventComboBoxPlaceholder();
-            };
+
             if (!WperfDefaults.HasSPESupport)
             {
                 EnableSPECheckBox.IsEnabled = false;
@@ -138,7 +129,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             if (!SamplingSettings.samplingSettingsFrom.IsSPEEnabled) newSamplingEventConfig.SamplingFrequency = SamplingFrequencyComboBox.SelectedItem as string ?? WperfDefaults.Frequency;
             EventComboBox.SelectedIndex = -1;
             SamplingFrequencyComboBox.SelectedIndex = -1;
-            ResetEventComboBox();
 
             foreach (
                 var item in SamplingSettings.samplingSettingsFrom.SamplingEventList.Select(
@@ -246,7 +236,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             string aliasName = (
                 SamplingEventListBox.SelectedItems[0] as SamplingEventConfiguration
             )?.SamplingEvent;
-
+            EventComboBox.ClearFilter();
             foreach (
                 var predefinedEvent in ((List<PredefinedEvent>)EventComboBox.ItemsSource).Select(
                     (value, i) => new { value, i }
@@ -265,38 +255,10 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             )?.SamplingFrequency;
         }
 
-        private void PreviewKeyDown_EnhanceComboSearch(object sender, KeyEventArgs e)
-        {
-            EventComboBox.IsDropDownOpen = true;
-            HideEventComboBoxPlaceholder();
-            if (!string.IsNullOrEmpty(EventComboBox.Text))
-            {
-                EventComboBox.ItemsSource = FilterEventList(EventComboBox.Text);
-            }
-            else
-            {
-                EventComboBoxPlaceholder.Visibility = Visibility.Visible;
-                ResetEventComboBox();
-            }
-        }
 
         private void HideEventComboBoxPlaceholder()
         {
             EventComboBoxPlaceholder.Visibility = Visibility.Hidden;
-        }
-
-        private static List<PredefinedEvent> FilterEventList(string searchText)
-        {
-            var eventList = new List<PredefinedEvent>(
-               SamplingSettings.samplingSettingsFrom.IsSPEEnabled
-               ? WPerfOptions.Instance.WperfList.PredefinedSPEFilters
-               : WPerfOptions.Instance.WperfList.PredefinedEvents
-           );
-            var listSearcher = new ListSearcher<PredefinedEvent>(
-                eventList,
-                new SearchOptions<PredefinedEvent> { GetValue = x => x.AliasName }
-            );
-            return listSearcher.Search(searchText);
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -342,6 +304,11 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 EventComboBoxPlaceholder.Text = SamplingSettingsLanguagePack.Event;
                 EventGroupBoxHeaderLabel.Content = SamplingSettingsLanguagePack.Event;
             }
+        }
+
+        private void EventComboBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            HideEventComboBoxPlaceholder();
         }
     }
 }

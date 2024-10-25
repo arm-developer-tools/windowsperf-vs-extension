@@ -28,6 +28,9 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using CliWrap;
+using Microsoft.VisualStudio.PlatformUI;
+using Microsoft.Win32;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -37,9 +40,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using CliWrap;
-using Microsoft.VisualStudio.PlatformUI;
-using Microsoft.Win32;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK;
@@ -93,7 +93,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             wperfClient.OnCountingFinished += HandleCountingFinished;
         }
 
-   
+
 
         private void HandleCountingFinished(
             object sender,
@@ -217,7 +217,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             GroupEventButton.IsEnabled = CanGroupEvents();
 
             string aliasName = CountingEventListBox.SelectedItems[0] as string;
-
+            EventComboBox.ClearFilter();
             foreach (
                 var predefinedEvent in ((List<PredefinedEvent>)EventComboBox.ItemsSource).Select(
                     (value, i) => new { value, i }
@@ -233,27 +233,12 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             EventComboBox.SelectedIndex = eventIndex;
         }
 
-        private void EventComboBox_PreviewKeyUp(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            EventComboBox.IsDropDownOpen = true;
-            HideEventComboBoxPlaceholder();
-            if (!string.IsNullOrEmpty(EventComboBox.Text))
-            {
-                EventComboBox.ItemsSource = FilterEventList(EventComboBox.Text);
-            }
-            else
-            {
-                EventComboBoxPlaceholder.Visibility = Visibility.Visible;
-                ResetEventComboBox();
-            }
-        }
 
         private void AddEventButton_Click(object sender, RoutedEventArgs e)
         {
             var newCountingEvent = (EventComboBox.SelectedItem as PredefinedEvent)?.AliasName;
 
             EventComboBox.SelectedIndex = -1;
-            ResetEventComboBox();
 
             foreach (
                 var item in CountingSettings.countingSettingsForm.CountingEventList.Select(
@@ -384,6 +369,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             MetricComboBoxPlaceholder.Visibility = Visibility.Hidden;
 
             string metricName = CountingMetricListBox.SelectedItems[0] as string;
+            MetricComboBox.ClearFilter();
 
             foreach (
                 var predefinedMetric in ((List<PredefinedMetricAndGroupOfMetrics>)MetricComboBox.ItemsSource).Select(
@@ -404,7 +390,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
         {
             var newCountingMetric = (MetricComboBox.SelectedItem as PredefinedMetricAndGroupOfMetrics)?.Metric;
 
-            ResetMetricComboBox();
+            MetricComboBox.SelectedIndex = -1;
 
             foreach (
                 var item in CountingSettings.countingSettingsForm.CountingMetricList.Select(
@@ -432,7 +418,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             );
             EventComboBox.ItemsSource = eventList;
         }
-        private void ResetMetricComboBox ()
+        private void ResetMetricComboBox()
         {
             var metricList = new List<PredefinedMetricAndGroupOfMetrics>(
                 WPerfOptions.Instance.WperfList.PredefinedMetricsAndGroupsOfMetrics
@@ -644,6 +630,16 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             {
                 OpenSaveAsDialog("csv");
             }
+        }
+
+        private void EventComboBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            HideEventComboBoxPlaceholder();
+        }
+
+        private void MetricComboBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            HideMetricComboBoxPlaceholder();
         }
     }
 }
