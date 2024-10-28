@@ -89,7 +89,7 @@ namespace WindowsPerfGUI.Components
                     new TextBoxBaseUserChangeTracker(EditableTextBox).UserTextChanged += FilteredComboBox_UserTextChange;
             };
 
-            SelectionChanged += (_, __) => shouldTriggerSelectedItemChanged = true;
+            SelectionChanged += (_, _) => shouldTriggerSelectedItemChanged = true;
 
             SelectionEffectivelyChanged += (_, o) => EffectivelySelectedItem = o;
         }
