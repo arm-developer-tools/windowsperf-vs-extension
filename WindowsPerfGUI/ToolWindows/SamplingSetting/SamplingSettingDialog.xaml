@@ -175,12 +175,17 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0" Margin="0,0,5,10">
-                        <Components:CustomComboBoxControl
+                        <Components:FilterableComboBox
                             x:Name="EventComboBox"
-                            IsEditable="True"
-                            IsTextSearchEnabled="False"
-                            PreviewKeyUp="PreviewKeyDown_EnhanceComboSearch"
-                            SelectedItem="{Binding SelectedEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                            GotFocus="EventComboBox_GotFocus"
+                            OnlyValuesInList="True"
+                            SelectedItem="{Binding SelectedEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                            <Components:FilterableComboBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel VirtualizationMode="Recycling" />
+                                </ItemsPanelTemplate>
+                            </Components:FilterableComboBox.ItemsPanel>
+                        </Components:FilterableComboBox>
                         <TextBlock
                             x:Name="EventComboBoxPlaceholder"
                             Margin="5,3,20,0"

@@ -263,12 +263,18 @@
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         Margin="0,0,5,10">
-                        <Components:CustomComboBoxControl
+                        <Components:FilterableComboBox
                             x:Name="EventComboBox"
-                            IsEditable="True"
-                            IsTextSearchEnabled="False"
-                            PreviewKeyUp="EventComboBox_PreviewKeyUp"
-                            SelectedItem="{Binding SelectedEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                            GotFocus="EventComboBox_GotFocus"
+                            OnlyValuesInList="True"
+                            SelectedItem="{Binding SelectedEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                            <Components:FilterableComboBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel VirtualizationMode="Recycling" />
+                                </ItemsPanelTemplate>
+                            </Components:FilterableComboBox.ItemsPanel>
+                        </Components:FilterableComboBox>
+
                         <TextBlock
                             x:Name="EventComboBoxPlaceholder"
                             Margin="5,3,20,0"
@@ -361,10 +367,17 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <Components:CustomComboBoxControl
+                                <Components:FilterableComboBox
                                     x:Name="MetricComboBox"
-                                    Grid.Column="0"
-                                    SelectedItem="{Binding SelectedMetric, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                    GotFocus="MetricComboBox_GotFocus"
+                                    OnlyValuesInList="True"
+                                    SelectedItem="{Binding SelectedEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                                    <Components:FilterableComboBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel VirtualizationMode="Recycling" />
+                                        </ItemsPanelTemplate>
+                                    </Components:FilterableComboBox.ItemsPanel>
+                                </Components:FilterableComboBox>
                                 <TextBlock
                                     x:Name="MetricComboBoxPlaceholder"
                                     Grid.Column="0"
