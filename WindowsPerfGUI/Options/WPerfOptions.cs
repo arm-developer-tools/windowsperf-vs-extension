@@ -48,7 +48,10 @@ namespace WindowsPerfGUI.Options
         [DisplayName("WindowsPerf path")]
         [Description("The path for the wperf.exe file")]
         [DefaultValue(true)]
-        public string WperfPath { get; set; } = "wperf.exe";
+        public string WperfPath { get; set; } =
+            !string.IsNullOrEmpty(WperfDefaults.DefaultWperfPath)
+                ? WperfDefaults.DefaultWperfPath + "\\wperf.exe"
+                : "wperf.exe";
         public bool WperfVersionCheckIgnore { get; set; } = false;
         public bool IsWperfInitialized { get; set; } = false;
         public bool HasSPESupport { get; set; } = false;

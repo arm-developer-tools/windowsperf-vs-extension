@@ -53,6 +53,13 @@ namespace WindowsPerfGUI.Options
         public void Initialize()
         {
             PathInput.Text = WPerfOptions.Instance.WperfPath;
+
+            if (!string.IsNullOrEmpty(WperfDefaults.DefaultWperfPath))
+            {
+                WperfDefaultPathNotice.Text =
+                    $"WINDOWSPERF_PATH=\"{WperfDefaults.DefaultWperfPath}\"";
+                WperfDefaultPathNotice.Visibility = Visibility.Visible;
+            }
             if (
                 WPerfOptions.Instance.IsWperfInitialized
                 && WPerfOptions.Instance.WperfCurrentVersion != null
