@@ -32,6 +32,13 @@
                     Width="Auto"
                     Margin="5" />
 
+                <TextBlock
+                    x:Name="WperfDefaultPathNotice"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="5"
+                    FontSize="12"
+                    Visibility="Collapsed" />
                 <Button
                     x:Name="ValidateButton"
                     Grid.Row="1"

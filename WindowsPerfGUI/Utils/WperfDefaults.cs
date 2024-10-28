@@ -39,9 +39,14 @@ namespace WindowsPerfGUI.Utils
         public static string? Frequency;
         public static int? TotalGPCNum;
 
-        public static string DefaultWPASearchDir = Environment.GetEnvironmentVariable(
-            "WPA_ADDITIONAL_SEARCH_DIRECTORIES"
-        ) ?? "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\CustomDataSources";
 #nullable disable
+
+        public static string DefaultWPASearchDir =
+            Environment.GetEnvironmentVariable("WPA_ADDITIONAL_SEARCH_DIRECTORIES")
+            ?? "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\CustomDataSources";
+
+        public static string DefaultWperfPath = Environment.GetEnvironmentVariable(
+            "WINDOWSPERF_PATH"
+        );
     }
 }
