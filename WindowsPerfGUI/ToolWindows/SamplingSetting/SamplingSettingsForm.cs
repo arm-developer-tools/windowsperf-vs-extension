@@ -74,6 +74,18 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             }
         }
 
+        private bool sampleDisplayLong;
+
+        public bool SampleDisplayLong
+        {
+            get { return sampleDisplayLong; }
+            set
+            {
+                sampleDisplayLong = value;
+                OnPropertyChanged();
+            }
+        }
+
         private bool isSPEEnabled;
 
         public bool IsSPEEnabled
