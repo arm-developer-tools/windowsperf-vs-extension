@@ -56,6 +56,8 @@ namespace WindowsPerfGUI.Options
         public bool IsWperfInitialized { get; set; } = false;
         public bool HasSPESupport { get; set; } = false;
         public bool UseDefaultSearchDirectory { get; set; } = true;
+        public bool UseDefaultWperfLocation { get; set; } =
+            !string.IsNullOrEmpty(WperfDefaults.DefaultWperfPath);
         public string WPAPluginSearchDirectory { get; set; }
         public WperfVersion WperfCurrentVersion { get; set; }
         public WperfList WperfList { get; set; }
