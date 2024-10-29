@@ -12,7 +12,7 @@
     xmlns:toolkit="clr-namespace:Community.VisualStudio.Toolkit;assembly=Community.VisualStudio.Toolkit"
     xmlns:utils="clr-namespace:WindowsPerfGUI.ToolWindows.SamplingSetting"
     Width="1000"
-    Height="600"
+    Height="700"
     toolkit:Themes.UseVsTheme="True"
     mc:Ignorable="d">
     <platform:DialogWindow.DataContext>
