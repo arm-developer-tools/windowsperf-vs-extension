@@ -28,6 +28,7 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -59,7 +60,7 @@ namespace WindowsPerfGUI.Options
             {
                 WperfDefaultPathCheckbox.IsChecked = true;
                 PathInput.IsEnabled = false;
-                PathInput.Text = WperfDefaults.DefaultWperfPath + "\\wperf.exe";
+                PathInput.Text = Path.Combine(WperfDefaults.DefaultWperfPath, "wperf.exe");
                 SelectDirectoryButton.IsEnabled = false;
             }
             if (!string.IsNullOrEmpty(WperfDefaults.DefaultWperfPath))
@@ -203,7 +204,7 @@ namespace WindowsPerfGUI.Options
             SelectDirectoryButton.IsEnabled = !newValue;
             if (newValue)
             {
-                PathInput.Text = WperfDefaults.DefaultWperfPath + "\\wperf.exe";
+                PathInput.Text = Path.Combine(WperfDefaults.DefaultWperfPath, "wperf.exe");
             }
 
             WPerfOptions.Instance.UseDefaultWperfLocation = newValue;
