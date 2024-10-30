@@ -30,6 +30,7 @@
 
 
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.InteropServices;
 using WindowsPerfGUI.SDK.WperfOutputs;
 using WindowsPerfGUI.Utils;
@@ -50,12 +51,14 @@ namespace WindowsPerfGUI.Options
         [DefaultValue(true)]
         public string WperfPath { get; set; } =
             !string.IsNullOrEmpty(WperfDefaults.DefaultWperfPath)
-                ? WperfDefaults.DefaultWperfPath + "\\wperf.exe"
+                ? Path.Combine(WperfDefaults.DefaultWperfPath, "wperf.exe")
                 : "wperf.exe";
         public bool WperfVersionCheckIgnore { get; set; } = false;
         public bool IsWperfInitialized { get; set; } = false;
         public bool HasSPESupport { get; set; } = false;
         public bool UseDefaultSearchDirectory { get; set; } = true;
+        public bool UseDefaultWperfLocation { get; set; } =
+            !string.IsNullOrEmpty(WperfDefaults.DefaultWperfPath);
         public string WPAPluginSearchDirectory { get; set; }
         public WperfVersion WperfCurrentVersion { get; set; }
         public WperfList WperfList { get; set; }

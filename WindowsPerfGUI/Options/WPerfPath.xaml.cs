@@ -28,9 +28,11 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK;
 using WindowsPerfGUI.SDK.WperfOutputs;
@@ -41,7 +43,7 @@ namespace WindowsPerfGUI.Options
     /// <summary>
     /// Interaction logic for WPerfOptions.xaml
     /// </summary>
-    public partial class WPerfPath : UserControl
+    public partial class WPerfPath : System.Windows.Controls.UserControl
     {
         public WPerfPath()
         {
@@ -54,11 +56,18 @@ namespace WindowsPerfGUI.Options
         {
             PathInput.Text = WPerfOptions.Instance.WperfPath;
 
+            if (WPerfOptions.Instance.UseDefaultWperfLocation)
+            {
+                WperfDefaultPathCheckbox.IsChecked = true;
+                PathInput.IsEnabled = false;
+                PathInput.Text = Path.Combine(WperfDefaults.DefaultWperfPath, "wperf.exe");
+                SelectDirectoryButton.IsEnabled = false;
+            }
             if (!string.IsNullOrEmpty(WperfDefaults.DefaultWperfPath))
             {
-                WperfDefaultPathNotice.Text =
+                WperfDefaultPathCheckboxLabel.Text =
                     $"WINDOWSPERF_PATH=\"{WperfDefaults.DefaultWperfPath}\"";
-                WperfDefaultPathNotice.Visibility = Visibility.Visible;
+                WperfDefaultPathCheckbox.Visibility = Visibility.Visible;
             }
             if (
                 WPerfOptions.Instance.IsWperfInitialized
@@ -118,7 +127,7 @@ namespace WindowsPerfGUI.Options
 
         private void ClearMainStack()
         {
-            MainStack.Children.RemoveRange(OFFSET_ROW + 1, MainStack.Children.Count - OFFSET_ROW);
+            MainStack.Children.RemoveRange(OFFSET_ROW + 2, MainStack.Children.Count - OFFSET_ROW);
         }
 
         private void SetWperfVersion(WperfVersion wperfVersion, bool shouldForce = false)
@@ -185,6 +194,34 @@ namespace WindowsPerfGUI.Options
                 || WPerfVersionCheckIgnore.IsChecked == false;
             WPerfOptions.Instance.WperfVersionCheckIgnore = !shouldEnforceVersionCheck;
             WPerfOptions.Instance.Save();
+        }
+
+        private void WperfDefaultPathCheckbox_Click(object sender, RoutedEventArgs e)
+        {
+            bool newValue = !WPerfOptions.Instance.UseDefaultWperfLocation;
+
+            PathInput.IsEnabled = !newValue;
+            SelectDirectoryButton.IsEnabled = !newValue;
+            if (newValue)
+            {
+                PathInput.Text = Path.Combine(WperfDefaults.DefaultWperfPath, "wperf.exe");
+            }
+
+            WPerfOptions.Instance.UseDefaultWperfLocation = newValue;
+        }
+
+        private void SelectDirectory_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            using var fbd = new FolderBrowserDialog()
+            {
+                SelectedPath = WPerfOptions.Instance.WperfPath,
+            };
+            DialogResult result = fbd.ShowDialog();
+
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            {
+                PathInput.Text = fbd.SelectedPath;
+            }
         }
     }
 }
