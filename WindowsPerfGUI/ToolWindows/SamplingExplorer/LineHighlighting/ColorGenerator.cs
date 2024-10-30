@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -33,51 +33,51 @@ using System.Windows.Media;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
 {
-    public static class ColorGenerator
+  public static class ColorGenerator
+  {
+    public const int DEFAULT_COLOR_RESOLUTION = 3;
+    public const int MIN_COLOR_RESOLUTION = 3;
+    public const int MAX_COLOR_RESOLUTION = 256;
+
+    const int GREEN_HUE = 120,
+        YELLOW_HUE = 60,
+        RED_HUE = 0;
+
+    /// <summary>
+    /// Get a color from a hue, saturation and lightness
+    /// </summary>
+    /// <param name="hue">from 0 to 360</param>
+    /// <param name="saturation">from 0 to 1</param>
+    /// <param name="lightness">from 0 to 1</param>
+    /// <returns><see cref="Color"/></returns>
+    private static Color GetColorFromHSL(double hue, double saturation, double lightness)
     {
-        public const int DEFAULT_COLOR_RESOLUTION = 3;
-        public const int MIN_COLOR_RESOLUTION = 3;
-        public const int MAX_COLOR_RESOLUTION = 256;
-
-        const int GREEN_HUE = 120,
-            YELLOW_HUE = 60,
-            RED_HUE = 0;
-
-        /// <summary>
-        /// Get a color from a hue, saturation and lightness
-        /// </summary>
-        /// <param name="hue">from 0 to 360</param>
-        /// <param name="saturation">from 0 to 1</param>
-        /// <param name="lightness">from 0 to 1</param>
-        /// <returns><see cref="Color"/></returns>
-        private static Color GetColorFromHSL(double hue, double saturation, double lightness)
-        {
-            var hslColor = new HslColor(hue, saturation, lightness);
-            var rgbColor = hslColor.ToColor();
-            return Color.FromArgb(80, rgbColor.R, rgbColor.G, rgbColor.B);
-        }
-
-        private static Color GetColorFromPercentage(double percentage, int colorResolution)
-        {
-            if (colorResolution < MIN_COLOR_RESOLUTION || colorResolution > MAX_COLOR_RESOLUTION)
-                colorResolution = DEFAULT_COLOR_RESOLUTION;
-
-            double percentageChunk = Math.Floor(100.0 / (double)colorResolution);
-            double hueChunk = (double)(GREEN_HUE - RED_HUE) / ((double)colorResolution - 1);
-            int amountOfChunks = (int)
-                Math.Min(Math.Floor(percentage / percentageChunk), colorResolution - 1);
-            return GetColorFromHSL(GREEN_HUE - (hueChunk * amountOfChunks) + RED_HUE, 1, 0.67);
-        }
-
-        /// <summary>
-        /// Takes a percentage from 0 to 100 and returns one of 3 colors red, yellow or green
-        /// anything beyond 100 will return red
-        /// </summary>
-        /// <param name="percentage">values from 0 to 100</param>
-        /// <returns></returns>
-        public static Brush GenerateColor(double percentage, int colorResolution)
-        {
-            return new SolidColorBrush(GetColorFromPercentage(percentage, colorResolution));
-        }
+      var hslColor = new HslColor(hue, saturation, lightness);
+      var rgbColor = hslColor.ToColor();
+      return Color.FromArgb(80, rgbColor.R, rgbColor.G, rgbColor.B);
     }
+
+    private static Color GetColorFromPercentage(double percentage, int colorResolution)
+    {
+      if (colorResolution < MIN_COLOR_RESOLUTION || colorResolution > MAX_COLOR_RESOLUTION)
+        colorResolution = DEFAULT_COLOR_RESOLUTION;
+
+      double percentageChunk = Math.Floor(100.0 / (double)colorResolution);
+      double hueChunk = (double)(GREEN_HUE - RED_HUE) / ((double)colorResolution - 1);
+      int amountOfChunks = (int)
+          Math.Min(Math.Floor(percentage / percentageChunk), colorResolution - 1);
+      return GetColorFromHSL(GREEN_HUE - (hueChunk * amountOfChunks) + RED_HUE, 1, 0.67);
+    }
+
+    /// <summary>
+    /// Takes a percentage from 0 to 100 and returns one of 3 colors red, yellow or green
+    /// anything beyond 100 will return red
+    /// </summary>
+    /// <param name="percentage">values from 0 to 100</param>
+    /// <returns></returns>
+    public static Brush GenerateColor(double percentage, int colorResolution)
+    {
+      return new SolidColorBrush(GetColorFromPercentage(percentage, colorResolution));
+    }
+  }
 }

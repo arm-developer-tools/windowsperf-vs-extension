@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -38,29 +38,29 @@ using WindowsPerfGUI.ToolWindows.SamplingSetting;
 
 namespace WindowsPerfGUI.Utils.CommandBuilder
 {
-    public abstract class CommandSettings
+  public abstract class CommandSettings
+  {
+    public static string[] ArgsArray;
+    public static bool IsSampling = false;
+    public static bool AreSettingsFilled = false;
+
+    internal static List<string> AppendElementsToList(List<string> source, params string[] args)
     {
-        public static string[] ArgsArray;
-        public static bool IsSampling = false;
-        public static bool AreSettingsFilled = false;
-    
-        internal static List<string> AppendElementsToList(List<string> source, params string[] args)
+      bool areAllTruthy = true;
+      List<string> tempList = new List<string>();
+      foreach (string arg in args)
+      {
+        tempList.Add(arg);
+        if (string.IsNullOrWhiteSpace(arg))
         {
-            bool areAllTruthy = true;
-            List<string> tempList = new List<string>();
-            foreach (string arg in args)
-            {
-                tempList.Add(arg);
-                if (string.IsNullOrWhiteSpace(arg))
-                {
-                    areAllTruthy = false;
-                }
-            }
-            if (areAllTruthy)
-            {
-                source.AddRange(tempList);
-            }
-            return source;
+          areAllTruthy = false;
         }
+      }
+      if (areAllTruthy)
+      {
+        source.AddRange(tempList);
+      }
+      return source;
     }
+  }
 }

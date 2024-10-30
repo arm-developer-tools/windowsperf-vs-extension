@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -35,12 +35,12 @@ using System.Linq;
 namespace WindowsPerfGUI.SDK.WperfOutputs
 {
 
-    public partial class WperfList
-    {
-        #region Default hardcoded values
+  public partial class WperfList
+  {
+    #region Default hardcoded values
 
-        private List<PredefinedEvent> defaultPredefinedSPEFilters = [
-                new PredefinedEvent() {
+    private List<PredefinedEvent> defaultPredefinedSPEFilters = [
+            new PredefinedEvent() {
                             AliasName = "load_filter",
                             RawIndex = "",
                             Description = "Enables collection of load sampled operations, including atomic operations that return a value to a register.",
@@ -59,159 +59,159 @@ namespace WindowsPerfGUI.SDK.WperfOutputs
                             EventType = "[SPE filter]"
                         },
             ];
-        public const string SPE_EVENT_BASE_NAME = "arm_spe_0";
-        public const string SPE_EVENT_SEPARATOR = "/";
+    public const string SPE_EVENT_BASE_NAME = "arm_spe_0";
+    public const string SPE_EVENT_SEPARATOR = "/";
 
-        #endregion
+    #endregion
 
-        private List<PredefinedEvent> predefinedEvents;
+    private List<PredefinedEvent> predefinedEvents;
 
-        [JsonProperty("Predefined_Events")]
-        public List<PredefinedEvent> PredefinedEvents
-        {
-            get { return predefinedEvents; }
-            set
-            {
-                predefinedEvents = value.Where(e => e.EventType != "[Kernel PMU event]" && e.EventType != "[SPE filter]").ToList();
-                List<PredefinedEvent> _speFilters = value.Where(e => e.EventType == "[SPE filter]").ToList();
-
-                if (_speFilters.Count == 0) _speFilters = defaultPredefinedSPEFilters;
-
-                PredefinedSPEFilters = _speFilters;
-            }
-        }
-
-        public List<PredefinedEvent> PredefinedSPEFilters { get; set; }
-
-        public (PredefinedEvent, int) GetPredefinedEventFromAliasName(string aliasName)
-        {
-            foreach (var predefinedEvent in PredefinedEvents.Select((value, i) => new { value, i }))
-            {
-                if (predefinedEvent.value.AliasName == aliasName)
-                {
-                    return (predefinedEvent.value, predefinedEvent.i);
-                }
-
-            }
-            return (null, -1);
-        }
-
-        [JsonProperty("Predefined_Metrics")]
-        public List<PredefinedMetric> PredefinedMetrics { get; set; }
-
-        [JsonProperty("Predefined_Groups_of_Metrics")]
-        public List<PredefinedGroupsOfMetric>? PredefinedGroupsOfMetrics { get; set; }
-
-
-        public List<PredefinedMetricAndGroupOfMetrics> PredefinedMetricsAndGroupsOfMetrics
-        {
-            get
-            {
-                List<PredefinedMetricAndGroupOfMetrics> metricsAndGroupsOfMetrics = new List<PredefinedMetricAndGroupOfMetrics>();
-                foreach (var predefinedMetric in PredefinedMetrics)
-                {
-                    metricsAndGroupsOfMetrics.Add(new PredefinedMetricAndGroupOfMetrics()
-                    {
-                        Label = predefinedMetric.ToString(),
-                        Metric = predefinedMetric.Metric
-                    });
-                }
-                if (PredefinedGroupsOfMetrics == null) return metricsAndGroupsOfMetrics;
-                foreach (var predefinedGroupOfMetric in PredefinedGroupsOfMetrics)
-                {
-                    metricsAndGroupsOfMetrics.Add(new PredefinedMetricAndGroupOfMetrics()
-                    {
-                        Label = predefinedGroupOfMetric.ToString(),
-                        Metric = predefinedGroupOfMetric.Group
-                    });
-                }
-                return metricsAndGroupsOfMetrics;
-            }
-        }
-
-        public class PredefinedMetricAndGroupOfMetrics
-        {
-            public string Metric { get; set; }
-            public string Label { get; set; }
-            public override string ToString()
-            {
-                return Label;
-
-            }
-        }
-    }
-
-    public partial class PredefinedGroupsOfMetric
+    [JsonProperty("Predefined_Events")]
+    public List<PredefinedEvent> PredefinedEvents
     {
-        [JsonProperty("Group")]
-        public string Group { get; set; }
+      get { return predefinedEvents; }
+      set
+      {
+        predefinedEvents = value.Where(e => e.EventType != "[Kernel PMU event]" && e.EventType != "[SPE filter]").ToList();
+        List<PredefinedEvent> _speFilters = value.Where(e => e.EventType == "[SPE filter]").ToList();
 
-        [JsonProperty("Metrics")]
-        public string Metrics { get; set; }
+        if (_speFilters.Count == 0) _speFilters = defaultPredefinedSPEFilters;
 
-        [JsonProperty("Description")]
-        public string Description { get; set; }
-        public override string ToString()
-        {
-            return $"{Group} | {{{Metrics}}}";
-        }
+        PredefinedSPEFilters = _speFilters;
+      }
     }
 
+    public List<PredefinedEvent> PredefinedSPEFilters { get; set; }
 
-    public partial class PredefinedEvent
+    public (PredefinedEvent, int) GetPredefinedEventFromAliasName(string aliasName)
     {
-        [JsonProperty("Alias_Name")]
-        public string AliasName { get; set; }
-
-        [JsonProperty("Raw_Index")]
-        public string RawIndex { get; set; }
-
-        [JsonProperty("Event_Type")]
-        public string EventType { get; set; }
-
-        [JsonProperty("Description")]
-        public string Description { get; set; }
-
-        public override string ToString()
+      foreach (var predefinedEvent in PredefinedEvents.Select((value, i) => new { value, i }))
+      {
+        if (predefinedEvent.value.AliasName == aliasName)
         {
-            return $"{AliasName} | {Description}";
+          return (predefinedEvent.value, predefinedEvent.i);
         }
+
+      }
+      return (null, -1);
     }
 
-    public partial class PredefinedMetric
+    [JsonProperty("Predefined_Metrics")]
+    public List<PredefinedMetric> PredefinedMetrics { get; set; }
+
+    [JsonProperty("Predefined_Groups_of_Metrics")]
+    public List<PredefinedGroupsOfMetric>? PredefinedGroupsOfMetrics { get; set; }
+
+
+    public List<PredefinedMetricAndGroupOfMetrics> PredefinedMetricsAndGroupsOfMetrics
     {
-        [JsonProperty("Metric")]
-        public string Metric { get; set; }
-
-        [JsonProperty("Events")]
-        public string Events { get; set; }
-
-        [JsonProperty("Formula")]
-        public string Formula { get; set; }
-
-        [JsonProperty("Unit")]
-        public string Unit { get; set; }
-
-        [JsonProperty("Description")]
-        public string Description { get; set; }
-
-        public override string ToString()
+      get
+      {
+        List<PredefinedMetricAndGroupOfMetrics> metricsAndGroupsOfMetrics = new List<PredefinedMetricAndGroupOfMetrics>();
+        foreach (var predefinedMetric in PredefinedMetrics)
         {
-            return $"{Metric} | {{{Events}}}";
+          metricsAndGroupsOfMetrics.Add(new PredefinedMetricAndGroupOfMetrics()
+          {
+            Label = predefinedMetric.ToString(),
+            Metric = predefinedMetric.Metric
+          });
         }
+        if (PredefinedGroupsOfMetrics == null) return metricsAndGroupsOfMetrics;
+        foreach (var predefinedGroupOfMetric in PredefinedGroupsOfMetrics)
+        {
+          metricsAndGroupsOfMetrics.Add(new PredefinedMetricAndGroupOfMetrics()
+          {
+            Label = predefinedGroupOfMetric.ToString(),
+            Metric = predefinedGroupOfMetric.Group
+          });
+        }
+        return metricsAndGroupsOfMetrics;
+      }
     }
 
-    public partial class WperfList
+    public class PredefinedMetricAndGroupOfMetrics
     {
-        public static WperfList FromJson(string json)
-        {
-            WperfList eventList = JsonConvert.DeserializeObject<WperfList>(
-                json,
-                JsonSettings.Settings
-            );
-            var sortedPredefinedEvents = new List<PredefinedEvent>();
-            eventList.PredefinedEvents.Sort((a, b) => a.AliasName.CompareTo(b.AliasName));
-            return eventList;
-        }
+      public string Metric { get; set; }
+      public string Label { get; set; }
+      public override string ToString()
+      {
+        return Label;
+
+      }
     }
+  }
+
+  public partial class PredefinedGroupsOfMetric
+  {
+    [JsonProperty("Group")]
+    public string Group { get; set; }
+
+    [JsonProperty("Metrics")]
+    public string Metrics { get; set; }
+
+    [JsonProperty("Description")]
+    public string Description { get; set; }
+    public override string ToString()
+    {
+      return $"{Group} | {{{Metrics}}}";
+    }
+  }
+
+
+  public partial class PredefinedEvent
+  {
+    [JsonProperty("Alias_Name")]
+    public string AliasName { get; set; }
+
+    [JsonProperty("Raw_Index")]
+    public string RawIndex { get; set; }
+
+    [JsonProperty("Event_Type")]
+    public string EventType { get; set; }
+
+    [JsonProperty("Description")]
+    public string Description { get; set; }
+
+    public override string ToString()
+    {
+      return $"{AliasName} | {Description}";
+    }
+  }
+
+  public partial class PredefinedMetric
+  {
+    [JsonProperty("Metric")]
+    public string Metric { get; set; }
+
+    [JsonProperty("Events")]
+    public string Events { get; set; }
+
+    [JsonProperty("Formula")]
+    public string Formula { get; set; }
+
+    [JsonProperty("Unit")]
+    public string Unit { get; set; }
+
+    [JsonProperty("Description")]
+    public string Description { get; set; }
+
+    public override string ToString()
+    {
+      return $"{Metric} | {{{Events}}}";
+    }
+  }
+
+  public partial class WperfList
+  {
+    public static WperfList FromJson(string json)
+    {
+      WperfList eventList = JsonConvert.DeserializeObject<WperfList>(
+          json,
+          JsonSettings.Settings
+      );
+      var sortedPredefinedEvents = new List<PredefinedEvent>();
+      eventList.PredefinedEvents.Sort((a, b) => a.AliasName.CompareTo(b.AliasName));
+      return eventList;
+    }
+  }
 }

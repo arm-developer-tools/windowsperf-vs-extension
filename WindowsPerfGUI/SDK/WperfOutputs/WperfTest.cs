@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -33,27 +33,27 @@ using Newtonsoft.Json;
 
 namespace WindowsPerfGUI.SDK.WperfOutputs
 {
-    public partial class WperfTest
-    {
-        [JsonProperty("Test_Results")]
-        public List<TestResult> TestResults { get; set; }
-    }
+  public partial class WperfTest
+  {
+    [JsonProperty("Test_Results")]
+    public List<TestResult> TestResults { get; set; }
+  }
 
-    public partial class TestResult
-    {
-        [JsonProperty("Result")]
-        public string Result { get; set; }
+  public partial class TestResult
+  {
+    [JsonProperty("Result")]
+    public string Result { get; set; }
 
-        [JsonProperty("Test_Name")]
-        public string TestName { get; set; }
-    }
+    [JsonProperty("Test_Name")]
+    public string TestName { get; set; }
+  }
 
-    public partial class WperfTest
-    {
-        public static WperfTest FromJson(string json) =>
-            JsonConvert.DeserializeObject<WperfTest>(
-                json,
-                WindowsPerfGUI.SDK.WperfOutputs.JsonSettings.Settings
-            );
-    }
+  public partial class WperfTest
+  {
+    public static WperfTest FromJson(string json) =>
+        JsonConvert.DeserializeObject<WperfTest>(
+            json,
+            WindowsPerfGUI.SDK.WperfOutputs.JsonSettings.Settings
+        );
+  }
 }

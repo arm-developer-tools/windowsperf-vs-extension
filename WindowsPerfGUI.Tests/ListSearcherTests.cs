@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -34,40 +34,40 @@ using WindowsPerfGUI.Utils.ListSearcher;
 
 namespace WindowsPerfGUI.Tests.Utils.ListSearcher
 {
-    public class ListSearcherTests
+  public class ListSearcherTests
+  {
+    [Test()]
+    [Description("Tests the response type of the Search results")]
+    [TestCase("fire", ExpectedResult = 1)]
+    [TestCase("fox", ExpectedResult = 1)]
+    [TestCase("Firefox", ExpectedResult = 1)]
+    [TestCase("FIREFOX", ExpectedResult = 1)]
+    [TestCase("firefox", ExpectedResult = 1)]
+    [TestCase("fifox", ExpectedResult = 0)]
+    [TestCase("o", ExpectedResult = 2)]
+    [TestCase("", ExpectedResult = 3)]
+    public int BasicTest(string searchString)
     {
-        [Test()]
-        [Description("Tests the response type of the Search results")]
-        [TestCase("fire", ExpectedResult = 1)]
-        [TestCase("fox", ExpectedResult = 1)]
-        [TestCase("Firefox", ExpectedResult = 1)]
-        [TestCase("FIREFOX", ExpectedResult = 1)]
-        [TestCase("firefox", ExpectedResult = 1)]
-        [TestCase("fifox", ExpectedResult = 0)]
-        [TestCase("o", ExpectedResult = 2)]
-        [TestCase("", ExpectedResult = 3)]
-        public int BasicTest(string searchString)
-        {
-            var fields = new List<SearchList>();
-            fields.Add(new SearchList { Name = "Name", Application = "Firefox" });
-            fields.Add(new SearchList { Name = "Other", Application = "Chrome" });
-            fields.Add(new SearchList { Name = "Yet another", Application = "Discrpd" });
+      var fields = new List<SearchList>();
+      fields.Add(new SearchList { Name = "Name", Application = "Firefox" });
+      fields.Add(new SearchList { Name = "Other", Application = "Chrome" });
+      fields.Add(new SearchList { Name = "Yet another", Application = "Discrpd" });
 
-            var sut = new ListSearcher<SearchList>(
-                fields,
-                new SearchOptions<SearchList> { GetValue = x => x.Application }
-            );
+      var sut = new ListSearcher<SearchList>(
+          fields,
+          new SearchOptions<SearchList> { GetValue = x => x.Application }
+      );
 
-            var result = sut.Search(searchString);
-            TestContext.WriteLine(result);
-            TestContext.WriteLine(searchString);
-            return result.Count;
-        }
+      var result = sut.Search(searchString);
+      TestContext.WriteLine(result);
+      TestContext.WriteLine(searchString);
+      return result.Count;
     }
+  }
 
-    public class SearchList
-    {
-        public string Name { get; set; }
-        public string Application { get; set; }
-    }
+  public class SearchList
+  {
+    public string Name { get; set; }
+    public string Application { get; set; }
+  }
 }

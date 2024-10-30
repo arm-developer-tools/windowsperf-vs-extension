@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -33,30 +33,30 @@ using System.Windows.Controls;
 
 namespace WindowsPerfGUI.Components
 {
-    public class CustomRadioButtonControl : RadioButton
+  public class CustomRadioButtonControl : RadioButton
+  {
+    /// <summary>
+    /// Custom RadioButton control is a styled RadioButton that inherets from the native `System.Windows.Controls.RadioButton` class.
+    /// </summary>
+    /// <example>
+    ///     Include the Components namespace in your XAML file
+    ///     <code>
+    ///         xmlns:Components="clr-namespace:WindowsPerfGUI.Components"
+    ///     </code>
+    ///     Then use the control in your page
+    ///     <code>
+    ///         <Components:CustomRadioButtonControl x:Name="CustomProcessRadioButton"
+    ///                                              Content="Payload From File"
+    ///                                              GroupName="SamplingSourceRad"/>
+    ///                                           SelectedItem="{Binding CPUCore, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+    ///     </code>
+    /// </example>
+    static CustomRadioButtonControl()
     {
-        /// <summary>
-        /// Custom RadioButton control is a styled RadioButton that inherets from the native `System.Windows.Controls.RadioButton` class.
-        /// </summary>
-        /// <example>
-        ///     Include the Components namespace in your XAML file
-        ///     <code>
-        ///         xmlns:Components="clr-namespace:WindowsPerfGUI.Components"
-        ///     </code>
-        ///     Then use the control in your page
-        ///     <code>
-        ///         <Components:CustomRadioButtonControl x:Name="CustomProcessRadioButton"
-        ///                                              Content="Payload From File"
-        ///                                              GroupName="SamplingSourceRad"/>
-        ///                                           SelectedItem="{Binding CPUCore, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-        ///     </code>
-        /// </example>
-        static CustomRadioButtonControl()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(
-                typeof(CustomRadioButtonControl),
-                new FrameworkPropertyMetadata(typeof(CustomRadioButtonControl))
-            );
-        }
+      DefaultStyleKeyProperty.OverrideMetadata(
+          typeof(CustomRadioButtonControl),
+          new FrameworkPropertyMetadata(typeof(CustomRadioButtonControl))
+      );
     }
+  }
 }

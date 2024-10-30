@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -34,28 +34,28 @@ using WindowsPerfGUI.ToolWindows;
 
 namespace WindowsPerfGUI.Commands
 {
-    [Command(PackageIds.WperfMan)]
-    internal sealed class WperfManCommand : BaseCommand<WperfManCommand>
+  [Command(PackageIds.WperfMan)]
+  internal sealed class WperfManCommand : BaseCommand<WperfManCommand>
+  {
+    protected override void BeforeQueryStatus(EventArgs e)
     {
-        protected override void BeforeQueryStatus(EventArgs e)
-        {
-            Command.Text = WperfManLanguagePack.WindowTitle;
-            base.BeforeQueryStatus(e);
-        }
-
-        protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
-        {
-            if (!WPerfOptions.Instance.IsWperfInitialized)
-            {
-                await VS.MessageBox.ShowErrorAsync(
-                    ErrorLanguagePack.NotInititiatedWperfErrorLine1,
-                    ErrorLanguagePack.NotInititiatedWperfErrorLine2
-                );
-                return;
-            }
-
-            WperfManDialog wperfManDialog = new() { Title = WperfManLanguagePack.WindowTitle };
-            wperfManDialog.ShowDialog();
-        }
+      Command.Text = WperfManLanguagePack.WindowTitle;
+      base.BeforeQueryStatus(e);
     }
+
+    protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
+    {
+      if (!WPerfOptions.Instance.IsWperfInitialized)
+      {
+        await VS.MessageBox.ShowErrorAsync(
+            ErrorLanguagePack.NotInititiatedWperfErrorLine1,
+            ErrorLanguagePack.NotInititiatedWperfErrorLine2
+        );
+        return;
+      }
+
+      WperfManDialog wperfManDialog = new() { Title = WperfManLanguagePack.WindowTitle };
+      wperfManDialog.ShowDialog();
+    }
+  }
 }

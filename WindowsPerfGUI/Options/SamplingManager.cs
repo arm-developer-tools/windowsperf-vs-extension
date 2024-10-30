@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -33,20 +33,20 @@ using System.Runtime.InteropServices;
 
 namespace WindowsPerfGUI.Options
 {
-    internal partial class SamplingManagerOptionsProvider
-    {
-        [ComVisible(true)]
-        public class SamplingManagerOptions : BaseOptionPage<SamplingManager> { }
-    }
+  internal partial class SamplingManagerOptionsProvider
+  {
+    [ComVisible(true)]
+    public class SamplingManagerOptions : BaseOptionPage<SamplingManager> { }
+  }
 
-    public class SamplingManager : BaseOptionModel<SamplingManager>
-    {
-        [Category("Windows Perf")]
-        [DisplayName("Highlighter Color Resolution")]
-        [Description(
-            "The resolution of the colors to use in the line highlighter. Please chose a value between 3 and 256, defaulting to 3 otherwise."
-        )]
-        [DefaultValue(3)]
-        public int HighlighterColorResolution { get; set; } = 3;
-    }
+  public class SamplingManager : BaseOptionModel<SamplingManager>
+  {
+    [Category("Windows Perf")]
+    [DisplayName("Highlighter Color Resolution")]
+    [Description(
+        "The resolution of the colors to use in the line highlighter. Please chose a value between 3 and 256, defaulting to 3 otherwise."
+    )]
+    [DefaultValue(3)]
+    public int HighlighterColorResolution { get; set; } = 3;
+  }
 }

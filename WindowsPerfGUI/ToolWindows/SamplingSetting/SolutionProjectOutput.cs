@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -35,88 +35,88 @@ using EnvDTE80;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 {
-    public static class SolutionProjectOutput
+  public static class SolutionProjectOutput
+  {
+    private static DTE2 _dte;
+    public static string SelectedConfigName = "";
+    public static string SelectedPlatformName = "";
+    public static string SelectedConfigLabel = "";
+
+    private static (string, string) EnumerateConfigurations()
     {
-        private static DTE2 _dte;
-        public static string SelectedConfigName = "";
-        public static string SelectedPlatformName = "";
-        public static string SelectedConfigLabel = "";
+      ThreadHelper.ThrowIfNotOnUIThread();
 
-        private static (string, string) EnumerateConfigurations()
+      string mainOutput = "";
+      string pdbOutput = "";
+
+      _dte = (DTE2)Package.GetGlobalService(typeof(DTE));
+
+      Array projects = (Array)_dte.ActiveSolutionProjects;
+      EnvDTE.Project project = (EnvDTE.Project)projects.GetValue(0);
+      if (project.ConfigurationManager == null)
+      {
+        return (mainOutput, pdbOutput);
+      }
+      Configuration config = project.ConfigurationManager.ActiveConfiguration;
+      if (config == null)
+      {
+        return (mainOutput, pdbOutput);
+      }
+      SelectedConfigName = config.ConfigurationName;
+      SelectedPlatformName = config.PlatformName;
+      SelectedConfigLabel = $"({SelectedConfigName} | {SelectedPlatformName})";
+      if (config != null)
+      {
+        // Process each configuration
+        // Find an outputgroup with at least one file.
+        OutputGroups groups = config.OutputGroups;
+        foreach (OutputGroup group in groups)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-
-            string mainOutput = "";
-            string pdbOutput = "";
-
-            _dte = (DTE2)Package.GetGlobalService(typeof(DTE));
-
-            Array projects = (Array)_dte.ActiveSolutionProjects;
-            EnvDTE.Project project = (EnvDTE.Project)projects.GetValue(0);
-            if (project.ConfigurationManager == null)
-            {
-                return (mainOutput, pdbOutput);
-            }
-            Configuration config = project.ConfigurationManager.ActiveConfiguration;
-            if (config == null)
-            {
-                return (mainOutput, pdbOutput);
-            }
-            SelectedConfigName = config.ConfigurationName;
-            SelectedPlatformName = config.PlatformName;
-            SelectedConfigLabel = $"({SelectedConfigName} | {SelectedPlatformName})";
-            if (config != null)
-            {
-                // Process each configuration
-                // Find an outputgroup with at least one file.
-                OutputGroups groups = config.OutputGroups;
-                foreach (OutputGroup group in groups)
-                {
-                    if (group.FileCount < 1)
-                        continue;
-                    if (group.CanonicalName != "Built" && group.CanonicalName != "Symbols")
-                        continue;
-                    string mainFile = "";
-                    foreach (string fURL in (Array)group.FileURLs)
-                    {
-                        mainFile = Regex.Replace(fURL, "file:///", "");
-                        break;
-                    }
-                    if (group.CanonicalName == "Built")
-                    {
-                        mainOutput = $"\"{mainFile}\"";
-                    }
-                    if (group.CanonicalName == "Symbols")
-                    {
-                        pdbOutput = $"\"{mainFile}\"";
-                    }
-                }
-            }
-            return (mainOutput, pdbOutput);
+          if (group.FileCount < 1)
+            continue;
+          if (group.CanonicalName != "Built" && group.CanonicalName != "Symbols")
+            continue;
+          string mainFile = "";
+          foreach (string fURL in (Array)group.FileURLs)
+          {
+            mainFile = Regex.Replace(fURL, "file:///", "");
+            break;
+          }
+          if (group.CanonicalName == "Built")
+          {
+            mainOutput = $"\"{mainFile}\"";
+          }
+          if (group.CanonicalName == "Symbols")
+          {
+            pdbOutput = $"\"{mainFile}\"";
+          }
         }
-
-        public static async Task<(string, string)> GetProjectOutputAsync()
-        {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            (string mainOutput, string pdbOutput) = EnumerateConfigurations();
-            if (
-                string.IsNullOrEmpty(pdbOutput)
-                || getFilePathWithoutExtension(mainOutput) == getFilePathWithoutExtension(pdbOutput)
-            )
-            {
-                return (mainOutput, null);
-            }
-            else
-            {
-                return (mainOutput, pdbOutput);
-            }
-        }
-
-        private static string getFilePathWithoutExtension(string filePath)
-        {
-            if (string.IsNullOrEmpty(filePath))
-                return filePath;
-            return filePath.Remove(filePath.Length - 4);
-        }
+      }
+      return (mainOutput, pdbOutput);
     }
+
+    public static async Task<(string, string)> GetProjectOutputAsync()
+    {
+      await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+      (string mainOutput, string pdbOutput) = EnumerateConfigurations();
+      if (
+          string.IsNullOrEmpty(pdbOutput)
+          || getFilePathWithoutExtension(mainOutput) == getFilePathWithoutExtension(pdbOutput)
+      )
+      {
+        return (mainOutput, null);
+      }
+      else
+      {
+        return (mainOutput, pdbOutput);
+      }
+    }
+
+    private static string getFilePathWithoutExtension(string filePath)
+    {
+      if (string.IsNullOrEmpty(filePath))
+        return filePath;
+      return filePath.Remove(filePath.Length - 4);
+    }
+  }
 }

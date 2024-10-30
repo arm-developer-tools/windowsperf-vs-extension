@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -34,112 +34,112 @@ using System.Windows.Input;
 
 namespace WindowsPerfGUI.Components.TreeListView
 {
-    public class TreeListItem : ListViewItem, INotifyPropertyChanged
+  public class TreeListItem : ListViewItem, INotifyPropertyChanged
+  {
+    #region Properties
+
+    private TreeNode _node;
+
+    public TreeNode Node
     {
-        #region Properties
-
-        private TreeNode _node;
-
-        public TreeNode Node
-        {
-            get { return _node; }
-            internal set
-            {
-                _node = value;
-                OnPropertyChanged("Node");
-            }
-        }
-
-        #endregion
-
-        public TreeListItem() { }
-
-        protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
-        {
-            if (Node != null && Node.IsExpandable)
-            {
-                Node.IsExpanded = !Node.IsExpanded;
-            }
-
-            base.OnMouseDoubleClick(e);
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            if (Node == null)
-            {
-                base.OnKeyDown(e);
-                return;
-            }
-
-            switch (e.Key)
-            {
-                case Key.Right:
-                    e.Handled = true;
-                    if (!Node.IsExpanded)
-                    {
-                        Node.IsExpanded = true;
-                        ChangeFocus(Node);
-                    }
-                    else if (Node.Children.Count > 0)
-                        ChangeFocus(Node.Children[0]);
-
-                    break;
-
-                case Key.Left:
-
-                    e.Handled = true;
-                    if (Node.IsExpanded && Node.IsExpandable)
-                    {
-                        Node.IsExpanded = false;
-                        ChangeFocus(Node);
-                    }
-                    else
-                        ChangeFocus(Node.Parent);
-
-                    break;
-
-                case Key.Subtract:
-                    e.Handled = true;
-                    Node.IsExpanded = false;
-                    ChangeFocus(Node);
-                    break;
-
-                case Key.Add:
-                    e.Handled = true;
-                    Node.IsExpanded = true;
-                    ChangeFocus(Node);
-                    break;
-                default:
-                    base.OnKeyDown(e);
-                    return;
-            }
-        }
-
-        private void ChangeFocus(TreeNode node)
-        {
-            var tree = node.Tree;
-            if (tree == null)
-            {
-                return;
-            }
-
-            TreeListItem item = (TreeListItem)tree.ItemContainerGenerator.ContainerFromItem(node);
-            if (item != null)
-                item.Focus();
-            else
-                tree.PendingFocusNode = node;
-        }
-
-        #region INotifyPropertyChanged Members
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-
-        #endregion
+      get { return _node; }
+      internal set
+      {
+        _node = value;
+        OnPropertyChanged("Node");
+      }
     }
+
+    #endregion
+
+    public TreeListItem() { }
+
+    protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
+    {
+      if (Node != null && Node.IsExpandable)
+      {
+        Node.IsExpanded = !Node.IsExpanded;
+      }
+
+      base.OnMouseDoubleClick(e);
+    }
+
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+      if (Node == null)
+      {
+        base.OnKeyDown(e);
+        return;
+      }
+
+      switch (e.Key)
+      {
+        case Key.Right:
+          e.Handled = true;
+          if (!Node.IsExpanded)
+          {
+            Node.IsExpanded = true;
+            ChangeFocus(Node);
+          }
+          else if (Node.Children.Count > 0)
+            ChangeFocus(Node.Children[0]);
+
+          break;
+
+        case Key.Left:
+
+          e.Handled = true;
+          if (Node.IsExpanded && Node.IsExpandable)
+          {
+            Node.IsExpanded = false;
+            ChangeFocus(Node);
+          }
+          else
+            ChangeFocus(Node.Parent);
+
+          break;
+
+        case Key.Subtract:
+          e.Handled = true;
+          Node.IsExpanded = false;
+          ChangeFocus(Node);
+          break;
+
+        case Key.Add:
+          e.Handled = true;
+          Node.IsExpanded = true;
+          ChangeFocus(Node);
+          break;
+        default:
+          base.OnKeyDown(e);
+          return;
+      }
+    }
+
+    private void ChangeFocus(TreeNode node)
+    {
+      var tree = node.Tree;
+      if (tree == null)
+      {
+        return;
+      }
+
+      TreeListItem item = (TreeListItem)tree.ItemContainerGenerator.ContainerFromItem(node);
+      if (item != null)
+        item.Focus();
+      else
+        tree.PendingFocusNode = node;
+    }
+
+    #region INotifyPropertyChanged Members
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    private void OnPropertyChanged(string name)
+    {
+      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+
+    #endregion
+  }
 }

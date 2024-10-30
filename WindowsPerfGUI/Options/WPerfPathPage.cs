@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -33,18 +33,18 @@ using System.Windows;
 
 namespace WindowsPerfGUI.Options
 {
-    [ComVisible(true)]
-    [Guid("DB55C26B-3270-417D-B496-88EC3CAC6ECC")]
-    public class WPerfPathPage : UIElementDialogPage
+  [ComVisible(true)]
+  [Guid("DB55C26B-3270-417D-B496-88EC3CAC6ECC")]
+  public class WPerfPathPage : UIElementDialogPage
+  {
+    protected override UIElement Child
     {
-        protected override UIElement Child
-        {
-            get
-            {
-                WPerfPath page = new WPerfPath { wPerfPathPage = this };
-                page.Initialize();
-                return page;
-            }
-        }
+      get
+      {
+        WPerfPath page = new WPerfPath { wPerfPathPage = this };
+        page.Initialize();
+        return page;
+      }
     }
+  }
 }

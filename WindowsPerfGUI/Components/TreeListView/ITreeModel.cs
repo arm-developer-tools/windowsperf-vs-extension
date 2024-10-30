@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -32,16 +32,16 @@ using System.Collections;
 
 namespace WindowsPerfGUI.Components.TreeListView
 {
-    public interface ITreeModel
-    {
-        ///
-        /// Get list of children of the specified parent
-        ///
-        IEnumerable GetChildren(object parent);
+  public interface ITreeModel
+  {
+    ///
+    /// Get list of children of the specified parent
+    ///
+    IEnumerable GetChildren(object parent);
 
-        ///
-        /// returns weather specified parent has any children or not.
-        ///
-        bool HasChildren(object parent);
-    }
+    ///
+    /// returns weather specified parent has any children or not.
+    ///
+    bool HasChildren(object parent);
+  }
 }

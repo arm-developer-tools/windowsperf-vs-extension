@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -37,28 +37,28 @@ using WindowsPerfGUI.Resources.Locals;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
 {
-    public class SamplingExplorer : BaseToolWindow<SamplingExplorer>
+  public class SamplingExplorer : BaseToolWindow<SamplingExplorer>
+  {
+    public override string GetTitle(int toolWindowId) =>
+        SamplingExplorerLanguagePack.WindowTitle;
+
+    public override Type PaneType => typeof(Pane);
+
+    public override Task<FrameworkElement> CreateAsync(
+        int toolWindowId,
+        CancellationToken cancellationToken
+    )
     {
-        public override string GetTitle(int toolWindowId) =>
-            SamplingExplorerLanguagePack.WindowTitle;
-
-        public override Type PaneType => typeof(Pane);
-
-        public override Task<FrameworkElement> CreateAsync(
-            int toolWindowId,
-            CancellationToken cancellationToken
-        )
-        {
-            return Task.FromResult<FrameworkElement>(new SamplingExplorerControl());
-        }
-
-        [Guid("e0b657ee-f2c9-4365-a1db-e0d5a8a59417")]
-        internal class Pane : ToolWindowPane
-        {
-            public Pane()
-            {
-                BitmapImageMoniker = KnownMonikers.ToolWindow;
-            }
-        }
+      return Task.FromResult<FrameworkElement>(new SamplingExplorerControl());
     }
+
+    [Guid("e0b657ee-f2c9-4365-a1db-e0d5a8a59417")]
+    internal class Pane : ToolWindowPane
+    {
+      public Pane()
+      {
+        BitmapImageMoniker = KnownMonikers.ToolWindow;
+      }
+    }
+  }
 }

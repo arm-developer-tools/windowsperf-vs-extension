@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -33,26 +33,26 @@ using System.Windows.Data;
 
 namespace WindowsPerfGUI.Utils.Converters
 {
-    public class NullToDisabledConverter : IValueConverter
+  public class NullToDisabledConverter : IValueConverter
+  {
+    #region Implementation of IValueConverter
+
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        #region Implementation of IValueConverter
-
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            // TODO: fix the casting
-            return (value == null) || (value is bool && (bool)value == false) ? false : true;
-        }
-
-        public object ConvertBack(
-            object value,
-            Type targetType,
-            object parameter,
-            CultureInfo culture
-        )
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
+      // TODO: fix the casting
+      return (value == null) || (value is bool && (bool)value == false) ? false : true;
     }
+
+    public object ConvertBack(
+        object value,
+        Type targetType,
+        object parameter,
+        CultureInfo culture
+    )
+    {
+      throw new NotImplementedException();
+    }
+
+    #endregion
+  }
 }

@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -33,30 +33,30 @@ using System.Windows.Controls;
 
 namespace WindowsPerfGUI.Components
 {
-    public class CustomComboBoxControl : ComboBox
+  public class CustomComboBoxControl : ComboBox
+  {
+    /// <summary>
+    /// Custom ComboBox control is a styled ComboBox that inherets from the native `System.Windows.Controls.ComboBox` class.
+    /// </summary>
+    /// <example>
+    ///     Include the Components namespace in your XAML file
+    ///     <code>
+    ///         xmlns:Components="clr-namespace:WindowsPerfGUI.Components"
+    ///     </code>
+    ///     Then use the control in your page
+    ///     <code>
+    ///         <Components:CustomComboBoxControl x:Name="CpuCoreComboBox"
+    ///                                           Grid.Row="0"
+    ///                                           Grid.Column="1"
+    ///                                           SelectedItem="{Binding CPUCore, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+    ///     </code>
+    /// </example>
+    static CustomComboBoxControl()
     {
-        /// <summary>
-        /// Custom ComboBox control is a styled ComboBox that inherets from the native `System.Windows.Controls.ComboBox` class.
-        /// </summary>
-        /// <example>
-        ///     Include the Components namespace in your XAML file
-        ///     <code>
-        ///         xmlns:Components="clr-namespace:WindowsPerfGUI.Components"
-        ///     </code>
-        ///     Then use the control in your page
-        ///     <code>
-        ///         <Components:CustomComboBoxControl x:Name="CpuCoreComboBox"
-        ///                                           Grid.Row="0"
-        ///                                           Grid.Column="1"
-        ///                                           SelectedItem="{Binding CPUCore, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-        ///     </code>
-        /// </example>
-        static CustomComboBoxControl()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(
-                typeof(CustomComboBoxControl),
-                new FrameworkPropertyMetadata(typeof(CustomComboBoxControl))
-            );
-        }
+      DefaultStyleKeyProperty.OverrideMetadata(
+          typeof(CustomComboBoxControl),
+          new FrameworkPropertyMetadata(typeof(CustomComboBoxControl))
+      );
     }
+  }
 }

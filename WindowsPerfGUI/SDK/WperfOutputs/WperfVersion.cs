@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -33,32 +33,32 @@ using System.Collections.Generic;
 
 namespace WindowsPerfGUI.SDK.WperfOutputs
 {
-    public partial class WperfVersion
+  public partial class WperfVersion
+  {
+    [JsonProperty("Version")]
+    public List<Version> Components { get; set; }
+  }
+
+  public partial class Version
+  {
+    [JsonProperty("Component")]
+    public string Component { get; set; }
+
+    [JsonProperty("Version")]
+    public string ComponentVersion { get; set; }
+
+    [JsonProperty("GitVer")]
+    public string GitVersion { get; set; }
+
+    [JsonProperty("FeatureString")]
+    public string FeatureString { get; set; }
+  }
+
+  public partial class WperfVersion
+  {
+    public static WperfVersion FromJson(string json)
     {
-        [JsonProperty("Version")]
-        public List<Version> Components { get; set; }
+      return JsonConvert.DeserializeObject<WperfVersion>(json, JsonSettings.Settings);
     }
-
-    public partial class Version
-    {
-        [JsonProperty("Component")]
-        public string Component { get; set; }
-
-        [JsonProperty("Version")]
-        public string ComponentVersion { get; set; }
-
-        [JsonProperty("GitVer")]
-        public string GitVersion { get; set; }
-
-        [JsonProperty("FeatureString")]
-        public string FeatureString { get; set; }
-    }
-
-    public partial class WperfVersion
-    {
-        public static WperfVersion FromJson(string json)
-        {
-            return JsonConvert.DeserializeObject<WperfVersion>(json, JsonSettings.Settings);
-        }
-    }
+  }
 }

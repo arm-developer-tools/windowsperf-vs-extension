@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -39,109 +39,109 @@ using WindowsPerfGUI.Utils.ListSearcher;
 
 namespace WindowsPerfGUI.ToolWindows
 {
-    public partial class WperfManDialog : DialogWindow
+  public partial class WperfManDialog : DialogWindow
+  {
+    readonly WperfClientFactory wperfClient = new();
+
+    public WperfManDialog()
     {
-        readonly WperfClientFactory wperfClient = new();
-
-        public WperfManDialog()
-        {
-            InitializeComponent();
-            ResetEventComboBox();
-        }
-
-        private void HideEventComboBoxPlaceholder()
-        {
-            EventComboBoxPlaceholder.Visibility = Visibility.Hidden;
-        }
-
-        private void ResetEventComboBox()
-        {
-            var eventList = new List<PredefinedEvent>(
-                WPerfOptions.Instance.WperfList.PredefinedEvents
-            );
-            EventComboBox.ItemsSource = eventList;
-        }
-
-        private static List<PredefinedEvent> FilterEventList(string searchText)
-        {
-            var eventList = WPerfOptions.Instance.WperfList.PredefinedEvents;
-            var listSearcher = new ListSearcher<PredefinedEvent>(
-                eventList,
-                new SearchOptions<PredefinedEvent> { GetValue = x => x.AliasName }
-            );
-            return listSearcher.Search(searchText);
-        }
-
-        private void EventComboBox_PreviewKeyUp(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            EventComboBox.IsDropDownOpen = true;
-            HideEventComboBoxPlaceholder();
-            if (!string.IsNullOrEmpty(EventComboBox.Text))
-            {
-                EventComboBox.ItemsSource = FilterEventList(EventComboBox.Text);
-            }
-            else
-            {
-                EventComboBoxPlaceholder.Visibility = Visibility.Visible;
-                ResetEventComboBox();
-            }
-        }
-
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        private void EventComboBox_SelectionChanged(
-            object sender,
-            System.Windows.Controls.SelectionChangedEventArgs e
-        )
-        {
-            string selectedEvent = (EventComboBox.SelectedItem as PredefinedEvent)?.AliasName;
-            if (string.IsNullOrEmpty(selectedEvent))
-                return;
-
-            ManOutput.Children.Clear();
-
-            try
-            {
-                (WperfManOutput wperfManOutput, string stdErr) = wperfClient.GetManOutput(
-                    selectedEvent
-                );
-
-                if (!string.IsNullOrEmpty(stdErr))
-                {
-                    VS.MessageBox.ShowError(stdErr);
-                    return;
-                }
-                ;
-
-                foreach (var manResult in wperfManOutput.ManualResults)
-                {
-                    if (manResult.Result.ToLower() == "n/a")
-                        continue;
-                    ManOutput.Children.Add(
-                        new TextBlock()
-                        {
-                            Text = manResult.FieldType,
-                            FontSize = 16,
-                            FontWeight = FontWeights.Bold
-                        }
-                    );
-                    ManOutput.Children.Add(
-                        new TextBlock()
-                        {
-                            Text = manResult.Result,
-                            Margin = new Thickness(0, 5, 0, 10),
-                            FontSize = 14,
-                        }
-                    );
-                }
-            }
-            catch (Exception ex)
-            {
-                VS.MessageBox.ShowError(ex.Message);
-            }
-        }
+      InitializeComponent();
+      ResetEventComboBox();
     }
+
+    private void HideEventComboBoxPlaceholder()
+    {
+      EventComboBoxPlaceholder.Visibility = Visibility.Hidden;
+    }
+
+    private void ResetEventComboBox()
+    {
+      var eventList = new List<PredefinedEvent>(
+          WPerfOptions.Instance.WperfList.PredefinedEvents
+      );
+      EventComboBox.ItemsSource = eventList;
+    }
+
+    private static List<PredefinedEvent> FilterEventList(string searchText)
+    {
+      var eventList = WPerfOptions.Instance.WperfList.PredefinedEvents;
+      var listSearcher = new ListSearcher<PredefinedEvent>(
+          eventList,
+          new SearchOptions<PredefinedEvent> { GetValue = x => x.AliasName }
+      );
+      return listSearcher.Search(searchText);
+    }
+
+    private void EventComboBox_PreviewKeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+    {
+      EventComboBox.IsDropDownOpen = true;
+      HideEventComboBoxPlaceholder();
+      if (!string.IsNullOrEmpty(EventComboBox.Text))
+      {
+        EventComboBox.ItemsSource = FilterEventList(EventComboBox.Text);
+      }
+      else
+      {
+        EventComboBoxPlaceholder.Visibility = Visibility.Visible;
+        ResetEventComboBox();
+      }
+    }
+
+    private void CloseButton_Click(object sender, RoutedEventArgs e)
+    {
+      Close();
+    }
+
+    private void EventComboBox_SelectionChanged(
+        object sender,
+        System.Windows.Controls.SelectionChangedEventArgs e
+    )
+    {
+      string selectedEvent = (EventComboBox.SelectedItem as PredefinedEvent)?.AliasName;
+      if (string.IsNullOrEmpty(selectedEvent))
+        return;
+
+      ManOutput.Children.Clear();
+
+      try
+      {
+        (WperfManOutput wperfManOutput, string stdErr) = wperfClient.GetManOutput(
+            selectedEvent
+        );
+
+        if (!string.IsNullOrEmpty(stdErr))
+        {
+          VS.MessageBox.ShowError(stdErr);
+          return;
+        }
+          ;
+
+        foreach (var manResult in wperfManOutput.ManualResults)
+        {
+          if (manResult.Result.ToLower() == "n/a")
+            continue;
+          ManOutput.Children.Add(
+              new TextBlock()
+              {
+                Text = manResult.FieldType,
+                FontSize = 16,
+                FontWeight = FontWeights.Bold
+              }
+          );
+          ManOutput.Children.Add(
+              new TextBlock()
+              {
+                Text = manResult.Result,
+                Margin = new Thickness(0, 5, 0, 10),
+                FontSize = 14,
+              }
+          );
+        }
+      }
+      catch (Exception ex)
+      {
+        VS.MessageBox.ShowError(ex.Message);
+      }
+    }
+  }
 }

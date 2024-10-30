@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -34,53 +34,53 @@ using Microsoft.Win32;
 
 namespace WindowsPerfGUI.Components
 {
-    /// <summary>
-    /// Interaction logic for FilePicker.xaml
-    /// </summary>
-    public partial class FilePicker : UserControl
+  /// <summary>
+  /// Interaction logic for FilePicker.xaml
+  /// </summary>
+  public partial class FilePicker : UserControl
+  {
+    public FilePicker()
     {
-        public FilePicker()
-        {
-            InitializeComponent();
-            FilePathTextBox.TextChanged += (sender, e) => _onChange?.Invoke(sender, e);
-        }
-
-        public string Label
-        {
-            get => LabelTextBlock.Content.ToString();
-            set => LabelTextBlock.Content = value;
-        }
-
-        private TextChangedEventHandler _onChange;
-        public TextChangedEventHandler OnChange
-        {
-            get => _onChange;
-            set => _onChange = value;
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() == true)
-                FilePathTextBox.Text = openFileDialog.FileName;
-        }
-
-        public void Validate()
-        {
-            if (!IsFileSelected())
-            {
-                throw new Exception("File not selected");
-            }
-        }
-
-        public string GetFilePath()
-        {
-            return FilePathTextBox.Text;
-        }
-
-        public bool IsFileSelected()
-        {
-            return FilePathTextBox.Text != "";
-        }
+      InitializeComponent();
+      FilePathTextBox.TextChanged += (sender, e) => _onChange?.Invoke(sender, e);
     }
+
+    public string Label
+    {
+      get => LabelTextBlock.Content.ToString();
+      set => LabelTextBlock.Content = value;
+    }
+
+    private TextChangedEventHandler _onChange;
+    public TextChangedEventHandler OnChange
+    {
+      get => _onChange;
+      set => _onChange = value;
+    }
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+      OpenFileDialog openFileDialog = new OpenFileDialog();
+      if (openFileDialog.ShowDialog() == true)
+        FilePathTextBox.Text = openFileDialog.FileName;
+    }
+
+    public void Validate()
+    {
+      if (!IsFileSelected())
+      {
+        throw new Exception("File not selected");
+      }
+    }
+
+    public string GetFilePath()
+    {
+      return FilePathTextBox.Text;
+    }
+
+    public bool IsFileSelected()
+    {
+      return FilePathTextBox.Text != "";
+    }
+  }
 }

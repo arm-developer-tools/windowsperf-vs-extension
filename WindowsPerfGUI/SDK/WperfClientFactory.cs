@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -32,21 +32,21 @@ using WindowsPerfGUI.Options;
 
 namespace WindowsPerfGUI.SDK
 {
-    internal class WperfClientFactory : WperfClient
+  internal class WperfClientFactory : WperfClient
+  {
+    public WperfClientFactory()
     {
-        public WperfClientFactory()
-        {
-            AssignPathAsync().FireAndForget();
-        }
-
-        private async Task AssignPathAsync()
-        {
-            WPerfOptions options = await WPerfOptions.GetLiveInstanceAsync();
-            Path = options.WperfPath;
-            InitProcess();
-            var outputPaneTextWriter =
-                await WindowsPerfGUIPackage.WperfOutputWindow.CreateOutputPaneTextWriterAsync();
-            OutputWindowTextWriter = outputPaneTextWriter.WriteLine;
-        }
+      AssignPathAsync().FireAndForget();
     }
+
+    private async Task AssignPathAsync()
+    {
+      WPerfOptions options = await WPerfOptions.GetLiveInstanceAsync();
+      Path = options.WperfPath;
+      InitProcess();
+      var outputPaneTextWriter =
+          await WindowsPerfGUIPackage.WperfOutputWindow.CreateOutputPaneTextWriterAsync();
+      OutputWindowTextWriter = outputPaneTextWriter.WriteLine;
+    }
+  }
 }

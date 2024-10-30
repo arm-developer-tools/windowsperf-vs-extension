@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -33,42 +33,42 @@ using System.Linq;
 
 namespace WindowsPerfGUI.Utils.ListSearcher
 {
-    public class ListSearcher<T>
-    {
-        private readonly List<T> _records;
-        private readonly SearchOptions<T> _options;
+  public class ListSearcher<T>
+  {
+    private readonly List<T> _records;
+    private readonly SearchOptions<T> _options;
 
 #nullable enable
-        public ListSearcher(IEnumerable<T> records, SearchOptions<T>? options = null)
-        {
-            _records = records.ToList();
-            _options = options ?? new SearchOptions<T>();
-        }
+    public ListSearcher(IEnumerable<T> records, SearchOptions<T>? options = null)
+    {
+      _records = records.ToList();
+      _options = options ?? new SearchOptions<T>();
+    }
 
 #nullable disable
 
-        public List<T> Search(string searchText)
-        {
-            var results = new List<T>();
-            string lowerCaseSearchText = searchText.ToLower();
-            foreach (var record in _records)
-            {
-                var recordValue =
-                    _options.GetValue != null
-                        ? _options.GetValue(record)
-                        : record?.ToString() ?? "";
-                if (recordValue.ToLower().Contains(lowerCaseSearchText))
-                    results.Add(record);
-            }
+    public List<T> Search(string searchText)
+    {
+      var results = new List<T>();
+      string lowerCaseSearchText = searchText.ToLower();
+      foreach (var record in _records)
+      {
+        var recordValue =
+            _options.GetValue != null
+                ? _options.GetValue(record)
+                : record?.ToString() ?? "";
+        if (recordValue.ToLower().Contains(lowerCaseSearchText))
+          results.Add(record);
+      }
 
-            return results;
-        }
+      return results;
     }
+  }
 }
 
 public class SearchOptions<T>
 {
 #nullable enable
-    public Func<T, string>? GetValue { get; set; }
+  public Func<T, string>? GetValue { get; set; }
 #nullable disable
 }

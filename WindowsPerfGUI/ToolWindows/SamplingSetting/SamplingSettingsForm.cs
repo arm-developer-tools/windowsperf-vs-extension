@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -34,127 +34,127 @@ using WindowsPerfGUI.Utils.CommandBuilder;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 {
-    public class SamplingEventConfiguration
-    {
-        private string samplingEvent;
+  public class SamplingEventConfiguration
+  {
+    private string samplingEvent;
 
-        public string SamplingEvent
-        {
-            get { return samplingEvent; }
-            set { samplingEvent = value; }
-        }
-        private string samplingFrequency;
+    public string SamplingEvent
+    {
+      get { return samplingEvent; }
+      set { samplingEvent = value; }
+    }
+    private string samplingFrequency;
 #nullable enable
-        public string? SamplingFrequency
-        {
-            get { return samplingFrequency; }
-            set { samplingFrequency = value; }
-        }
+    public string? SamplingFrequency
+    {
+      get { return samplingFrequency; }
+      set { samplingFrequency = value; }
+    }
 
 #nullable disable
-        public override string ToString()
-        {
-            return string.IsNullOrWhiteSpace(SamplingFrequency)
-                ? SamplingEvent
-                : $"{SamplingEvent}:{SamplingFrequency}";
-        }
-    }
-
-    public class SamplingSettingsForm : CommandSettingsForm
+    public override string ToString()
     {
-        private bool isEventSelectionEnabled;
-
-        public bool IsEventSelectionEnabled
-        {
-            get { return isEventSelectionEnabled; }
-            set
-            {
-                isEventSelectionEnabled = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool sampleDisplayLong;
-
-        public bool SampleDisplayLong
-        {
-            get { return sampleDisplayLong; }
-            set
-            {
-                sampleDisplayLong = value;
-                OnPropertyChanged();
-                CommandLinePreview = GenerateCommandLinePreview();
-            }
-        }
-
-        private bool isSPEEnabled;
-
-        public bool IsSPEEnabled
-        {
-            get { return isSPEEnabled; }
-            set
-            {
-                isSPEEnabled = value;
-                OnPropertyChanged();
-            }
-        }
-        private bool shouldDisassemble = true;
-
-        public bool ShouldDisassemble
-        {
-            get { return shouldDisassemble; }
-            set
-            {
-                shouldDisassemble = value;
-                OnPropertyChanged();
-                CommandLinePreview = GenerateCommandLinePreview();
-            }
-        }
-
-        private ObservableCollection<SamplingEventConfiguration> samplingEventList = new();
-
-        public ObservableCollection<SamplingEventConfiguration> SamplingEventList
-        {
-            get { return samplingEventList; }
-            set
-            {
-                samplingEventList = value;
-                OnPropertyChanged();
-                IsEventSelectionEnabled =
-                   value.Count
-                   < WperfDefaults.TotalGPCNum;
-                OnPropertyChanged("IsEventSelectionEnabled");
-                CommandLinePreview = GenerateCommandLinePreview();
-            }
-        }
-
-        internal override string GenerateCommandLinePreview() { return SamplingSettings.GenerateCommandLinePreview(); }
-
-        public SamplingSettingsForm()
-        {
-            // We deliberatly set the private version of `samplingEventList`
-            // to not trigger the OnPropertyChanged event and generateCommandLinePreview
-            // that depend on the init of SamplingSettings.samplingSettingsFrom
-
-            if (SamplingSettings.samplingSettingsFrom != null)
-            {
-                SamplingSettingsForm samplingSettingsForm = SamplingSettings.samplingSettingsFrom;
-                FilePath = samplingSettingsForm.FilePath;
-                SelectedEventFrequency = samplingSettingsForm.SelectedEventFrequency;
-                SelectedEvent = samplingSettingsForm.SelectedEvent;
-                Timeout = samplingSettingsForm.Timeout;
-                CPUCore = samplingSettingsForm.CPUCore;
-                ExtraArgs = samplingSettingsForm.ExtraArgs;
-                SamplingEventList = samplingSettingsForm.SamplingEventList;
-                RawEvents = samplingSettingsForm.RawEvents;
-                ForceLock = samplingSettingsForm.ForceLock;
-                IsSPEEnabled = samplingSettingsForm.IsSPEEnabled;
-                ShouldDisassemble = samplingSettingsForm.ShouldDisassemble;
-                SampleDisplayLong = samplingSettingsForm.SampleDisplayLong;
-            }
-            SamplingSettings.samplingSettingsFrom = this;
-            SamplingSettings.samplingSettingsFrom.SamplingEventList.CollectionChanged +=
-                CollectionUpdater("SamplingEventList");
-        }
+      return string.IsNullOrWhiteSpace(SamplingFrequency)
+          ? SamplingEvent
+          : $"{SamplingEvent}:{SamplingFrequency}";
     }
+  }
+
+  public class SamplingSettingsForm : CommandSettingsForm
+  {
+    private bool isEventSelectionEnabled;
+
+    public bool IsEventSelectionEnabled
+    {
+      get { return isEventSelectionEnabled; }
+      set
+      {
+        isEventSelectionEnabled = value;
+        OnPropertyChanged();
+      }
+    }
+
+    private bool sampleDisplayLong;
+
+    public bool SampleDisplayLong
+    {
+      get { return sampleDisplayLong; }
+      set
+      {
+        sampleDisplayLong = value;
+        OnPropertyChanged();
+        CommandLinePreview = GenerateCommandLinePreview();
+      }
+    }
+
+    private bool isSPEEnabled;
+
+    public bool IsSPEEnabled
+    {
+      get { return isSPEEnabled; }
+      set
+      {
+        isSPEEnabled = value;
+        OnPropertyChanged();
+      }
+    }
+    private bool shouldDisassemble = true;
+
+    public bool ShouldDisassemble
+    {
+      get { return shouldDisassemble; }
+      set
+      {
+        shouldDisassemble = value;
+        OnPropertyChanged();
+        CommandLinePreview = GenerateCommandLinePreview();
+      }
+    }
+
+    private ObservableCollection<SamplingEventConfiguration> samplingEventList = new();
+
+    public ObservableCollection<SamplingEventConfiguration> SamplingEventList
+    {
+      get { return samplingEventList; }
+      set
+      {
+        samplingEventList = value;
+        OnPropertyChanged();
+        IsEventSelectionEnabled =
+           value.Count
+           < WperfDefaults.TotalGPCNum;
+        OnPropertyChanged("IsEventSelectionEnabled");
+        CommandLinePreview = GenerateCommandLinePreview();
+      }
+    }
+
+    internal override string GenerateCommandLinePreview() { return SamplingSettings.GenerateCommandLinePreview(); }
+
+    public SamplingSettingsForm()
+    {
+      // We deliberatly set the private version of `samplingEventList`
+      // to not trigger the OnPropertyChanged event and generateCommandLinePreview
+      // that depend on the init of SamplingSettings.samplingSettingsFrom
+
+      if (SamplingSettings.samplingSettingsFrom != null)
+      {
+        SamplingSettingsForm samplingSettingsForm = SamplingSettings.samplingSettingsFrom;
+        FilePath = samplingSettingsForm.FilePath;
+        SelectedEventFrequency = samplingSettingsForm.SelectedEventFrequency;
+        SelectedEvent = samplingSettingsForm.SelectedEvent;
+        Timeout = samplingSettingsForm.Timeout;
+        CPUCore = samplingSettingsForm.CPUCore;
+        ExtraArgs = samplingSettingsForm.ExtraArgs;
+        SamplingEventList = samplingSettingsForm.SamplingEventList;
+        RawEvents = samplingSettingsForm.RawEvents;
+        ForceLock = samplingSettingsForm.ForceLock;
+        IsSPEEnabled = samplingSettingsForm.IsSPEEnabled;
+        ShouldDisassemble = samplingSettingsForm.ShouldDisassemble;
+        SampleDisplayLong = samplingSettingsForm.SampleDisplayLong;
+      }
+      SamplingSettings.samplingSettingsFrom = this;
+      SamplingSettings.samplingSettingsFrom.SamplingEventList.CollectionChanged +=
+          CollectionUpdater("SamplingEventList");
+    }
+  }
 }

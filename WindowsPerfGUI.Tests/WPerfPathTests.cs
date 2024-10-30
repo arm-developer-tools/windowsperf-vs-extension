@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -34,21 +34,21 @@ using NUnitLite;
 
 namespace WindowsPerfGUI.Options.Tests
 {
-    [TestFixture(), Apartment(ApartmentState.STA)]
-    public class WPerfPathTests
+  [TestFixture(), Apartment(ApartmentState.STA)]
+  public class WPerfPathTests
+  {
+    [Test()]
+    [Description("Tests if the TextBlockFactory method is returning a TextBlock")]
+    public void TextBlockFactoryTest()
     {
-        [Test()]
-        [Description("Tests if the TextBlockFactory method is returning a TextBlock")]
-        public void TextBlockFactoryTest()
-        {
-            TextBlock testTextBlock = WPerfPath.TextBlockFactory("Test text block", 0);
-            Assert.That(testTextBlock, Is.InstanceOf(typeof(TextBlock)));
-            Assert.That(testTextBlock, Is.Not.Null);
-        }
-
-        public static int Main(string[] args)
-        {
-            return new AutoRun().Execute(args);
-        }
+      TextBlock testTextBlock = WPerfPath.TextBlockFactory("Test text block", 0);
+      Assert.That(testTextBlock, Is.InstanceOf(typeof(TextBlock)));
+      Assert.That(testTextBlock, Is.Not.Null);
     }
+
+    public static int Main(string[] args)
+    {
+      return new AutoRun().Execute(args);
+    }
+  }
 }

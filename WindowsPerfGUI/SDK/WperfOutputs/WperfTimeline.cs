@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -33,17 +33,17 @@ using WindowsPerfGUI.SDK.WperfOutputs;
 
 namespace WindowsPerfGUI.ToolWindows.CountingSetting
 {
-    public partial class WperfTimeline
-    {
-        [JsonProperty("timeline", Required = Required.Always)]
-        public WperfCounting[] Timeline { get; set; }
-    }
+  public partial class WperfTimeline
+  {
+    [JsonProperty("timeline", Required = Required.Always)]
+    public WperfCounting[] Timeline { get; set; }
+  }
 
-    public partial class WperfTimeline
+  public partial class WperfTimeline
+  {
+    public static WperfTimeline FromJson(string json)
     {
-        public static WperfTimeline FromJson(string json)
-        {
-            return JsonConvert.DeserializeObject<WperfTimeline>(json, JsonSettings.Settings);
-        }
+      return JsonConvert.DeserializeObject<WperfTimeline>(json, JsonSettings.Settings);
     }
+  }
 }

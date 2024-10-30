@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -40,188 +40,188 @@ using WindowsPerfGUI.Utils;
 
 namespace WindowsPerfGUI.Options
 {
-    /// <summary>
-    /// Interaction logic for WPerfOptions.xaml
-    /// </summary>
-    public partial class WPerfPath : System.Windows.Controls.UserControl
+  /// <summary>
+  /// Interaction logic for WPerfOptions.xaml
+  /// </summary>
+  public partial class WPerfPath : System.Windows.Controls.UserControl
+  {
+    public WPerfPath()
     {
-        public WPerfPath()
-        {
-            InitializeComponent();
-        }
-
-        internal WPerfPathPage wPerfPathPage;
-
-        public void Initialize()
-        {
-            PathInput.Text = WPerfOptions.Instance.WperfPath;
-
-            if (WPerfOptions.Instance.UseDefaultWperfLocation)
-            {
-                WperfDefaultPathCheckbox.IsChecked = true;
-                PathInput.IsEnabled = false;
-                PathInput.Text = Path.Combine(WperfDefaults.DefaultWperfPath, "wperf.exe");
-                SelectDirectoryButton.IsEnabled = false;
-            }
-            if (!string.IsNullOrEmpty(WperfDefaults.DefaultWperfPath))
-            {
-                WperfDefaultPathCheckboxLabel.Text =
-                    $"WINDOWSPERF_PATH=\"{WperfDefaults.DefaultWperfPath}\"";
-                WperfDefaultPathCheckbox.Visibility = Visibility.Visible;
-            }
-            if (
-                WPerfOptions.Instance.IsWperfInitialized
-                && WPerfOptions.Instance.WperfCurrentVersion != null
-                && WPerfOptions.Instance.WperfList != null
-            )
-            {
-                SetWperfVersion(WPerfOptions.Instance.WperfCurrentVersion);
-                SetPredefinedEventsAndMetrics(WPerfOptions.Instance.WperfList);
-                WPerfVersionCheckIgnore.IsChecked = WPerfOptions.Instance.WperfVersionCheckIgnore;
-            }
-
-            WPerfOptions.Instance.Save();
-        }
-
-        private void ValidateButton_Click(object sender, RoutedEventArgs e)
-        {
-            bool shouldIgnoreWperfVersionCheck =
-                WPerfVersionCheckIgnore.IsChecked != null
-                || WPerfVersionCheckIgnore.IsChecked == true;
-            WPerfOptions.Instance.WperfPath = PathInput.Text;
-            WperfClientFactory wperf = new WperfClientFactory();
-            try
-            {
-                (WperfVersion versions, string error) = wperf.GetVersion();
-                (WperfTest wperfTest, _) = wperf.GetTest();
-                if (error != "")
-                    throw new Exception(error);
-                SetWperfVersion(versions, shouldForce: true);
-                string wperfVersion = versions.Components.FirstOrDefault().ComponentVersion;
-                if (
-                    shouldIgnoreWperfVersionCheck
-                    && wperfVersion != WperfDefaults.WPERF_MIN_VERSION
-                )
-                    VS.MessageBox.ShowWarning(
-                        string.Format(
-                            ErrorLanguagePack.MinimumVersionMismatch,
-                            WperfDefaults.WPERF_MIN_VERSION
-                        )
-                    );
-
-                (WperfList wperfList, string errorWperfList) = wperf.GetEventList();
-                if (errorWperfList != "")
-                    throw new Exception(errorWperfList);
-
-                SetPredefinedEventsAndMetrics(wperfList, shouldForce: true);
-                WPerfOptions.Instance.UpdateWperfOptions(versions, wperfList);
-                WperfDefaults.HasSPESupport = wperf.CheckIsSPESupported(versions, wperfTest);
-            }
-            catch (Exception ex)
-            {
-                VS.MessageBox.ShowError(ex.Message);
-            }
-        }
-
-        const int OFFSET_ROW = 2;
-
-        private void ClearMainStack()
-        {
-            MainStack.Children.RemoveRange(OFFSET_ROW + 2, MainStack.Children.Count - OFFSET_ROW);
-        }
-
-        private void SetWperfVersion(WperfVersion wperfVersion, bool shouldForce = false)
-        {
-            ClearMainStack();
-
-            foreach (
-                var item in wperfVersion.Components.Select((component, i) => new { i, component })
-            )
-            {
-                int offset = OFFSET_ROW + item.i;
-
-                string component = item.component.Component;
-                string componentVersion = item.component.ComponentVersion;
-                string gitVersion = item.component.GitVersion;
-                string featureString = item.component.FeatureString;
-
-                MainStack.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-
-                TextBlock componentLabel = TextBlockFactory(component, offset);
-                TextBlock componentVersionLabel = TextBlockFactory(
-                    $"{componentVersion} ({gitVersion}) -- {featureString}",
-                    offset,
-                    true
-                );
-
-                MainStack.Children.Add(componentLabel);
-                MainStack.Children.Add(componentVersionLabel);
-            }
-
-            if (!shouldForce)
-            {
-                return;
-            }
-        }
-
-        private void SetPredefinedEventsAndMetrics(WperfList wperfList, bool shouldForce = false)
-        {
-            PredefinedEventsDataGrid.ItemsSource = wperfList.PredefinedEvents;
-            PredefinedMetricsDataGrid.ItemsSource = wperfList.PredefinedMetrics;
-            if (!shouldForce)
-            {
-                return;
-            }
-        }
-
-        public static TextBlock TextBlockFactory(string text, int offset, bool isRight = false)
-        {
-            TextBlock textBlock = new TextBlock()
-            {
-                Text = text,
-                Margin = new Thickness(5, 5, 5, 5)
-            };
-            textBlock.SetValue(Grid.RowProperty, offset);
-            textBlock.SetValue(Grid.ColumnProperty, isRight ? 1 : 0);
-
-            return textBlock;
-        }
-
-        private void WPerfVersionCheckIgnoreChanged(object sender, RoutedEventArgs e)
-        {
-            bool shouldEnforceVersionCheck =
-                WPerfVersionCheckIgnore.IsChecked == null
-                || WPerfVersionCheckIgnore.IsChecked == false;
-            WPerfOptions.Instance.WperfVersionCheckIgnore = !shouldEnforceVersionCheck;
-            WPerfOptions.Instance.Save();
-        }
-
-        private void WperfDefaultPathCheckbox_Click(object sender, RoutedEventArgs e)
-        {
-            bool newValue = !WPerfOptions.Instance.UseDefaultWperfLocation;
-
-            PathInput.IsEnabled = !newValue;
-            SelectDirectoryButton.IsEnabled = !newValue;
-            if (newValue)
-            {
-                PathInput.Text = Path.Combine(WperfDefaults.DefaultWperfPath, "wperf.exe");
-            }
-
-            WPerfOptions.Instance.UseDefaultWperfLocation = newValue;
-        }
-
-        private void SelectDirectory_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            using var fbd = new FolderBrowserDialog()
-            {
-                SelectedPath = WPerfOptions.Instance.WperfPath,
-            };
-            DialogResult result = fbd.ShowDialog();
-
-            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-            {
-                PathInput.Text = fbd.SelectedPath;
-            }
-        }
+      InitializeComponent();
     }
+
+    internal WPerfPathPage wPerfPathPage;
+
+    public void Initialize()
+    {
+      PathInput.Text = WPerfOptions.Instance.WperfPath;
+
+      if (WPerfOptions.Instance.UseDefaultWperfLocation)
+      {
+        WperfDefaultPathCheckbox.IsChecked = true;
+        PathInput.IsEnabled = false;
+        PathInput.Text = Path.Combine(WperfDefaults.DefaultWperfPath, "wperf.exe");
+        SelectDirectoryButton.IsEnabled = false;
+      }
+      if (!string.IsNullOrEmpty(WperfDefaults.DefaultWperfPath))
+      {
+        WperfDefaultPathCheckboxLabel.Text =
+            $"WINDOWSPERF_PATH=\"{WperfDefaults.DefaultWperfPath}\"";
+        WperfDefaultPathCheckbox.Visibility = Visibility.Visible;
+      }
+      if (
+          WPerfOptions.Instance.IsWperfInitialized
+          && WPerfOptions.Instance.WperfCurrentVersion != null
+          && WPerfOptions.Instance.WperfList != null
+      )
+      {
+        SetWperfVersion(WPerfOptions.Instance.WperfCurrentVersion);
+        SetPredefinedEventsAndMetrics(WPerfOptions.Instance.WperfList);
+        WPerfVersionCheckIgnore.IsChecked = WPerfOptions.Instance.WperfVersionCheckIgnore;
+      }
+
+      WPerfOptions.Instance.Save();
+    }
+
+    private void ValidateButton_Click(object sender, RoutedEventArgs e)
+    {
+      bool shouldIgnoreWperfVersionCheck =
+          WPerfVersionCheckIgnore.IsChecked != null
+          || WPerfVersionCheckIgnore.IsChecked == true;
+      WPerfOptions.Instance.WperfPath = PathInput.Text;
+      WperfClientFactory wperf = new WperfClientFactory();
+      try
+      {
+        (WperfVersion versions, string error) = wperf.GetVersion();
+        (WperfTest wperfTest, _) = wperf.GetTest();
+        if (error != "")
+          throw new Exception(error);
+        SetWperfVersion(versions, shouldForce: true);
+        string wperfVersion = versions.Components.FirstOrDefault().ComponentVersion;
+        if (
+            shouldIgnoreWperfVersionCheck
+            && wperfVersion != WperfDefaults.WPERF_MIN_VERSION
+        )
+          VS.MessageBox.ShowWarning(
+              string.Format(
+                  ErrorLanguagePack.MinimumVersionMismatch,
+                  WperfDefaults.WPERF_MIN_VERSION
+              )
+          );
+
+        (WperfList wperfList, string errorWperfList) = wperf.GetEventList();
+        if (errorWperfList != "")
+          throw new Exception(errorWperfList);
+
+        SetPredefinedEventsAndMetrics(wperfList, shouldForce: true);
+        WPerfOptions.Instance.UpdateWperfOptions(versions, wperfList);
+        WperfDefaults.HasSPESupport = wperf.CheckIsSPESupported(versions, wperfTest);
+      }
+      catch (Exception ex)
+      {
+        VS.MessageBox.ShowError(ex.Message);
+      }
+    }
+
+    const int OFFSET_ROW = 2;
+
+    private void ClearMainStack()
+    {
+      MainStack.Children.RemoveRange(OFFSET_ROW + 2, MainStack.Children.Count - OFFSET_ROW);
+    }
+
+    private void SetWperfVersion(WperfVersion wperfVersion, bool shouldForce = false)
+    {
+      ClearMainStack();
+
+      foreach (
+          var item in wperfVersion.Components.Select((component, i) => new { i, component })
+      )
+      {
+        int offset = OFFSET_ROW + item.i;
+
+        string component = item.component.Component;
+        string componentVersion = item.component.ComponentVersion;
+        string gitVersion = item.component.GitVersion;
+        string featureString = item.component.FeatureString;
+
+        MainStack.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+
+        TextBlock componentLabel = TextBlockFactory(component, offset);
+        TextBlock componentVersionLabel = TextBlockFactory(
+            $"{componentVersion} ({gitVersion}) -- {featureString}",
+            offset,
+            true
+        );
+
+        MainStack.Children.Add(componentLabel);
+        MainStack.Children.Add(componentVersionLabel);
+      }
+
+      if (!shouldForce)
+      {
+        return;
+      }
+    }
+
+    private void SetPredefinedEventsAndMetrics(WperfList wperfList, bool shouldForce = false)
+    {
+      PredefinedEventsDataGrid.ItemsSource = wperfList.PredefinedEvents;
+      PredefinedMetricsDataGrid.ItemsSource = wperfList.PredefinedMetrics;
+      if (!shouldForce)
+      {
+        return;
+      }
+    }
+
+    public static TextBlock TextBlockFactory(string text, int offset, bool isRight = false)
+    {
+      TextBlock textBlock = new TextBlock()
+      {
+        Text = text,
+        Margin = new Thickness(5, 5, 5, 5)
+      };
+      textBlock.SetValue(Grid.RowProperty, offset);
+      textBlock.SetValue(Grid.ColumnProperty, isRight ? 1 : 0);
+
+      return textBlock;
+    }
+
+    private void WPerfVersionCheckIgnoreChanged(object sender, RoutedEventArgs e)
+    {
+      bool shouldEnforceVersionCheck =
+          WPerfVersionCheckIgnore.IsChecked == null
+          || WPerfVersionCheckIgnore.IsChecked == false;
+      WPerfOptions.Instance.WperfVersionCheckIgnore = !shouldEnforceVersionCheck;
+      WPerfOptions.Instance.Save();
+    }
+
+    private void WperfDefaultPathCheckbox_Click(object sender, RoutedEventArgs e)
+    {
+      bool newValue = !WPerfOptions.Instance.UseDefaultWperfLocation;
+
+      PathInput.IsEnabled = !newValue;
+      SelectDirectoryButton.IsEnabled = !newValue;
+      if (newValue)
+      {
+        PathInput.Text = Path.Combine(WperfDefaults.DefaultWperfPath, "wperf.exe");
+      }
+
+      WPerfOptions.Instance.UseDefaultWperfLocation = newValue;
+    }
+
+    private void SelectDirectory_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+      using var fbd = new FolderBrowserDialog()
+      {
+        SelectedPath = WPerfOptions.Instance.WperfPath,
+      };
+      DialogResult result = fbd.ShowDialog();
+
+      if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+      {
+        PathInput.Text = fbd.SelectedPath;
+      }
+    }
+  }
 }

@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -37,27 +37,27 @@ using Microsoft.VisualStudio.Imaging;
 
 namespace WindowsPerfGUI
 {
-    public class MyToolWindow : BaseToolWindow<MyToolWindow>
+  public class MyToolWindow : BaseToolWindow<MyToolWindow>
+  {
+    public override string GetTitle(int toolWindowId) => "My Tool Window";
+
+    public override Type PaneType => typeof(Pane);
+
+    public override Task<FrameworkElement> CreateAsync(
+        int toolWindowId,
+        CancellationToken cancellationToken
+    )
     {
-        public override string GetTitle(int toolWindowId) => "My Tool Window";
-
-        public override Type PaneType => typeof(Pane);
-
-        public override Task<FrameworkElement> CreateAsync(
-            int toolWindowId,
-            CancellationToken cancellationToken
-        )
-        {
-            return Task.FromResult<FrameworkElement>(new ToolWindows.MyToolWindowControl());
-        }
-
-        [Guid("e92265f4-3d92-4a09-a90b-75fe312ffed2")]
-        internal class Pane : ToolWindowPane
-        {
-            public Pane()
-            {
-                BitmapImageMoniker = KnownMonikers.ToolWindow;
-            }
-        }
+      return Task.FromResult<FrameworkElement>(new ToolWindows.MyToolWindowControl());
     }
+
+    [Guid("e92265f4-3d92-4a09-a90b-75fe312ffed2")]
+    internal class Pane : ToolWindowPane
+    {
+      public Pane()
+      {
+        BitmapImageMoniker = KnownMonikers.ToolWindow;
+      }
+    }
+  }
 }

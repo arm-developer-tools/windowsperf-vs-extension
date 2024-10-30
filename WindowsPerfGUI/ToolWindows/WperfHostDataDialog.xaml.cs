@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -37,33 +37,33 @@ using WindowsPerfGUI.SDK.WperfOutputs;
 
 namespace WindowsPerfGUI.ToolWindows
 {
-    public partial class WperfHostDataDialog : DialogWindow
+  public partial class WperfHostDataDialog : DialogWindow
+  {
+    public WperfHostDataDialog()
     {
-        public WperfHostDataDialog()
-        {
-            InitializeComponent();
-            if (!WPerfOptions.Instance.IsWperfInitialized)
-                return;
-            WperfClientFactory wperfClient = new();
-            try
-            {
-                (WperfTest results, string stdError) = wperfClient.GetTest();
-                if (stdError != "")
-                    throw new Exception(stdError);
+      InitializeComponent();
+      if (!WPerfOptions.Instance.IsWperfInitialized)
+        return;
+      WperfClientFactory wperfClient = new();
+      try
+      {
+        (WperfTest results, string stdError) = wperfClient.GetTest();
+        if (stdError != "")
+          throw new Exception(stdError);
 
-                WperfTestResults.ItemsSource = results.TestResults;
-            }
-            catch (Exception e)
-            {
-                VS.MessageBox.ShowError(ErrorLanguagePack.ErrorWindowsPerfCLI, e.Message);
-                Close();
-                return;
-            }
-        }
-
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
+        WperfTestResults.ItemsSource = results.TestResults;
+      }
+      catch (Exception e)
+      {
+        VS.MessageBox.ShowError(ErrorLanguagePack.ErrorWindowsPerfCLI, e.Message);
+        Close();
+        return;
+      }
     }
+
+    private void CloseButton_Click(object sender, RoutedEventArgs e)
+    {
+      Close();
+    }
+  }
 }

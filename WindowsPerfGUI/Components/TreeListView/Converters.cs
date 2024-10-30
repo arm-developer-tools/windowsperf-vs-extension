@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -34,42 +34,42 @@ using System.Windows.Data;
 
 namespace WindowsPerfGUI.Components.TreeListView
 {
-    /// <summary>
-    /// Convert Level to left margin
-    /// </summary>
-    internal class LevelToIndentConverter : IValueConverter
+  /// <summary>
+  /// Convert Level to left margin
+  /// </summary>
+  internal class LevelToIndentConverter : IValueConverter
+  {
+    private const double INDENT_SIZE = 19.0;
+
+    public object Convert(object o, Type type, object parameter, CultureInfo culture)
     {
-        private const double INDENT_SIZE = 19.0;
+      if (o != null)
+      {
+        return new Thickness((int)o * INDENT_SIZE, 0, 0, 0);
+      }
 
-        public object Convert(object o, Type type, object parameter, CultureInfo culture)
-        {
-            if (o != null)
-            {
-                return new Thickness((int)o * INDENT_SIZE, 0, 0, 0);
-            }
-
-            return new Thickness(0);
-        }
-
-        public object ConvertBack(object o, Type type, object parameter, CultureInfo culture)
-        {
-            throw new NotSupportedException();
-        }
+      return new Thickness(0);
     }
 
-    internal class CanExpandConverter : IValueConverter
+    public object ConvertBack(object o, Type type, object parameter, CultureInfo culture)
     {
-        public object Convert(object o, Type type, object parameter, CultureInfo culture)
-        {
-            if ((bool)o)
-                return Visibility.Visible;
-            else
-                return Visibility.Hidden;
-        }
-
-        public object ConvertBack(object o, Type type, object parameter, CultureInfo culture)
-        {
-            throw new NotSupportedException();
-        }
+      throw new NotSupportedException();
     }
+  }
+
+  internal class CanExpandConverter : IValueConverter
+  {
+    public object Convert(object o, Type type, object parameter, CultureInfo culture)
+    {
+      if ((bool)o)
+        return Visibility.Visible;
+      else
+        return Visibility.Hidden;
+    }
+
+    public object ConvertBack(object o, Type type, object parameter, CultureInfo culture)
+    {
+      throw new NotSupportedException();
+    }
+  }
 }

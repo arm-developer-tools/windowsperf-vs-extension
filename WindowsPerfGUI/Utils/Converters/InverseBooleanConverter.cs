@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -33,29 +33,29 @@ using System.Windows.Data;
 
 namespace WindowsPerfGUI.Utils.Converters
 {
-    public class InverseBooleanConverter : IValueConverter
+  public class InverseBooleanConverter : IValueConverter
+  {
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is bool boolValue)
-            {
-                return !boolValue;
-            }
-            throw new ArgumentException("Value must be a boolean.");
-        }
-
-        public object ConvertBack(
-            object value,
-            Type targetType,
-            object parameter,
-            CultureInfo culture
-        )
-        {
-            if (value is bool boolValue)
-            {
-                return !boolValue;
-            }
-            throw new ArgumentException("Value must be a boolean.");
-        }
+      if (value is bool boolValue)
+      {
+        return !boolValue;
+      }
+      throw new ArgumentException("Value must be a boolean.");
     }
+
+    public object ConvertBack(
+        object value,
+        Type targetType,
+        object parameter,
+        CultureInfo culture
+    )
+    {
+      if (value is bool boolValue)
+      {
+        return !boolValue;
+      }
+      throw new ArgumentException("Value must be a boolean.");
+    }
+  }
 }

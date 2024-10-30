@@ -1,6 +1,6 @@
 // BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -406,12 +406,14 @@ namespace WindowsPerfGUI.SDK
         public EventHandler<(
             WperfSampling serializedOutput,
             string stdError
-        )> OnSamplingFinished { get; set; }
+        )> OnSamplingFinished
+        { get; set; }
 
         public EventHandler<(
             WperfSPE serializedOutput,
             string stdError
-        )> OnSPESamplingFinished { get; set; }
+        )> OnSPESamplingFinished
+        { get; set; }
 
         /// <summary>
         /// This public event is raised when the counting process is finished. The standard
@@ -421,7 +423,8 @@ namespace WindowsPerfGUI.SDK
         public EventHandler<(
             List<CountingEvent> countingEvents,
             string stdError
-        )> OnCountingFinished { get; set; }
+        )> OnCountingFinished
+        { get; set; }
 
         /// <summary>
         /// This public method greacefully stops the sampling command and returns the output.

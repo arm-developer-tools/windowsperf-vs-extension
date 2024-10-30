@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -33,30 +33,30 @@ using System.Windows.Data;
 
 namespace WindowsPerfGUI.Utils.Converters
 {
-    public class NegativeIntToDisabledConverter : IValueConverter
+  public class NegativeIntToDisabledConverter : IValueConverter
+  {
+    #region Implementation of IValueConverter
+
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        #region Implementation of IValueConverter
+      if (value is int intValue)
+      {
+        return intValue >= 0;
+      }
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is int intValue)
-            {
-                return intValue >= 0;
-            }
-
-            return false; // Default to disabled if the value is not an integer
-        }
-
-        public object ConvertBack(
-            object value,
-            Type targetType,
-            object parameter,
-            CultureInfo culture
-        )
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
+      return false; // Default to disabled if the value is not an integer
     }
+
+    public object ConvertBack(
+        object value,
+        Type targetType,
+        object parameter,
+        CultureInfo culture
+    )
+    {
+      throw new NotImplementedException();
+    }
+
+    #endregion
+  }
 }

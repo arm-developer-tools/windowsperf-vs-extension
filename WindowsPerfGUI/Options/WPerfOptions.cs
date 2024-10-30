@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -37,76 +37,76 @@ using WindowsPerfGUI.Utils;
 
 namespace WindowsPerfGUI.Options
 {
-    internal partial class OptionsProvider
+  internal partial class OptionsProvider
+  {
+    [ComVisible(true)]
+    public class WPerfPathOptions : BaseOptionPage<WPerfOptions> { }
+  }
+
+  public class WPerfOptions : BaseOptionModel<WPerfOptions>
+  {
+    [Category("Windows Perf")]
+    [DisplayName("WindowsPerf path")]
+    [Description("The path for the wperf.exe file")]
+    [DefaultValue(true)]
+    public string WperfPath { get; set; } =
+        !string.IsNullOrEmpty(WperfDefaults.DefaultWperfPath)
+            ? Path.Combine(WperfDefaults.DefaultWperfPath, "wperf.exe")
+            : "wperf.exe";
+    public bool WperfVersionCheckIgnore { get; set; } = false;
+    public bool IsWperfInitialized { get; set; } = false;
+    public bool HasSPESupport { get; set; } = false;
+    public bool UseDefaultSearchDirectory { get; set; } = true;
+    public bool UseDefaultWperfLocation { get; set; } =
+        !string.IsNullOrEmpty(WperfDefaults.DefaultWperfPath);
+    public string WPAPluginSearchDirectory { get; set; }
+    public WperfVersion WperfCurrentVersion { get; set; }
+    public WperfList WperfList { get; set; }
+
+    public void UpdateWperfVersion(WperfVersion wperfVersion)
     {
-        [ComVisible(true)]
-        public class WPerfPathOptions : BaseOptionPage<WPerfOptions> { }
+      IsWperfInitialized = true;
+      WperfCurrentVersion = wperfVersion;
     }
 
-    public class WPerfOptions : BaseOptionModel<WPerfOptions>
+    public void UpdateWperfOptions(WperfVersion wperfVersion, WperfList wperfList)
     {
-        [Category("Windows Perf")]
-        [DisplayName("WindowsPerf path")]
-        [Description("The path for the wperf.exe file")]
-        [DefaultValue(true)]
-        public string WperfPath { get; set; } =
-            !string.IsNullOrEmpty(WperfDefaults.DefaultWperfPath)
-                ? Path.Combine(WperfDefaults.DefaultWperfPath, "wperf.exe")
-                : "wperf.exe";
-        public bool WperfVersionCheckIgnore { get; set; } = false;
-        public bool IsWperfInitialized { get; set; } = false;
-        public bool HasSPESupport { get; set; } = false;
-        public bool UseDefaultSearchDirectory { get; set; } = true;
-        public bool UseDefaultWperfLocation { get; set; } =
-            !string.IsNullOrEmpty(WperfDefaults.DefaultWperfPath);
-        public string WPAPluginSearchDirectory { get; set; }
-        public WperfVersion WperfCurrentVersion { get; set; }
-        public WperfList WperfList { get; set; }
+      UpdateWperfVersion(wperfVersion);
+      if (wperfList != null)
+      {
+        WperfList = wperfList;
+      }
+      Save();
+    }
 
-        public void UpdateWperfVersion(WperfVersion wperfVersion)
-        {
-            IsWperfInitialized = true;
-            WperfCurrentVersion = wperfVersion;
-        }
+    public void UpdateWperfOptions(WperfVersion wperfVersion, bool hasSPESupport)
+    {
+      UpdateWperfVersion(wperfVersion);
 
-        public void UpdateWperfOptions(WperfVersion wperfVersion, WperfList wperfList)
-        {
-            UpdateWperfVersion(wperfVersion);
-            if (wperfList != null)
-            {
-                WperfList = wperfList;
-            }
-            Save();
-        }
-
-        public void UpdateWperfOptions(WperfVersion wperfVersion, bool hasSPESupport)
-        {
-            UpdateWperfVersion(wperfVersion);
-
-            HasSPESupport = hasSPESupport;
-            WperfDefaults.HasSPESupport = hasSPESupport;
-            Save();
-        }
+      HasSPESupport = hasSPESupport;
+      WperfDefaults.HasSPESupport = hasSPESupport;
+      Save();
+    }
 
 #nullable enable
-        public void UpdateWperfOptions(
-            WperfVersion wperfVersion,
-            WperfList wperfList,
-            bool? hasSPESupport
-        )
-        {
-            UpdateWperfVersion(wperfVersion);
+    public void UpdateWperfOptions(
+        WperfVersion wperfVersion,
+        WperfList wperfList,
+        bool? hasSPESupport
+    )
+    {
+      UpdateWperfVersion(wperfVersion);
 
-            WperfList = wperfList;
+      WperfList = wperfList;
 
-            if (hasSPESupport != null)
-                HasSPESupport = (bool)hasSPESupport;
+      if (hasSPESupport != null)
+        HasSPESupport = (bool)hasSPESupport;
 
-            if (wperfList != null && hasSPESupport != null)
-                IsWperfInitialized = true;
+      if (wperfList != null && hasSPESupport != null)
+        IsWperfInitialized = true;
 
-            Save();
-        }
-#nullable disable
+      Save();
     }
+#nullable disable
+  }
 }

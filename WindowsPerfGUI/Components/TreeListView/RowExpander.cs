@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -33,14 +33,14 @@ using System.Windows.Controls;
 
 namespace WindowsPerfGUI.Components.TreeListView
 {
-    public class RowExpander : Control
+  public class RowExpander : Control
+  {
+    static RowExpander()
     {
-        static RowExpander()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(
-                typeof(RowExpander),
-                new FrameworkPropertyMetadata(typeof(RowExpander))
-            );
-        }
+      DefaultStyleKeyProperty.OverrideMetadata(
+          typeof(RowExpander),
+          new FrameworkPropertyMetadata(typeof(RowExpander))
+      );
     }
+  }
 }

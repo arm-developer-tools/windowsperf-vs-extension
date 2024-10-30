@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -30,20 +30,20 @@
 
 namespace WindowsPerfGUI.SDK.WperfOutputs
 {
-    using Newtonsoft.Json;
+  using Newtonsoft.Json;
 
-    public partial class WperfSPE
-    {
-        [JsonProperty("sampling")]
-        public WperfSampling Sampling { get; set; }
+  public partial class WperfSPE
+  {
+    [JsonProperty("sampling")]
+    public WperfSampling Sampling { get; set; }
 
-        [JsonProperty("counting")]
-        public WperfCounting Counting { get; set; }
-    }
-    public partial class WperfSPE
-    {
-        public static WperfSPE FromJson(string json) =>
-            JsonConvert.DeserializeObject<WperfSPE>(json, JsonSettings.Settings);
-    }
+    [JsonProperty("counting")]
+    public WperfCounting Counting { get; set; }
+  }
+  public partial class WperfSPE
+  {
+    public static WperfSPE FromJson(string json) =>
+        JsonConvert.DeserializeObject<WperfSPE>(json, JsonSettings.Settings);
+  }
 
 }

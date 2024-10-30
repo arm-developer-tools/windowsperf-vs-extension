@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -32,59 +32,59 @@ using System.Collections.Generic;
 
 namespace WindowsPerfGUI.Utils.SDK
 {
-    public class OutputHandler
+  public class OutputHandler
+  {
+    /// <summary>
+    /// OutputHandler is a class that provides a simple way handle `DataReceivedEventHandler` and plug to the `StdOutput` / `StdError` of process.
+    ///     <example>
+    ///         <code>
+    ///       var StdOutput = new OutputHandler();
+    ///       var StdError = new OutputHandler();
+    ///       var process = new Process();
+    ///       {
+    ///         StartInfo = {
+    ///           FileName = "ping.exe",
+    ///           RedirectStandardOutput = true,
+    ///           RedirectStandardError = true,
+    ///           RedirectStandardInput = true,
+    ///           Arguments = "-t 127.0.0.1"
+    ///         }
+    ///       }
+    ///       process.OutputDataReceived += new DataReceivedEventHandler(StdOutput.OutputhHandler);
+    ///       process.ErrorDataReceived += new DataReceivedEventHandler(StdError.OutputhHandler);
+    ///       process.Start();
+    ///       
+    ///       // if you want to react to all the incoming data
+    ///       StdOutput.OutputCb = (string data) => {
+    ///         Debug.WriteLine(data);
+    ///       };
+    ///       StdError.OutputCb = (string data) => {
+    ///         Debug.WriteLine(data);
+    ///       };
+    ///         </code>
+    ///     </example>
+    /// </summary>
+    public OutputHandler() { }
+    /// <summary>
+    /// A `List<string>` that contains the output of the process.
+    /// </summary>
+    public List<string> Output = new();
+    /// <summary>
+    /// This is callback function that is executed whenever the process outputs something.
+    /// </summary>
+    public Action<string> OutputCb { get; set; }
+
+    public void ClearOutput()
     {
-        /// <summary>
-        /// OutputHandler is a class that provides a simple way handle `DataReceivedEventHandler` and plug to the `StdOutput` / `StdError` of process.
-        ///     <example>
-        ///         <code>
-        ///       var StdOutput = new OutputHandler();
-        ///       var StdError = new OutputHandler();
-        ///       var process = new Process();
-        ///       {
-        ///         StartInfo = {
-        ///           FileName = "ping.exe",
-        ///           RedirectStandardOutput = true,
-        ///           RedirectStandardError = true,
-        ///           RedirectStandardInput = true,
-        ///           Arguments = "-t 127.0.0.1"
-        ///         }
-        ///       }
-        ///       process.OutputDataReceived += new DataReceivedEventHandler(StdOutput.OutputhHandler);
-        ///       process.ErrorDataReceived += new DataReceivedEventHandler(StdError.OutputhHandler);
-        ///       process.Start();
-        ///       
-        ///       // if you want to react to all the incoming data
-        ///       StdOutput.OutputCb = (string data) => {
-        ///         Debug.WriteLine(data);
-        ///       };
-        ///       StdError.OutputCb = (string data) => {
-        ///         Debug.WriteLine(data);
-        ///       };
-        ///         </code>
-        ///     </example>
-        /// </summary>
-        public OutputHandler() { }
-        /// <summary>
-        /// A `List<string>` that contains the output of the process.
-        /// </summary>
-        public List<string> Output = new();
-        /// <summary>
-        /// This is callback function that is executed whenever the process outputs something.
-        /// </summary>
-        public Action<string> OutputCb { get; set; }
-
-        public void ClearOutput()
-        {
-            Output.Clear();
-        }
-
-        public void OutputhHandler(object sendingProcess, DataReceivedEventArgs outLine)
-        {
-            // Collect the Std output of the process and store it in a list
-            Output.Add(outLine.Data);
-            // Execute the callback function if it is set
-            OutputCb?.Invoke(outLine.Data);
-        }
+      Output.Clear();
     }
+
+    public void OutputhHandler(object sendingProcess, DataReceivedEventArgs outLine)
+    {
+      // Collect the Std output of the process and store it in a list
+      Output.Add(outLine.Data);
+      // Execute the callback function if it is set
+      OutputCb?.Invoke(outLine.Data);
+    }
+  }
 }

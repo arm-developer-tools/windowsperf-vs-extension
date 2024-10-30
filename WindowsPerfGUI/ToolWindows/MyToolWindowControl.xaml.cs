@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -34,16 +34,16 @@ using WindowsPerfGUI.Options;
 
 namespace WindowsPerfGUI.ToolWindows
 {
-    public partial class MyToolWindowControl : UserControl
+  public partial class MyToolWindowControl : UserControl
+  {
+    public MyToolWindowControl()
     {
-        public MyToolWindowControl()
-        {
-            InitializeComponent();
-        }
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            bool speSupport = WPerfOptions.Instance.HasSPESupport;
-            Debug.WriteLine(speSupport);
-        }
+      InitializeComponent();
     }
+    private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+      bool speSupport = WPerfOptions.Instance.HasSPESupport;
+      Debug.WriteLine(speSupport);
+    }
+  }
 }

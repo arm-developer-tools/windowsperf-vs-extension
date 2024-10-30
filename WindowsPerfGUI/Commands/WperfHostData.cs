@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -34,29 +34,29 @@ using WindowsPerfGUI.ToolWindows;
 
 namespace WindowsPerfGUI.Commands
 {
-    [Command(PackageIds.WperfHostData)]
-    internal sealed class WperfHostData : BaseCommand<WperfHostData>
+  [Command(PackageIds.WperfHostData)]
+  internal sealed class WperfHostData : BaseCommand<WperfHostData>
+  {
+    protected override void BeforeQueryStatus(EventArgs e)
     {
-        protected override void BeforeQueryStatus(EventArgs e)
-        {
-            Command.Text = WperfHostDataLanguagePack.WindowTitle;
-            base.BeforeQueryStatus(e);
-        }
-
-        protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
-        {
-            if (!WPerfOptions.Instance.IsWperfInitialized)
-            {
-                await VS.MessageBox.ShowErrorAsync(
-                    ErrorLanguagePack.NotInititiatedWperfErrorLine1,
-                    ErrorLanguagePack.NotInititiatedWperfErrorLine2
-                );
-                return;
-            }
-
-            WperfHostDataDialog wperfHostDataDialog =
-                new() { Title = WperfHostDataLanguagePack.WindowTitle };
-            wperfHostDataDialog.ShowDialog();
-        }
+      Command.Text = WperfHostDataLanguagePack.WindowTitle;
+      base.BeforeQueryStatus(e);
     }
+
+    protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
+    {
+      if (!WPerfOptions.Instance.IsWperfInitialized)
+      {
+        await VS.MessageBox.ShowErrorAsync(
+            ErrorLanguagePack.NotInititiatedWperfErrorLine1,
+            ErrorLanguagePack.NotInititiatedWperfErrorLine2
+        );
+        return;
+      }
+
+      WperfHostDataDialog wperfHostDataDialog =
+          new() { Title = WperfHostDataLanguagePack.WindowTitle };
+      wperfHostDataDialog.ShowDialog();
+    }
+  }
 }

@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -33,74 +33,74 @@ using System.Windows.Controls;
 
 namespace WindowsPerfGUI.Components
 {
-    /// <summary>
-    /// Custom TextBox control is a styled TextBox that inherets from the native `System.Windows.Controls.TextBox` class.
-    /// </summary>
-    /// <example>
-    ///     Include the Components namespace in your XAML file
-    ///     <code>
-    ///         xmlns:Components="clr-namespace:WindowsPerfGUI.Components"
-    ///     </code>
-    ///     Then use the control in your page
-    ///     <code>
-    ///         <Components:CustomTextBoxControl x:Name="ExtraArgs"
-    ///                                          Padding="2"
-    ///                                          Placeholder="extra args..."
-    ///                                          Text="{Binding ExtraArgs, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-    ///     </code>
-    /// </example>
-    public class CustomTextBoxControl : TextBox
+  /// <summary>
+  /// Custom TextBox control is a styled TextBox that inherets from the native `System.Windows.Controls.TextBox` class.
+  /// </summary>
+  /// <example>
+  ///     Include the Components namespace in your XAML file
+  ///     <code>
+  ///         xmlns:Components="clr-namespace:WindowsPerfGUI.Components"
+  ///     </code>
+  ///     Then use the control in your page
+  ///     <code>
+  ///         <Components:CustomTextBoxControl x:Name="ExtraArgs"
+  ///                                          Padding="2"
+  ///                                          Placeholder="extra args..."
+  ///                                          Text="{Binding ExtraArgs, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+  ///     </code>
+  /// </example>
+  public class CustomTextBoxControl : TextBox
+  {
+    public static readonly DependencyProperty PlaceholderProperty = DependencyProperty.Register(
+        nameof(Placeholder),
+        typeof(string),
+        typeof(CustomTextBoxControl),
+        new PropertyMetadata(string.Empty)
+    );
+
+    public string Placeholder
     {
-        public static readonly DependencyProperty PlaceholderProperty = DependencyProperty.Register(
-            nameof(Placeholder),
-            typeof(string),
-            typeof(CustomTextBoxControl),
-            new PropertyMetadata(string.Empty)
-        );
-
-        public string Placeholder
-        {
-            get { return (string)GetValue(PlaceholderProperty); }
-            set { SetValue(PlaceholderProperty, value); }
-        }
-
-        public static readonly DependencyProperty IsEmptyProperty = DependencyProperty.Register(
-            nameof(IsEmpty),
-            typeof(bool),
-            typeof(CustomTextBoxControl),
-            new PropertyMetadata(false)
-        );
-
-        public bool IsEmpty
-        {
-            get { return (bool)GetValue(IsEmptyProperty); }
-            private set { SetValue(IsEmptyProperty, value); }
-        }
-
-        static CustomTextBoxControl()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(
-                typeof(CustomTextBoxControl),
-                new FrameworkPropertyMetadata(typeof(CustomTextBoxControl))
-            );
-        }
-
-        protected override void OnInitialized(EventArgs e)
-        {
-            UpdateIsEmpty();
-            this.TextWrapping = TextWrapping.Wrap;
-            base.OnInitialized(e);
-        }
-
-        protected override void OnTextChanged(TextChangedEventArgs e)
-        {
-            UpdateIsEmpty();
-            base.OnTextChanged(e);
-        }
-
-        private void UpdateIsEmpty()
-        {
-            IsEmpty = string.IsNullOrEmpty(Text);
-        }
+      get { return (string)GetValue(PlaceholderProperty); }
+      set { SetValue(PlaceholderProperty, value); }
     }
+
+    public static readonly DependencyProperty IsEmptyProperty = DependencyProperty.Register(
+        nameof(IsEmpty),
+        typeof(bool),
+        typeof(CustomTextBoxControl),
+        new PropertyMetadata(false)
+    );
+
+    public bool IsEmpty
+    {
+      get { return (bool)GetValue(IsEmptyProperty); }
+      private set { SetValue(IsEmptyProperty, value); }
+    }
+
+    static CustomTextBoxControl()
+    {
+      DefaultStyleKeyProperty.OverrideMetadata(
+          typeof(CustomTextBoxControl),
+          new FrameworkPropertyMetadata(typeof(CustomTextBoxControl))
+      );
+    }
+
+    protected override void OnInitialized(EventArgs e)
+    {
+      UpdateIsEmpty();
+      this.TextWrapping = TextWrapping.Wrap;
+      base.OnInitialized(e);
+    }
+
+    protected override void OnTextChanged(TextChangedEventArgs e)
+    {
+      UpdateIsEmpty();
+      base.OnTextChanged(e);
+    }
+
+    private void UpdateIsEmpty()
+    {
+      IsEmpty = string.IsNullOrEmpty(Text);
+    }
+  }
 }

@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -35,54 +35,54 @@ using WindowsPerfGUI.Utils;
 
 namespace WindowsPerfGUI.Commands
 {
-    [Command(PackageIds.CountingSettings)]
-    internal sealed class CountingSettingsCommand : BaseCommand<CountingSettingsCommand>
+  [Command(PackageIds.CountingSettings)]
+  internal sealed class CountingSettingsCommand : BaseCommand<CountingSettingsCommand>
+  {
+    protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
     {
-        protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
+      if (!WPerfOptions.Instance.IsWperfInitialized)
+      {
+        await VS.MessageBox.ShowErrorAsync(
+            ErrorLanguagePack.NotInititiatedWperfErrorLine1,
+            ErrorLanguagePack.NotInititiatedWperfErrorLine2
+        );
+        return;
+      }
+      string windowTitle = CountingSettingsLanguagePack.WindowTitle;
+
+      if (
+          WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion
+          != WperfDefaults.WPERF_MIN_VERSION
+      )
+      {
+        if (WPerfOptions.Instance.WperfVersionCheckIgnore != true)
         {
-            if (!WPerfOptions.Instance.IsWperfInitialized)
-            {
-                await VS.MessageBox.ShowErrorAsync(
-                    ErrorLanguagePack.NotInititiatedWperfErrorLine1,
-                    ErrorLanguagePack.NotInititiatedWperfErrorLine2
-                );
-                return;
-            }
-            string windowTitle = CountingSettingsLanguagePack.WindowTitle;
-
-            if (
-                WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion
-                != WperfDefaults.WPERF_MIN_VERSION
-            )
-            {
-                if (WPerfOptions.Instance.WperfVersionCheckIgnore != true)
-                {
-                    await VS.MessageBox.ShowErrorAsync(
-                        string.Format(
-                            ErrorLanguagePack.MinimumVersionMismatch,
-                            WperfDefaults.WPERF_MIN_VERSION
-                        ),
-                        ErrorLanguagePack.MinimumVersionMismatchLine2
-                    );
-                    return;
-                }
-                var messageBoxResult = await VS.MessageBox.ShowWarningAsync(
-                    string.Format(
-                        ErrorLanguagePack.MinimumVersionMismatch,
-                        WperfDefaults.WPERF_MIN_VERSION
-                    )
-                );
-                if (
-                    messageBoxResult == Microsoft.VisualStudio.VSConstants.MessageBoxResult.IDCANCEL
-                )
-                {
-                    return;
-                }
-                windowTitle += $" - (UNSTABLE)";
-            }
-
-            CountingSettingDialog countingSettingsDialog = new() { Title = windowTitle };
-            countingSettingsDialog.ShowDialog();
+          await VS.MessageBox.ShowErrorAsync(
+              string.Format(
+                  ErrorLanguagePack.MinimumVersionMismatch,
+                  WperfDefaults.WPERF_MIN_VERSION
+              ),
+              ErrorLanguagePack.MinimumVersionMismatchLine2
+          );
+          return;
         }
+        var messageBoxResult = await VS.MessageBox.ShowWarningAsync(
+            string.Format(
+                ErrorLanguagePack.MinimumVersionMismatch,
+                WperfDefaults.WPERF_MIN_VERSION
+            )
+        );
+        if (
+            messageBoxResult == Microsoft.VisualStudio.VSConstants.MessageBoxResult.IDCANCEL
+        )
+        {
+          return;
+        }
+        windowTitle += $" - (UNSTABLE)";
+      }
+
+      CountingSettingDialog countingSettingsDialog = new() { Title = windowTitle };
+      countingSettingsDialog.ShowDialog();
     }
+  }
 }

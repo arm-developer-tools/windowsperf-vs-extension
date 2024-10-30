@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -33,13 +33,13 @@ using System.Runtime.CompilerServices;
 
 namespace WindowsPerfGUI.Utils
 {
-    public class NotifyPropertyChangedImplementor : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
+  public class NotifyPropertyChangedImplementor : INotifyPropertyChanged
+  {
+    public event PropertyChangedEventHandler PropertyChanged;
 
-        public void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+    public void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+  }
 }

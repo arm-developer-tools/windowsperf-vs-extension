@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -35,37 +35,37 @@ using System.ComponentModel;
 
 namespace WindowsPerfGUI.Components.TreeListView
 {
-    public class ObservableCollectionTreeList<T> : ObservableCollection<T>
+  public class ObservableCollectionTreeList<T> : ObservableCollection<T>
+  {
+    public void RemoveRange(int index, int count)
     {
-        public void RemoveRange(int index, int count)
-        {
-            this.CheckReentrancy();
-            var items = this.Items as List<T>;
-            items?.RemoveRange(index, count);
+      this.CheckReentrancy();
+      var items = this.Items as List<T>;
+      items?.RemoveRange(index, count);
 
-            OnReset();
-        }
-
-        public void InsertRange(int index, IEnumerable<T> collection)
-        {
-            this.CheckReentrancy();
-            var items = this.Items as List<T>;
-            items?.InsertRange(index, collection);
-            OnReset();
-        }
-
-        private void OnReset()
-        {
-            OnPropertyChanged("Count");
-            OnPropertyChanged("Item[]");
-            OnCollectionChanged(
-                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)
-            );
-        }
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-        }
+      OnReset();
     }
+
+    public void InsertRange(int index, IEnumerable<T> collection)
+    {
+      this.CheckReentrancy();
+      var items = this.Items as List<T>;
+      items?.InsertRange(index, collection);
+      OnReset();
+    }
+
+    private void OnReset()
+    {
+      OnPropertyChanged("Count");
+      OnPropertyChanged("Item[]");
+      OnCollectionChanged(
+          new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)
+      );
+    }
+
+    private void OnPropertyChanged(string propertyName)
+    {
+      OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+    }
+  }
 }

@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -33,48 +33,48 @@ using WindowsPerfGUI.Resources.Locals;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 {
-    public class CpuCoreElement
-    {
-        public int coreNumber;
-        public IntPtr coreMask;
+  public class CpuCoreElement
+  {
+    public int coreNumber;
+    public IntPtr coreMask;
 
-        public override string ToString()
-        {
-            return $"{SamplingSettingsLanguagePack.CpuCoreNumber} {coreNumber}";
-        }
+    public override string ToString()
+    {
+      return $"{SamplingSettingsLanguagePack.CpuCoreNumber} {coreNumber}";
+    }
+  }
+
+  public static class CpuCores
+  {
+    public static int numberOfAvailableCores = 0;
+
+    public static List<CpuCoreElement> CpuCoreList { get; private set; }
+
+    public static List<CpuCoreElement> InitCpuCores()
+    {
+      if (numberOfAvailableCores > 0)
+        return CpuCoreList;
+      foreach (
+          var item in new System.Management.ManagementObjectSearcher(
+              "Select * from Win32_Processor"
+          ).Get()
+      )
+      {
+        numberOfAvailableCores += int.Parse(item["NumberOfCores"].ToString());
+      }
+      CreateCpuCoreList();
+      return CpuCoreList;
     }
 
-    public static class CpuCores
+    private static void CreateCpuCoreList()
     {
-        public static int numberOfAvailableCores = 0;
-
-        public static List<CpuCoreElement> CpuCoreList { get; private set; }
-
-        public static List<CpuCoreElement> InitCpuCores()
-        {
-            if (numberOfAvailableCores > 0)
-                return CpuCoreList;
-            foreach (
-                var item in new System.Management.ManagementObjectSearcher(
-                    "Select * from Win32_Processor"
-                ).Get()
-            )
-            {
-                numberOfAvailableCores += int.Parse(item["NumberOfCores"].ToString());
-            }
-            CreateCpuCoreList();
-            return CpuCoreList;
-        }
-
-        private static void CreateCpuCoreList()
-        {
-            CpuCoreList = new List<CpuCoreElement>();
-            for (int i = 0; i < numberOfAvailableCores; i++)
-            {
-                CpuCoreList.Add(
-                    new CpuCoreElement { coreNumber = i, coreMask = (IntPtr)(0x1 << i) }
-                );
-            }
-        }
+      CpuCoreList = new List<CpuCoreElement>();
+      for (int i = 0; i < numberOfAvailableCores; i++)
+      {
+        CpuCoreList.Add(
+            new CpuCoreElement { coreNumber = i, coreMask = (IntPtr)(0x1 << i) }
+        );
+      }
     }
+  }
 }

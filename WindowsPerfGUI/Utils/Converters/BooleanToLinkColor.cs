@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -34,25 +34,25 @@ using System.Windows.Media;
 
 namespace WindowsPerfGUI.Utils.Converters
 {
-    public class BooleanToLinkColor : IValueConverter
+  public class BooleanToLinkColor : IValueConverter
+  {
+    public Brush NormalBrush { get; set; }
+
+    public Brush LinkBrush { get; set; }
+
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        public Brush NormalBrush { get; set; }
-
-        public Brush LinkBrush { get; set; }
-
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (bool)value ? LinkBrush : NormalBrush;
-        }
-
-        public object ConvertBack(
-            object value,
-            Type targetType,
-            object parameter,
-            CultureInfo culture
-        )
-        {
-            throw new NotImplementedException();
-        }
+      return (bool)value ? LinkBrush : NormalBrush;
     }
+
+    public object ConvertBack(
+        object value,
+        Type targetType,
+        object parameter,
+        CultureInfo culture
+    )
+    {
+      throw new NotImplementedException();
+    }
+  }
 }

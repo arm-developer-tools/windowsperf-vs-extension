@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -33,32 +33,32 @@ using System.Windows.Controls;
 
 namespace WindowsPerfGUI.Components
 {
-    /// <summary>
-    /// Custom Button control is a styled button that inherets from the native `System.Windows.Controls.Button` class.
-    /// </summary>
-    /// <example>
-    ///     Include the Components namespace in your XAML file
-    ///     <code>
-    ///         xmlns:Components="clr-namespace:WindowsPerfGUI.Components"
-    ///     </code>
-    ///     Then use the control in your page
-    ///     <code>
-    ///         <Components:CustomButtonControl Grid.Row="4"
-    ///                                         Margin="0,10,0,10"
-    ///                                         Padding="20,5,20,5"
-    ///                                         HorizontalAlignment="Right"
-    ///                                         Click="SaveButton_Click"
-    ///                                         Content="Save" />
-    ///     </code>
-    /// </example>
-    public class CustomButtonControl : Button
+  /// <summary>
+  /// Custom Button control is a styled button that inherets from the native `System.Windows.Controls.Button` class.
+  /// </summary>
+  /// <example>
+  ///     Include the Components namespace in your XAML file
+  ///     <code>
+  ///         xmlns:Components="clr-namespace:WindowsPerfGUI.Components"
+  ///     </code>
+  ///     Then use the control in your page
+  ///     <code>
+  ///         <Components:CustomButtonControl Grid.Row="4"
+  ///                                         Margin="0,10,0,10"
+  ///                                         Padding="20,5,20,5"
+  ///                                         HorizontalAlignment="Right"
+  ///                                         Click="SaveButton_Click"
+  ///                                         Content="Save" />
+  ///     </code>
+  /// </example>
+  public class CustomButtonControl : Button
+  {
+    static CustomButtonControl()
     {
-        static CustomButtonControl()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(
-                typeof(CustomButtonControl),
-                new FrameworkPropertyMetadata(typeof(CustomButtonControl))
-            );
-        }
+      DefaultStyleKeyProperty.OverrideMetadata(
+          typeof(CustomButtonControl),
+          new FrameworkPropertyMetadata(typeof(CustomButtonControl))
+      );
     }
+  }
 }

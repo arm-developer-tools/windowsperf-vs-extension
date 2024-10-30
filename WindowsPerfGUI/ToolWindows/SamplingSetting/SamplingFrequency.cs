@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -32,9 +32,9 @@ using System.Collections.Generic;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 {
-    public static class SamplingFrequency
-    {
-        public static List<string> SamplingFrequencyList = new List<string>()
+  public static class SamplingFrequency
+  {
+    public static List<string> SamplingFrequencyList = new List<string>()
         {
             "10000",
             "100000",
@@ -48,5 +48,5 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             "900000",
             "1000000",
         };
-    }
+  }
 }

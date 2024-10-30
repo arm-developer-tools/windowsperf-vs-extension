@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -30,23 +30,23 @@
 
 namespace WindowsPerfGUI.Utils
 {
-    static class WperfDefaults
-    {
-        public const string WPERF_MIN_VERSION = "3.8.0";
-        public static bool HasSPESupport = false;
-        public static string SPEFeatureName = "";
+  static class WperfDefaults
+  {
+    public const string WPERF_MIN_VERSION = "3.8.0";
+    public static bool HasSPESupport = false;
+    public static string SPEFeatureName = "";
 #nullable enable
-        public static string? Frequency;
-        public static int? TotalGPCNum;
+    public static string? Frequency;
+    public static int? TotalGPCNum;
 
 #nullable disable
 
-        public static string DefaultWPASearchDir =
-            Environment.GetEnvironmentVariable("WPA_ADDITIONAL_SEARCH_DIRECTORIES")
-            ?? "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\CustomDataSources";
+    public static string DefaultWPASearchDir =
+        Environment.GetEnvironmentVariable("WPA_ADDITIONAL_SEARCH_DIRECTORIES")
+        ?? "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\CustomDataSources";
 
-        public static string DefaultWperfPath = Environment.GetEnvironmentVariable(
-            "WINDOWSPERF_PATH"
-        );
-    }
+    public static string DefaultWperfPath = Environment.GetEnvironmentVariable(
+        "WINDOWSPERF_PATH"
+    );
+  }
 }

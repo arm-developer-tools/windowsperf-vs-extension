@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -34,236 +34,236 @@ using WindowsPerfGUI.Utils;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
 {
-    public class ExtendedAssembly : Assembly
+  public class ExtendedAssembly : Assembly
+  {
+    public bool IsHighlighted = false;
+  }
+
+  public class SamplingSection : NotifyPropertyChangedImplementor
+  {
+    private ulong? hits;
+
+    public ulong? Hits
     {
-        public bool IsHighlighted = false;
+      get { return hits; }
+      set
+      {
+        hits = value;
+        OnPropertyChanged();
+      }
+    }
+    private double? overhead;
+
+    public double? Overhead
+    {
+      get { return overhead; }
+      set
+      {
+        overhead = value;
+        OnPropertyChanged();
+        if (value != null)
+          overheadPercentage = RoundToTwoDecimalPlaces(value).ToString() + " %";
+      }
     }
 
-    public class SamplingSection : NotifyPropertyChangedImplementor
+    private double? absoluteOverhead;
+
+    public double? AbsoluteOverhead
     {
-        private ulong? hits;
+      get { return absoluteOverhead; }
+      set
+      {
+        absoluteOverhead = value;
+        OnPropertyChanged();
+        if (value != null)
+          absoluteOverheadPercentage = RoundToTwoDecimalPlaces(value).ToString() + " %";
+      }
+    }
 
-        public ulong? Hits
-        {
-            get { return hits; }
-            set
-            {
-                hits = value;
-                OnPropertyChanged();
-            }
-        }
-        private double? overhead;
+    private ulong? lineNumber = null;
 
-        public double? Overhead
-        {
-            get { return overhead; }
-            set
-            {
-                overhead = value;
-                OnPropertyChanged();
-                if (value != null)
-                    overheadPercentage = RoundToTwoDecimalPlaces(value).ToString() + " %";
-            }
-        }
+    public ulong? LineNumber
+    {
+      get { return lineNumber; }
+      set
+      {
+        lineNumber = value;
+        OnPropertyChanged();
+      }
+    }
 
-        private double? absoluteOverhead;
+    public string VisibleLineNumber
+    {
+      get
+      {
+        return lineNumber == 0xF00F00 | lineNumber == 0xFEEFEE
+            ? string.Format("0x{0:X}", lineNumber)
+            : lineNumber.ToString();
+      }
+    }
 
-        public double? AbsoluteOverhead
-        {
-            get { return absoluteOverhead; }
-            set
-            {
-                absoluteOverhead = value;
-                OnPropertyChanged();
-                if (value != null)
-                    absoluteOverheadPercentage = RoundToTwoDecimalPlaces(value).ToString() + " %";
-            }
-        }
+    private string name;
 
-        private ulong? lineNumber = null;
+    public string Name
+    {
+      get { return name; }
+      set
+      {
+        name = value;
+        OnPropertyChanged();
+      }
+    }
 
-        public ulong? LineNumber
-        {
-            get { return lineNumber; }
-            set
-            {
-                lineNumber = value;
-                OnPropertyChanged();
-            }
-        }
+    private int layer;
 
-        public string VisibleLineNumber
-        {
-            get
-            {
-                return lineNumber == 0xF00F00 | lineNumber == 0xFEEFEE
-                    ? string.Format("0x{0:X}", lineNumber)
-                    : lineNumber.ToString();
-            }
-        }
+    public int Layer
+    {
+      get { return layer; }
+      set { layer = value; }
+    }
 
-        private string name;
+    private SamplingSectionType sectionType;
 
-        public string Name
-        {
-            get { return name; }
-            set
-            {
-                name = value;
-                OnPropertyChanged();
-            }
-        }
+    public SamplingSectionType SectionType
+    {
+      get { return sectionType; }
+      set { sectionType = value; }
+    }
 
-        private int layer;
+    private bool isFileExists = false;
 
-        public int Layer
-        {
-            get { return layer; }
-            set { layer = value; }
-        }
-
-        private SamplingSectionType sectionType;
-
-        public SamplingSectionType SectionType
-        {
-            get { return sectionType; }
-            set { sectionType = value; }
-        }
-
-        private bool isFileExists = false;
-
-        public bool IsFileExists
-        {
-            get { return isFileExists; }
-            set { isFileExists = value; }
-        }
+    public bool IsFileExists
+    {
+      get { return isFileExists; }
+      set { isFileExists = value; }
+    }
 
 #nullable enable
-        private List<ExtendedAssembly>? assemblies;
+    private List<ExtendedAssembly>? assemblies;
 
-        public List<ExtendedAssembly>? Assemblies
-        {
-            get { return assemblies; }
-            set { assemblies = value; }
-        }
+    public List<ExtendedAssembly>? Assemblies
+    {
+      get { return assemblies; }
+      set { assemblies = value; }
+    }
 
-        private string? overheadPercentage;
+    private string? overheadPercentage;
 
-        public string? OverheadPercentage
-        {
-            get { return overheadPercentage; }
-        }
+    public string? OverheadPercentage
+    {
+      get { return overheadPercentage; }
+    }
 
-        private string? absoluteOverheadPercentage;
+    private string? absoluteOverheadPercentage;
 
-        public string? AbsoluteOverheadPercentage
-        {
-            get { return absoluteOverheadPercentage; }
-        }
+    public string? AbsoluteOverheadPercentage
+    {
+      get { return absoluteOverheadPercentage; }
+    }
 
-        private string? frequency;
+    private string? frequency;
 
-        public string? Frequency
-        {
-            get { return frequency; }
-            set { frequency = value; }
-        }
+    public string? Frequency
+    {
+      get { return frequency; }
+      set { frequency = value; }
+    }
 
-        private string? pdbFile;
+    private string? pdbFile;
 
-        public string? PdbFile
-        {
-            get { return pdbFile; }
-            set
-            {
-                pdbFile = value;
-                OnPropertyChanged();
-            }
-        }
-        private string? peFile;
+    public string? PdbFile
+    {
+      get { return pdbFile; }
+      set
+      {
+        pdbFile = value;
+        OnPropertyChanged();
+      }
+    }
+    private string? peFile;
 
-        public string? PeFile
-        {
-            get { return peFile; }
-            set
-            {
-                peFile = value;
-                OnPropertyChanged();
-            }
-        }
-        private List<Module>? modules;
+    public string? PeFile
+    {
+      get { return peFile; }
+      set
+      {
+        peFile = value;
+        OnPropertyChanged();
+      }
+    }
+    private List<Module>? modules;
 
-        public List<Module>? Modules
-        {
-            get { return modules; }
-            set
-            {
-                modules = value;
-                OnPropertyChanged();
-            }
-        }
+    public List<Module>? Modules
+    {
+      get { return modules; }
+      set
+      {
+        modules = value;
+        OnPropertyChanged();
+      }
+    }
 
-        private ulong? samplesDropped;
+    private ulong? samplesDropped;
 
-        public ulong? SamplesDropped
-        {
-            get { return samplesDropped; }
-            set { samplesDropped = value; }
-        }
+    public ulong? SamplesDropped
+    {
+      get { return samplesDropped; }
+      set { samplesDropped = value; }
+    }
 
 #nullable disable
-        public enum SamplingSectionType
-        {
-            ROOT,
-            SAMPLE_EVENT,
-            SAMPLE_FUNCTION,
-            SAMPLE_SOURCE_CODE
-        }
-
-        private List<SamplingSection> children;
-
-        public List<SamplingSection> Children
-        {
-            get { return children; }
-            set
-            {
-                children = value;
-                OnPropertyChanged();
-            }
-        }
-        private SamplingSection parent;
-
-        public SamplingSection Parent
-        {
-            get { return parent; }
-            set
-            {
-                parent = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string stringifiedJsonOutput;
-
-        public string StringifiedJsonOutput
-        {
-            get
-            {
-                return stringifiedJsonOutput;
-                ;
-            }
-            set
-            {
-                stringifiedJsonOutput = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private double RoundToTwoDecimalPlaces(double? value)
-        {
-            if (value == null)
-                return 0;
-            return Math.Round((double)value, 2);
-        }
+    public enum SamplingSectionType
+    {
+      ROOT,
+      SAMPLE_EVENT,
+      SAMPLE_FUNCTION,
+      SAMPLE_SOURCE_CODE
     }
+
+    private List<SamplingSection> children;
+
+    public List<SamplingSection> Children
+    {
+      get { return children; }
+      set
+      {
+        children = value;
+        OnPropertyChanged();
+      }
+    }
+    private SamplingSection parent;
+
+    public SamplingSection Parent
+    {
+      get { return parent; }
+      set
+      {
+        parent = value;
+        OnPropertyChanged();
+      }
+    }
+
+    private string stringifiedJsonOutput;
+
+    public string StringifiedJsonOutput
+    {
+      get
+      {
+        return stringifiedJsonOutput;
+        ;
+      }
+      set
+      {
+        stringifiedJsonOutput = value;
+        OnPropertyChanged();
+      }
+    }
+
+    private double RoundToTwoDecimalPlaces(double? value)
+    {
+      if (value == null)
+        return 0;
+      return Math.Round((double)value, 2);
+    }
+  }
 }

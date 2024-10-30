@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -35,67 +35,67 @@ using WindowsPerfGUI.Utils;
 
 namespace WindowsPerfGUI.Commands
 {
-    [Command(PackageIds.SamplingExplorer)]
-    internal sealed class SamplingExplorerCommand : BaseCommand<SamplingExplorerCommand>
+  [Command(PackageIds.SamplingExplorer)]
+  internal sealed class SamplingExplorerCommand : BaseCommand<SamplingExplorerCommand>
+  {
+    protected override void BeforeQueryStatus(EventArgs e)
     {
-        protected override void BeforeQueryStatus(EventArgs e)
-        {
-            string windowTitle = SamplingExplorerLanguagePack.WindowTitle;
-            try
-            {
-                if (
-                    WPerfOptions.Instance.WperfCurrentVersion != null
-                    && WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion
-                    != WperfDefaults.WPERF_MIN_VERSION
-                )
-                    windowTitle += $" - (UNSTABLE)";
-            }
-            catch (Exception) { }
-            Command.Text = windowTitle;
-            base.BeforeQueryStatus(e);
-        }
-
-        protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
-        {
-            if (!WPerfOptions.Instance.IsWperfInitialized)
-            {
-                await VS.MessageBox.ShowErrorAsync(
-                    ErrorLanguagePack.NotInititiatedWperfErrorLine1,
-                    ErrorLanguagePack.NotInititiatedWperfErrorLine2
-                );
-                return;
-            }
-
-            if (
-                WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion
-                != WperfDefaults.WPERF_MIN_VERSION
-            )
-            {
-                if (WPerfOptions.Instance.WperfVersionCheckIgnore != true)
-                {
-                    await VS.MessageBox.ShowErrorAsync(
-                        string.Format(
-                            ErrorLanguagePack.MinimumVersionMismatch,
-                            WperfDefaults.WPERF_MIN_VERSION
-                        ),
-                        ErrorLanguagePack.MinimumVersionMismatchLine2
-                    );
-                    return;
-                }
-                var messageBoxResult = await VS.MessageBox.ShowWarningAsync(
-                    string.Format(
-                        ErrorLanguagePack.MinimumVersionMismatch,
-                        WperfDefaults.WPERF_MIN_VERSION
-                    )
-                );
-                if (
-                    messageBoxResult == Microsoft.VisualStudio.VSConstants.MessageBoxResult.IDCANCEL
-                )
-                {
-                    return;
-                }
-            }
-            await SamplingExplorer.ShowAsync();
-        }
+      string windowTitle = SamplingExplorerLanguagePack.WindowTitle;
+      try
+      {
+        if (
+            WPerfOptions.Instance.WperfCurrentVersion != null
+            && WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion
+            != WperfDefaults.WPERF_MIN_VERSION
+        )
+          windowTitle += $" - (UNSTABLE)";
+      }
+      catch (Exception) { }
+      Command.Text = windowTitle;
+      base.BeforeQueryStatus(e);
     }
+
+    protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
+    {
+      if (!WPerfOptions.Instance.IsWperfInitialized)
+      {
+        await VS.MessageBox.ShowErrorAsync(
+            ErrorLanguagePack.NotInititiatedWperfErrorLine1,
+            ErrorLanguagePack.NotInititiatedWperfErrorLine2
+        );
+        return;
+      }
+
+      if (
+          WPerfOptions.Instance.WperfCurrentVersion.Components[0].ComponentVersion
+          != WperfDefaults.WPERF_MIN_VERSION
+      )
+      {
+        if (WPerfOptions.Instance.WperfVersionCheckIgnore != true)
+        {
+          await VS.MessageBox.ShowErrorAsync(
+              string.Format(
+                  ErrorLanguagePack.MinimumVersionMismatch,
+                  WperfDefaults.WPERF_MIN_VERSION
+              ),
+              ErrorLanguagePack.MinimumVersionMismatchLine2
+          );
+          return;
+        }
+        var messageBoxResult = await VS.MessageBox.ShowWarningAsync(
+            string.Format(
+                ErrorLanguagePack.MinimumVersionMismatch,
+                WperfDefaults.WPERF_MIN_VERSION
+            )
+        );
+        if (
+            messageBoxResult == Microsoft.VisualStudio.VSConstants.MessageBoxResult.IDCANCEL
+        )
+        {
+          return;
+        }
+      }
+      await SamplingExplorer.ShowAsync();
+    }
+  }
 }

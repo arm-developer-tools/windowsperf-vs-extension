@@ -1,6 +1,6 @@
 ﻿// BSD 3-Clause License
 //
-// Copyright (c) 2022, Arm Limited
+// Copyright (c) 2024, Arm Limited
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -33,18 +33,18 @@ using System.Windows;
 
 namespace WindowsPerfGUI.Options
 {
-    [ComVisible(true)]
-    [Guid("4D40035D-E4E9-4D48-9DE3-1D6D35507EF0")]
-    public class WPAOptionsPage : UIElementDialogPage
+  [ComVisible(true)]
+  [Guid("4D40035D-E4E9-4D48-9DE3-1D6D35507EF0")]
+  public class WPAOptionsPage : UIElementDialogPage
+  {
+    protected override UIElement Child
     {
-        protected override UIElement Child
-        {
-            get
-            {
-                WPAOptions page = new() { wpaOptionsPage = this };
-                page.Initialize();
-                return page;
-            }
-        }
+      get
+      {
+        WPAOptions page = new() { wpaOptionsPage = this };
+        page.Initialize();
+        return page;
+      }
     }
+  }
 }
