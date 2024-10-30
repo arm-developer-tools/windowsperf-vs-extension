@@ -74,6 +74,19 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             }
         }
 
+        private bool sampleDisplayLong;
+
+        public bool SampleDisplayLong
+        {
+            get { return sampleDisplayLong; }
+            set
+            {
+                sampleDisplayLong = value;
+                OnPropertyChanged();
+                CommandLinePreview = GenerateCommandLinePreview();
+            }
+        }
+
         private bool isSPEEnabled;
 
         public bool IsSPEEnabled
@@ -137,6 +150,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 ForceLock = samplingSettingsForm.ForceLock;
                 IsSPEEnabled = samplingSettingsForm.IsSPEEnabled;
                 ShouldDisassemble = samplingSettingsForm.ShouldDisassemble;
+                SampleDisplayLong = samplingSettingsForm.SampleDisplayLong;
             }
             SamplingSettings.samplingSettingsFrom = this;
             SamplingSettings.samplingSettingsFrom.SamplingEventList.CollectionChanged +=

@@ -78,6 +78,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 
             AppendElementsToList(argsList, "--annotate");
             if (samplingSettingsFrom.ShouldDisassemble) AppendElementsToList(argsList, "--disassemble");
+            if (samplingSettingsFrom.SampleDisplayLong) AppendElementsToList(argsList, "--sample-display-long");
 
             AppendElementsToList(argsList, "--timeout", samplingSettingsFrom.Timeout);
             AppendElementsToList(argsList, "-v", "--json");
