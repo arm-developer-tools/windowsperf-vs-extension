@@ -320,8 +320,9 @@ namespace WindowsPerfGUI.SDK
             try
             {
                 await _wperfProcess.StartBackgroundProcessAsync(countingArgsList.ToArray());
-                (List<CountingEvent> countingEvents, string stdError) = StopCounting();
-                OnCountingFinished?.Invoke(this, (countingEvents, stdError));
+                (List<CountingEvent> countingEvents, bool isTimeline, string stdError) =
+                    StopCounting();
+                OnCountingFinished?.Invoke(this, (countingEvents, isTimeline, stdError));
             }
             catch (Exception e)
             {
@@ -333,21 +334,25 @@ namespace WindowsPerfGUI.SDK
         /// <summary>
         /// Parses the counting results from a JSON file and returns a list of events and their corresponding number of hits.
         /// </summary>
-        public static List<CountingEvent> GetCountingEventsFromJSONFile(string filePath)
+        public static (
+            List<CountingEvent> countingEvents,
+            bool isTimeline
+        ) GetCountingEventsFromJSONFile(string filePath)
         {
             List<CountingEvent> countingEvents = new();
 
             if (string.IsNullOrEmpty(filePath))
-                return countingEvents;
+                return (countingEvents, false);
 
             string jsonContent = File.ReadAllText(filePath);
             bool isTimelineJSON = jsonContent.Contains("timeline");
             if (isTimelineJSON)
             {
                 WperfTimeline wperfTimeline = WperfTimeline.FromJson(jsonContent);
-                foreach (var count in wperfTimeline.Timeline)
+                for (int i = 0; i < wperfTimeline.Timeline.Length; ++i)
                 {
-                    ProcessSingleCount(count, countingEvents, true);
+                    var count = wperfTimeline.Timeline[i];
+                    ProcessSingleCount(count, countingEvents, i);
                 }
             }
             else
@@ -356,7 +361,7 @@ namespace WindowsPerfGUI.SDK
                 ProcessSingleCount(wperfCount, countingEvents);
             }
 
-            return countingEvents;
+            return (countingEvents, isTimelineJSON);
         }
 
         /// <summary>
@@ -365,7 +370,7 @@ namespace WindowsPerfGUI.SDK
         private static void ProcessSingleCount(
             WperfCounting count,
             List<CountingEvent> countingEvents,
-            bool accumulatePerCoreAndEvent = false
+            int iteration = 0
         )
         {
             foreach (CorePerformanceCounter core in count.Core.PerformanceCounters)
@@ -375,11 +380,6 @@ namespace WindowsPerfGUI.SDK
                     int index = countingEvents.FindIndex(el =>
                         el.CoreNumber == core.CoreNumber && el.Name == rawCountingEvent.EventName
                     );
-                    if (accumulatePerCoreAndEvent && index != -1)
-                    {
-                        countingEvents[index].Value += rawCountingEvent.CounterValue;
-                    }
-                    else
                     {
                         CountingEvent countingEvent =
                             new()
@@ -389,6 +389,7 @@ namespace WindowsPerfGUI.SDK
                                 Name = rawCountingEvent.EventName,
                                 Index = rawCountingEvent.EventIdx,
                                 Note = rawCountingEvent.EventNote,
+                                Iteration = iteration
                             };
 
                         countingEvents.Add(countingEvent);
@@ -420,6 +421,7 @@ namespace WindowsPerfGUI.SDK
         /// </summary>
         public EventHandler<(
             List<CountingEvent> countingEvents,
+            bool isTimeline,
             string stdError
         )> OnCountingFinished { get; set; }
 
@@ -470,7 +472,7 @@ namespace WindowsPerfGUI.SDK
         /// The standard output is deserialized into a `List<CountingEvents>` list and returned,
         /// along with the standard error.
         /// </summary>
-        public (List<CountingEvent> countingEvents, string stdError) StopCounting()
+        public (List<CountingEvent> countingEvents, bool isTimeline, string stdError) StopCounting()
         {
             _wperfProcess.StopProcess();
             CountingSettings.IsCounting = false;
@@ -481,10 +483,10 @@ namespace WindowsPerfGUI.SDK
                 stdError,
                 CountingSettings.GenerateCommandLineArgsArray(CountingSettings.countingSettingsForm)
             );
-            List<CountingEvent> countingEvents = GetCountingEventsFromJSONFile(
+            (List<CountingEvent> countingEvents, bool isTimeline) = GetCountingEventsFromJSONFile(
                 OutputPath + ".json"
             );
-            return (countingEvents, stdError);
+            return (countingEvents, isTimeline, stdError);
         }
     }
 }

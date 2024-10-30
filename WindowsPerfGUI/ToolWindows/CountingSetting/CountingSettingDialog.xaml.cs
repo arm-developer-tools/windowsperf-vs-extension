@@ -28,9 +28,6 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using CliWrap;
-using Microsoft.VisualStudio.PlatformUI;
-using Microsoft.Win32;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -40,6 +37,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using CliWrap;
+using Microsoft.VisualStudio.PlatformUI;
+using Microsoft.Win32;
+using WindowsPerfGUI.Components;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK;
@@ -93,11 +94,9 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             wperfClient.OnCountingFinished += HandleCountingFinished;
         }
 
-
-
         private void HandleCountingFinished(
             object sender,
-            (List<CountingEvent> countingEvents, string stdError) e
+            (List<CountingEvent> countingEvents, bool isTimeline, string stdError) e
         )
         {
             StopCountingButton.IsEnabled = false;
@@ -113,8 +112,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 return;
             }
 
-            CountingSettings.countingSettingsForm.IsCountCollected = true;
-            CountingSettings.countingSettingsForm.CountingResult = e.countingEvents;
+            RenderCountingOutput(e.countingEvents, e.isTimeline);
         }
 
         private void UpdateCountingCommandCallTextBox()
@@ -232,7 +230,6 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
 
             EventComboBox.SelectedIndex = eventIndex;
         }
-
 
         private void AddEventButton_Click(object sender, RoutedEventArgs e)
         {
@@ -372,9 +369,9 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             MetricComboBox.ClearFilter();
 
             foreach (
-                var predefinedMetric in ((List<PredefinedMetricAndGroupOfMetrics>)MetricComboBox.ItemsSource).Select(
-                    (value, i) => new { value, i }
-                )
+                var predefinedMetric in (
+                    (List<PredefinedMetricAndGroupOfMetrics>)MetricComboBox.ItemsSource
+                ).Select((value, i) => new { value, i })
             )
             {
                 if (predefinedMetric.value.Metric == metricName)
@@ -388,7 +385,9 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
 
         private void AddMetricButton_Click(object sender, RoutedEventArgs e)
         {
-            var newCountingMetric = (MetricComboBox.SelectedItem as PredefinedMetricAndGroupOfMetrics)?.Metric;
+            var newCountingMetric = (
+                MetricComboBox.SelectedItem as PredefinedMetricAndGroupOfMetrics
+            )?.Metric;
 
             MetricComboBox.SelectedIndex = -1;
 
@@ -411,6 +410,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             CountingSettings.countingSettingsForm.CountingMetricList.Add(newCountingMetric);
             MetricComboBoxPlaceholder.Visibility = Visibility.Visible;
         }
+
         private void ResetEventComboBox()
         {
             var eventList = new List<PredefinedEvent>(
@@ -418,6 +418,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             );
             EventComboBox.ItemsSource = eventList;
         }
+
         private void ResetMetricComboBox()
         {
             var metricList = new List<PredefinedMetricAndGroupOfMetrics>(
@@ -425,6 +426,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             );
             MetricComboBox.ItemsSource = metricList;
         }
+
         private void RemoveMetricButton_Click(object sender, RoutedEventArgs e)
         {
             int selectedIndex = CountingMetricListBox.SelectedIndex;
@@ -569,7 +571,7 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
                 return;
             }
 
-            if (e.PropertyName == "Value")
+            if (e.PropertyName == "Value" || e.PropertyName == "Iteration")
             {
                 var numericCellStyle = FindResource("NumericDataGridCellStyle") as Style;
                 textColumn.ElementStyle = numericCellStyle;
@@ -589,15 +591,108 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             string filename = fileDialog.FileName;
             try
             {
-                List<CountingEvent> wperfSampling = WperfClient.GetCountingEventsFromJSONFile(
-                    filename
-                );
-                CountingSettings.countingSettingsForm.IsCountCollected = true;
-                CountingSettings.countingSettingsForm.CountingResult = wperfSampling;
+                (List<CountingEvent> countingEventList, bool isTimeline) =
+                    WperfClient.GetCountingEventsFromJSONFile(filename);
+
+                RenderCountingOutput(countingEventList, isTimeline);
             }
             catch (Exception err)
             {
                 VS.MessageBox.ShowError("Error loading JSON file", err.Message);
+            }
+        }
+
+        private DataGrid GenerateDataGrid()
+        {
+            DataGrid dataGrid =
+                new()
+                {
+                    Margin = new Thickness() { Left = 5, Right = 5 },
+                    Height = 150,
+                    Padding = new Thickness(0),
+                    AutoGenerateColumns = true,
+                    Background = (System.Windows.Media.Brush)FindResource("VsInputBackground"),
+                    BorderThickness = new Thickness(0),
+                    ColumnHeaderStyle = (Style)FindResource("ColumnHeaderStyle"),
+                    Foreground = (System.Windows.Media.Brush)FindResource("ToolWindowText"),
+                    HeadersVisibility = DataGridHeadersVisibility.Column,
+                    HorizontalGridLinesBrush = (System.Windows.Media.Brush)FindResource(
+                        "ToolWindowText"
+                    ),
+                    IsReadOnly = true,
+                    RowBackground = (System.Windows.Media.Brush)FindResource("VsInputBackground"),
+                    VerticalGridLinesBrush = (System.Windows.Media.Brush)FindResource(
+                        "ToolWindowText"
+                    )
+                };
+
+            dataGrid.AutoGeneratingColumn += DataGrid_OnAutoGeneratingColumn;
+
+            return dataGrid;
+        }
+
+        private void RenderCountingOutput(List<CountingEvent> countingEventList, bool isTimeline)
+        {
+            CountingSettings.countingSettingsForm.IsCountCollected = true;
+            CountingOutputContainer.Children.Clear();
+            if (isTimeline)
+            {
+                var iterations = countingEventList
+                    .Select(countingEvent => countingEvent.Iteration)
+                    .Distinct()
+                    .ToList();
+
+                iterations.Sort();
+                StackPanel comboBoxStackPanel =
+                    new()
+                    {
+                        Orientation = Orientation.Horizontal,
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Margin = new Thickness() { Bottom = 10, },
+                    };
+
+                Label label =
+                    new()
+                    {
+                        Content = "Timeline iteration",
+                        Margin = new Thickness() { Right = 5 },
+                    };
+
+                CustomComboBoxControl comboBox =
+                    new()
+                    {
+                        ItemsSource = iterations,
+                        SelectedIndex = iterations[0],
+                        Width = 100,
+                        MaxDropDownHeight = 200,
+                    };
+
+                comboBoxStackPanel.Children.Add(label);
+                comboBoxStackPanel.Children.Add(comboBox);
+
+                int iteration = iterations[0];
+                DataGrid dataGrid = GenerateDataGrid();
+                dataGrid.ItemsSource = countingEventList.Where(countingEvent =>
+                    countingEvent.Iteration == iteration
+                );
+
+                CountingOutputContainer.Children.Add(comboBoxStackPanel);
+                CountingOutputContainer.Children.Add(dataGrid);
+
+                comboBox.SelectionChanged += (sender, e) =>
+                {
+                    int iteration = (int)e.AddedItems[0];
+                    dataGrid.ItemsSource = countingEventList.Where(countingEvent =>
+                        countingEvent.Iteration == iteration
+                    );
+                };
+            }
+            else
+            {
+                DataGrid dataGrid = GenerateDataGrid();
+                dataGrid.ItemsSource = countingEventList;
+                CountingOutputContainer.Children.Add(dataGrid);
             }
         }
 

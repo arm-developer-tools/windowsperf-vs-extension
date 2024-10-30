@@ -37,5 +37,6 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
         public string Name { get; set; }
         public string Index { get; set; }
         public string Note { get; set; }
+        public int Iteration { get; set; } = 0;
     }
 }
