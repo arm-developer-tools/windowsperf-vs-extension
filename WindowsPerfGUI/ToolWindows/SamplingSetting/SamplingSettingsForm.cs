@@ -110,6 +110,42 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 CommandLinePreview = GenerateCommandLinePreview();
             }
         }
+        private int[] numberOfRowsPerSampleOptions = { 1, 5, 10, 15, 25, 50, 75, 100 };
+
+        public int[] NumberOfRowsPerSampleOptions
+        {
+            get { return numberOfRowsPerSampleOptions; }
+            set
+            {
+                numberOfRowsPerSampleOptions = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int numberOfRowsPerSample = 50;
+
+        public int NumberOfRowsPerSample
+        {
+            get { return numberOfRowsPerSample; }
+            set
+            {
+                numberOfRowsPerSample = value;
+                OnPropertyChanged();
+                CommandLinePreview = GenerateCommandLinePreview();
+            }
+        }
+
+        private bool customNumberOfRowsPerSample = false;
+        public bool CustomNumberOfRowsPerSample
+        {
+            get { return customNumberOfRowsPerSample; }
+            set
+            {
+                customNumberOfRowsPerSample = value;
+                if (value == false) NumberOfRowsPerSample = 50;
+                OnPropertyChanged();
+            }
+        }
 
         private ObservableCollection<SamplingEventConfiguration> samplingEventList = new();
 
@@ -151,6 +187,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 IsSPEEnabled = samplingSettingsForm.IsSPEEnabled;
                 ShouldDisassemble = samplingSettingsForm.ShouldDisassemble;
                 SampleDisplayLong = samplingSettingsForm.SampleDisplayLong;
+                NumberOfRowsPerSample = samplingSettingsForm.NumberOfRowsPerSample;
+                CustomNumberOfRowsPerSample = samplingSettingsForm.CustomNumberOfRowsPerSample;
             }
             SamplingSettings.samplingSettingsFrom = this;
             SamplingSettings.samplingSettingsFrom.SamplingEventList.CollectionChanged +=
