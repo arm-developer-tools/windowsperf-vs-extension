@@ -132,6 +132,15 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             UpdateCountingCommandCallTextBox();
         }
 
+        private static bool IsTimeStringValid(string timeString)
+        {
+            var validTimeStringRegex = new Regex("^\\d+(\\.?\\d+)?((ms)|s|m|h|d)?$");
+            bool isValid =
+                string.IsNullOrEmpty(timeString) || validTimeStringRegex.Match(timeString).Success;
+
+            return isValid;
+        }
+
         private void StartCounting_Click(object sender, RoutedEventArgs e)
         {
             if (!WPerfOptions.Instance.IsWperfInitialized)
@@ -139,6 +148,16 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             if (!CountingSettings.AreSettingsFilled)
             {
                 VS.MessageBox.ShowError(ErrorLanguagePack.IncompleteCountingSettingsLine1);
+                return;
+            }
+
+            bool areTimeStringsValid =
+                IsTimeStringValid(CountingSettings.countingSettingsForm.TimelineInterval)
+                && IsTimeStringValid(CountingSettings.countingSettingsForm.Timeout);
+
+            if (!areTimeStringsValid)
+            {
+                VS.MessageBox.ShowError(ErrorLanguagePack.IncorrectTimeStringFormat);
                 return;
             }
 

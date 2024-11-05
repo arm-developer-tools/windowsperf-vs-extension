@@ -48,5 +48,7 @@ namespace WindowsPerfGUI.Utils
         public static string DefaultWperfPath = Environment.GetEnvironmentVariable(
             "WINDOWSPERF_PATH"
         );
+
+        public static string DefaultWperfExecutable = "wperf.exe";
     }
 }

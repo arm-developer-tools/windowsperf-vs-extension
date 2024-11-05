@@ -173,4 +173,10 @@ Par exemple, r10 est un événement avec l'index 0x10</value>
   <data name="WPAPluginNotInstalled" xml:space="preserve">
     <value>Impossible de détecter le plug-in WindowsPerf WPA. Veuillez vous assurer que le plugin est correctement installé.</value>
   </data>
+  <data name="IncorrectTimeStringFormat" xml:space="preserve">
+    <value>Format de temps incorrect. 
+Le temps doit être au format &lt;time&gt;&lt;unit&gt; où l'unité est facultative.
+Les unités prises en charge sont : ms, s, m, h, d.
+Exemples : 10, 0.5, 50ms, 2.5m</value>
+  </data>
 </root>

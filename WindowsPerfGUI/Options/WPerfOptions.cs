@@ -51,8 +51,8 @@ namespace WindowsPerfGUI.Options
         [DefaultValue(true)]
         public string WperfPath { get; set; } =
             !string.IsNullOrEmpty(WperfDefaults.DefaultWperfPath)
-                ? Path.Combine(WperfDefaults.DefaultWperfPath, "wperf.exe")
-                : "wperf.exe";
+                ? Path.Combine(WperfDefaults.DefaultWperfPath, WperfDefaults.DefaultWperfExecutable)
+                : WperfDefaults.DefaultWperfExecutable;
         public bool WperfVersionCheckIgnore { get; set; } = false;
         public bool IsWperfInitialized { get; set; } = false;
         public bool HasSPESupport { get; set; } = false;
