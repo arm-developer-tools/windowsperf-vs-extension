@@ -60,7 +60,10 @@ namespace WindowsPerfGUI.Options
             {
                 WperfDefaultPathCheckbox.IsChecked = true;
                 PathInput.IsEnabled = false;
-                PathInput.Text = Path.Combine(WperfDefaults.DefaultWperfPath, "wperf.exe");
+                PathInput.Text = Path.Combine(
+                    WperfDefaults.DefaultWperfPath,
+                    WperfDefaults.DefaultWperfExecutable
+                );
                 SelectDirectoryButton.IsEnabled = false;
             }
             if (!string.IsNullOrEmpty(WperfDefaults.DefaultWperfPath))
@@ -204,7 +207,10 @@ namespace WindowsPerfGUI.Options
             SelectDirectoryButton.IsEnabled = !newValue;
             if (newValue)
             {
-                PathInput.Text = Path.Combine(WperfDefaults.DefaultWperfPath, "wperf.exe");
+                PathInput.Text = Path.Combine(
+                    WperfDefaults.DefaultWperfPath,
+                    WperfDefaults.DefaultWperfExecutable
+                );
             }
 
             WPerfOptions.Instance.UseDefaultWperfLocation = newValue;

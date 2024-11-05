@@ -88,6 +88,18 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incorrect time format.
+        ///Time should be of format &lt;time&gt;&lt;unit&gt; where unit is optional.
+        ///Supported units are: ms, s, m, h, d.
+        ///Examples: 10, 0.5, 50ms, 2.5m.
+        /// </summary>
+        public static string IncorrectTimeStringFormat {
+            get {
+                return ResourceManager.GetString("IncorrectTimeStringFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This version of the extention was built to only support WindowsPerf version {0}!.
         /// </summary>
         public static string MinimumVersionMismatch {

@@ -49,15 +49,15 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             }
             if (countingSettingsForm == null)
                 throw new ArgumentNullException(nameof(countingSettingsForm));
-            List<string> argsList = new List<string>();
+            List<string> argsList = new();
             ValidateSettings();
             AppendElementsToList(argsList, "stat");
 
             AppendElementsToList(
-             argsList,
-             "-e",
-             string.Join(",", countingSettingsForm.CountingEventList)
-         );
+                argsList,
+                "-e",
+                string.Join(",", countingSettingsForm.CountingEventList)
+            );
             AppendElementsToList(
                 argsList,
                 "-m",
@@ -82,8 +82,10 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
 
             AppendElementsToList(argsList, "--timeout", countingSettingsForm.Timeout);
             AppendElementsToList(argsList, "--json");
-            if (countingSettingsForm.ForceLock) AppendElementsToList(argsList, "--force-lock");
-            if (countingSettingsForm.KernelMode) AppendElementsToList(argsList, "-k");
+            if (countingSettingsForm.ForceLock)
+                AppendElementsToList(argsList, "--force-lock");
+            if (countingSettingsForm.KernelMode)
+                AppendElementsToList(argsList, "-k");
 
             if (!countingSettingsForm.NoTarget)
             {
