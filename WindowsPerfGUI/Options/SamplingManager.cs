@@ -29,6 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System.ComponentModel;
+using System.Drawing;
 using System.Runtime.InteropServices;
 
 namespace WindowsPerfGUI.Options
@@ -41,12 +42,62 @@ namespace WindowsPerfGUI.Options
 
     public class SamplingManager : BaseOptionModel<SamplingManager>
     {
-        [Category("Windows Perf")]
+        [Category("Code Annotations")]
         [DisplayName("Highlighter Color Resolution")]
         [Description(
             "The resolution of the colors to use in the line highlighter. Please chose a value between 3 and 256, defaulting to 3 otherwise."
         )]
         [DefaultValue(3)]
         public int HighlighterColorResolution { get; set; } = 3;
+
+        [Category("Syntax Highlighting")]
+        [DisplayName("Disassembly Syntax Highlighting")]
+        [Description("Enables or disables disassembly syntax highlighting")]
+        public bool EnableDisassemblySyntaxHighlighting { get; set; } = true;
+
+        [Category("Disassembly Syntax Highlighting Colors")]
+        [DisplayName("Mnemonic Color")]
+        [Description("Sets the color of mnemonics")]
+        public Color MnemonicColor { get; set; } = Color.MediumPurple;
+
+        [Category("Disassembly Syntax Highlighting Colors")]
+        [DisplayName("Memory Address Color")]
+        [Description("Sets the color of memory addresses")]
+        public Color AddressColor { get; set; } = Color.LimeGreen;
+
+        [Category("Disassembly Syntax Highlighting Colors")]
+        [DisplayName("Comment Color")]
+        [Description("Sets the color of inline comments")]
+        public Color CommentColor { get; set; } = Color.Gray;
+
+        [Category("Disassembly Syntax Highlighting Colors")]
+        [DisplayName("Update Modifier Color")]
+        [Description("Sets the color of the \"!\" modifier")]
+        public Color UpdateModifierColor { get; set; } = Color.Yellow;
+
+        [Category("Disassembly Syntax Highlighting Colors")]
+        [DisplayName("Symbolic Notation Color")]
+        [Description("Sets the color of items enclosed in angle brackets.")]
+        public Color SymbolicNotationColor { get; set; } = Color.MediumVioletRed;
+
+        [Category("Disassembly Syntax Highlighting Colors")]
+        [DisplayName("Argument Separator Color")]
+        [Description("Sets the color of the \",\" separator")]
+        public Color SeparatorColor { get; set; } = Color.White;
+
+        [Category("Disassembly Syntax Highlighting Colors")]
+        [DisplayName("Memory Adressing and Register List Color")]
+        [Description("Sets the color of items enclosed in either \"{}\" or \"[]\"")]
+        public Color GroupColor { get; set; } = Color.LightGreen;
+
+        [Category("Disassembly Syntax Highlighting Colors")]
+        [DisplayName("Immediate Value Color")]
+        [Description("Sets the color of immediate values (eg: #0x01)")]
+        public Color ImmediateValueColor { get; set; } = Color.SkyBlue;
+
+        [Category("Disassembly Syntax Highlighting Colors")]
+        [DisplayName("Register Color")]
+        [Description("Sets the color of registers.")]
+        public Color RegisterColor { get; set; } = Color.LightPink;
     }
 }
