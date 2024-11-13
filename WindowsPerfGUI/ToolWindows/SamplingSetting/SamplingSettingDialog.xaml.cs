@@ -28,11 +28,11 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.VisualStudio.PlatformUI;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using Microsoft.VisualStudio.PlatformUI;
 using WindowsPerfGUI.Options;
 using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK.WperfOutputs;
@@ -75,16 +75,18 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 EnableSPECheckBox.IsEnabled = false;
             }
         }
+
         private void ResetEventComboBox()
         {
             var eventList = new List<PredefinedEvent>(
                 SamplingSettings.samplingSettingsFrom.IsSPEEnabled
-                ? WPerfOptions.Instance.WperfList.PredefinedSPEFilters
-                : WPerfOptions.Instance.WperfList.PredefinedEvents
+                    ? WPerfOptions.Instance.WperfList.PredefinedSPEFilters
+                    : WPerfOptions.Instance.WperfList.PredefinedEvents
             );
 
             EventComboBox.ItemsSource = eventList;
         }
+
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             SyncSamplingSettings();
@@ -126,7 +128,9 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 SamplingEvent = (EventComboBox.SelectedItem as PredefinedEvent)?.AliasName,
                 SamplingFrequency = SamplingFrequencyComboBox.SelectedItem as string
             };
-            if (!SamplingSettings.samplingSettingsFrom.IsSPEEnabled) newSamplingEventConfig.SamplingFrequency = SamplingFrequencyComboBox.SelectedItem as string ?? WperfDefaults.Frequency;
+            if (!SamplingSettings.samplingSettingsFrom.IsSPEEnabled)
+                newSamplingEventConfig.SamplingFrequency =
+                    SamplingFrequencyComboBox.SelectedItem as string ?? WperfDefaults.Frequency;
             EventComboBox.SelectedIndex = -1;
             SamplingFrequencyComboBox.SelectedIndex = -1;
 
@@ -180,8 +184,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 VS.MessageBox.ShowError(ErrorLanguagePack.RawEventBadFormat);
                 return;
             }
-            var eventExists = SamplingSettings.samplingSettingsFrom.SamplingEventList.Any(el =>
-                el.SamplingEvent == eventIndex
+            var eventExists = SamplingSettings.samplingSettingsFrom.SamplingEventList.Any(
+                el => el.SamplingEvent == eventIndex
             );
 
             if (eventExists)
@@ -255,7 +259,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             )?.SamplingFrequency;
         }
 
-
         private void HideEventComboBoxPlaceholder()
         {
             EventComboBoxPlaceholder.Visibility = Visibility.Hidden;
@@ -264,7 +267,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             ToggleSPEMode(true, true);
-
         }
 
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
@@ -274,7 +276,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 
         private void ToggleSPEMode(bool enable, bool forceRefreshList = false)
         {
-            if (EventComboBox == null) return;
+            if (EventComboBox == null)
+                return;
             var eventList = new List<PredefinedEvent>(
                 WPerfOptions.Instance.WperfList.PredefinedEvents
             );
@@ -290,8 +293,10 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 RawEventStackPanel.Visibility = Visibility.Collapsed;
                 FrequencyListBoxHeader.Visibility = Visibility.Collapsed;
                 EventListBoxHeader.Text = SamplingSettingsLanguagePack.SPEEventListBoxHeader;
-                EventComboBoxPlaceholder.Text = SamplingSettingsLanguagePack.SPEEventComboBoxPlaceholder;
-                EventGroupBoxHeaderLabel.Content = SamplingSettingsLanguagePack.SPEEventGroupBoxHeaderLabel;
+                EventComboBoxPlaceholder.Text =
+                    SamplingSettingsLanguagePack.SPEEventComboBoxPlaceholder;
+                EventGroupBoxHeaderLabel.Content =
+                    SamplingSettingsLanguagePack.SPEEventGroupBoxHeaderLabel;
             }
             else
             {

@@ -30,15 +30,12 @@
 
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
-using CliWrap.Builders;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.Win32;
@@ -1050,12 +1047,16 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             using StreamReader reader = new(filename);
 
             string json = reader.ReadToEnd();
+            bool isSPESampling = JsonTypeChecker.IsJsonType<WperfSPE>(json);
+
+            WperfSampling samplingSection = isSPESampling
+                ? WperfSPE.FromJson(json).Sampling
+                : WperfSampling.FromJson(json);
 
             try
             {
-                WperfSampling wperfSampling = WperfSampling.FromJson(json);
                 formattedSamplingResults.FormatSamplingResults(
-                    wperfSampling,
+                    samplingSection,
                     $"Read from file: {filename}"
                 );
 

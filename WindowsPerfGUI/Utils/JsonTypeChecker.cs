@@ -28,22 +28,27 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-namespace WindowsPerfGUI.SDK.WperfOutputs
+using Newtonsoft.Json;
+
+namespace WindowsPerfGUI.Utils
 {
-    using Newtonsoft.Json;
-
-    public partial class WperfSPE
+    public class JsonTypeChecker
     {
-        [JsonProperty("sampling", Required = Required.Always)]
-        public WperfSampling Sampling { get; set; }
-
-        [JsonProperty("counting", Required = Required.Always)]
-        public WperfCounting Counting { get; set; }
-    }
-
-    public partial class WperfSPE
-    {
-        public static WperfSPE FromJson(string json) =>
-            JsonConvert.DeserializeObject<WperfSPE>(json, JsonSettings.Settings);
+        public static bool IsJsonType<T>(string jsonString)
+        {
+            try
+            {
+                JsonConvert.DeserializeObject<T>(jsonString);
+                return true;
+            }
+            catch (JsonReaderException)
+            {
+                return false;
+            }
+            catch (JsonSerializationException)
+            {
+                return false;
+            }
+        }
     }
 }
