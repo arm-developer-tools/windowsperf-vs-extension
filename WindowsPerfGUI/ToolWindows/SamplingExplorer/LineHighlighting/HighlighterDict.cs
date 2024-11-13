@@ -28,8 +28,8 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.VisualStudio.Text.Editor;
 using System.Collections.Generic;
+using Microsoft.VisualStudio.Text.Editor;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
 {
@@ -72,7 +72,10 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
                 return;
             FilePaths.Add(samplingSection.Name.ToLower());
 
-            FilesToHighlight.TryGetValue(samplingSection.Name.ToLower(), out FileToHighlight fileToHighlight);
+            FilesToHighlight.TryGetValue(
+                samplingSection.Name.ToLower(),
+                out FileToHighlight fileToHighlight
+            );
 
             if (fileToHighlight == null)
             {
@@ -108,6 +111,10 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting
                 return;
             }
             IWpfTextView _view = activeDocument?.TextView;
+            if (_view == null)
+            {
+                return;
+            }
             IAdornmentLayer _layer = _view.GetAdornmentLayer("LineHighlighter");
             LineHighlighter.RefreshTextHighlights(_view, _layer, 3);
         }

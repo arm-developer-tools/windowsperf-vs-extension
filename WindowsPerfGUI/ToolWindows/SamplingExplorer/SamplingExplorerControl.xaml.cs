@@ -28,17 +28,20 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.Text;
-using Microsoft.Win32;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using CliWrap.Builders;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Text;
+using Microsoft.Win32;
 using WindowsPerfGUI.Components;
 using WindowsPerfGUI.Components.TreeListView;
 using WindowsPerfGUI.Options;
@@ -108,7 +111,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             }
         }
 
-
         private void HandleSamplingStateReset(object sender, string stdError)
         {
             SamplingSettingsMonikerButton.IsEnabled = true;
@@ -125,12 +127,12 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                     "Other WindowsPerf process acquired the wperf-driver.",
                     "Click 'Retry' to use --force-lock to force driver to give lock to current `wperf` process.",
                     icon: OLEMSGICON.OLEMSGICON_CRITICAL,
-                    buttons: OLEMSGBUTTON.OLEMSGBUTTON_RETRYCANCEL);
+                    buttons: OLEMSGBUTTON.OLEMSGBUTTON_RETRYCANCEL
+                );
                 if (messageBoxResult == Microsoft.VisualStudio.VSConstants.MessageBoxResult.IDRETRY)
                 {
                     SamplingSettings.samplingSettingsFrom.ForceLock = true;
                     StartSamplingMonikerButton_Click(sender, new RoutedEventArgs());
-
                 }
                 throw new Exception();
             }
@@ -390,6 +392,15 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             StackPanel asseblyPanel = GenerateAssemblyStackPanel(samplingSection);
             if (asseblyPanel != null)
                 children.Add(asseblyPanel);
+            SamplingManager.Saved += (e) =>
+            {
+                StackPanel asseblyPanel = GenerateAssemblyStackPanel(samplingSection);
+                if (asseblyPanel != null)
+                {
+                    children.Clear();
+                    children.Add(asseblyPanel);
+                }
+            };
         }
 
         private StackPanel GenerateAssemblyStackPanel(SamplingSection samplingSection)
@@ -455,7 +466,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             Brush textColor = null
         )
         {
-            Grid asseblyTitleGrid = new Grid();
+            Grid asseblyTitleGrid = new();
             asseblyTitleGrid.ColumnDefinitions.Add(
                 new ColumnDefinition() { Width = new GridLength(100, GridUnitType.Pixel) }
             );
@@ -463,30 +474,198 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
                 new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) }
             );
 
+            Brush addressColor =
+                textColor
+                ?? (
+                    (
+                        SamplingManager.Instance.EnableDisassemblySyntaxHighlighting == true
+                        && isTitle == false
+                    )
+                        ? DrawingcolorToSolidBrush(SamplingManager.Instance.AddressColor)
+                        : null
+                );
+
             TextBlock addressTitleTB = GenerateTextBlock(
-                InlineText: new List<Inline>()
-                {
-                    isTitle ? new Bold(new Run(firstColumn)) : new Run(firstColumn)
-                },
+                InlineText: [isTitle ? new Bold(new Run(firstColumn)) : new Run(firstColumn)],
                 fontSize: isTitle ? _localFontSizes.lg : _localFontSizes.md,
-                textColor: textColor
+                textColor: addressColor
             );
-            FontFamily _fontFamily = new FontFamily("Consolas");
+            FontFamily _fontFamily = new("Consolas");
             addressTitleTB.FontFamily = _fontFamily;
             addressTitleTB.SetValue(Grid.ColumnProperty, 0);
 
             asseblyTitleGrid.Children.Add(addressTitleTB);
 
-            TextBlock instructionTitleTB = GenerateTextBlock(
-                InlineText: new List<Inline>() { new Bold(new Run(secondColumn)) },
-                fontSize: isTitle ? _localFontSizes.lg : _localFontSizes.md,
-                textColor: textColor
-            );
-            instructionTitleTB.SetValue(Grid.ColumnProperty, 1);
-            instructionTitleTB.FontFamily = _fontFamily;
+            if (isTitle)
+            {
+                TextBlock instructionTitleTB = GenerateTextBlock(
+                    InlineText: [new Bold(new Run(secondColumn))],
+                    fontSize: _localFontSizes.lg,
+                    textColor: textColor
+                );
+                instructionTitleTB.SetValue(Grid.ColumnProperty, 1);
+                instructionTitleTB.FontFamily = _fontFamily;
 
-            asseblyTitleGrid.Children.Add(instructionTitleTB);
+                asseblyTitleGrid.Children.Add(instructionTitleTB);
+            }
+            else
+            {
+                Grid instructionGrid = new();
+                instructionGrid.ColumnDefinitions.Add(
+                    new ColumnDefinition() { Width = new GridLength(50, GridUnitType.Pixel) }
+                );
+                instructionGrid.ColumnDefinitions.Add(
+                    new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) }
+                );
+                instructionGrid.SetValue(Grid.ColumnProperty, 1);
+
+                List<string> instructionList = [.. secondColumn.Split(null, 2)];
+
+                string instruction = instructionList[0];
+
+                TextBlock instructionTextBlock = GenerateTextBlock(
+                    InlineText: [new Bold(new Run(instruction))],
+                    fontSize: _localFontSizes.md,
+                    textColor: textColor
+                        ?? (
+                            SamplingManager.Instance.EnableDisassemblySyntaxHighlighting == true
+                                ? DrawingcolorToSolidBrush(SamplingManager.Instance.MnemonicColor)
+                                : null
+                        )
+                );
+                instructionTextBlock.FontFamily = _fontFamily;
+                instructionTextBlock.SetValue(Grid.ColumnProperty, 0);
+                instructionGrid.Children.Add(instructionTextBlock);
+                if (instructionList.Count > 1)
+                {
+                    string arguments = instructionList[1].Trim();
+
+                    List<Inline> highlightedArgsInlineList = [new Bold(new Run(arguments))];
+
+                    if (SamplingManager.Instance.EnableDisassemblySyntaxHighlighting)
+                    {
+                        highlightedArgsInlineList = HighlightArguments(arguments, textColor);
+                    }
+                    TextBlock argumentsTextBlock = GenerateTextBlock(
+                        InlineText: highlightedArgsInlineList,
+                        fontSize: _localFontSizes.md,
+                        textColor: textColor
+                    );
+                    argumentsTextBlock.FontFamily = _fontFamily;
+                    argumentsTextBlock.SetValue(Grid.ColumnProperty, 1);
+                    instructionGrid.Children.Add(argumentsTextBlock);
+                }
+                asseblyTitleGrid.Children.Add(instructionGrid);
+            }
             return asseblyTitleGrid;
+        }
+
+        private static SolidColorBrush DrawingcolorToSolidBrush(System.Drawing.Color color)
+        {
+            return new SolidColorBrush(Color.FromArgb(color.A, color.R, color.G, color.B));
+        }
+
+        private static List<Inline> HighlightArguments(string arguments, Brush textColor = null)
+        {
+            List<Inline> argsInlineList = [];
+
+            int valueCounter = 0;
+            int symoblicCounter = 0;
+            bool inComment = false;
+
+            for (int i = 0; i < arguments.Length; i++)
+            {
+                char c = arguments[i];
+                SolidColorBrush brush;
+                if (inComment)
+                    brush = Brushes.Gray;
+                else if (
+                    c == '@'
+                    || c == ';'
+                    || (
+                        i != arguments.Length - 1
+                        && (
+                            (c == '/' && arguments[i + 1] == '/')
+                            || (c == '%' && arguments[i + 1] == '%')
+                        )
+                    )
+                )
+                {
+                    inComment = true;
+                    brush = DrawingcolorToSolidBrush(SamplingManager.Instance.CommentColor);
+                }
+                else
+                    switch (c)
+                    {
+                        case '!':
+                            brush = DrawingcolorToSolidBrush(
+                                SamplingManager.Instance.UpdateModifierColor
+                            );
+                            break;
+                        case ',':
+                            brush = DrawingcolorToSolidBrush(
+                                SamplingManager.Instance.SeparatorColor
+                            );
+                            break;
+                        case '<':
+                            symoblicCounter++;
+                            brush = DrawingcolorToSolidBrush(
+                                SamplingManager.Instance.SymbolicNotationColor
+                            );
+                            break;
+                        case '>':
+                            symoblicCounter--;
+                            brush = DrawingcolorToSolidBrush(
+                                SamplingManager.Instance.SymbolicNotationColor
+                            );
+                            break;
+                        case '[':
+                        case ']':
+                        case '{':
+                        case '}':
+                            brush = DrawingcolorToSolidBrush(SamplingManager.Instance.GroupColor);
+                            break;
+                        case '#':
+                            valueCounter++;
+                            brush = DrawingcolorToSolidBrush(
+                                SamplingManager.Instance.ImmediateValueColor
+                            );
+                            break;
+                        case ' ':
+                            valueCounter = 0;
+                            brush = DrawingcolorToSolidBrush(
+                                SamplingManager.Instance.SeparatorColor
+                            );
+                            break;
+                        default:
+                            brush =
+                                valueCounter > 0
+                                    ? DrawingcolorToSolidBrush(
+                                        SamplingManager.Instance.ImmediateValueColor
+                                    )
+                                    : symoblicCounter > 0
+                                        ? DrawingcolorToSolidBrush(
+                                            SamplingManager.Instance.SymbolicNotationColor
+                                        )
+                                        : DrawingcolorToSolidBrush(
+                                            SamplingManager.Instance.RegisterColor
+                                        );
+                            break;
+                    }
+
+                argsInlineList.Add(
+                    (
+                        new Run()
+                        {
+                            Text = c.ToString(),
+                            Foreground = textColor ?? brush,
+                            FontWeight = FontWeights.Bold
+                        }
+                    )
+                );
+            }
+
+            return argsInlineList;
         }
 
         private void CreateFunctionSummary(
@@ -864,7 +1043,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             fileDialog.Filter = "JSON files (*.json)|*.json";
 
             bool? result = fileDialog.ShowDialog();
-            if (result != true) return;
+            if (result != true)
+                return;
 
             string filename = fileDialog.FileName;
             using StreamReader reader = new(filename);
@@ -874,7 +1054,10 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             try
             {
                 WperfSampling wperfSampling = WperfSampling.FromJson(json);
-                formattedSamplingResults.FormatSamplingResults(wperfSampling, $"Read from file: {filename}");
+                formattedSamplingResults.FormatSamplingResults(
+                    wperfSampling,
+                    $"Read from file: {filename}"
+                );
 
                 _tree.Model ??= formattedSamplingResults;
                 _tree.UpdateTreeList();
@@ -883,7 +1066,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             {
                 VS.MessageBox.ShowError("Error loading JSON file", err.Message);
             }
-
         }
     }
 }
