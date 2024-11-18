@@ -146,6 +146,7 @@
     <Compile Include="Utils\Converters\InverseBooleanConverter.cs" />
     <Compile Include="Utils\Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Utils\Converters\StringlNullOrEmptyToVisibilityConverter.cs" />
+    <Compile Include="Utils\JsonTypeChecker.cs" />
     <Compile Include="Utils\WperfDefaults.cs" />
     <Compile Include="Utils\Converters\BooleanToLinkCursor.cs" />
     <Compile Include="Utils\Converters\BooleanToLinkTextDecoration.cs" />
