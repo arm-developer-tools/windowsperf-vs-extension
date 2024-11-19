@@ -241,6 +241,15 @@ namespace WindowsPerfGUI.Resources.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Record Spawn Delay (ms).
+        /// </summary>
+        public static string RecordSpawnDelay {
+            get {
+                return ResourceManager.GetString("RecordSpawnDelay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start sampling without building the current project.
         /// </summary>
         public static string RunTooltip {

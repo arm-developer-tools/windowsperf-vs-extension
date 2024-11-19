@@ -98,6 +98,18 @@
                     Padding="2"
                     Placeholder="2.5"
                     Text="{Binding Timeout, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                <Label
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Content="{x:Static locals:SamplingSettingsLanguagePack.RecordSpawnDelay}" />
+                <Components:CustomTextBoxControl
+                    x:Name="RecordSpawnDelayTextBox"
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Margin="0,0,0,10"
+                    Padding="2"
+                    Placeholder="500"
+                    Text="{Binding RecordSpawnDelay, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
 
                 <CheckBox Margin="0,10,0,0" IsChecked="{Binding ShouldDisassemble, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">

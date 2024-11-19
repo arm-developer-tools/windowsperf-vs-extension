@@ -142,7 +142,8 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             set
             {
                 customNumberOfRowsPerSample = value;
-                if (value == false) NumberOfRowsPerSample = 50;
+                if (value == false)
+                    NumberOfRowsPerSample = 50;
                 OnPropertyChanged();
             }
         }
@@ -156,15 +157,16 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             {
                 samplingEventList = value;
                 OnPropertyChanged();
-                IsEventSelectionEnabled =
-                   value.Count
-                   < WperfDefaults.TotalGPCNum;
+                IsEventSelectionEnabled = value.Count < WperfDefaults.TotalGPCNum;
                 OnPropertyChanged("IsEventSelectionEnabled");
                 CommandLinePreview = GenerateCommandLinePreview();
             }
         }
 
-        internal override string GenerateCommandLinePreview() { return SamplingSettings.GenerateCommandLinePreview(); }
+        internal override string GenerateCommandLinePreview()
+        {
+            return SamplingSettings.GenerateCommandLinePreview();
+        }
 
         public SamplingSettingsForm()
         {
@@ -179,6 +181,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 SelectedEventFrequency = samplingSettingsForm.SelectedEventFrequency;
                 SelectedEvent = samplingSettingsForm.SelectedEvent;
                 Timeout = samplingSettingsForm.Timeout;
+                RecordSpawnDelay = samplingSettingsForm.RecordSpawnDelay;
                 CPUCore = samplingSettingsForm.CPUCore;
                 ExtraArgs = samplingSettingsForm.ExtraArgs;
                 SamplingEventList = samplingSettingsForm.SamplingEventList;
