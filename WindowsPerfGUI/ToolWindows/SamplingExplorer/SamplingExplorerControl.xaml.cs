@@ -30,6 +30,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -46,6 +47,7 @@ using WindowsPerfGUI.Resources.Locals;
 using WindowsPerfGUI.SDK;
 using WindowsPerfGUI.SDK.WperfOutputs;
 using WindowsPerfGUI.ToolWindows.SamplingExplorer.LineHighlighting;
+using WindowsPerfGUI.ToolWindows.SamplingExplorer.SyntaxHighlighting;
 using WindowsPerfGUI.ToolWindows.SamplingSetting;
 using WindowsPerfGUI.Utils;
 
@@ -154,6 +156,46 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             wperfClient.OnSPESamplingFinished += HandleSPESamplingFinished;
             StopSamplingMonikerButton.IsEnabled = false;
             this._colorResolution = SamplingManager.Instance.HighlighterColorResolution;
+
+            _tree.Loaded += (sender, e) =>
+            {
+                if (SamplingManager.Instance.EnableAnnotatedSymbolsSyntaxHighlighting)
+                {
+                    var scrollViewer = VisualTreeHelpers.GetScrollViewer(_tree);
+                    scrollViewer.ScrollChanged += HighlightTreeRows;
+                }
+            };
+            SamplingManager.Saved += (e) =>
+            {
+                HighlightTreeRows(null, null);
+                var scrollViewer = VisualTreeHelpers.GetScrollViewer(_tree);
+                if (e.EnableAnnotatedSymbolsSyntaxHighlighting)
+                {
+                    scrollViewer.ScrollChanged += HighlightTreeRows;
+                }
+                else
+                {
+                    scrollViewer.ScrollChanged -= HighlightTreeRows;
+                }
+
+                if (_tree.SelectedItem == null)
+                    return;
+                SamplingSection selecteditem =
+                    (_tree.SelectedItem as TreeNode).Tag as SamplingSection;
+
+                switch (selecteditem.SectionType)
+                {
+                    case SamplingSection.SamplingSectionType.SAMPLE_FUNCTION:
+                        SummaryStack.Children.Clear();
+                        CreateFunctionSummary(SummaryStack.Children, selecteditem);
+                        break;
+
+                    case SamplingSection.SamplingSectionType.SAMPLE_SOURCE_CODE:
+                        SummaryStack.Children.Clear();
+                        CreateSourceCodeSummary(SummaryStack.Children, selecteditem);
+                        break;
+                }
+            };
         }
 
         private void SettingsMonikerButton_Click(object sender, RoutedEventArgs e)
@@ -389,15 +431,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             StackPanel asseblyPanel = GenerateAssemblyStackPanel(samplingSection);
             if (asseblyPanel != null)
                 children.Add(asseblyPanel);
-            SamplingManager.Saved += (e) =>
-            {
-                StackPanel asseblyPanel = GenerateAssemblyStackPanel(samplingSection);
-                if (asseblyPanel != null)
-                {
-                    children.Clear();
-                    children.Add(asseblyPanel);
-                }
-            };
         }
 
         private StackPanel GenerateAssemblyStackPanel(SamplingSection samplingSection)
@@ -509,7 +542,7 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             {
                 Grid instructionGrid = new();
                 instructionGrid.ColumnDefinitions.Add(
-                    new ColumnDefinition() { Width = new GridLength(50, GridUnitType.Pixel) }
+                    new ColumnDefinition() { Width = new GridLength(100, GridUnitType.Pixel) }
                 );
                 instructionGrid.ColumnDefinitions.Add(
                     new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) }
@@ -539,14 +572,22 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
 
                     List<Inline> highlightedArgsInlineList = [new Bold(new Run(arguments))];
 
-                    if (SamplingManager.Instance.EnableDisassemblySyntaxHighlighting)
+                    if (
+                        SamplingManager.Instance.EnableDisassemblySyntaxHighlighting
+                        && textColor == null
+                    )
                     {
-                        highlightedArgsInlineList = HighlightArguments(arguments, textColor);
+                        highlightedArgsInlineList = SyntaxHighlighter.HighlightCode(
+                            arguments,
+                            Rules.GetARM64AssemblyRules(),
+                            defaultColor: SamplingManager.Instance.RegisterColor
+                        );
                     }
                     TextBlock argumentsTextBlock = GenerateTextBlock(
                         InlineText: highlightedArgsInlineList,
                         fontSize: _localFontSizes.md,
-                        textColor: textColor
+                        textColor: textColor,
+                        fontWeight: _localFontWeights.bold
                     );
                     argumentsTextBlock.FontFamily = _fontFamily;
                     argumentsTextBlock.SetValue(Grid.ColumnProperty, 1);
@@ -562,109 +603,6 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             return new SolidColorBrush(Color.FromArgb(color.A, color.R, color.G, color.B));
         }
 
-        private static List<Inline> HighlightArguments(string arguments, Brush textColor = null)
-        {
-            List<Inline> argsInlineList = [];
-
-            int valueCounter = 0;
-            int symoblicCounter = 0;
-            bool inComment = false;
-
-            for (int i = 0; i < arguments.Length; i++)
-            {
-                char c = arguments[i];
-                SolidColorBrush brush;
-                if (inComment)
-                    brush = Brushes.Gray;
-                else if (
-                    c == '@'
-                    || c == ';'
-                    || (
-                        i != arguments.Length - 1
-                        && (
-                            (c == '/' && arguments[i + 1] == '/')
-                            || (c == '%' && arguments[i + 1] == '%')
-                        )
-                    )
-                )
-                {
-                    inComment = true;
-                    brush = DrawingcolorToSolidBrush(SamplingManager.Instance.CommentColor);
-                }
-                else
-                    switch (c)
-                    {
-                        case '!':
-                            brush = DrawingcolorToSolidBrush(
-                                SamplingManager.Instance.UpdateModifierColor
-                            );
-                            break;
-                        case ',':
-                            brush = DrawingcolorToSolidBrush(
-                                SamplingManager.Instance.SeparatorColor
-                            );
-                            break;
-                        case '<':
-                            symoblicCounter++;
-                            brush = DrawingcolorToSolidBrush(
-                                SamplingManager.Instance.SymbolicNotationColor
-                            );
-                            break;
-                        case '>':
-                            symoblicCounter--;
-                            brush = DrawingcolorToSolidBrush(
-                                SamplingManager.Instance.SymbolicNotationColor
-                            );
-                            break;
-                        case '[':
-                        case ']':
-                        case '{':
-                        case '}':
-                            brush = DrawingcolorToSolidBrush(SamplingManager.Instance.GroupColor);
-                            break;
-                        case '#':
-                            valueCounter++;
-                            brush = DrawingcolorToSolidBrush(
-                                SamplingManager.Instance.ImmediateValueColor
-                            );
-                            break;
-                        case ' ':
-                            valueCounter = 0;
-                            brush = DrawingcolorToSolidBrush(
-                                SamplingManager.Instance.SeparatorColor
-                            );
-                            break;
-                        default:
-                            brush =
-                                valueCounter > 0
-                                    ? DrawingcolorToSolidBrush(
-                                        SamplingManager.Instance.ImmediateValueColor
-                                    )
-                                    : symoblicCounter > 0
-                                        ? DrawingcolorToSolidBrush(
-                                            SamplingManager.Instance.SymbolicNotationColor
-                                        )
-                                        : DrawingcolorToSolidBrush(
-                                            SamplingManager.Instance.RegisterColor
-                                        );
-                            break;
-                    }
-
-                argsInlineList.Add(
-                    (
-                        new Run()
-                        {
-                            Text = c.ToString(),
-                            Foreground = textColor ?? brush,
-                            FontWeight = FontWeights.Bold
-                        }
-                    )
-                );
-            }
-
-            return argsInlineList;
-        }
-
         private void CreateFunctionSummary(
             UIElementCollection children,
             SamplingSection samplingSection
@@ -674,17 +612,28 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             {
                 return;
             }
+            var functionNameInlines = new List<Inline>()
+            {
+                new Bold(new Run($"{SamplingExplorerLanguagePack.FunctionName}: ")),
+            };
 
+            if (SamplingManager.Instance.EnableAnnotatedSymbolsSyntaxHighlighting)
+            {
+                functionNameInlines.AddRange(
+                    SyntaxHighlighter.HighlightCode(
+                        samplingSection.Name,
+                        Rules.GetCPPRules(),
+                        defaultColor: System.Drawing.Color.White,
+                        configureHighlightedRun: block => block.FontWeight = FontWeights.Bold
+                    )
+                );
+            }
+            else
+            {
+                functionNameInlines.Add(new Run(samplingSection.Name));
+            }
             children.Add(
-                GenerateTextBlock(
-                    new List<Inline>()
-                    {
-                        new Bold(new Run($"{SamplingExplorerLanguagePack.FunctionName}: ")),
-                        new Run(samplingSection.Name)
-                    },
-                    _localFontSizes.lg,
-                    _localFontWeights.bold
-                )
+                GenerateTextBlock(functionNameInlines, _localFontSizes.lg, _localFontWeights.bold)
             );
             children.Add(
                 GenerateTextBlock(
@@ -1067,6 +1016,54 @@ namespace WindowsPerfGUI.ToolWindows.SamplingExplorer
             {
                 VS.MessageBox.ShowError("Error loading JSON file", err.Message);
             }
+        }
+
+        private string GetTextFromTextBlockInlines(TextBlock tb)
+        {
+            return string.Join(
+                null,
+                tb.Inlines.Select(el => new TextRange(el.ContentStart, el.ContentEnd).Text)
+            );
+        }
+
+        private void HighlightTreeRows(object sender, object e)
+        {
+            foreach (TreeNode levelThreeNode in _tree.Rows.Where(node => node.Level == 2))
+            {
+                if (
+                    _tree.ItemContainerGenerator.ContainerFromItem(levelThreeNode)
+                    is not TreeListItem treeListItem
+                )
+                    continue;
+
+                TextBlock textBlock = VisualTreeHelpers.FindTextBlock(treeListItem);
+                if (textBlock == null)
+                    continue;
+                TextBlock newTextBlock = new();
+
+                string text = GetTextFromTextBlockInlines(textBlock);
+                if (!SamplingManager.Instance.EnableAnnotatedSymbolsSyntaxHighlighting)
+                {
+                    newTextBlock.Text = text;
+                }
+                else
+                {
+                    newTextBlock.Inlines.AddRange(
+                        SyntaxHighlighting.SyntaxHighlighter.HighlightCode(
+                            text,
+                            SyntaxHighlighting.Rules.GetCPPRules(),
+                            defaultColor: System.Drawing.Color.White,
+                            configureHighlightedRun: block => block.FontWeight = FontWeights.Bold
+                        )
+                    );
+                }
+
+                if (VisualTreeHelper.GetParent(textBlock) is not StackPanel stackPanel)
+                    continue;
+                stackPanel.Children.Remove(textBlock);
+                stackPanel.Children.Add(newTextBlock);
+            }
+            VisualTreeHelpers.UpdateUI();
         }
     }
 }

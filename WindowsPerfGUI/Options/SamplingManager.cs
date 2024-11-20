@@ -99,5 +99,25 @@ namespace WindowsPerfGUI.Options
         [DisplayName("Register Color")]
         [Description("Sets the color of registers.")]
         public Color RegisterColor { get; set; } = Color.LightPink;
+
+        [Category("Syntax Highlighting")]
+        [DisplayName("Annotated Symbols Syntax Highlighting")]
+        [Description("Enables or disables annotated symbols syntax highlighting")]
+        public bool EnableAnnotatedSymbolsSyntaxHighlighting { get; set; } = true;
+
+        [Category("Annotated Symbols Highlighting Colors")]
+        [DisplayName("Keyword Color")]
+        [Description("Sets the color of keywords.")]
+        public Color KeywordColor { get; set; } = Color.SkyBlue;
+
+        [Category("Annotated Symbols Highlighting Colors")]
+        [DisplayName("Symbol Color")]
+        [Description("Sets the color of symbols.")]
+        public Color SymbolColor { get; set; } = Color.Yellow;
+
+        [Category("Annotated Symbols Highlighting Colors")]
+        [DisplayName("Module Color")]
+        [Description("Sets the color of modules.")]
+        public Color ModuleColor { get; set; } = Color.LightPink;
     }
 }
