@@ -207,4 +207,7 @@
   <data name="EnableSPECheckBoxText" xml:space="preserve">
     <value>Activer mode SPE</value>
   </data>
+  <data name="RecordSpawnDelay" xml:space="preserve">
+    <value>Délai d'enregistrement (ms)</value>
+  </data>
 </root>

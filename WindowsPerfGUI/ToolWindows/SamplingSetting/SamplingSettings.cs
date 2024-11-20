@@ -54,20 +54,21 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             if (samplingSettingsFrom.IsSPEEnabled)
             {
                 string SPEFilters = string.Join("=1,", samplingSettingsFrom.SamplingEventList);
-                if (samplingSettingsFrom.SamplingEventList.Count > 0) SPEFilters = $"{SPEFilters}=1";
+                if (samplingSettingsFrom.SamplingEventList.Count > 0)
+                    SPEFilters = $"{SPEFilters}=1";
                 AppendElementsToList(
-                argsList,
-                "-e",
-                $"{WperfList.SPE_EVENT_BASE_NAME}{WperfList.SPE_EVENT_SEPARATOR}{SPEFilters}{WperfList.SPE_EVENT_SEPARATOR}"
-            );
+                    argsList,
+                    "-e",
+                    $"{WperfList.SPE_EVENT_BASE_NAME}{WperfList.SPE_EVENT_SEPARATOR}{SPEFilters}{WperfList.SPE_EVENT_SEPARATOR}"
+                );
             }
             else
             {
                 AppendElementsToList(
-                argsList,
-                "-e",
-                string.Join(",", samplingSettingsFrom.SamplingEventList)
-            );
+                    argsList,
+                    "-e",
+                    string.Join(",", samplingSettingsFrom.SamplingEventList)
+                );
             }
 
             AppendElementsToList(
@@ -77,15 +78,29 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
             );
 
             AppendElementsToList(argsList, "--annotate");
-            if (samplingSettingsFrom.ShouldDisassemble) AppendElementsToList(argsList, "--disassemble");
-            if (samplingSettingsFrom.SampleDisplayLong) AppendElementsToList(argsList, "--sample-display-long");
-            if (samplingSettingsFrom.NumberOfRowsPerSample != 50) AppendElementsToList(argsList, "--sample-display-row", samplingSettingsFrom.NumberOfRowsPerSample.ToString());
+            if (samplingSettingsFrom.ShouldDisassemble)
+                AppendElementsToList(argsList, "--disassemble");
+            if (samplingSettingsFrom.SampleDisplayLong)
+                AppendElementsToList(argsList, "--sample-display-long");
+            if (samplingSettingsFrom.NumberOfRowsPerSample != 50)
+                AppendElementsToList(
+                    argsList,
+                    "--sample-display-row",
+                    samplingSettingsFrom.NumberOfRowsPerSample.ToString()
+                );
 
             AppendElementsToList(argsList, "--timeout", samplingSettingsFrom.Timeout);
+            AppendElementsToList(
+                argsList,
+                "--record_spawn_delay",
+                samplingSettingsFrom.RecordSpawnDelay
+            );
             AppendElementsToList(argsList, "-v", "--json");
 
-            if (samplingSettingsFrom.ForceLock) AppendElementsToList(argsList, "--force-lock");
-            if (samplingSettingsFrom.KernelMode) AppendElementsToList(argsList, "-k");
+            if (samplingSettingsFrom.ForceLock)
+                AppendElementsToList(argsList, "--force-lock");
+            if (samplingSettingsFrom.KernelMode)
+                AppendElementsToList(argsList, "-k");
 
             AppendElementsToList(argsList, "--pdb_file", samplingSettingsFrom.PdbFile);
             AppendElementsToList(argsList, "--");
@@ -98,7 +113,10 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
         private static void ValidateSettings()
         {
             AreSettingsFilled = !(
-                (samplingSettingsFrom.SamplingEventList.Count < 1 && !samplingSettingsFrom.IsSPEEnabled)
+                (
+                    samplingSettingsFrom.SamplingEventList.Count < 1
+                    && !samplingSettingsFrom.IsSPEEnabled
+                )
                 || string.IsNullOrEmpty(samplingSettingsFrom.FilePath)
                 || string.IsNullOrEmpty(samplingSettingsFrom.CPUCore?.coreNumber.ToString())
             );

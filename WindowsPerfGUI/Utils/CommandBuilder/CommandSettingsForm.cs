@@ -224,6 +224,19 @@ namespace WindowsPerfGUI.Utils.CommandBuilder
                 CommandLinePreview = GenerateCommandLinePreview();
             }
         }
+        private string recordSpawnDelay;
+
+        public string RecordSpawnDelay
+        {
+            get { return recordSpawnDelay; }
+            set
+            {
+                recordSpawnDelay = value;
+                OnPropertyChanged();
+                CommandLinePreview = GenerateCommandLinePreview();
+            }
+        }
+
         internal NotifyCollectionChangedEventHandler CollectionUpdater(string callerMemberName)
         {
             return (object sender, NotifyCollectionChangedEventArgs e) =>
@@ -232,6 +245,7 @@ namespace WindowsPerfGUI.Utils.CommandBuilder
                 CommandLinePreview = GenerateCommandLinePreview();
             };
         }
+
         internal abstract string GenerateCommandLinePreview();
     }
 }
