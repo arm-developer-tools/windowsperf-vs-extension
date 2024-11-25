@@ -33,7 +33,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shapes;
 using Microsoft.VisualStudio.PlatformUI;
-using WindowsPerfGUI.ToolWindows.SamplingExplorer;
 
 namespace WindowsPerfGUI.Components.TreeListView
 {
@@ -82,9 +81,6 @@ namespace WindowsPerfGUI.Components.TreeListView
                 base.OnKeyDown(e);
                 return;
             }
-
-            Debug.WriteLine(e.Key);
-            Debug.WriteLine((Node.Tag as SamplingSection).Name);
 
             switch (e.Key)
             {
