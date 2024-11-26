@@ -59,8 +59,6 @@ namespace WindowsPerfGUI.Tests.Utils.ListSearcher
             );
 
             var result = sut.Search(searchString);
-            TestContext.WriteLine(result);
-            TestContext.WriteLine(searchString);
             return result.Count;
         }
     }
