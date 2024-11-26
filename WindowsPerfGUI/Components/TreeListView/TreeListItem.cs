@@ -31,6 +31,8 @@
 using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Shapes;
+using Microsoft.VisualStudio.PlatformUI;
 
 namespace WindowsPerfGUI.Components.TreeListView
 {
@@ -56,6 +58,14 @@ namespace WindowsPerfGUI.Components.TreeListView
 
         protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
         {
+            if (
+                e.OriginalSource is Path
+                || (
+                    e.OriginalSource is Border
+                    && (e.OriginalSource as Border).GetVisualOrLogicalParent() is not TreeListItem
+                )
+            )
+                return;
             if (Node != null && Node.IsExpandable)
             {
                 Node.IsExpanded = !Node.IsExpanded;
@@ -76,13 +86,18 @@ namespace WindowsPerfGUI.Components.TreeListView
             {
                 case Key.Right:
                     e.Handled = true;
-                    if (!Node.IsExpanded)
+                    if (Node.IsExpandable)
                     {
-                        Node.IsExpanded = true;
-                        ChangeFocus(Node);
+                        if (!Node.IsExpanded)
+                        {
+                            Node.IsExpanded = true;
+                            ChangeFocus(Node);
+                        }
+                        else if (Node.Children.Count > 0)
+                        {
+                            ChangeFocus(Node.Children[0]);
+                        }
                     }
-                    else if (Node.Children.Count > 0)
-                        ChangeFocus(Node.Children[0]);
 
                     break;
 

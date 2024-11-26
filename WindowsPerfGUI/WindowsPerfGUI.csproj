@@ -134,6 +134,8 @@
     </Compile>
     <Compile Include="ToolWindows\CountingSetting\CountingSettings.cs" />
     <Compile Include="ToolWindows\CountingSetting\CountingSettingsForm.cs" />
+    <Compile Include="ToolWindows\SamplingExplorer\SyntaxHighlighting\Rules.cs" />
+    <Compile Include="ToolWindows\SamplingExplorer\SyntaxHighlighting\SyntaxHighlighter.cs" />
     <Compile Include="ToolWindows\SamplingSetting\SolutionProjectOutput.cs" />
     <Compile Include="ToolWindows\SamplingExplorer\LineHighlighting\ColorGenerator.cs" />
     <Compile Include="ToolWindows\SamplingExplorer\LineHighlighting\LineHighlighter.cs" />
@@ -147,6 +149,7 @@
     <Compile Include="Utils\Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Utils\Converters\StringlNullOrEmptyToVisibilityConverter.cs" />
     <Compile Include="Utils\JsonTypeChecker.cs" />
+    <Compile Include="Utils\VisualTreeHelpers.cs" />
     <Compile Include="Utils\WperfDefaults.cs" />
     <Compile Include="Utils\Converters\BooleanToLinkCursor.cs" />
     <Compile Include="Utils\Converters\BooleanToLinkTextDecoration.cs" />
