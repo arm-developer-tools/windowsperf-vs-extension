@@ -11,7 +11,7 @@ namespace WindowsPerfGUI
         public const string Name = "WindowsPerf GUI";
         public const string Description = @"WindowsPerf GUI (Graphical User Interface) project, a Visual Studio 2022 extension designed to bring a seamless UI experience to WindowsPerf, the command-line performance profiling tool for Windows on Arm.";
         public const string Language = "en-US";
-        public const string Version = "3.0.1";
+        public const string Version = "3.1.0";
         public const string Author = "arm";
         public const string Tags = "WindowsPerf; WindowsPerfGUI;WindowsOnArm; WOA; Profiling; perf; PMU; Performance";
     }
