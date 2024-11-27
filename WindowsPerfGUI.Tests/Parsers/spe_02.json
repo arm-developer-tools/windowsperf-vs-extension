@@ -1,0 +1,53 @@
+{"sampling":{
+"sampling": {
+"pe_file": "cpython\\PCbuild\\arm64\\python_d.exe",
+"pdb_file": "cpython\\PCbuild\\arm64\\python_d.pdb",
+"sample_display_row": 50,
+"samples_generated": 17,
+"samples_dropped": 0,
+"base_address": 140696055321224,
+"runtime_delta": 140690686607360,
+"modules":[{"name":"ADVAPI32.dll","address":140707791437824,"path":"C:\\Windows\\System32\\ADVAPI32.dll"},{"name":"KERNEL32.DLL","address":140707775578112,"path":"C:\\Windows\\System32\\KERNEL32.DLL"},{"name":"KERNELBASE.dll","address":140707756965888,"path":"C:\\Windows\\System32\\KERNELBASE.dll"},{"name":"RPCRT4.dll","address":140707797729280,"path":"C:\\Windows\\System32\\RPCRT4.dll"},{"name":"VCRUNTIME140D.dll","address":140707138306048,"path":"C:\\Windows\\SYSTEM32\\VCRUNTIME140D.dll"},{"name":"VERSION.dll","address":140707424960512,"path":"C:\\Windows\\SYSTEM32\\VERSION.dll"},{"name":"WS2_32.dll","address":140707765485568,"path":"C:\\Windows\\System32\\WS2_32.dll"},{"name":"bcrypt.dll","address":140707732127744,"path":"C:\\Windows\\SYSTEM32\\bcrypt.dll"},{"name":"bcryptprimitives.dll","address":140707763519488,"path":"C:\\Windows\\System32\\bcryptprimitives.dll"},{"name":"msvcrt.dll","address":140707806576640,"path":"C:\\Windows\\System32\\msvcrt.dll"},{"name":"ntdll.dll","address":140707826106368,"path":"C:\\Windows\\SYSTEM32\\ntdll.dll"},{"name":"python312_d.dll","address":140705709555712,"path":"C:\\Users\\przemek\\Workspace\\3.8.0-release\\cpython\\PCbuild\\arm64\\python312_d.dll"},{"name":"python_d.exe","address":140696055316480,"path":"C:\\Users\\przemek\\Workspace\\3.8.0-release\\cpython\\PCbuild\\arm64\\python_d.exe"},{"name":"sechost.dll","address":140707803037696,"path":"C:\\Windows\\System32\\sechost.dll"},{"name":"ucrtbased.dll","address":140706055192576,"path":"C:\\Windows\\SYSTEM32\\ucrtbased.dll"}],
+"modules_info": [{"sections":[{"section":".text","offset":4096,"virtual_size":9543036},{"section":".rdata","offset":9547776,"virtual_size":2699921},{"section":".data","offset":12251136,"virtual_size":1284801},{"section":".pdata","offset":13537280,"virtual_size":101784},{"section":".idata","offset":13639680,"virtual_size":15048},{"section":"PyRuntim","offset":13656064,"virtual_size":552428},{"section":".00cfg","offset":14209024,"virtual_size":337},{"section":".rsrc","offset":14213120,"virtual_size":3478},{"section":".reloc","offset":14217216,"virtual_size":133749}],"module":"python312_d.dll","pdb_file":"C:\\Users\\przemek\\Workspace\\3.8.0-release\\cpython\\PCbuild\\arm64\\python312_d.pdb","pe_name":"C:\\Users\\przemek\\Workspace\\3.8.0-release\\cpython\\PCbuild\\arm64\\python312_d.dll"},
+{"sections":[{"section":".text","offset":4096,"virtual_size":28521},{"section":".rdata","offset":32768,"virtual_size":6774},{"section":".data","offset":40960,"virtual_size":625},{"section":".pdata","offset":45056,"virtual_size":840},{"section":".idata","offset":49152,"virtual_size":2868},{"section":".00cfg","offset":53248,"virtual_size":337},{"section":".rsrc","offset":57344,"virtual_size":97481},{"section":".reloc","offset":155648,"virtual_size":431}],"module":"python_d.exe","pdb_file":"C:\\Users\\przemek\\Workspace\\3.8.0-release\\cpython\\PCbuild\\arm64\\python_d.pdb","pe_name":"C:\\Users\\przemek\\Workspace\\3.8.0-release\\cpython\\PCbuild\\arm64\\python_d.exe"}],
+"events": [{"type":"LOAD_STORE_ATOMIC-LOAD-GP/retired+level1-data-cache-access+tlb_access","samples":[{"overhead":66.6667,"count":12,"symbol":"x_mul:python312_d.dll"},{"overhead":11.1111,"count":2,"symbol":"v_iadd:python312_d.dll"},{"overhead":5.55556,"count":1,"symbol":"read_size_t:python312_d.dll"},{"overhead":5.55556,"count":1,"symbol":"_Py_atomic_load_32bit_impl:python312_d.dll"},{"overhead":5.55556,"count":1,"symbol":"v_isub:python312_d.dll"},{"overhead":5.55556,"count":1,"symbol":"_PyMem_DebugCheckAddress:python312_d.dll"}],"interval":0,"printed_sample_num":6,
+"pcs":[{"address":140705713767264,"count":2,"in_symbol":"x_mul:python312_d.dll"},{"address":140705713767280,"count":2,"in_symbol":"x_mul:python312_d.dll"},{"address":140705713767324,"count":2,"in_symbol":"x_mul:python312_d.dll"},{"address":140705713767276,"count":1,"in_symbol":"x_mul:python312_d.dll"},{"address":140705713767312,"count":1,"in_symbol":"x_mul:python312_d.dll"},{"address":140705713767356,"count":1,"in_symbol":"x_mul:python312_d.dll"},{"address":140705713767368,"count":1,"in_symbol":"x_mul:python312_d.dll"},{"address":140705713767348,"count":1,"in_symbol":"x_mul:python312_d.dll"},{"address":140705713767336,"count":1,"in_symbol":"x_mul:python312_d.dll"},{"address":140705713760192,"count":2,"in_symbol":"v_iadd:python312_d.dll"},{"address":140705713960740,"count":1,"in_symbol":"read_size_t:python312_d.dll"},{"address":140705711051760,"count":1,"in_symbol":"_Py_atomic_load_32bit_impl:python312_d.dll"},{"address":140705713760840,"count":1,"in_symbol":"v_isub:python312_d.dll"},{"address":140705713933052,"count":1,"in_symbol":"_PyMem_DebugCheckAddress:python312_d.dll"}],
+"annotate": [{"function_name": "x_mul:python312_d.dll",
+"source_code":[{"line_number":3590,"hits":6,"filename":"C:\\Users\\przemek\\Workspace\\3.5.0-beta\\wperf-scripts\\tests\\cpython\\Objects\\longobject.c"},{"line_number":3591,"hits":3,"filename":"C:\\Users\\przemek\\Workspace\\3.5.0-beta\\wperf-scripts\\tests\\cpython\\Objects\\longobject.c"},{"line_number":3589,"hits":2,"filename":"C:\\Users\\przemek\\Workspace\\3.5.0-beta\\wperf-scripts\\tests\\cpython\\Objects\\longobject.c"},{"line_number":3592,"hits":1,"filename":"C:\\Users\\przemek\\Workspace\\3.5.0-beta\\wperf-scripts\\tests\\cpython\\Objects\\longobject.c"}]},
+{"function_name": "v_iadd:python312_d.dll",
+"source_code":[{"line_number":1574,"hits":2,"filename":"C:\\Users\\przemek\\Workspace\\3.5.0-beta\\wperf-scripts\\tests\\cpython\\Objects\\longobject.c"}]},
+{"function_name": "read_size_t:python312_d.dll",
+"source_code":[{"line_number":1759,"hits":1,"filename":"C:\\Users\\przemek\\Workspace\\3.5.0-beta\\wperf-scripts\\tests\\cpython\\Objects\\obmalloc.c"}]},
+{"function_name": "_Py_atomic_load_32bit_impl:python312_d.dll",
+"source_code":[{"line_number":486,"hits":1,"filename":"C:\\Users\\przemek\\Workspace\\3.5.0-beta\\wperf-scripts\\tests\\cpython\\Include\\internal\\pycore_atomic.h"}]},
+{"function_name": "v_isub:python312_d.dll",
+"source_code":[{"line_number":1601,"hits":1,"filename":"C:\\Users\\przemek\\Workspace\\3.5.0-beta\\wperf-scripts\\tests\\cpython\\Objects\\longobject.c"}]},
+{"function_name": "_PyMem_DebugCheckAddress:python312_d.dll",
+"source_code":[{"line_number":2086,"hits":1,"filename":"C:\\Users\\przemek\\Workspace\\3.5.0-beta\\wperf-scripts\\tests\\cpython\\Objects\\obmalloc.c"}]}]}
+]}
+},
+"counting":{
+"core": {
+"Multiplexing": false,
+"Kernel_mode": false,
+"cores":[{
+"core_number":7,"Performance_counter":[{"counter_value":65247952197,"event_name":"cycle","event_idx":"fixed","event_note":"e"},{"counter_value":168791063034,"event_name":"sample_pop","event_idx":"0x4000","event_note":"e"},{"counter_value":39,"event_name":"sample_feed","event_idx":"0x4001","event_note":"e"},{"counter_value":17,"event_name":"sample_filtrate","event_idx":"0x4002","event_note":"e"},{"counter_value":0,"event_name":"sample_collision","event_idx":"0x4003","event_note":"e"}]
+}
+]
+,
+"overall": {}
+,
+"ts_metric": {}
+}
+,
+"dsu": {
+"l3metric": {},
+"overall": {}
+}
+,
+"dmc": {
+"pmu": {},
+"ddr": {}
+},
+"Time_elapsed": 0
+}}
