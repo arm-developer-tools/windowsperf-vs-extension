@@ -27,131 +27,281 @@
     </platform:DialogWindow.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <GroupBox
-            Grid.Row="0"
-            Grid.Column="0"
-            Padding="5">
-            <GroupBox.Header>
-                <Label Content="{x:Static locals:SamplingSettingsLanguagePack.Payload}" />
-            </GroupBox.Header>
-            <StackPanel Orientation="Vertical">
-                <Components:CustomRadioButtonControl
-                    x:Name="CustomProcessRadioButton"
-                    Content="{x:Static locals:SamplingSettingsLanguagePack.PayloadFromFile}"
-                    GroupName="SamplingSourceRadioButtonGroup"
-                    IsChecked="{Binding CustomProcessRadioButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                <Components:FilePicker
-                    x:Name="SamplingSourcePathFilePicker"
-                    IsEnabled="{Binding IsChecked, ElementName=CustomProcessRadioButton, Converter={StaticResource NullToDisabledConverter}}"
-                    OnChange="FilePickerTextBox_TextChanged" />
-                <StackPanel Orientation="Horizontal">
-                    <Components:CustomRadioButtonControl
-                        x:Name="CurrentProjectProcessRadioButton"
-                        Content="{x:Static locals:SamplingSettingsLanguagePack.ProjectTarget}"
-                        GroupName="SamplingSourceRadioButtonGroup"
-                        IsChecked="{Binding CurrentProjectProcessRadioButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                    <Label x:Name="ProjectTargetConfigLabel" />
-                </StackPanel>
-                <Label Content="{x:Static locals:SamplingSettingsLanguagePack.ExtraArgs}" />
-                <Components:CustomTextBoxControl
-                    x:Name="ExtraArgs"
-                    Padding="2"
-                    Placeholder="extra args..."
-                    Text="{Binding ExtraArgs, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-            </StackPanel>
-        </GroupBox>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-        <GroupBox
-            Grid.Row="1"
-            Margin="0,0,0,0"
-            Padding="5">
-            <GroupBox.Header>
-                <Label Content="{x:Static locals:SamplingSettingsLanguagePack.Parameters}" />
-            </GroupBox.Header>
-            <StackPanel>
-                <Label
+                <GroupBox
                     Grid.Row="0"
                     Grid.Column="0"
-                    Content="{x:Static locals:SamplingSettingsLanguagePack.CpuCore}" />
-                <Components:CustomComboBoxControl
-                    x:Name="CpuCoreComboBox"
+                    Padding="5">
+                    <GroupBox.Header>
+                        <Label Content="{x:Static locals:SamplingSettingsLanguagePack.Payload}" />
+                    </GroupBox.Header>
+                    <StackPanel Orientation="Vertical">
+                        <Components:CustomRadioButtonControl
+                            x:Name="CustomProcessRadioButton"
+                            Content="{x:Static locals:SamplingSettingsLanguagePack.PayloadFromFile}"
+                            GroupName="SamplingSourceRadioButtonGroup"
+                            IsChecked="{Binding CustomProcessRadioButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        <Components:FilePicker
+                            x:Name="SamplingSourcePathFilePicker"
+                            IsEnabled="{Binding IsChecked, ElementName=CustomProcessRadioButton, Converter={StaticResource NullToDisabledConverter}}"
+                            OnChange="FilePickerTextBox_TextChanged" />
+                        <StackPanel Orientation="Horizontal">
+                            <Components:CustomRadioButtonControl
+                                x:Name="CurrentProjectProcessRadioButton"
+                                Content="{x:Static locals:SamplingSettingsLanguagePack.ProjectTarget}"
+                                GroupName="SamplingSourceRadioButtonGroup"
+                                IsChecked="{Binding CurrentProjectProcessRadioButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                            <Label x:Name="ProjectTargetConfigLabel" />
+                        </StackPanel>
+                        <Label Content="{x:Static locals:SamplingSettingsLanguagePack.ExtraArgs}" />
+                        <Components:CustomTextBoxControl
+                            x:Name="ExtraArgs"
+                            Padding="2"
+                            Placeholder="extra args..."
+                            Text="{Binding ExtraArgs, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox
+                    Grid.Row="1"
+                    Margin="0,0,0,0"
+                    Padding="5">
+                    <GroupBox.Header>
+                        <Label Content="{x:Static locals:SamplingSettingsLanguagePack.Parameters}" />
+                    </GroupBox.Header>
+                    <StackPanel>
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Content="{x:Static locals:SamplingSettingsLanguagePack.CpuCore}" />
+                        <Components:CustomComboBoxControl
+                            x:Name="CpuCoreComboBox"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            SelectedItem="{Binding CPUCore, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Content="{x:Static locals:SamplingSettingsLanguagePack.Timeout}" />
+                        <Components:CustomTextBoxControl
+                            x:Name="SamplingTimeoutTextBox"
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Margin="0,0,0,10"
+                            Padding="2"
+                            Placeholder="2.5"
+                            Text="{Binding Timeout, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Content="{x:Static locals:SamplingSettingsLanguagePack.RecordSpawnDelay}" />
+                        <Components:CustomTextBoxControl
+                            x:Name="RecordSpawnDelayTextBox"
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Margin="0,0,0,10"
+                            Padding="2"
+                            Placeholder="500"
+                            Text="{Binding RecordSpawnDelay, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+
+                        <CheckBox Margin="0,10,0,0" IsChecked="{Binding ShouldDisassemble, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                            <TextBlock Text="{x:Static locals:SamplingSettingsLanguagePack.EnableDisassembly}" TextWrapping="Wrap" />
+                        </CheckBox>
+                        <CheckBox
+                            x:Name="EnableSPECheckBox"
+                            Margin="0,5,0,0"
+                            Checked="CheckBox_Checked"
+                            IsChecked="{Binding IsSPEEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                            Unchecked="CheckBox_Unchecked">
+                            <TextBlock Text="{x:Static locals:SamplingSettingsLanguagePack.EnableSPECheckBoxText}" TextWrapping="Wrap" />
+                        </CheckBox>
+                        <CheckBox Margin="0,5,0,0" IsChecked="{Binding ForceLock, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                            <TextBlock Text="{x:Static locals:MainLanguagePack.ForceLock}" TextWrapping="Wrap" />
+                        </CheckBox>
+                        <CheckBox Margin="0,5,0,0" IsChecked="{Binding KernelMode, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                            <TextBlock Text="Enable Kernel Mode" TextWrapping="Wrap" />
+                        </CheckBox>
+                        <CheckBox Margin="0,5,0,0" IsChecked="{Binding SampleDisplayLong, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                            <TextBlock Text="Display decorated symbol names" TextWrapping="Wrap" />
+                        </CheckBox>
+                        <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                            <CheckBox x:Name="NumberOfRowsPerSampleCheckBox" IsChecked="{Binding CustomNumberOfRowsPerSample, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                                <TextBlock Text="Custom number of samples to show in the summary" TextWrapping="Wrap" />
+                            </CheckBox>
+                            <TextBlock
+                                Margin="5,0,0,0"
+                                IsHitTestVisible="False"
+                                Text="{Binding NumberOfRowsPerSample, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                Visibility="{Binding SelectedItem, ElementName=NumberOfRowsPerSampleComboBox, Converter={StaticResource NullToVisibilityConverter}}" />
+                            <Components:CustomComboBoxControl
+                                x:Name="NumberOfRowsPerSampleComboBox"
+                                Margin="5,-3,0,0"
+                                IsEnabled="{Binding Path=CustomNumberOfRowsPerSample}"
+                                ItemsSource="{Binding NumberOfRowsPerSampleOptions}"
+                                SelectedItem="{Binding NumberOfRowsPerSample, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+                        </StackPanel>
+
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox
                     Grid.Row="0"
+                    Grid.RowSpan="2"
                     Grid.Column="1"
-                    SelectedItem="{Binding CPUCore, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                <Label
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    Content="{x:Static locals:SamplingSettingsLanguagePack.Timeout}" />
-                <Components:CustomTextBoxControl
-                    x:Name="SamplingTimeoutTextBox"
-                    Grid.Row="2"
-                    Grid.Column="1"
-                    Margin="0,0,0,10"
-                    Padding="2"
-                    Placeholder="2.5"
-                    Text="{Binding Timeout, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                <Label
-                    Grid.Row="3"
-                    Grid.Column="0"
-                    Content="{x:Static locals:SamplingSettingsLanguagePack.RecordSpawnDelay}" />
-                <Components:CustomTextBoxControl
-                    x:Name="RecordSpawnDelayTextBox"
-                    Grid.Row="3"
-                    Grid.Column="1"
-                    Margin="0,0,0,10"
-                    Padding="2"
-                    Placeholder="500"
-                    Text="{Binding RecordSpawnDelay, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    Margin="5,0,0,0"
+                    BorderThickness="1,1,1,1">
+                    <GroupBox.Header>
+                        <Label x:Name="EventGroupBoxHeaderLabel" Content="{x:Static locals:SamplingSettingsLanguagePack.Event}" />
+                    </GroupBox.Header>
+                    <StackPanel Margin="5,10,5,10">
+                        <StackPanel x:Name="RawEventStackPanel">
+                            <Label Content="{x:Static locals:SamplingSettingsLanguagePack.RawEvent}" />
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="50" />
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0">
+                                    <Components:CustomTextBoxControl
+                                        x:Name="RawEventsInput"
+                                        Padding="2"
+                                        Placeholder="rF123:80000"
+                                        Text="{Binding RawEvents, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                </Grid>
+                                <Grid Grid.Column="1">
+                                    <Components:CustomMonikerButtonControl
+                                        x:Name="AddRawEventButton"
+                                        Margin="5,0,0,0"
+                                        Click="AddRawEventButton_Click"
+                                        IsEnabled="{Binding Text, ElementName=RawEventsInput, Converter={StaticResource EmptyStringToDisabledConverter}}"
+                                        MonikerName="{x:Static catalog:KnownMonikers.Add}"
+                                        Visibility="{Binding IsEventSelectionEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                </Grid>
+                            </Grid>
+                        </StackPanel>
 
-
-                <CheckBox Margin="0,10,0,0" IsChecked="{Binding ShouldDisassemble, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-                    <TextBlock Text="{x:Static locals:SamplingSettingsLanguagePack.EnableDisassembly}" TextWrapping="Wrap" />
-                </CheckBox>
-                <CheckBox
-                    x:Name="EnableSPECheckBox"
-                    Margin="0,5,0,0"
-                    Checked="CheckBox_Checked"
-                    IsChecked="{Binding IsSPEEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Unchecked="CheckBox_Unchecked">
-                    <TextBlock Text="{x:Static locals:SamplingSettingsLanguagePack.EnableSPECheckBoxText}" TextWrapping="Wrap" />
-                </CheckBox>
-                <CheckBox Margin="0,5,0,0" IsChecked="{Binding ForceLock, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-                    <TextBlock Text="{x:Static locals:MainLanguagePack.ForceLock}" TextWrapping="Wrap" />
-                </CheckBox>
-                <CheckBox Margin="0,5,0,0" IsChecked="{Binding KernelMode, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-                    <TextBlock Text="Enable Kernel Mode" TextWrapping="Wrap" />
-                </CheckBox>
-                <CheckBox Margin="0,5,0,0" IsChecked="{Binding SampleDisplayLong, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-                    <TextBlock Text="Display decorated symbol names" TextWrapping="Wrap" />
-                </CheckBox>
-                <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                    <CheckBox x:Name="NumberOfRowsPerSampleCheckBox" IsChecked="{Binding CustomNumberOfRowsPerSample, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-                        <TextBlock Text="Custom number of samples to show in the summary" TextWrapping="Wrap" />
-                    </CheckBox>
-                    <TextBlock
-                        Margin="5,0,0,0"
-                        IsHitTestVisible="False"
-                        Text="{Binding NumberOfRowsPerSample, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                        Visibility="{Binding SelectedItem, ElementName=NumberOfRowsPerSampleComboBox, Converter={StaticResource NullToVisibilityConverter}}" />
-                    <Components:CustomComboBoxControl
-                        x:Name="NumberOfRowsPerSampleComboBox"
-                        Margin="5,-3,0,0"
-                        IsEnabled="{Binding Path=CustomNumberOfRowsPerSample}"
-                        ItemsSource="{Binding NumberOfRowsPerSampleOptions}"
-                        SelectedItem="{Binding NumberOfRowsPerSample, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-
-                </StackPanel>
-
-            </StackPanel>
-        </GroupBox>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0" Margin="0,0,5,10">
+                                <Components:FilterableComboBox
+                                    x:Name="EventComboBox"
+                                    GotFocus="EventComboBox_GotFocus"
+                                    OnlyValuesInList="True"
+                                    SelectedItem="{Binding SelectedEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                                    <Components:FilterableComboBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel VirtualizationMode="Recycling" />
+                                        </ItemsPanelTemplate>
+                                    </Components:FilterableComboBox.ItemsPanel>
+                                </Components:FilterableComboBox>
+                                <TextBlock
+                                    x:Name="EventComboBoxPlaceholder"
+                                    Margin="5,3,20,0"
+                                    IsHitTestVisible="False"
+                                    Text="{x:Static locals:SamplingSettingsLanguagePack.Event}" />
+                            </Grid>
+                            <Grid
+                                x:Name="SamplingFrequencyGrid"
+                                Grid.Column="1"
+                                Margin="5,0,0,10">
+                                <Components:CustomComboBoxControl x:Name="SamplingFrequencyComboBox" SelectedItem="{Binding SelectedEventFrequency, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                <TextBlock
+                                    Margin="5,3,20,0"
+                                    IsHitTestVisible="False"
+                                    Text="{x:Static locals:SamplingSettingsLanguagePack.Frequency}"
+                                    Visibility="{Binding SelectedItem, ElementName=SamplingFrequencyComboBox, Converter={StaticResource NullToVisibilityConverter}}" />
+                            </Grid>
+                            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                <Components:CustomMonikerButtonControl
+                                    x:Name="AddEventButton"
+                                    Margin="5,0,0,10"
+                                    Click="AddEventButton_Click"
+                                    IsEnabled="{Binding SelectedItem, ElementName=EventComboBox, Converter={StaticResource NullToDisabledConverter}}"
+                                    MonikerName="{x:Static catalog:KnownMonikers.Add}"
+                                    Visibility="{Binding IsEventSelectionEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                <Components:CustomMonikerButtonControl
+                                    x:Name="RemoveEventButton"
+                                    Margin="5,0,0,10"
+                                    Click="RemoveEventButton_Click"
+                                    IsEnabled="{Binding SelectedIndex, ElementName=SamplingEventListBox, Converter={StaticResource NegativeIntToDisabledConverter}}"
+                                    MonikerName="{x:Static catalog:KnownMonikers.Remove}" />
+                            </StackPanel>
+                        </Grid>
+                        <Grid Margin="0,10,0,5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="190" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    x:Name="EventListBoxHeader"
+                                    Grid.Column="0"
+                                    Margin="7,0,5,0"
+                                    Text="{x:Static locals:SamplingSettingsLanguagePack.EventHeader}" />
+                                <TextBlock
+                                    x:Name="FrequencyListBoxHeader"
+                                    Grid.Column="1"
+                                    Margin="10,0,0,0"
+                                    Text="{x:Static locals:SamplingSettingsLanguagePack.FrequencyHeader}" />
+                            </Grid>
+                            <ScrollViewer
+                                Grid.Row="1"
+                                MaxHeight="185"
+                                VerticalScrollBarVisibility="Auto">
+                                <ListBox
+                                    x:Name="SamplingEventListBox"
+                                    d:ItemsSource="{d:SampleData ItemCount=5}"
+                                    BorderBrush="Transparent"
+                                    ItemsSource="{Binding SamplingEventList}"
+                                    SelectionChanged="SamplingEventListBox_SelectionChanged">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid x:Name="GridItem">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="193" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock
+                                                    x:Name="Parameter"
+                                                    Grid.Column="0"
+                                                    Text="{Binding Path=SamplingEvent}" />
+                                                <TextBlock
+                                                    x:Name="Value"
+                                                    Grid.Column="1"
+                                                    Text="{Binding Path=SamplingFrequency}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </ScrollViewer>
+                        </Grid>
+                    </StackPanel>
+                </GroupBox>
+            </Grid>
+        </ScrollViewer>
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2">
             <Label Content="{x:Static locals:SamplingSettingsLanguagePack.WperfCommandPreview}" />
             <Components:CustomTextBoxControl
@@ -167,146 +317,5 @@
                 Click="SaveButton_Click"
                 Content="{x:Static locals:SamplingSettingsLanguagePack.Save}" />
         </StackPanel>
-        <GroupBox
-            Grid.Row="0"
-            Grid.RowSpan="2"
-            Grid.Column="1"
-            Margin="5,0,0,0"
-            BorderThickness="1,1,1,1">
-            <GroupBox.Header>
-                <Label x:Name="EventGroupBoxHeaderLabel" Content="{x:Static locals:SamplingSettingsLanguagePack.Event}" />
-            </GroupBox.Header>
-            <StackPanel Margin="5,10,5,10">
-                <StackPanel x:Name="RawEventStackPanel">
-                    <Label Content="{x:Static locals:SamplingSettingsLanguagePack.RawEvent}" />
-                    <Grid Margin="0,0,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="50" />
-                        </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0">
-                            <Components:CustomTextBoxControl
-                                x:Name="RawEventsInput"
-                                Padding="2"
-                                Placeholder="rF123:80000"
-                                Text="{Binding RawEvents, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                        </Grid>
-                        <Grid Grid.Column="1">
-                            <Components:CustomMonikerButtonControl
-                                x:Name="AddRawEventButton"
-                                Margin="5,0,0,0"
-                                Click="AddRawEventButton_Click"
-                                IsEnabled="{Binding Text, ElementName=RawEventsInput, Converter={StaticResource EmptyStringToDisabledConverter}}"
-                                MonikerName="{x:Static catalog:KnownMonikers.Add}"
-                                Visibility="{Binding IsEventSelectionEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                        </Grid>
-                    </Grid>
-                </StackPanel>
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0" Margin="0,0,5,10">
-                        <Components:FilterableComboBox
-                            x:Name="EventComboBox"
-                            GotFocus="EventComboBox_GotFocus"
-                            OnlyValuesInList="True"
-                            SelectedItem="{Binding SelectedEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-                            <Components:FilterableComboBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <VirtualizingStackPanel VirtualizationMode="Recycling" />
-                                </ItemsPanelTemplate>
-                            </Components:FilterableComboBox.ItemsPanel>
-                        </Components:FilterableComboBox>
-                        <TextBlock
-                            x:Name="EventComboBoxPlaceholder"
-                            Margin="5,3,20,0"
-                            IsHitTestVisible="False"
-                            Text="{x:Static locals:SamplingSettingsLanguagePack.Event}" />
-                    </Grid>
-                    <Grid
-                        x:Name="SamplingFrequencyGrid"
-                        Grid.Column="1"
-                        Margin="5,0,0,10">
-                        <Components:CustomComboBoxControl x:Name="SamplingFrequencyComboBox" SelectedItem="{Binding SelectedEventFrequency, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                        <TextBlock
-                            Margin="5,3,20,0"
-                            IsHitTestVisible="False"
-                            Text="{x:Static locals:SamplingSettingsLanguagePack.Frequency}"
-                            Visibility="{Binding SelectedItem, ElementName=SamplingFrequencyComboBox, Converter={StaticResource NullToVisibilityConverter}}" />
-                    </Grid>
-                    <StackPanel Grid.Column="2" Orientation="Horizontal">
-                        <Components:CustomMonikerButtonControl
-                            x:Name="AddEventButton"
-                            Margin="5,0,0,10"
-                            Click="AddEventButton_Click"
-                            IsEnabled="{Binding SelectedItem, ElementName=EventComboBox, Converter={StaticResource NullToDisabledConverter}}"
-                            MonikerName="{x:Static catalog:KnownMonikers.Add}"
-                            Visibility="{Binding IsEventSelectionEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                        <Components:CustomMonikerButtonControl
-                            x:Name="RemoveEventButton"
-                            Margin="5,0,0,10"
-                            Click="RemoveEventButton_Click"
-                            IsEnabled="{Binding SelectedIndex, ElementName=SamplingEventListBox, Converter={StaticResource NegativeIntToDisabledConverter}}"
-                            MonikerName="{x:Static catalog:KnownMonikers.Remove}" />
-                    </StackPanel>
-                </Grid>
-                <Grid Margin="0,10,0,5">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Grid Grid.Row="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="190" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock
-                            x:Name="EventListBoxHeader"
-                            Grid.Column="0"
-                            Margin="7,0,5,0"
-                            Text="{x:Static locals:SamplingSettingsLanguagePack.EventHeader}" />
-                        <TextBlock
-                            x:Name="FrequencyListBoxHeader"
-                            Grid.Column="1"
-                            Margin="10,0,0,0"
-                            Text="{x:Static locals:SamplingSettingsLanguagePack.FrequencyHeader}" />
-                    </Grid>
-                    <ScrollViewer
-                        Grid.Row="1"
-                        MaxHeight="185"
-                        VerticalScrollBarVisibility="Auto">
-                        <ListBox
-                            x:Name="SamplingEventListBox"
-                            d:ItemsSource="{d:SampleData ItemCount=5}"
-                            BorderBrush="Transparent"
-                            ItemsSource="{Binding SamplingEventList}"
-                            SelectionChanged="SamplingEventListBox_SelectionChanged">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid x:Name="GridItem">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="193" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock
-                                            x:Name="Parameter"
-                                            Grid.Column="0"
-                                            Text="{Binding Path=SamplingEvent}" />
-                                        <TextBlock
-                                            x:Name="Value"
-                                            Grid.Column="1"
-                                            Text="{Binding Path=SamplingFrequency}" />
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </ScrollViewer>
-                </Grid>
-            </StackPanel>
-        </GroupBox>
     </Grid>
 </platform:DialogWindow>
