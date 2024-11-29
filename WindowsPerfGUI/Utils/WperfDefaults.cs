@@ -38,6 +38,7 @@ namespace WindowsPerfGUI.Utils
 #nullable enable
         public static string? Frequency;
         public static int? TotalGPCNum;
+        public static int? CoreNum = null;
 
 #nullable disable
 
