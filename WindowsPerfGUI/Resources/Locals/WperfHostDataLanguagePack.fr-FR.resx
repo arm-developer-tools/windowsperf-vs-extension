@@ -98,7 +98,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="WindowTitle" xml:space="preserve">
-    <value>Résultats des tests de WindowsPerf</value>
+    <value>Résultats de la commande de test de WindowsPerf</value>
   </data>
   <data name="TestName" xml:space="preserve">
     <value>Nom du test</value>
