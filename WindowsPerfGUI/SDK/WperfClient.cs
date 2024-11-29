@@ -234,6 +234,11 @@ namespace WindowsPerfGUI.SDK
                     .TestResults.Find(el => el.TestName == "PMU_CTL_QUERY_HW_CFG [total_gpc_num]")
                     ?.Result;
                 WperfDefaults.TotalGPCNum = Convert.ToInt32(gpc_num, 16);
+
+                string core_num = serializedOutput
+                    .TestResults.Find(el => el.TestName == "PMU_CTL_QUERY_HW_CFG [core_num]")
+                    ?.Result;
+                WperfDefaults.CoreNum = Convert.ToInt32(core_num, 16);
             }
             catch (Exception e)
             {
