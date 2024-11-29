@@ -30,6 +30,8 @@
 
 using System.Collections.Generic;
 using WindowsPerfGUI.Resources.Locals;
+using WindowsPerfGUI.SDK.WperfOutputs;
+using WindowsPerfGUI.Utils;
 
 namespace WindowsPerfGUI.ToolWindows.SamplingSetting
 {
@@ -54,13 +56,19 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
         {
             if (numberOfAvailableCores > 0)
                 return CpuCoreList;
-            foreach (
-                var item in new System.Management.ManagementObjectSearcher(
-                    "Select * from Win32_Processor"
-                ).Get()
-            )
+
+            if (WperfDefaults.CoreNum != null)
+                numberOfAvailableCores = (int)WperfDefaults.CoreNum;
+            else
             {
-                numberOfAvailableCores += int.Parse(item["NumberOfCores"].ToString());
+                foreach (
+                    var item in new System.Management.ManagementObjectSearcher(
+                        "Select * from Win32_Processor"
+                    ).Get()
+                )
+                {
+                    numberOfAvailableCores = int.Parse(item["NumberOfCores"].ToString());
+                }
             }
             CreateCpuCoreList();
             return CpuCoreList;
