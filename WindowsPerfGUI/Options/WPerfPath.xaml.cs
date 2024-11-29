@@ -226,7 +226,10 @@ namespace WindowsPerfGUI.Options
 
             if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
             {
-                PathInput.Text = fbd.SelectedPath;
+                PathInput.Text = Path.Combine(
+                    fbd.SelectedPath,
+                    WperfDefaults.DefaultWperfExecutable
+                );
             }
         }
     }
