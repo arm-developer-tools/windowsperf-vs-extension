@@ -87,7 +87,10 @@ namespace WindowsPerfGUI.ToolWindows.CountingSetting
             if (countingSettingsForm.KernelMode)
                 AppendElementsToList(argsList, "-k");
 
-            if (!countingSettingsForm.NoTarget)
+            if (
+                !string.IsNullOrEmpty(countingSettingsForm.FilePath)
+                || !string.IsNullOrEmpty(countingSettingsForm.ExtraArgs)
+            )
             {
                 AppendElementsToList(argsList, "--pdb_file", countingSettingsForm.PdbFile);
                 AppendElementsToList(argsList, "--");
