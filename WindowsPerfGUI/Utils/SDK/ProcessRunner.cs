@@ -316,6 +316,7 @@ namespace WindowsPerfGUI.Utils.SDK
         {
             if (_BackgroundProcess != null && !_BackgroundProcess.HasExited)
                 throw new Exception("Process already running");
+            string now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds().ToString();
             _BackgroundProcess = new Process()
             {
                 StartInfo =
@@ -326,6 +327,10 @@ namespace WindowsPerfGUI.Utils.SDK
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             RedirectStandardInput = true,
+            WorkingDirectory = System.IO.Path.Combine(
+                System.IO.Path.GetTempPath(),
+                    "wperf-cwd-" + now
+                ),
             FileName = _Path,
             Arguments = string.Join(" ", args)
         },
