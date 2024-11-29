@@ -316,7 +316,6 @@ namespace WindowsPerfGUI.Utils.SDK
         {
             if (_BackgroundProcess != null && !_BackgroundProcess.HasExited)
                 throw new Exception("Process already running");
-            string now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds().ToString();
             _BackgroundProcess = new Process()
             {
                 StartInfo =
