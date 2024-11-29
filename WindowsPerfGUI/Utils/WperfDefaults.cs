@@ -32,7 +32,7 @@ namespace WindowsPerfGUI.Utils
 {
     static class WperfDefaults
     {
-        public const string WPERF_MIN_VERSION = "3.8.0";
+        public const string WPERF_MIN_VERSION = "4.0.0";
         public static bool HasSPESupport = false;
         public static string SPEFeatureName = "";
 #nullable enable
