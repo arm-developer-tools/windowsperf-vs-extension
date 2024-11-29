@@ -103,9 +103,15 @@ namespace WindowsPerfGUI.ToolWindows.SamplingSetting
                 AppendElementsToList(argsList, "-k");
 
             AppendElementsToList(argsList, "--pdb_file", samplingSettingsFrom.PdbFile);
-            AppendElementsToList(argsList, "--");
-            AppendElementsToList(argsList, samplingSettingsFrom.FilePath);
-            AppendElementsToList(argsList, samplingSettingsFrom.ExtraArgs);
+            if (
+                !string.IsNullOrEmpty(samplingSettingsFrom.FilePath)
+                || !string.IsNullOrEmpty(samplingSettingsFrom.ExtraArgs)
+            )
+            {
+                AppendElementsToList(argsList, "--");
+                AppendElementsToList(argsList, samplingSettingsFrom.FilePath);
+                AppendElementsToList(argsList, samplingSettingsFrom.ExtraArgs);
+            }
             ArgsArray = argsList.ToArray();
             return ArgsArray;
         }
