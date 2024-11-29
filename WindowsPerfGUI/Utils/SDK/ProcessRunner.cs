@@ -326,6 +326,7 @@ namespace WindowsPerfGUI.Utils.SDK
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             RedirectStandardInput = true,
+            WorkingDirectory = System.IO.Path.GetTempPath(),
             FileName = _Path,
             Arguments = string.Join(" ", args)
         },
